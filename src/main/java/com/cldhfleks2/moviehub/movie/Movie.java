@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @SQLDelete(sql = "UPDATE movie SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
+//몇개 필드 빼고는 잘 안바뀌는 엔티티
 public class Movie {
     //일별박스오피스, 영화상세정보
     private String movieCd; // 영화 고유 코드  예) "20200142"

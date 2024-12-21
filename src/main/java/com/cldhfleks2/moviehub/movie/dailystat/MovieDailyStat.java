@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @SQLDelete(sql = "UPDATE movie_daily_stat SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
+//유일하게 하루마다 값이 바뀌어야하는 엔티티
 public class MovieDailyStat {
     //일별박스오피스
     private String day; // 일자(showRange날짜) 예) "20241220"

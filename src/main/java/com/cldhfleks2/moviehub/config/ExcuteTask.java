@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 public class ExcuteTask {
     private HttpResponse<String> totalTodayBoxOfficeResponse;
 
-    @Value("/kobis.key")
+    @Value("${kobis.key}")
     private String kobiskey;
 
     // 응답을 다른 곳에서 활용하고 싶다면 이 메소드를 통해서 필드에 저장된 응답을 가져올 수 있음
@@ -34,10 +34,10 @@ public class ExcuteTask {
     @PostConstruct
     public void initialize()  {
         try{
-            System.out.println("앱 실행 후 초기화 작업 시작");
+            System.out.println("앱 실행 후 최초 작업 시작");
             //앱 실행시 최초 한번의 쿼리를 보냄.
             getTotalTodayBoxOfficeTask();
-
+            System.out.println("전체 일일 박스오피스 목록을 정상적으로 가져왔음.");
 
         }catch (Exception e){ //모든 에러를 캡쳐
             e.printStackTrace();

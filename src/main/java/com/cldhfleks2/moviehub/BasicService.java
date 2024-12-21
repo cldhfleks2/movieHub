@@ -28,7 +28,7 @@ public class BasicService {
     private final ExcuteTask excuteTask;
     private final MovieRepository movieRepository;
 
-    @Value("/kobis.key")
+    @Value("${kobis.key}")
     private String kobiskey;
 
     //메인 페이지 GET
