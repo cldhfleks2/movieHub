@@ -10,7 +10,12 @@ public class BasicController {
     private final BasicService basicService;
 
     @GetMapping({"/", "/main"})
-    String main() {
-        return basicService.main();
+    String getMain() {
+        return basicService.getMain();
+    }
+
+    @GetMapping("/detail")
+    String getDetail() {
+        return basicService.getDetail();
     }
 }

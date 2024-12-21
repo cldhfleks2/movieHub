@@ -6,7 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class BasicService {
-    String main() {
-        return "main";
+
+    String getMain() {
+        return "main/main";
+    }
+
+    String getDetail() {
+        return "detail/detail";
     }
 }
