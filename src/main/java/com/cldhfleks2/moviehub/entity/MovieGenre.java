@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-//오류나면 테이블이름이 제대로 작성된건지 확인하자
 @SQLDelete(sql = "UPDATE movie_genre SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
 public class MovieGenre {

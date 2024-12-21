@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-//JPA의 delete메소드 실행시 soft삭제를위해 status=0, update_date를 현재시간으로 설정
-//오류나면 테이블이름이 제대로 작성된건지 확인하자
 @SQLDelete(sql = "UPDATE movie_daily_stat SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
 public class MovieDailyStat {
