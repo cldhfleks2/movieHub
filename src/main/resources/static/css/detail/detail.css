@@ -1,6 +1,4 @@
-
-
-.movie-info {
+.movieInfo {
     display: flex;
     gap: 2rem;
     margin-bottom: 2rem;
@@ -10,37 +8,37 @@
     align-items: center;
 }
 
-.movie-poster {
+.moviePoster {
     width: 120px;
     height: 180px;
     object-fit: cover;
     border-radius: 4px;
 }
 
-.movie-details h1 {
+.movieDetails h1 {
     font-size: 24px;
     margin-bottom: 0.5rem;
 }
 
-.movie-meta {
+.movieMeta {
     color: #666;
     font-size: 14px;
 }
 
-.theater-search {
+.theaterSearch {
     background: white;
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 2rem;
 }
 
-.search-options {
+.searchOptions {
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
 }
 
-.date-selector {
+.dateSelector {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
@@ -48,7 +46,7 @@
     padding: 0.5rem 0;
 }
 
-.date-item {
+.dateItem {
     padding: 0.8rem 1.2rem;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -57,33 +55,33 @@
     min-width: 80px;
 }
 
-.date-item.active {
+.dateItem.active {
     background-color: #e50914;
     color: white;
     border-color: #e50914;
 }
 
-.date-day {
+.dateDay {
     font-size: 14px;
     color: #666;
 }
 
-.date-item.active .date-day {
+.dateItem.active .dateDay {
     color: white;
 }
 
-.theater-list {
+.theaterList {
     background: white;
     padding: 1.5rem;
     border-radius: 8px;
 }
 
-.theater-item {
+.theaterItem {
     border-bottom: 1px solid #eee;
     padding: 1.5rem 0;
 }
 
-.theater-name {
+.theaterName {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 1rem;
@@ -97,13 +95,13 @@
     color: #666;
 }
 
-.showtime-grid {
+.showtimeGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 1rem;
 }
 
-.showtime-item {
+.showtimeItem {
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 1rem;
@@ -111,49 +109,49 @@
     transition: all 0.2s;
 }
 
-.showtime-item:hover {
+.showtimeItem:hover {
     background-color: #f8f8f8;
 }
 
-.showtime-time {
+.showtimeTime {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
 
-.showtime-info {
+.showtimeInfo {
     font-size: 13px;
     color: #666;
 }
 
-.seats-available {
+.seatsAvailable {
     color: #e50914;
     font-weight: bold;
 }
 
-.theater-map {
+.theaterMap {
     position: fixed;
-    top: 0;
+    top: 82px;
     right: 0;
     width: 400px;
-    height: 100vh;
+    height: 90vh;
     background: white;
     box-shadow: -2px 0 5px rgba(0,0,0,0.1);
     padding: 1rem;
 }
 
-.map-container {
+.mapContainer {
     width: 100%;
     height: calc(100% - 50px);
     background: #eee;
     border-radius: 8px;
 }
 
-.filter-group {
+.filterGroup {
     margin-right: 1rem;
 }
 
-.filter-label {
+.filterLabel {
     display: block;
     margin-bottom: 0.5rem;
     font-size: 14px;
@@ -167,8 +165,92 @@ select {
     font-size: 14px;
 }
 
-.hint-text {
+.hintText {
     font-size: 13px;
     color: #666;
     margin-top: 0.5rem;
+}
+
+/* 기존 CSS에 추가할 스타일 */
+.movieAdditionalInfo {
+    margin-top: 1rem;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.movieAdditionalInfo p {
+    margin: 0.5rem 0;
+}
+
+.movieActions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.actionBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionBtn:hover {
+    background: #f5f5f5;
+}
+
+.actionBtn .icon {
+    font-size: 1.2rem;
+}
+
+.likeBtn.active {
+    color: #e50914;
+    border-color: #e50914;
+}
+
+.bookmarkBtn.active {
+    color: #1a73e8;
+    border-color: #1a73e8;
+}
+
+.movieLinks {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.linkBtn {
+    padding: 0.5rem 1rem;
+    background: #e50914;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.linkBtn:hover {
+    background: #c4000f;
+}
+
+.movieShowtime {
+    margin-top: 2rem;
+}
+
+.movieShowtime h2 {
+    margin-bottom: 1rem;
+    font-size: 20px;
+    color: #333;
+}
+
+.mainContent {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
