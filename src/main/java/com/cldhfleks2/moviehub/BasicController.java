@@ -3,7 +3,13 @@ package com.cldhfleks2.moviehub;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Controller
 @RequiredArgsConstructor
@@ -11,8 +17,8 @@ public class BasicController {
     private final BasicService basicService;
 
     @GetMapping({"/", "/main"})
-    String getMain() {
-        return basicService.getMain();
+    String getMain(Model model) throws Exception {
+        return basicService.getMain(model);
     }
 
     @GetMapping("/detail")

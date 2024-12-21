@@ -10,4 +10,8 @@ public interface MovieDailyStatRepository extends JpaRepository<MovieDailyStat, 
     // day로 객체를 조회하는 쿼리
     @Query("SELECT m FROM MovieDailyStat m WHERE m.day = :day AND m.status = 1")
     Optional<MovieDailyStat> findByDay(String day);
+
+    // movie_id로 객체를 조회하는 쿼리
+    @Query("SELECT m FROM MovieDailyStat m WHERE m.movie.id = :movieId AND m.status = 1")
+    Optional<MovieDailyStat> findByMovieId(Long movieId);
 }
