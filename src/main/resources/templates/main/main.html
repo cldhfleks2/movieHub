@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+
 <div th:replace="~{ header/header::header }"></div>
 
 <section class="searchSection">
@@ -27,10 +28,10 @@
 </section>
 
 <main class="mainContent">
-    <!-- 현재 상영작 순위 섹션 -->
+    <!-- 일일 박스 오피스 -->
     <section class="movieSection" style="margin-bottom: 80px;">
         <div class="sectionHeader">
-            <h2 class="sectionTitle">현재 상영작 순위</h2>
+            <h2 class="sectionTitle">오늘의 박스 오피스 목록</h2>
             <a href="#" class="viewMoreLink">더보기 ></a>
         </div>
         <div class="movieGrid">
@@ -49,62 +50,88 @@
                     </div>
                 </div>
             </div>
-
-            <div class="movieCard">
-                <img src="/image/example3.jpg" alt="영화 포스터" class="moviePoster">
-                <div class="movieInfo">
-                    <div class="movieTitle">영화 제목</div>
-                    <div class="movieStats">
-                        <span class="movieRating">⭐ 9.5</span>
-                        <span class="reservationRate">예매율 35%</span>
-                    </div>
-                    <div class="movieButtons">
-                        <button class="reserveButton">예매하기</button>
-                        <button class="detailButton">상세정보</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="movieCard">
-                <img src="/image/example2.jpg" alt="영화 포스터" class="moviePoster">
-                <div class="movieInfo">
-                    <div class="movieTitle">영화 제목</div>
-                    <div class="movieStats">
-                        <span class="movieRating">⭐ 9.5</span>
-                        <span class="reservationRate">예매율 35%</span>
-                    </div>
-                    <div class="movieButtons">
-                        <button class="reserveButton">예매하기</button>
-                        <button class="detailButton">상세정보</button>
-                    </div>
-                </div>
-            </div>
-
-
         </div>
     </section>
 
-    <!-- 사용자 맞춤 추천 섹션 -->
-<!--    <section class="movieSection" sec:authorize="isAuthenticated()">-->
+    <!-- 주간 박스 오피스 -->
     <section class="movieSection" style="margin-bottom: 80px;">
         <div class="sectionHeader">
-            <h2 class="sectionTitle">회원님을 위한 추천영화</h2>
+            <h2 class="sectionTitle">주간 박스 오피스 목록</h2>
             <a href="#" class="viewMoreLink">더보기 ></a>
         </div>
         <div class="movieGrid">
-<!--            <div class="movieCard" th:each="movie : ${recommendedMovies}">-->
+            <!--            <div class="movieCard" th:each="movie : ${currentMovies}">-->
             <div class="movieCard">
-                <img src="/image/blank.png" alt="영화 포스터" class="moviePoster">
+                <img src="/image/example1.jpg" alt="영화 포스터" class="moviePoster">
                 <div class="movieInfo">
-                    <div class="movieTitle">추천 영화 제목</div>
+                    <div class="movieTitle">영화 제목</div>
                     <div class="movieStats">
-                        <span class="movieRating">⭐ 8.9</span>
-                        <span class="movieGenre">액션/어드벤처</span>
+                        <span class="movieRating">⭐ 9.5</span>
+                        <span class="reservationRate">예매율 35%</span>
+                    </div>
+                    <div class="movieButtons">
+                        <button class="reserveButton">예매하기</button>
+                        <button class="detailButton">상세정보</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- 주간 한국 영화 박스 오피스 -->
+    <section class="movieSection" style="margin-bottom: 80px;">
+        <div class="sectionHeader">
+            <h2 class="sectionTitle">주간 한국 영화 목록</h2>
+            <a href="#" class="viewMoreLink">더보기 ></a>
+        </div>
+        <div class="movieGrid">
+            <!--            <div class="movieCard" th:each="movie : ${currentMovies}">-->
+            <div class="movieCard">
+                <img src="/image/example1.jpg" alt="영화 포스터" class="moviePoster">
+                <div class="movieInfo">
+                    <div class="movieTitle">영화 제목</div>
+                    <div class="movieStats">
+                        <span class="movieRating">⭐ 9.5</span>
+                        <span class="reservationRate">예매율 35%</span>
+                    </div>
+                    <div class="movieButtons">
+                        <button class="reserveButton">예매하기</button>
+                        <button class="detailButton">상세정보</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 주간 외국 영화 박스 오피스 -->
+    <section class="movieSection" style="margin-bottom: 80px;">
+        <div class="sectionHeader">
+            <h2 class="sectionTitle">주간 외국 영화 목록</h2>
+            <a href="#" class="viewMoreLink">더보기 ></a>
+        </div>
+        <div class="movieGrid">
+            <!--            <div class="movieCard" th:each="movie : ${currentMovies}">-->
+            <div class="movieCard">
+                <img src="/image/example1.jpg" alt="영화 포스터" class="moviePoster">
+                <div class="movieInfo">
+                    <div class="movieTitle">영화 제목</div>
+                    <div class="movieStats">
+                        <span class="movieRating">⭐ 9.5</span>
+                        <span class="reservationRate">예매율 35%</span>
+                    </div>
+                    <div class="movieButtons">
+                        <button class="reserveButton">예매하기</button>
+                        <button class="detailButton">상세정보</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
 
     <!-- 인기 리뷰 섹션 -->
     <section class="reviewSection" style="margin-bottom: 80px;">
@@ -134,7 +161,14 @@
 </main>
 
 <div th:replace="~{ footer/footer::footer }"></div>
-
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
 <script src="/js/main/main.js"></script>
 </body>
 </html>
