@@ -132,6 +132,15 @@
     </div>
 </aside>
 
+<div th:replace="~{ footer/footer::footer }"></div>
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
 <script src="/js/detail/detail.js"></script>
 </body>
 </html>
