@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상영 정보</title>
+<!--    <link rel="stylesheet" href="/css/global.css">-->
+    <link rel="stylesheet" href="/css/detail/detail.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<header class="header">
+    <nav class="nav">
+        <a href="/static" class="logo">MovieMate</a>
+        <div class="nav-links">
+            <a href="/movies">영화</a>
+            <a href="/community">커뮤니티</a>
+            <a href="/login">로그인</a>
+        </div>
+
+    </nav>
+</header>
+
+<main class="main-content">
+    <div class="movie-info">
+        <img src="" alt="영화 포스터" class="movie-poster">
+        <div class="movie-details">
+            <h1>영화 제목</h1>
+            <div class="movie-meta">
+                <span>2024 • 액션/드라마</span>
+                <span>150분</span>
+                <span>15세 관람가</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="theater-search">
+        <div class="search-options">
+            <div class="filter-group">
+                <label class="filter-label">지역</label>
+                <select id="region">
+                    <option>서울</option>
+                    <option>경기</option>
+                    <option>인천</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">상세 지역</label>
+                <select id="subRegion">
+                    <option>강남구</option>
+                    <option>서초구</option>
+                    <option>송파구</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="date-selector">
+            <div class="date-item">
+                <div class="date-day">오늘</div>
+                <div>12/21</div>
+            </div>
+            <div class="date-item active">
+                <div class="date-day">내일</div>
+                <div>12/22</div>
+            </div>
+            <div class="date-item">
+                <div class="date-day">일</div>
+                <div>12/23</div>
+            </div>
+            <div class="date-item">
+                <div class="date-day">월</div>
+                <div>12/24</div>
+            </div>
+            <div class="date-item">
+                <div class="date-day">화</div>
+                <div>12/25</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="theater-list">
+        <div class="theater-item">
+            <div class="theater-name">
+                <span>메가박스 강남</span>
+                <span class="distance">1.2km</span>
+            </div>
+            <div class="showtime-grid">
+                <div class="showtime-item">
+                    <div class="showtime-time">13:20</div>
+                    <div class="showtime-info">
+                        2관 (디지털)
+                        <div class="seats-available">120/150석</div>
+                    </div>
+                </div>
+                <div class="showtime-item">
+                    <div class="showtime-time">15:40</div>
+                    <div class="showtime-info">
+                        1관 (IMAX)
+                        <div class="seats-available">80/200석</div>
+                    </div>
+                </div>
+                <div class="showtime-item">
+                    <div class="showtime-time">18:00</div>
+                    <div class="showtime-info">
+                        3관 (디지털)
+                        <div class="seats-available">90/150석</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theater-item">
+            <div class="theater-name">
+                <span>CGV 강남역</span>
+                <span class="distance">0.5km</span>
+            </div>
+            <div class="showtime-grid">
+                <div class="showtime-item">
+                    <div class="showtime-time">12:30</div>
+                    <div class="showtime-info">
+                        1관
+                        <div class="seats-available">100/120석</div>
+                    </div>
+                </div>
+                <div class="showtime-item">
+                    <div class="showtime-time">14:50</div>
+                    <div class="showtime-info">
+                        2관
+                        <div class="seats-available">75/120석</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div class="theater-map">
+    <h3>주변 영화관</h3>
+    <div class="map-container">
+        <!-- 카카오맵이 들어갈 자리 -->
+    </div>
+</div>
+
+<script src="/js/detail/detail.js"></script>
+</body>
+</html>
