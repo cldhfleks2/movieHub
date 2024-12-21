@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub.entity;
+package com.cldhfleks2.moviehub.movie;
 
 import jakarta.persistence.*;
 import lombok.Getter;

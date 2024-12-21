@@ -1,5 +1,6 @@
-package com.cldhfleks2.moviehub.entity;
+package com.cldhfleks2.moviehub.movie.genre;
 
+import com.cldhfleks2.moviehub.movie.Movie;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,11 +14,11 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE movie_nation SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE movie_genre SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
-public class MovieNation {
+public class MovieGenre {
     //영화상세정보
-    private String nationNm; // 제작 국가명  예) "한국"
+    private String genreNm; // 장르명   예) "드라마"
 
     //아래는 기본 필드들
     @Id

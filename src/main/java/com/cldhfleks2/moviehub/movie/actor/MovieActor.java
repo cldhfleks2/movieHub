@@ -1,5 +1,6 @@
-package com.cldhfleks2.moviehub.entity;
+package com.cldhfleks2.moviehub.movie.actor;
 
+import com.cldhfleks2.moviehub.movie.Movie;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,15 +14,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-//오류나면 테이블이름이 제대로 작성된건지 확인하자
-@SQLDelete(sql = "UPDATE movie_company SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE movie_actor SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
-public class MovieCompany {
+public class MovieActor {
     //영화상세정보
-    private String companyCd; //회사 고유 코드     예) "20229461"
-    private String companyNm; //회사 이름 한글     예) "(주)바이포엠스튜디오"
-    private String companyNmEn; //회사 이름 영문   예) "BY4MSTUDIO"
-    private String companyPartNm; //회사의 역할    예) "제공"
+    private String peopleNm; // 배우 이름 한글    예) "주원"
+    private String peopleNmEn; // 배우 이름 영문  예) "JOO Won"
 
     //아래는 기본 필드들
     @Id
