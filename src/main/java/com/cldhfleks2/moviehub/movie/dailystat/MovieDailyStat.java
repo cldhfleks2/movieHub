@@ -18,10 +18,11 @@ import java.time.LocalDateTime;
 @ToString
 public class MovieDailyStat {
     //일별박스오피스
-    private String day; // 일별박스오피스의 showRange에 일치하는 날짜. 예) "20241220"
-    private String audiCnt; // 누적 매출액 :
-    private String scrnCnt; // 스크린 수  예) "1438" 잘안쓸거같긴해
-    private String showCnt; // 상영 횟수  예) "5173" 잘안쓸거같긴해
+    private String day; // 일자(showRange날짜) 예) "20241220"
+    private String salesAmt; // 해당일의 매출액 예) "1010084470"
+    private String audiCnt; // 해당 일 관객 수 예) "1438"
+    private String scrnCnt; // 스크린 수      예) "1176" 잘안쓸거같긴해
+    private String showCnt; // 상영 횟수      예) "3698" 잘안쓸거같긴해
 
 
     //아래는 기본 필드들

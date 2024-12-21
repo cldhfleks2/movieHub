@@ -23,24 +23,20 @@ public class Movie {
     private String openDt; // 개봉일     예) "2024-12-04(일별박스오피스)" "20241204(영화상세정보)"
 
     //일별박스오피스
-    private String salesAmt; // 해당일의 매출액  예) "1010084470"
     private String salesAcc; // 누적 매출액     예) "20542011020"
-    private Long audiAcc; // 누적 관객 수       예) "2191719"
+    private String audiAcc; // 누적 관객 수       예) "2191719"
 
     //영화상세정보
     private String movieNmEn; // 영화 이름 영문  예) "소방관"
     private String prdtYear; // 제작 연도       예) "2024"
     private String showTm; // 영화 상영 시간     예) "106" 단위 분
     private String typeNm; // 영화 유형         예) "장편"
-    private String watchGradeNm; // 관람 등급  예) "12세이상관람가"
 
-
-//    private Double salesShare; // 매출 점유율 : 일별박스오피스 애매해서 사용 X
-//    private Long audiCnt; // 해당일의 관객 수 : DailyStats로 이전
+//    private String salesShare; // 매출 점유율 : 일별박스오피스 애매해서 사용 X
+//    private String audiCnt; // 해당일의 관객 수 : DailyStats로 이전
 //    private String movieNmOg; // 영화 이름 원문  예) "" 공백일때가 많음.
 //    private String prdtStatNm; // 제작 상태     예) "개봉" 보통 다 개봉이겠지..
 //    private String showTypeNm; // 상영 형태명   예) "디지털" 잘 안쓸듯
-
 
     //아래는 기본 필드들
     @Id
