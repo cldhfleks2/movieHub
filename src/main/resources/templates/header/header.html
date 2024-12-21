@@ -1,10 +1,88 @@
 <header class="header" th:fragment="header">
     <nav class="nav">
-        <a href="#" class="logo">MovieMate</a>
-        <div class="nav-links">
-            <a href="/#">영화</a>
-            <a href="#">커뮤니티</a>
-            <a href="#">로그인</a>
+        <!-- 로고 -->
+        <a href="/main" class="logo">MovieHub</a>
+
+        <!-- 메인 네비게이션 -->
+        <div class="navLinks">
+            <a href="#" class="dropdownItem">박스오피스</a>
+            <a href="#" class="dropdownItem">영화검색</a>
+            <a href="#" class="dropdownItem">장르별영화</a>
+            <!-- 영화 드롭다운 -->
+<!--            <div class="navItem dropdown">-->
+<!--                <a href="#" class="dropdownToggle">영화</a>-->
+<!--                <div class="dropdownMenu">-->
+<!--                    <a href="#" class="dropdownItem">박스오피스</a>-->
+<!--                    <a href="#" class="dropdownItem">영화검색</a>-->
+<!--                    <a href="#" class="dropdownItem">장르별영화</a>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <!-- 커뮤니티 드롭다운 -->
+            <div class="navItem dropdown">
+                <a href="#" class="dropdownToggle">커뮤니티</a>
+                <div class="dropdownMenu">
+                    <a href="#" class="dropdownItem">영화리뷰</a>
+                    <a href="#" class="dropdownItem">영화추천</a>
+                    <a href="#" class="dropdownItem">영화토론</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 우측 유저 메뉴 -->
+        <div class="userMenu">
+            <!-- 비로그인 상태 -->
+            <!--            <div sec:authorize="isAnonymous()" class="authButtons" 잠시 가림>-->
+            <div class="authButtons" style="display: none">
+                <a href="#" class="btnLogin">로그인</a>
+                <a href="#" class="btnSignup">회원가입</a>
+            </div>
+
+            <!-- 로그인 상태 -->
+            <!--            <div sec:authorize="isAuthenticated()" class="userControls" 잠시 가림>-->
+            <div class="userControls">
+                <!-- 알림 아이콘 -->
+                <div class="notificationWrapper">
+                    <div class="notificationIcon">
+                        <div style="width: 20px; font-size: 25px;">🔔</div>
+                        <span class="notificationCount">2</span>
+                    </div>
+                    <div class="notificationDropdown">
+                        <div class="notificationHeader">
+                            <span>알림</span>
+                            <a href="#" class="readAll">모두 읽음</a>
+                        </div>
+                        <div class="notificationContent">
+                            <div class="notificationItem">
+                                <div class="notificationText">새로운 댓글이 달렸습니다.</div>
+                                <div class="notificationTime">방금 전</div>
+                            </div>
+                            <div class="notificationItem">
+                                <div class="notificationText">새로운 쪽지가 도착했습니다.</div>
+                                <div class="notificationTime">1시간 전</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 프로필 드롭다운 -->
+                <div class="profileDropdown">
+                    <img src="/image/profile.png" style="" alt="프로필" class="profileImg">
+                    <div class="profileMenu">
+                        <div class="profileInfo">
+                            <img src="/image/blank.png" alt="프로필" class="profileImgLarge">
+                            <!--  <span class="profileEmail" sec:authentication="name에 알맞는 변수로 가져와">user@email.com</span>-->
+                            <span class="profileEmail">user@email.com</span>
+                        </div>
+                        <div class="profileActions">
+                            <a href="#" class="btnProfile">프로필</a>
+                            <form th:action="@{/logout}" method="post" class="logoutForm">
+                                <button type="submit" class="btnLogout">로그아웃</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 </header>

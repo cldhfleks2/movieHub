@@ -23,6 +23,11 @@ body {
     align-items: center;
 }
 
+.navLinks {
+    display: flex;
+    gap: 2rem;
+}
+
 .logo {
     font-size: 24px;
     font-weight: bold;
@@ -30,22 +35,11 @@ body {
     text-decoration: none;
 }
 
-.nav-links {
-    display: flex;
-    gap: 2rem;
-}
 
-.nav-links a {
+.navLinks a {
     color: white;
     text-decoration: none;
 }
-
-.main-content {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
-
 
 .footer {
     background-color: #1a1a1a;
@@ -53,4 +47,306 @@ body {
     text-align: center;
     padding: 2rem;
     margin-top: 4rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 드롭다운 메뉴 스타일 */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    top: 12px;
+}
+
+.dropdownToggle {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.dropdownToggle:after {
+    content: '▼';
+    font-size: 0.8em;
+    margin-left: 0.5rem;
+}
+
+.dropdownMenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #2a2a2a;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 4px;
+}
+
+.dropdown:hover .dropdownMenu {
+    display: block;
+}
+
+.dropdownItem {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.dropdownItem:hover {
+    background-color: #3a3a3a;
+}
+
+/* 유저 메뉴 스타일 */
+.userMenu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.authButtons {
+    display: flex;
+    gap: 1rem;
+}
+
+.btnLogin, .btnSignup {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btnLogin {
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+.btnSignup {
+    background-color: #e50914;
+    color: #ffffff;
+}
+
+.btnLogin:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.btnSignup:hover {
+    background-color: #f40612;
+}
+
+/* 기존 스타일은 유지하고 알림 관련 스타일만 수정 */
+
+.userControls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.notificationWrapper {
+    position: relative;
+}
+
+.notificationIcon {
+    position: relative;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.notificationIcon i {
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.notificationCount {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #e50914;
+    color: white;
+    border-radius: 50%;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.75rem;
+    min-width: 1rem;
+    text-align: center;
+    transform: translate(25%, -25%);
+}
+
+.notificationDropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: -100px;
+    background-color: #2a2a2a;
+    min-width: 300px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.notificationWrapper:hover .notificationDropdown {
+    display: block;
+}
+
+.notificationHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.notificationHeader span {
+    font-weight: bold;
+}
+
+.readAll {
+    color: #e50914;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.readAll:hover {
+    text-decoration: underline;
+}
+
+.notificationContent {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notificationItem {
+    padding: 1rem;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.notificationItem:last-child {
+    border-bottom: none;
+}
+
+.notificationText {
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.notificationTime {
+    color: #999999;
+    font-size: 0.8rem;
+}
+
+/* 알림 드롭다운 화살표 추가 */
+.notificationDropdown::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 120px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #2a2a2a;
+}
+
+/* 프로필 드롭다운 스타일 */
+.profileDropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+.profileImg {
+    color: white;
+    background-color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profileImgLarge {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profileMenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #2a2a2a;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.profileDropdown:hover .profileMenu {
+    display: block;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.profileEmail {
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+.profileActions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.btnProfile, .btnLogout {
+    flex: 1;
+    padding: 0.5rem;
+    text-align: center;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btnProfile {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+.btnLogout {
+    background-color: #e50914;
+    color: #ffffff;
+}
+
+.btnProfile:hover {
+    background-color: #4a4a4a;
+}
+
+.btnLogout:hover {
+    background-color: #f40612;
+}
+
+.logoutForm {
+    margin: 0;
+    padding: 0;
+    flex: 1;
 }
