@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -21,9 +22,9 @@ public class BasicController {
         return basicService.getMain(model);
     }
 
-    @GetMapping("/detail")
-    String getDetail() {
-        return basicService.getDetail();
+    @GetMapping("/detail/{movieCd}")
+    String getDetail(@PathVariable String movieCd, Model model) {
+        return basicService.getDetail(movieCd, model);
     }
 
     //JS에서 KOBIS Key를 요청하면 String으로 전달해준다.

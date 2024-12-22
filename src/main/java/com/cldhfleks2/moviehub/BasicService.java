@@ -2,6 +2,7 @@ package com.cldhfleks2.moviehub;
 
 import com.cldhfleks2.moviehub.config.ExcuteTask;
 import com.cldhfleks2.moviehub.movie.Movie;
+import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
 import com.cldhfleks2.moviehub.movie.MovieService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,24 +44,44 @@ public class BasicService {
         JsonNode jsonNode = objectMapper.readTree(totalTodayBoxOfficeResponseBody);
         JsonNode totalTodayBoxOfficeList = jsonNode.path("boxOfficeResult").path("dailyBoxOfficeList");
         
-        List<Movie> totalTodayBoxOfficeMovie = new ArrayList<>();
+        List<MovieDTO> totalTodayBoxOfficeMovie = new ArrayList<>();
         //응답의 영화 목록에 대해 반복
         for (int i = 0; i < totalTodayBoxOfficeList.size() && i < 10; i++) {
             //현재 영화에 대한 처리
             JsonNode movieJsonNode = totalTodayBoxOfficeList.get(i);
             String movieCd = movieJsonNode.path("movieCd").asText();
             Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);
-            if(movieObj.isPresent()) totalTodayBoxOfficeMovie.add(movieObj.get()); //찾은것들만 넣어줌
-
+            if(!movieObj.isPresent()) continue;
+            //필요한것만 넣는다.
+            MovieDTO.MovieDTOBuilder movieDTOBuilder = MovieDTO.builder();
+            movieDTOBuilder.movieCd(movieJsonNode.path("movieCd").asText());
+            movieDTOBuilder.movieNm(movieJsonNode.path("movieNm").asText());
+            movieDTOBuilder.watchGradeNm(movieJsonNode.path("watchGradeNm").asText());
+            movieDTOBuilder.genreNm(movieJsonNode.path("genreNm").asText());
+            movieDTOBuilder.showTm(movieJsonNode.path("showTm").asText());
+            movieDTOBuilder.openDt(movieJsonNode.path("openDt").asText());
+            movieDTOBuilder.audiAcc(movieJsonNode.path("audiAcc").asText());
+            movieDTOBuilder.audiCnt(movieJsonNode.path("audiCnt").asText());
+            //이미지도 보내줌
+            
+            
+            
+            MovieDTO movieDTO = movieDTOBuilder.build();
+            totalTodayBoxOfficeMovie.add(movieDTO);
         }
-
+        model.addAttribute("totalTodayBoxOfficeMovie", totalTodayBoxOfficeMovie);
 
 
 
         return "main/main";
     }
 
-    String getDetail() {
+    String getDetail(String movieCd, Model model) {
+        //movieCd로 영화를 찾고 없으면
+        //KOBIS API로 영화를 검색해봄.
+        //그래도 없으면 메인페이지로 리다이렉트 alertmessage보내면서
+
+
         return "detail/detail";
     }
 
