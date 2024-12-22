@@ -33,6 +33,11 @@ public class Movie {
     private String showTm; // 영화 상영 시간     예) "106" 단위 분
     private String typeNm; // 영화 유형         예) "장편"
 
+    //"https://www.moviechart.co.kr/info/movieinfo/trailer/movieCd값"에서 이미지가져오기
+    private String posterURL;
+
+
+
 //    private String salesShare; // 매출 점유율 : 일별박스오피스 애매해서 사용 X
 //    private String audiCnt; // 해당일의 관객 수 : DailyStats로 이전
 //    private String movieNmOg; // 영화 이름 원문  예) "" 공백일때가 많음.

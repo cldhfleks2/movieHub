@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @SQLDelete(sql = "UPDATE movie_genre SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
+//미공개 영화는 status=0 처리
 public class MovieGenre {
     //영화상세정보
     private String genreNm; // 장르명   예) "드라마"
