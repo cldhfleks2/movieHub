@@ -83,21 +83,21 @@ public class BasicService {
             //3-1. 장르 가져오기 (MovieGenre에서)
             List<MovieGenre> movieGenreList = movieGenreRepository.findByMovieIdAndStatus(movieId);
             if(movieGenreList.isEmpty()){
-                log.error("다음에 출력할 영화 객체의 MovieGenre객체에 문제가 있음 = " + movie);
+                log.error("{} 영화 객체와 관련된 MovieGenre객체에 문제가 있음", movie);
                 continue;
             }
             movieDTOBuilder.genreList(movieGenreList);
             //3-2. 시청 가이드라인 가져오기 (MovieAudit에서)
             List<MovieAudit> movieAuditList = movieAuditRepository.findByMovieIdAndStatus(movieId);
             if(movieAuditList.isEmpty()){
-                log.error("다음에 출력할 영화 객체의 MovieAudit객체에 문제가 있음 = " + movie);
+                log.error("{} 영화 객체와 관련된 MovieAudit객체에 문제가 있음", movie);
                 continue;
             }
             movieDTOBuilder.watchGradeList(movieAuditList);
             //3-3. 관객수 가져오기 (MovieDailyStat에서)
             List<MovieDailyStat> movieDailyStatList = movieDailyStatRepository.findByMovieIdAndStatus(movieId);
             if(movieDailyStatList.isEmpty()){
-                log.error("다음에 출력할 영화 객체의 MovieDailySta객체에 문제가 있음 = " + movie);
+                log.error("{} 영화 객체와 관련된 MovieDailyStat객체에 문제가 있음", movie);
                 continue;
             }
             movieDTOBuilder.audiCnt(movieDailyStatList.get(0).getAudiCnt()); //값만 보냄

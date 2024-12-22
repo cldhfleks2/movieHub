@@ -1,19 +1,26 @@
 package com.cldhfleks2.moviehub.config;
 
+import com.cldhfleks2.moviehub.TMDBRequestService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.json.Json;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
+import java.net.http.HttpResponse;
 import java.nio.file.Paths;
 import java.time.Duration;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class SeleniumWebDriverConfig {
     private WebDriver driver;
@@ -60,8 +67,7 @@ public class SeleniumWebDriverConfig {
         }
     }
 
-
-
+    //웹크롤링으로 영화 포스터를 가져오는 코드
     public synchronized String getMoviePosterURL(String movieCd) {
         try {
             if (!isDriverInitialized) {

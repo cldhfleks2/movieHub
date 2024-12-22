@@ -1,6 +1,7 @@
 package com.cldhfleks2.moviehub.movie;
 
 import com.cldhfleks2.moviehub.KOBISRequestService;
+import com.cldhfleks2.moviehub.TMDBRequestService;
 import com.cldhfleks2.moviehub.config.ExcuteTask;
 import com.cldhfleks2.moviehub.config.SeleniumWebDriverConfig;
 import com.cldhfleks2.moviehub.movie.actor.MovieActor;
@@ -47,6 +48,7 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final SeleniumWebDriverConfig seleniumWebDriverConfig;
     private final KOBISRequestService kobisRequestService;
+    private final TMDBRequestService tmdbRequestService;
 
     //날짜 가져오는 함수 : KOBIS에서 하루이전 통계만 잡히므로 하루 이전 날짜로 계산
     private String getCurrentDay() {
@@ -102,15 +104,26 @@ public class MovieService {
                 movie.setOpenDt(openDt);
                 movie.setSalesAcc(salesAcc);
                 movie.setAudiAcc(audiAcc);
-                String getPosterURL = seleniumWebDriverConfig.getMoviePosterURL(movieCd);
+                //version 1
+//                String getPosterURL = seleniumWebDriverConfig.getMoviePosterURL(movieCd);
                 // 영화 포스터가 없으면 해당 영화를 미공개 영화로 저장
-                if (getPosterURL == null || !getPosterURL.contains("source=")) {
+//                if (getPosterURL == null || !getPosterURL.contains("source=")) {
+//                    movie.setPosterURL("null");
+//                    movie.setStatus(0); //미공개 영화로 저장
+//                    movieRepository.save(movie);
+//                    continue; //다른 엔티티를 저장하지 않음.
+//                }
+//                String posterURL = getPosterURL.split("source=")[1];
+//                movie.setPosterURL(posterURL);
+
+                //version2
+                String posterURL = tmdbRequestService.getMoviePosterURL(movieNm); //새로운 기능. 영화이름으로 검색
+                if(posterURL == null){
                     movie.setPosterURL("null");
                     movie.setStatus(0); //미공개 영화로 저장
                     movieRepository.save(movie);
                     continue; //다른 엔티티를 저장하지 않음.
                 }
-                String posterURL = getPosterURL.split("source=")[1];
                 movie.setPosterURL(posterURL);
 
                 //영화의 상세 정보를 받기 새로운 KOBIS API 요청을 날림
