@@ -39,24 +39,25 @@ public class BasicService {
     private final MovieGenreRepository movieGenreRepository;
     private final MovieAuditRepository movieAuditRepository;
     private final MovieDailyStatRepository movieDailyStatRepository;
+    private final KOBISRequestService kobisRequestService;
 
     @Value("${kobis.key}")
     private String kobiskey;
 
     String test(Model model) throws Exception {
-        HttpResponse<String> totalTodayBoxOfficeResponse = movieService.getTotalTodayBoxOfficeResponse();
-        String totalTodayBoxOfficeResponseBody = totalTodayBoxOfficeResponse.body();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(totalTodayBoxOfficeResponseBody);
-        //테스트
-        movieService.translateJsonToMap(jsonNode);
+
+        return "test";
+    }
+
+    String test2(Model model) throws Exception {
+
         return "test";
     }
 
     //메인 페이지 GET
     String getMain(Model model) throws Exception{
         //전체 일일 박스 오피스를 담은 response를 JSON파싱 진행
-        HttpResponse<String> totalTodayBoxOfficeResponse = movieService.getTotalTodayBoxOfficeResponse();
+        HttpResponse<String> totalTodayBoxOfficeResponse = kobisRequestService.getTotalTodayBoxOfficeResponse();
         String totalTodayBoxOfficeResponseBody = totalTodayBoxOfficeResponse.body();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(totalTodayBoxOfficeResponseBody);
@@ -117,18 +118,12 @@ public class BasicService {
 
 
     String getDetail(String movieCd, Model model) {
-        //movieCd로 영화를 찾고 없으면
+        //movieCd로 DB에서 영화를 찾고 없으면
         //KOBIS API로 영화를 검색해봄.
         //그래도 없으면 메인페이지로 리다이렉트 alertmessage보내면서
 
         return "detail/detail";
     }
-
-    //JS에서 KOBIS Key를 요청하면 String으로 전달해준다.
-    ResponseEntity<String> getKobiskey() {
-        return ResponseEntity.ok(kobiskey);
-    }
-
 
 
 }

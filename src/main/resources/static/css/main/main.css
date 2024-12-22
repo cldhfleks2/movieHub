@@ -136,13 +136,14 @@
 
 
 
-
-
-
-
 /* 영화 그리드 스타일 */
 .movieCard {
     display: inline-block;
+    background: white;
+    width: min-content; /* 내부 컨텐츠의 최소 너비에 맞춤 */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 .moviePoster {
     height: 480px; /* 세로 고정 */
@@ -199,35 +200,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* 반응형 스타일 */
 @media (max-width: 768px) {
     .searchWrapper {
@@ -255,9 +227,6 @@ section {
 }
 
 
-
-
-
 .mainContent {
     margin: 2rem auto;
     padding: 0 5rem;
@@ -265,12 +234,7 @@ section {
 
 
 
-.movieCard {
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+
 
 .movieInfo {
     padding: 1rem;
@@ -326,9 +290,13 @@ section {
     color: #333;
 }
 
-
-
 a {
     text-decoration: none; /* 밑줄 제거 */
     color: inherit; /* 부모 요소의 글자색 상속 */
 }
+
+
+
+
+
+

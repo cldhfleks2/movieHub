@@ -25,6 +25,11 @@ public class BasicController {
         return basicService.test(model);
     }
 
+//    @GetMapping("/test2")
+//    String test2(Model model) throws Exception {
+//        return basicService.test2(model);
+//    }
+
     @GetMapping({"/", "/main"})
     String getMain(Model model) throws Exception {
         return basicService.getMain(model);
@@ -33,11 +38,5 @@ public class BasicController {
     @GetMapping("/detail/{movieCd}")
     String getDetail(@PathVariable String movieCd, Model model) {
         return basicService.getDetail(movieCd, model);
-    }
-
-    //JS에서 KOBIS Key를 요청하면 String으로 전달해준다.
-    @GetMapping("/getkobiskey")
-    ResponseEntity<String> getKobiskey() {
-        return basicService.getKobiskey();
     }
 }

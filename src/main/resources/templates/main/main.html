@@ -46,7 +46,7 @@
                     <div class="movieMeta">
                         <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
                         <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
-                        <span class="release-date" th:text="${movie.openDt}">2024.12.04</span>
+                        <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
                     </div>
                     <div class="movieStats">
                         <div class="stat-item">
