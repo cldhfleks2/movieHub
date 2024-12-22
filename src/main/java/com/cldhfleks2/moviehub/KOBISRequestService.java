@@ -96,7 +96,7 @@ public class KOBISRequestService {
 
     //2. KOBIS API 전체주간박스오피스 10개 (월~일)(날짜를 포함하는 주간을 자동으로 인식해서 주나?)
     public HttpResponse<String> sendTotalWeeklyBoxOfficeRequest() throws Exception{
-        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
+        LocalDate currentDate = LocalDate.now().minusDays(8); //최소 일주일전 통계만 잡히나 안전을위해 8일전
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
 
@@ -112,9 +112,9 @@ public class KOBISRequestService {
 
     //3. KOBIS API 주간한국박스오피스 10개 (월~일)
     public HttpResponse<String> sendKoreaWeeklyBoxOfficeRequest() throws Exception{
-        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
+        LocalDate currentDate = LocalDate.now().minusDays(8);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
+        String currentDay = currentDate.format(formatter);
 
         String URL = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
                 + "?key=" + kobiskey
@@ -129,9 +129,9 @@ public class KOBISRequestService {
 
     //4. KOBIS API 주간외국박스오피스 10개 (월~일)
     public HttpResponse<String> sendForeignWeeklyBoxOfficeRequest() throws Exception{
-        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
+        LocalDate currentDate = LocalDate.now().minusDays(8);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
+        String currentDay = currentDate.format(formatter);
 
         String URL = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
                 + "?key=" + kobiskey
