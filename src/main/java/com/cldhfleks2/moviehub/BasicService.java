@@ -34,7 +34,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BasicService {
     private final MovieService movieService;
-    private final ExcuteTask excuteTask;
     private final MovieRepository movieRepository;
     private final SeleniumWebDriverConfig seleniumWebDriverConfig;
     private final MovieGenreRepository movieGenreRepository;
@@ -45,7 +44,7 @@ public class BasicService {
     private String kobiskey;
 
     String test(Model model) throws Exception {
-        HttpResponse<String> totalTodayBoxOfficeResponse = excuteTask.getTotalTodayBoxOfficeResponseBody();
+        HttpResponse<String> totalTodayBoxOfficeResponse = movieService.getTotalTodayBoxOfficeResponse();
         String totalTodayBoxOfficeResponseBody = totalTodayBoxOfficeResponse.body();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(totalTodayBoxOfficeResponseBody);
@@ -57,7 +56,7 @@ public class BasicService {
     //메인 페이지 GET
     String getMain(Model model) throws Exception{
         //전체 일일 박스 오피스를 담은 response를 JSON파싱 진행
-        HttpResponse<String> totalTodayBoxOfficeResponse = excuteTask.getTotalTodayBoxOfficeResponseBody();
+        HttpResponse<String> totalTodayBoxOfficeResponse = movieService.getTotalTodayBoxOfficeResponse();
         String totalTodayBoxOfficeResponseBody = totalTodayBoxOfficeResponse.body();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(totalTodayBoxOfficeResponseBody);

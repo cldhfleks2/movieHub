@@ -33,6 +33,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class MovieService {
+    private HttpResponse<String> totalTodayBoxOfficeResponse; //중요한 response는 따로 저장
     private final MovieNationRepository movieNationRepository;
     private final MovieActorRepository movieActorRepository;
     private final MovieCompanyRepository movieCompanyRepository;
@@ -41,12 +42,45 @@ public class MovieService {
     private final MovieGenreRepository movieGenreRepository;
     private final MovieAuditRepository movieAuditRepository;
     private final MovieRepository movieRepository;
-    private final ExcuteTask excuteTask;
     private final SeleniumWebDriverConfig seleniumWebDriverConfig;
-
 
     @Value("${kobis.key}")
     private String kobiskey;
+
+    public void setTotalTodayBoxOfficeResponse(HttpResponse<String> totalTodayBoxOfficeResponse) {
+        this.totalTodayBoxOfficeResponse = totalTodayBoxOfficeResponse;
+    }
+
+    //전체 일일 박스오피스 목록 response를 get
+    public HttpResponse<String> getTotalTodayBoxOfficeResponse() {
+        if (totalTodayBoxOfficeResponse == null) {
+            throw new RuntimeException("API 응답이 없습니다. 서버와의 연결 문제일 수 있습니다.");
+        } else if (totalTodayBoxOfficeResponse.statusCode() != 200) {
+            throw new RuntimeException("API 호출이 실패했습니다. 응답 코드: " + totalTodayBoxOfficeResponse.statusCode());
+        }
+        return totalTodayBoxOfficeResponse;
+    }
+
+    //전체 일일 박스오피스 목록을 요청하여 받은 응답을 필드로 지정하는 함수
+    public void sendTotalTodayBoxOfficeRequest() throws Exception {
+        //KOBIS에서 통계가 하루 이전날 까지만 계산 되므로 날짜를 -1
+        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
+
+        //KOBIS API : 전체 일일박스오피스 10개 가져오는 요청 만들기
+        String URL = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+                + "?key=" + kobiskey
+                + "&targetDt=" + currentDay;
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(URL))
+                .GET()
+                .build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        totalTodayBoxOfficeResponse = response; //필드에 저장
+    }
 
     //KOBIS URL로 요청을 보내고 응답을 리턴해주는 함수
     public HttpResponse<String> sendRequest(String URL) throws Exception {
@@ -96,10 +130,8 @@ public class MovieService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
 
-        HttpResponse<String> totalTodayBoxOfficeResponse = excuteTask.getTotalTodayBoxOfficeResponseBody();
-        String totalTodayBoxOfficeResponseBody = totalTodayBoxOfficeResponse.body();
-
         //JSON파싱 진행
+        String totalTodayBoxOfficeResponseBody = totalTodayBoxOfficeResponse.body();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(totalTodayBoxOfficeResponseBody);
         JsonNode totalTodayBoxOfficeList = jsonNode.path("boxOfficeResult").path("dailyBoxOfficeList");
@@ -107,11 +139,9 @@ public class MovieService {
         String day = jsonNode.path("boxOfficeResult").path("showRange").asText().split("~")[0];
 
         //현재 날짜와 response에있는 날짜가 다르면
+        //response를 새로 요청해서 받아야함
         if (!currentDay.equals(day)) {
-            //excuteTask에있는 response를 새로 요청해서 받아야함
-            excuteTask.getTotalTodayBoxOfficeResponse();
-            //새로 받은 response로 다시 JSON파싱 진행
-            totalTodayBoxOfficeResponse = excuteTask.getTotalTodayBoxOfficeResponseBody();
+            getTotalTodayBoxOfficeResponse(); //새로 받기
             totalTodayBoxOfficeResponseBody = totalTodayBoxOfficeResponse.body();
             jsonNode = objectMapper.readTree(totalTodayBoxOfficeResponseBody);
             totalTodayBoxOfficeList = jsonNode.path("boxOfficeResult").path("dailyBoxOfficeList");
