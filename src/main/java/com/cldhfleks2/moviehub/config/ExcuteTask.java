@@ -1,11 +1,10 @@
 package com.cldhfleks2.moviehub.config;
 
-import com.cldhfleks2.moviehub.KOBISRequestService;
+import com.cldhfleks2.moviehub.api.KOBISRequestService;
 import com.cldhfleks2.moviehub.movie.MovieService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;

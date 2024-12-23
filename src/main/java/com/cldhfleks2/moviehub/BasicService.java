@@ -1,33 +1,23 @@
 package com.cldhfleks2.moviehub;
 
-import com.cldhfleks2.moviehub.config.ExcuteTask;
+import com.cldhfleks2.moviehub.api.KOBISRequestService;
 import com.cldhfleks2.moviehub.config.SeleniumWebDriverConfig;
 import com.cldhfleks2.moviehub.movie.*;
-import com.cldhfleks2.moviehub.movie.audit.MovieAudit;
 import com.cldhfleks2.moviehub.movie.audit.MovieAuditRepository;
-import com.cldhfleks2.moviehub.movie.dailystat.MovieDailyStat;
 import com.cldhfleks2.moviehub.movie.dailystat.MovieDailyStatRepository;
-import com.cldhfleks2.moviehub.movie.genre.MovieGenre;
 import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

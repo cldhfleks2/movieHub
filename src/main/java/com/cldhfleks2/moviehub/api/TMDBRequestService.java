@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub;
+package com.cldhfleks2.moviehub.api;
 
 import com.cldhfleks2.moviehub.config.SeleniumWebDriverConfig;
 import com.fasterxml.jackson.databind.JsonNode;

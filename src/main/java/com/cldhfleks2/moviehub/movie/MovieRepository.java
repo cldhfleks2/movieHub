@@ -14,5 +14,4 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     //status=1 인 것만 가져온다.
     @Query("SELECT m FROM Movie m WHERE m.movieCd = :movieCd AND m.status = 1")
     Optional<Movie> findByMovieCdAndStatus(String movieCd);
-
 }
