@@ -139,6 +139,7 @@ public class MovieService {
         MovieDTO.MovieDTOBuilder builder = MovieDTO.builder();
         builder.movieCd(movie.getMovieCd());
         builder.movieNm(movie.getMovieNm());
+        builder.movieNmEn(movie.getMovieNmEn());
         builder.genreList(genreList);
         builder.auditList(auditList);
         builder.showTm(movie.getShowTm());
@@ -157,6 +158,7 @@ public class MovieService {
         MovieDTO.MovieDTOBuilder builder = MovieDTO.builder();
         builder.movieCd(returnEntitysDTO.getMovie().getMovieCd());
         builder.movieNm(returnEntitysDTO.getMovie().getMovieNm());
+        builder.movieNmEn(returnEntitysDTO.getMovie().getMovieNmEn());
         builder.genreList(returnEntitysDTO.getMovieGenreList());
         builder.auditList(returnEntitysDTO.getMovieAuditList());
         builder.showTm(returnEntitysDTO.getMovie().getShowTm());

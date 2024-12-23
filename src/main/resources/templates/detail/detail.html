@@ -16,16 +16,13 @@
     <div class="movieInfo">
         <img th:src="@{${movieDetail.posterURL}}" src="/image/blank.png" alt="영화 포스터" class="moviePoster">
         <div class="movieDetails">
-            <h1 th:if="${movieDetail.movieNm}" th:text="${movieDetail.movieNm}">영화 제목</h1>
-            <h1 th:if="${!movieDetail.movieNm}" th:text="${movieDetail.movieEm}">영문 영화 제목</h1>
+            <h1 th:text="${movieDetail.movieNm != null ? movieDetail.movieNm : movieDetail.movieNmEn}">영화 제목</h1>
             <div class="movieMeta">
-                <div class="movieGenreList" style="display: flex">
-                    <span th:each="genre : ${movieDetail.genreList}" th:text="${genre.genreNm} + ' '">장르</span>
-                </div>
+                <span th:each="genre : ${movieDetail.genreList}" th:text="${genre.genreNm} + ' '">장르</span>
+                &nbsp;•&nbsp;
                 <span th:text="${movieDetail.showTm} + '분'">150분</span>
-                <div class="movieAuditList" style="display: flex">
-                    <span th:each="audit : ${movieDetail.auditList}" th:text="${audit.watchGradeNm}">15세 관람가</span>
-                </div>
+                &nbsp;•&nbsp;
+                <span th:each="audit : ${movieDetail.auditList}" th:text="${audit.watchGradeNm}">15세 관람가</span>
             </div>
             <div class="movieAdditionalInfo">
                 <strong>감독:</strong>

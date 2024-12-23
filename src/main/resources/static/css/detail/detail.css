@@ -13,8 +13,9 @@ body{
 }
 
 .moviePoster {
-    width: 120px;
-    height: 180px;
+    /*width: 120px;*/
+    /*height: 180px;*/
+    height: 600px;
     object-fit: cover;
     border-radius: 4px;
 }
