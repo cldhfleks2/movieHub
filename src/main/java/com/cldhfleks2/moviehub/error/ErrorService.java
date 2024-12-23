@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+//필드 주입 필요없이 static send 메소드를 사용해서 오류내용을 출력
 public class ErrorService {
     //각 요청별로 독립적인 에러 속성을 저장 (Model model을 사용하지 않기 위함)
     //각 요청이 끝나면 알아서 JVM이 errorContext를 정리함. errorContext.remove를 할 필요가 없음
