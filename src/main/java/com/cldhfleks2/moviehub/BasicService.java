@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.http.HttpResponse;
@@ -46,6 +47,12 @@ public class BasicService {
         return "test";
     }
 
+    //날짜 가져오는 함수
+    private String getCurrentDay() {
+        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        return currentDate.format(formatter);
+    }
 
     //메인 페이지 GET
     String getMain(Model model) throws Exception{
@@ -86,13 +93,6 @@ public class BasicService {
         model.addAttribute("foreignWeeklyBoxOfficeMovie", foreignWeeklyBoxOfficeMovie);
 
         return "main/main";
-    }
-
-    //날짜 가져오는 함수
-    private String getCurrentDay() {
-        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        return currentDate.format(formatter);
     }
 
     //영화 상세 페이지 GET
@@ -137,4 +137,13 @@ public class BasicService {
     }
 
 
+    //검색 페이지 GET
+    String getSearch(String keyword, Integer pageIdx, Model model)  throws Exception{
+        if(keyword == null) keyword = ""; //검색어 없을때
+        if(pageIdx == null) pageIdx = 1;
+
+
+
+        return "search/search";
+    }
 }

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 검색 결과</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/search/search.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:replace="~{ header/header::header }"></div>
+
+<main class="mainContent">
+    <div class="searchContainer">
+        <div class="searchBar">
+            <input type="text" placeholder="영화 제목, 감독, 배우를 검색해보세요" class="searchInput">
+            <button class="searchButton">검색</button>
+        </div>
+
+        <div class="filterBar">
+            <select class="filterSelect">
+                <option value="relevance">관련도순</option>
+                <option value="date">개봉일순</option>
+                <option value="rating">평점순</option>
+            </select>
+            <div class="filterTags">
+                <button class="filterTag active">전체</button>
+                <button class="filterTag">국내영화</button>
+                <button class="filterTag">해외영화</button>
+            </div>
+        </div>
+
+        <div class="resultsInfo">
+            <span class="resultCount">총 <strong>24</strong>개의 검색결과</span>
+        </div>
+
+        <div class="movieGrid">
+            <div class="movieCard" th:each="movie : ${movies}">
+                <div class="moviePoster">
+                    <img src="/image/blank.png" th:src="${movie.posterUrl}" alt="영화 포스터">
+                    <div class="movieOverlay">
+                        <button class="btnLike">♥</button>
+                        <button class="btnBookmark">🏷️</button>
+                    </div>
+                </div>
+                <div class="movieInfo">
+                    <h3 class="movieTitle">영화 제목</h3>
+                    <div class="movieMeta">
+                        <span class="movieYear">2024</span>
+                        <span class="movieRating">⭐ 4.5</span>
+                    </div>
+                    <div class="movieGenres">
+                        <span class="genre">액션</span>
+                        <span class="genre">스릴러</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <button class="pageBtn" disabled>◀</button>
+            <div class="pageNumbers">
+                <button class="pageNum active">1</button>
+                <button class="pageNum">2</button>
+                <button class="pageNum">3</button>
+                <button class="pageNum">4</button>
+                <button class="pageNum">5</button>
+            </div>
+            <button class="pageBtn">▶</button>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{ footer/footer::footer }"></div>
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
+<script src="/js/search/search.js"></script>
+</body>
+</html>

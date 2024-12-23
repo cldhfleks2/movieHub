@@ -35,4 +35,11 @@ public class BasicController {
     String getDetail(@PathVariable String movieCd, Model model, RedirectAttributes redirectAttributes)  throws Exception{
         return basicService.getDetail(movieCd, model, redirectAttributes);
     }
+
+    //검색 페이지 GET
+    @GetMapping("/search")
+    String getSearch(String keyword, Integer pageIdx, Model model)  throws Exception{
+        return basicService.getSearch(keyword, pageIdx, model);
+    }
+
 }
