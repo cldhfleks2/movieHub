@@ -41,6 +41,7 @@
                 <div class="movieCard" th:each="movie : ${totalTodayBoxOfficeMovie}">
                     <!--                서버에서 이미지도 보내주자.-->
                     <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                    <span class="rank"></span>
                     <div class="movieInfo">
                         <div class="movieTitle">
                             <span th:text="${movie.movieNm}">영화 제목</span>
@@ -89,6 +90,7 @@
                 <div class="movieCard" th:each="movie : ${totalWeeklyBoxOfficeMovie}">
                     <!--                서버에서 이미지도 보내주자.-->
                     <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                    <span class="rank"></span>
                     <div class="movieInfo">
                         <div class="movieTitle">
                             <span th:text="${movie.movieNm}">영화 제목</span>
@@ -136,6 +138,7 @@
             <div class="movieGrid">
                 <div class="movieCard" th:each="movie : ${koreaWeeklyBoxOfficeMovie}">
                     <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                    <span class="rank"></span>
                     <div class="movieInfo">
                         <div class="movieTitle">
                             <span th:text="${movie.movieNm}">영화 제목</span>
@@ -183,6 +186,7 @@
             <div class="movieGrid">
                 <div class="movieCard" th:each="movie : ${foreignWeeklyBoxOfficeMovie}">
                     <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                    <span class="rank"></span>
                     <div class="movieInfo">
                         <div class="movieTitle">
                             <span th:text="${movie.movieNm}">영화 제목</span>

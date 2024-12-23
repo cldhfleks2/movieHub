@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    // 호출
+    addMovieRanks();
+
     initializeSliders();
 });
 
@@ -55,7 +58,7 @@ function initializeSliders() {
             if (isAnimating) return;
             isAnimating = true;
 
-            const moveAmount = direction === 'prev' ? -cardWidth * 2 : cardWidth * 2;
+            const moveAmount = direction === 'next' ? -cardWidth * 4 : cardWidth * 4;
             currentPosition += moveAmount;
 
             $sliderTrack.css({
@@ -103,5 +106,18 @@ function initializeSliders() {
         });
 
         requestAnimationFrame(autoSlide);
+    });
+}
+
+function addMovieRanks() {
+    $('.movieSection').each(function() {
+        const $section = $(this);
+        const $cards = $section.find('.movieCard');
+
+        $cards.each(function(index) {
+            const rank = index + 1; // 1부터 시작하는 순위
+            const rankTxt = rank + "위"
+            $(this).find('.rank').text(rankTxt);
+        });
     });
 }
