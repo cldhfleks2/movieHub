@@ -41,6 +41,9 @@ public class ErrorService {
                             path,
                             message)
             ));
+        }else if(returnType.equals(void.class)){
+            //not to do
+            return returnType.cast(null);
         }
 
         throw new IllegalArgumentException("Unsupported return type");
