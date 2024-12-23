@@ -19,10 +19,10 @@ import java.util.List;
 public class ReturnEntitysDTO {
     Movie movie;
     MovieDailyStat movieDailyStat;
-    List<MovieDirector> movieDirector;
-    List<MovieActor> movieActor;
-    List<MovieNation> movieNation;
-    List<MovieGenre> movieGenre;
-    List<MovieCompany> movieCompany;
-    List<MovieAudit> movieAudit;
+    List<MovieDirector> movieDirectorList;
+    List<MovieActor> movieActorList;
+    List<MovieNation> movieNationList;
+    List<MovieGenre> movieGenreList;
+    List<MovieCompany> movieCompanyList;
+    List<MovieAudit> movieAuditList;
 }
