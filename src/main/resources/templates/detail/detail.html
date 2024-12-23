@@ -14,23 +14,38 @@
 
 <main class="mainContent">
     <div class="movieInfo">
-        <img src="/image/blank.png" alt="영화 포스터" class="moviePoster">
+        <img th:src="@{${movieDetail.posterURL}}" src="/image/blank.png" alt="영화 포스터" class="moviePoster">
         <div class="movieDetails">
-            <h1>영화 제목</h1>
+            <h1 th:if="${movieDetail.movieNm}" th:text="${movieDetail.movieNm}">영화 제목</h1>
+            <h1 th:if="${!movieDetail.movieNm}" th:text="${movieDetail.movieEm}">영문 영화 제목</h1>
             <div class="movieMeta">
-                <span>2024 • 액션/드라마</span>
-                <span>150분</span>
-                <span>15세 관람가</span>
+                <div class="movieGenreList" style="display: flex">
+                    <span th:each="genre : ${movieDetail.genreList}" th:text="${genre.genreNm} + ' '">장르</span>
+                </div>
+                <span th:text="${movieDetail.showTm} + '분'">150분</span>
+                <div class="movieAuditList" style="display: flex">
+                    <span th:each="audit : ${movieDetail.auditList}" th:text="${audit.watchGradeNm}">15세 관람가</span>
+                </div>
             </div>
             <div class="movieAdditionalInfo">
-                <p><strong>감독:</strong> 홍길동</p>
-                <p><strong>출연:</strong> 배우1, 배우2, 배우3</p>
-                <p><strong>개봉일:</strong> 2024.01.01</p>
+                <strong>감독:</strong>
+                <div class="movieDirectorList" style="display: flex">
+                    <p th:each="director : ${movieDetail.directorList}" th:text="${director.peopleNm}">홍길동</p>
+                </div>
+                <strong>출연:</strong>
+                <div class="movieActorList" style="display: flex">
+                    <p th:each="actor : ${movieDetail.actorList}" th:text="${actor.peopleNm}">홍길동</p>
+                </div>
+                <strong>개봉일:</strong>
+                <div class="movieOpenDate" style="display: flex">
+                    <p th:text="${movieDetail.openDt}"></p>
+                </div>
             </div>
             <div class="movieActions">
                 <button class="actionBtn likeBtn">
                     <span class="icon">♥</span>
                     <span>좋아요</span>
+                    <span></span>
                 </button>
                 <button class="actionBtn bookmarkBtn">
                     <span class="icon">🏷️</span>
