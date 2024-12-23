@@ -21,12 +21,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -153,11 +156,43 @@ public class BasicService {
         return "main/main";
     }
 
+    //날짜 가져오는 함수
+    private String getCurrentDay() {
+        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        return currentDate.format(formatter);
+    }
 
-    String getDetail(String movieCd, Model model) {
-        //movieCd로 DB에서 영화를 찾고 없으면
-        //KOBIS API로 영화를 검색해봄.
-        //그래도 없으면 메인페이지로 리다이렉트 alertmessage보내면서
+    String getDetail(String movieCd, Model model, RedirectAttributes redirectAttributes) throws Exception{
+        //1차 : DB 검색
+        Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);
+        if(!movieObj.isPresent()){
+            //2차 : KOBIS API 검색
+            HttpResponse<String> movieDetailResponse =  kobisRequestService.sendMovieDetailRequest(movieCd);
+            String movieDetailResponseBody = movieDetailResponse.body();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode movieDetailJsonNode = objectMapper.readTree(movieDetailResponseBody);
+            JsonNode movieDetail = movieDetailJsonNode.path("movieInfoResult").path("movieInfo").path("movieCd");
+            if(movieDetail.isNull()){
+                //그래도 없으면 메인페이지로 리다이렉트
+                redirectAttributes.addFlashAttribute("alertMessage", "영화가 존재하지 않습니다.");
+                return "redirect:/main";
+            }
+            
+            //영화를 DB에 저장하고 그 정보를 보여주면됌
+            String currentDay = getCurrentDay();
+            JsonNode movieInfo = movieDetailJsonNode.path("movieInfoResult").path("movieInfo");
+            movieService.saveEntityAsMovieDetailResponse(movieInfo , currentDay);
+
+
+        }
+
+
+
+
+
+
+
 
         return "detail/detail";
     }

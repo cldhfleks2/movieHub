@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 public class MovieDailyStat {
     //일별박스오피스
     private String day; // 일자(showRange날짜) 예) "20241220"
-    private String salesAmt; // 해당일의 매출액 예) "1010084470"
-    private String audiCnt; // 해당 일 관객 수 예) "1438"
+    private String salesAmt; // 해당일의 매출액 예) "1010084470" //박스 오피스 목록에 들은 영화만이 가지는값
+    private String audiCnt; // 해당 일 관객 수 예) "1438"        //박스 오피스 목록에 들은 영화만이 가지는값
     private String scrnCnt; // 스크린 수      예) "1176" 잘안쓸거같긴해
     private String showCnt; // 상영 횟수      예) "3698" 잘안쓸거같긴해
 

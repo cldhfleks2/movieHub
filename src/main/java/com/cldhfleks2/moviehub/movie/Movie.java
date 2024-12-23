@@ -24,6 +24,8 @@ public class Movie {
     private String openDt; // 개봉일     예) "2024-12-04(일별박스오피스)" "20241204(영화상세정보)"
 
     //일별박스오피스
+    //이것들은 박스오피스 목록에 들은 영화만 존재하는 값
+    //영화 상세정보 요청등에서는 얻을 수 없는 값임.
     private String salesAcc; // 누적 매출액     예) "20542011020"
     private String audiAcc; // 누적 관객 수       예) "2191719"
 
