@@ -45,7 +45,7 @@
                     <div class="movieInfo">
                         <div class="movieTitle">
                             <span th:text="${movie.movieNm}">영화 제목</span>
-                            <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
+                            <span class="age-rating" th:each="watchGrade : ${movie.auditList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                         </div>
                         <div class="movieMeta">
                             <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
@@ -94,7 +94,7 @@
                     <div class="movieInfo">
                         <div class="movieTitle">
                             <span th:text="${movie.movieNm}">영화 제목</span>
-                            <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
+                            <span class="age-rating" th:each="watchGrade : ${movie.auditList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                         </div>
                         <div class="movieMeta">
                             <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
@@ -142,7 +142,7 @@
                     <div class="movieInfo">
                         <div class="movieTitle">
                             <span th:text="${movie.movieNm}">영화 제목</span>
-                            <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
+                            <span class="age-rating" th:each="watchGrade : ${movie.auditList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                         </div>
                         <div class="movieMeta">
                             <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
@@ -190,7 +190,7 @@
                     <div class="movieInfo">
                         <div class="movieTitle">
                             <span th:text="${movie.movieNm}">영화 제목</span>
-                            <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
+                            <span class="age-rating" th:each="watchGrade : ${movie.auditList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                         </div>
                         <div class="movieMeta">
                             <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
