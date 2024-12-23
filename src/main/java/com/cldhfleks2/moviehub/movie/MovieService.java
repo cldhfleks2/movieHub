@@ -104,19 +104,7 @@ public class MovieService {
                 movie.setOpenDt(openDt);
                 movie.setSalesAcc(salesAcc);
                 movie.setAudiAcc(audiAcc);
-                //version 1
-//                String getPosterURL = seleniumWebDriverConfig.getMoviePosterURL(movieCd);
-                // 영화 포스터가 없으면 해당 영화를 미공개 영화로 저장
-//                if (getPosterURL == null || !getPosterURL.contains("source=")) {
-//                    movie.setPosterURL("null");
-//                    movie.setStatus(0); //미공개 영화로 저장
-//                    movieRepository.save(movie);
-//                    continue; //다른 엔티티를 저장하지 않음.
-//                }
-//                String posterURL = getPosterURL.split("source=")[1];
-//                movie.setPosterURL(posterURL);
-
-                //version2
+                //포스터 가져오기
                 String posterURL = tmdbRequestService.getMoviePosterURL(movieNm); //새로운 기능. 영화이름으로 검색
                 if(posterURL == null){
                     movie.setPosterURL("null");

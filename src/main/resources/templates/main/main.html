@@ -34,41 +34,47 @@
             <h2 class="sectionTitle">오늘의 박스 오피스 목록</h2>
             <a href="#" class="viewMoreLink">더보기 ></a>
         </div>
-        <div class="movieGrid">
-            <div class="movieCard" th:each="movie : ${totalTodayBoxOfficeMovie}">
-<!--                서버에서 이미지도 보내주자.-->
-                <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
-                <div class="movieInfo">
-                    <div class="movieTitle">
-                        <span th:text="${movie.movieNm}">영화 제목</span>
-                        <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
-                    </div>
-                    <div class="movieMeta">
-                        <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
-                        <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
-                        <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
-                    </div>
-                    <div class="movieStats">
-                        <div class="stat-item">
-                            <span class="stat-label">누적관객 수</span>
-                            <span class="stat-value" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+
+        <div class="movieGrid-container">
+            <button class="slide-button prev">&#10094;</button>
+            <div class="movieGrid">
+                <div class="movieCard" th:each="movie : ${totalTodayBoxOfficeMovie}">
+                    <!--                서버에서 이미지도 보내주자.-->
+                    <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                    <div class="movieInfo">
+                        <div class="movieTitle">
+                            <span th:text="${movie.movieNm}">영화 제목</span>
+                            <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-label">일일관객 수</span>
-                            <span class="stat-value" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                        <div class="movieMeta">
+                            <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
+                            <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
+                            <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
                         </div>
-                    </div>
-                    <div class="movieButtons">
-                        <a href="#">
-                            <button class="reserveButton">예매하기</button>
-                        </a>
-                        <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}">
-                            <button class="detailButton">상세정보</button>
-                        </a>
+                        <div class="movieStats">
+                            <div class="stat-item">
+                                <span class="stat-label">누적관객 수</span>
+                                <span class="stat-value" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">일일관객 수</span>
+                                <span class="stat-value" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                            </div>
+                        </div>
+                        <div class="movieButtons">
+                            <a href="#">
+                                <button class="reserveButton">예매하기</button>
+                            </a>
+                            <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}">
+                                <button class="detailButton">상세정보</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+            <button class="slide-button next">&#10095;</button>
         </div>
+
     </section>
 
     <!-- 2. 전체 주간 박스 오피스 -->
@@ -77,41 +83,46 @@
             <h2 class="sectionTitle">주간 박스 오피스 목록</h2>
             <a href="#" class="viewMoreLink">더보기 ></a>
         </div>
-        <div class="movieGrid">
-            <div class="movieCard" th:each="movie : ${totalWeeklyBoxOfficeMovie}">
-                <!--                서버에서 이미지도 보내주자.-->
-                <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
-                <div class="movieInfo">
-                    <div class="movieTitle">
-                        <span th:text="${movie.movieNm}">영화 제목</span>
-                        <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
-                    </div>
-                    <div class="movieMeta">
-                        <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
-                        <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
-                        <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
-                    </div>
-                    <div class="movieStats">
-                        <div class="stat-item">
-                            <span class="stat-label">누적관객 수</span>
-                            <span class="stat-value" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+        <div class="movieGrid-container">
+            <button class="slide-button prev">&#10094;</button>
+            <div class="movieGrid">
+                <div class="movieCard" th:each="movie : ${totalWeeklyBoxOfficeMovie}">
+                    <!--                서버에서 이미지도 보내주자.-->
+                    <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                    <div class="movieInfo">
+                        <div class="movieTitle">
+                            <span th:text="${movie.movieNm}">영화 제목</span>
+                            <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-label">일일관객 수</span>
-                            <span class="stat-value" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                        <div class="movieMeta">
+                            <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
+                            <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
+                            <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
                         </div>
-                    </div>
-                    <div class="movieButtons">
-                        <a href="#">
-                            <button class="reserveButton">예매하기</button>
-                        </a>
-                        <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}">
-                            <button class="detailButton">상세정보</button>
-                        </a>
+                        <div class="movieStats">
+                            <div class="stat-item">
+                                <span class="stat-label">누적관객 수</span>
+                                <span class="stat-value" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">일일관객 수</span>
+                                <span class="stat-value" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                            </div>
+                        </div>
+                        <div class="movieButtons">
+                            <a href="#">
+                                <button class="reserveButton">예매하기</button>
+                            </a>
+                            <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}">
+                                <button class="detailButton">상세정보</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+            <button class="slide-button next">&#10095;</button>
         </div>
+
     </section>
 
     <!-- 3. 주간 한국 영화 박스 오피스 -->
@@ -120,40 +131,45 @@
             <h2 class="sectionTitle">주간 한국 영화 목록</h2>
             <a href="#" class="viewMoreLink">더보기 ></a>
         </div>
-        <div class="movieGrid">
-            <div class="movieCard" th:each="movie : ${koreaWeeklyBoxOfficeMovie}">
-                <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
-                <div class="movieInfo">
-                    <div class="movieTitle">
-                        <span th:text="${movie.movieNm}">영화 제목</span>
-                        <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
-                    </div>
-                    <div class="movieMeta">
-                        <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
-                        <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
-                        <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
-                    </div>
-                    <div class="movieStats">
-                        <div class="stat-item">
-                            <span class="stat-label">누적관객 수</span>
-                            <span class="stat-value" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+        <div class="movieGrid-container">
+            <button class="slide-button prev">&#10094;</button>
+            <div class="movieGrid">
+                <div class="movieCard" th:each="movie : ${koreaWeeklyBoxOfficeMovie}">
+                    <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                    <div class="movieInfo">
+                        <div class="movieTitle">
+                            <span th:text="${movie.movieNm}">영화 제목</span>
+                            <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-label">일일관객 수</span>
-                            <span class="stat-value" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                        <div class="movieMeta">
+                            <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
+                            <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
+                            <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
                         </div>
-                    </div>
-                    <div class="movieButtons">
-                        <a href="#">
-                            <button class="reserveButton">예매하기</button>
-                        </a>
-                        <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}">
-                            <button class="detailButton">상세정보</button>
-                        </a>
+                        <div class="movieStats">
+                            <div class="stat-item">
+                                <span class="stat-label">누적관객 수</span>
+                                <span class="stat-value" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">일일관객 수</span>
+                                <span class="stat-value" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                            </div>
+                        </div>
+                        <div class="movieButtons">
+                            <a href="#">
+                                <button class="reserveButton">예매하기</button>
+                            </a>
+                            <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}">
+                                <button class="detailButton">상세정보</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+            <button class="slide-button next">&#10095;</button>
         </div>
+
     </section>
 
     <!-- 4. 주간 외국 영화 박스 오피스 -->
@@ -162,40 +178,45 @@
             <h2 class="sectionTitle">주간 외국 영화 목록</h2>
             <a href="#" class="viewMoreLink">더보기 ></a>
         </div>
-        <div class="movieGrid">
-            <div class="movieCard" th:each="movie : ${foreignWeeklyBoxOfficeMovie}">
-                <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
-                <div class="movieInfo">
-                    <div class="movieTitle">
-                        <span th:text="${movie.movieNm}">영화 제목</span>
-                        <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
-                    </div>
-                    <div class="movieMeta">
-                        <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
-                        <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
-                        <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
-                    </div>
-                    <div class="movieStats">
-                        <div class="stat-item">
-                            <span class="stat-label">누적관객 수</span>
-                            <span class="stat-value" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+        <div class="movieGrid-container">
+            <button class="slide-button prev">&#10094;</button>
+            <div class="movieGrid">
+                <div class="movieCard" th:each="movie : ${foreignWeeklyBoxOfficeMovie}">
+                    <img src="/image/example1.jpg" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                    <div class="movieInfo">
+                        <div class="movieTitle">
+                            <span th:text="${movie.movieNm}">영화 제목</span>
+                            <span class="age-rating" th:each="watchGrade : ${movie.watchGradeList}" th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-label">일일관객 수</span>
-                            <span class="stat-value" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                        <div class="movieMeta">
+                            <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">드라마</span>
+                            <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
+                            <span class="release-date" th:text="${movie.openDt} + ' 개봉'">2024.12.04</span>
                         </div>
-                    </div>
-                    <div class="movieButtons">
-                        <a href="#">
-                            <button class="reserveButton">예매하기</button>
-                        </a>
-                        <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}">
-                            <button class="detailButton">상세정보</button>
-                        </a>
+                        <div class="movieStats">
+                            <div class="stat-item">
+                                <span class="stat-label">누적관객 수</span>
+                                <span class="stat-value" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">일일관객 수</span>
+                                <span class="stat-value" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                            </div>
+                        </div>
+                        <div class="movieButtons">
+                            <a href="#">
+                                <button class="reserveButton">예매하기</button>
+                            </a>
+                            <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}">
+                                <button class="detailButton">상세정보</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+            <button class="slide-button next">&#10095;</button>
         </div>
+
     </section>
 
 
