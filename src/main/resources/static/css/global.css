@@ -15,7 +15,7 @@ body {
     padding: 1rem 2rem;
 }
 
-.nav {
+.headerNav {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
@@ -23,25 +23,24 @@ body {
     align-items: center;
 }
 
-.navLinks {
+.headerNavLinks {
     display: flex;
     gap: 2rem;
 }
 
-.logo {
+.headerLogo {
     font-size: 24px;
     font-weight: bold;
     color: #ffffff;
     text-decoration: none;
 }
 
-
-.navLinks a {
+.headerNavLinks a {
     color: white;
     text-decoration: none;
 }
 
-.footer {
+.headerFooter {
     background-color: #1a1a1a;
     color: white;
     text-align: center;
@@ -49,38 +48,25 @@ body {
     margin-top: 4rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* 드롭다운 메뉴 스타일 */
-.dropdown {
+.headerDropdown {
     position: relative;
     display: inline-block;
     top: 12px;
 }
 
-.dropdownToggle {
+.headerDropdownToggle {
     padding: 0.5rem 1rem;
     cursor: pointer;
 }
 
-.dropdownToggle:after {
+.headerDropdownToggle:after {
     content: '▼';
     font-size: 0.8em;
     margin-left: 0.5rem;
 }
 
-.dropdownMenu {
+.headerDropdownMenu {
     display: none;
     position: absolute;
     top: 100%;
@@ -92,11 +78,11 @@ body {
     border-radius: 4px;
 }
 
-.dropdown:hover .dropdownMenu {
+.headerDropdown:hover .headerDropdownMenu {
     display: block;
 }
 
-.dropdownItem {
+.headerDropdownItem {
     display: block;
     padding: 0.75rem 1rem;
     color: #ffffff;
@@ -104,71 +90,71 @@ body {
     transition: background-color 0.2s;
 }
 
-.dropdownItem:hover {
+.headerDropdownItem:hover {
     background-color: #3a3a3a;
 }
 
 /* 유저 메뉴 스타일 */
-.userMenu {
+.headerUserMenu {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.authButtons {
+.headerAuthButtons {
     display: flex;
     gap: 1rem;
 }
 
-.btnLogin, .btnSignup {
+.headerBtnLogin, .headerBtnSignup {
     padding: 0.5rem 1rem;
     border-radius: 4px;
     text-decoration: none;
     transition: background-color 0.2s;
 }
 
-.btnLogin {
+.headerBtnLogin {
     color: #ffffff;
     border: 1px solid #ffffff;
 }
 
-.btnSignup {
+.headerBtnSignup {
     background-color: #e50914;
     color: #ffffff;
 }
 
-.btnLogin:hover {
+.headerBtnLogin:hover {
     background-color: rgba(255,255,255,0.1);
 }
 
-.btnSignup:hover {
+.headerBtnSignup:hover {
     background-color: #f40612;
 }
 
 /* 기존 스타일은 유지하고 알림 관련 스타일만 수정 */
 
-.userControls {
+.headerUserControls {
     display: flex;
     align-items: center;
     gap: 1.5rem;
 }
 
-.notificationWrapper {
+.headerNotificationWrapper {
     position: relative;
 }
 
-.notificationIcon {
+.headerNotificationIcon {
     position: relative;
     cursor: pointer;
     padding: 0.5rem;
 }
 
-.notificationIcon i {
+.headerNotificationIcon i {
     font-size: 1.2rem;
     color: #ffffff;
 }
 
-.notificationCount {
+.headerNotificationCount {
     position: absolute;
     top: 0;
     right: 0;
@@ -182,7 +168,7 @@ body {
     transform: translate(25%, -25%);
 }
 
-.notificationDropdown {
+.headerNotificationDropdown {
     display: none;
     position: absolute;
     top: calc(100% + 0.5rem);
@@ -194,11 +180,11 @@ body {
     z-index: 1000;
 }
 
-.notificationWrapper:hover .notificationDropdown {
+.headerNotificationWrapper:hover .headerNotificationDropdown {
     display: block;
 }
 
-.notificationHeader {
+.headerNotificationHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -206,46 +192,46 @@ body {
     border-bottom: 1px solid #3a3a3a;
 }
 
-.notificationHeader span {
+.headerNotificationHeader span {
     font-weight: bold;
 }
 
-.readAll {
+.headerReadAll {
     color: #e50914;
     text-decoration: none;
     font-size: 0.9rem;
 }
 
-.readAll:hover {
+.headerReadAll:hover {
     text-decoration: underline;
 }
 
-.notificationContent {
+.headerNotificationContent {
     max-height: 400px;
     overflow-y: auto;
 }
 
-.notificationItem {
+.headerNotificationItem {
     padding: 1rem;
     border-bottom: 1px solid #3a3a3a;
 }
 
-.notificationItem:last-child {
+.headerNotificationItem:last-child {
     border-bottom: none;
 }
 
-.notificationText {
+.headerNotificationText {
     color: #ffffff;
     margin-bottom: 0.5rem;
 }
 
-.notificationTime {
+.headerNotificationTime {
     color: #999999;
     font-size: 0.8rem;
 }
 
 /* 알림 드롭다운 화살표 추가 */
-.notificationDropdown::before {
+.headerNotificationDropdown::before {
     content: '';
     position: absolute;
     top: -8px;
@@ -256,12 +242,12 @@ body {
 }
 
 /* 프로필 드롭다운 스타일 */
-.profileDropdown {
+.headerProfileDropdown {
     position: relative;
     cursor: pointer;
 }
 
-.profileImg {
+.headerProfileImg {
     color: white;
     background-color: white;
     width: 35px;
@@ -270,14 +256,14 @@ body {
     object-fit: cover;
 }
 
-.profileImgLarge {
+.headerProfileImgLarge {
     width: 64px;
     height: 64px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.profileMenu {
+.headerProfileMenu {
     display: none;
     position: absolute;
     top: 100%;
@@ -290,11 +276,11 @@ body {
     padding: 1rem;
 }
 
-.profileDropdown:hover .profileMenu {
+.headerProfileDropdown:hover .headerProfileMenu {
     display: block;
 }
 
-.profileInfo {
+.headerProfileInfo {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -304,18 +290,18 @@ body {
     border-bottom: 1px solid #3a3a3a;
 }
 
-.profileEmail {
+.headerProfileEmail {
     color: #ffffff;
     font-size: 0.9rem;
 }
 
-.profileActions {
+.headerProfileActions {
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
 }
 
-.btnProfile, .btnLogout {
+.headerBtnProfile, .headerBtnLogout {
     flex: 1;
     padding: 0.5rem;
     text-align: center;
@@ -327,25 +313,25 @@ body {
     transition: background-color 0.2s;
 }
 
-.btnProfile {
+.headerBtnProfile {
     background-color: #3a3a3a;
     color: #ffffff;
 }
 
-.btnLogout {
+.headerBtnLogout {
     background-color: #e50914;
     color: #ffffff;
 }
 
-.btnProfile:hover {
+.headerBtnProfile:hover {
     background-color: #4a4a4a;
 }
 
-.btnLogout:hover {
+.headerBtnLogout:hover {
     background-color: #f40612;
 }
 
-.logoutForm {
+.headerLogoutForm {
     margin: 0;
     padding: 0;
     flex: 1;
