@@ -1,5 +1,20 @@
 package com.cldhfleks2.moviehub.api;
 
+import com.cldhfleks2.moviehub.movie.Movie;
+import com.cldhfleks2.moviehub.movie.MovieDTO;
+import com.cldhfleks2.moviehub.movie.MovieRepository;
+import com.cldhfleks2.moviehub.movie.actor.MovieActor;
+import com.cldhfleks2.moviehub.movie.audit.MovieAudit;
+import com.cldhfleks2.moviehub.movie.audit.MovieAuditRepository;
+import com.cldhfleks2.moviehub.movie.company.MovieCompany;
+import com.cldhfleks2.moviehub.movie.dailystat.MovieDailyStat;
+import com.cldhfleks2.moviehub.movie.dailystat.MovieDailyStatRepository;
+import com.cldhfleks2.moviehub.movie.director.MovieDirector;
+import com.cldhfleks2.moviehub.movie.genre.MovieGenre;
+import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
+import com.cldhfleks2.moviehub.movie.nation.MovieNation;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +27,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +41,26 @@ public class KOBISRequestService {
     private HttpResponse<String> totalWeeklyBoxOfficeResponse;
     private HttpResponse<String> koreaWeeklyBoxOfficeResponse;
     private HttpResponse<String> foreignWeeklyBoxOfficeResponse;
+    private final MovieRepository movieRepository;
+    private final MovieAuditRepository movieAuditRepository;
+    private final MovieDailyStatRepository movieDailyStatRepository;
+    private final MovieGenreRepository movieGenreRepository;
 
     @Value("${kobis.key}")
     private String kobiskey;
+
+    //날짜 가져오는 함수
+    private String getCurrentDay() {
+        //KOBIS에서 하루이전 통계만 잡히므로 하루 이전 날짜로 계산
+        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        return currentDate.format(formatter); //현재 날짜  예) "20241220"
+    }
+
+    // URL 안전한 문자열로 인코딩 (UTF-8)
+    public String encodeString(String keyword) throws Exception {
+        return URLEncoder.encode(keyword, "UTF-8");
+    }
 
     //KOBIS API URL로 요청을 보내고 응답을 리턴 해주는 함수 : 외부에서 사용할 수 도 있음
     public HttpResponse<String> sendRequest(String URL) throws Exception {
@@ -77,7 +112,6 @@ public class KOBISRequestService {
         }
         return foreignWeeklyBoxOfficeResponse;
     }
-
 
 
     //1. KOBIS API 전체 일일 박스오피스 10개 : 응답을 필드에 저장
@@ -160,30 +194,24 @@ public class KOBISRequestService {
         return response;
     }
 
-    //API 요청을 보낼때 문자는 URL-safe로 인코딩해서 보내야함.
-    public String encodeStr(String str) throws Exception {
-        // URL 안전한 문자열로 인코딩 (UTF-8)
-        return URLEncoder.encode(str, "UTF-8");
-    }
 
-    //영화 목록 요청을 보내는 함수 : movieNm 사용
+
+    //movieNm으로 영화 목록을 response로 가져오는 함수
     //URL-safe하게 movieNm을 보내야함
     public HttpResponse<String> sendMovieListRequestByMovieNm(String movieNm) throws Exception{
-        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
-
-        String encodedMovieNm = encodeStr(movieNm);
+        String encodedMovieNm = encodeString(movieNm);
 
         String URL = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json"
                 + "?key=" + kobiskey
                 + "&movieNm=" + encodedMovieNm; //영화 코드를 보냄
 
-//        log.info("요청 URL >> " + URL);
+        log.info("요청 URL >> " + URL);
 
         HttpResponse<String> response = sendRequest(URL);
         return response;
     }
+
+
 
 
 

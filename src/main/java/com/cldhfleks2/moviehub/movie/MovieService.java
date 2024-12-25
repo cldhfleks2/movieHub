@@ -2,7 +2,7 @@ package com.cldhfleks2.moviehub.movie;
 
 import com.cldhfleks2.moviehub.api.KOBISRequestService;
 import com.cldhfleks2.moviehub.api.TMDBRequestService;
-import com.cldhfleks2.moviehub.config.SeleniumWebDriverConfig;
+import com.cldhfleks2.moviehub.config.SeleniumWebDriver;
 import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.movie.actor.MovieActor;
 import com.cldhfleks2.moviehub.movie.actor.MovieActorRepository;
@@ -24,7 +24,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
+import java.net.URLEncoder;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +45,6 @@ public class MovieService {
     private final MovieGenreRepository movieGenreRepository;
     private final MovieAuditRepository movieAuditRepository;
     private final MovieRepository movieRepository;
-    private final SeleniumWebDriverConfig seleniumWebDriverConfig;
     private final KOBISRequestService kobisRequestService;
     private final TMDBRequestService tmdbRequestService;
 
@@ -55,56 +56,9 @@ public class MovieService {
         return currentDate.format(formatter); //현재 날짜  예) "20241220"
     }
 
-    //영화목록response을 파싱해서 나온 JsonNode로 MovieDTO를 생성
-    public List<MovieDTO> getMovieDTOAsJsonNode(JsonNode jsonNodeList) throws Exception {
-        //response에서 영화 목록만을 참고하려함. 실제 영화 데이터는 이미 DB에 존재할것.
-        List<MovieDTO> movieDTOList = new ArrayList<>();
-        for (int i = 0; i < jsonNodeList.size() && i < 10; i++) {
-            //영화 목록중 현재 영화에 대한 처리
-            JsonNode movieJsonNode = jsonNodeList.get(i);
-            String movieCd = movieJsonNode.path("movieCd").asText();
-            Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);
-            //1. 등록되지 않은 영화는 제외
-            if(!movieObj.isPresent()) continue;
-            //2. 미공개 영화는 제외
-            if(movieObj.get().getStatus() == 0) continue;
-            Movie movie = movieObj.get();
-            Long movieId = movie.getId();
-            //3. 사용할 필드만 DTO에 담는다.
-            MovieDTO.MovieDTOBuilder movieDTOBuilder = MovieDTO.builder();
-            movieDTOBuilder.movieCd(movie.getMovieCd());
-            movieDTOBuilder.movieNm(movie.getMovieNm());
-            movieDTOBuilder.showTm(movie.getShowTm());
-            movieDTOBuilder.openDt(movie.getOpenDt());
-            movieDTOBuilder.audiAcc(movie.getAudiAcc());
-            movieDTOBuilder.posterURL(movie.getPosterURL());
-            //3-1. 장르 가져오기 (MovieGenre에서)
-            List<MovieGenre> movieGenreList = movieGenreRepository.findByMovieIdAndStatus(movieId);
-            if(movieGenreList.isEmpty()){
-                log.error("{} 영화 객체와 관련된 MovieGenre객체에 문제가 있음", movie);
-                continue;
-            }
-            movieDTOBuilder.genreList(movieGenreList);
-            //3-2. 시청 가이드라인 가져오기 (MovieAudit에서)
-            List<MovieAudit> movieAuditList = movieAuditRepository.findByMovieIdAndStatus(movieId);
-            if(movieAuditList.isEmpty()){
-                log.error("{} 영화 객체와 관련된 MovieAudit객체에 문제가 있음", movie);
-                continue;
-            }
-            movieDTOBuilder.auditList(movieAuditList);
-            //3-3. 관객수 가져오기 (MovieDailyStat에서)
-            List<MovieDailyStat> movieDailyStatList = movieDailyStatRepository.findByMovieIdAndStatus(movieId);
-            if(movieDailyStatList.isEmpty()){
-                log.error("{} 영화 객체와 관련된 MovieDailyStat객체에 문제가 있음", movie);
-                continue;
-            }
-            movieDTOBuilder.audiCnt(movieDailyStatList.get(0).getAudiCnt()); //값만 보냄
-
-            //4. 마지막으로 결과를 담음
-            MovieDTO movieDTO = movieDTOBuilder.build();
-            movieDTOList.add(movieDTO);
-        }
-        return movieDTOList;
+    // URL 안전한 문자열로 인코딩 (UTF-8)
+    public String encodeString(String keyword) throws Exception {
+        return URLEncoder.encode(keyword, "UTF-8");
     }
 
     //MovieId 로 MovieDTO를 생성
@@ -170,7 +124,7 @@ public class MovieService {
     }
 
     //영화 상세 정보을 DB에 저장 : movieInfo가 정상적으로 있는지 확인은 상위 함수에서 처리했을거임. 저장만 하는함수
-    public ReturnEntitysDTO saveEntityAsMovieDetailResponse(JsonNode movieInfo, String currentDay) throws Exception {
+    public ReturnEntitysDTO saveEntityAsMovieDetail(JsonNode movieInfo, String currentDay) throws Exception {
         String movieCd = movieInfo.get("movieCd").asText();
         String movieNm = movieInfo.get("movieNm").asText();
         String openDt = movieInfo.get("openDt").asText();
@@ -286,7 +240,7 @@ public class MovieService {
 
     //박스오피스 목록을 DB에 저장 : 실제 JsonNode를 탐색하여 저장
     //saveTodayBoxOfficeOnDB, saveWeeklyBoxOfficeOnDB 에서 사용
-    public void saveEntityAsBoxOfficeResponse(JsonNode boxOfficeList, String currentDay) throws Exception {
+    public void saveEntityAsBoxOffice(JsonNode boxOfficeList, String currentDay) throws Exception {
         //response에 존재하는 전체 영화 목록을 DB에 저장하는 로직
         for (int i = 0; i < boxOfficeList.size() && i < 10; i++) {
             JsonNode boxOfficeMovie = boxOfficeList.get(i); //현재 영화에 대한 처리
@@ -338,13 +292,14 @@ public class MovieService {
                 movie.setAudiAcc(audiAcc);
                 movieRepository.save(movie); //수정
 
-                //movieDailyStat 정보 업데이트
-                MovieDailyStat movieDailyStat = movieDailyStatObj.get();
-                movieDailyStat.setSalesAmt(salesAmt); // 일일 기록
-                movieDailyStat.setAudiCnt(audiCnt); // 일일 기록
-                movieDailyStat.setScrnCnt(scrnCnt); // 스크린 수
-                movieDailyStat.setShowCnt(showCnt); // 상영 횟수
-                movieDailyStatRepository.save(movieDailyStat); //수정
+                //movieDailyStat 정보 업데이트 : 뭐지? 없을땐 새로 생성해줘야 하는거 근데 왜 그동안은 잘 작동했지
+                //추가하면 안되겟지..?
+//                MovieDailyStat movieDailyStat = movieDailyStatObj.get();
+//                movieDailyStat.setSalesAmt(salesAmt); // 일일 기록
+//                movieDailyStat.setAudiCnt(audiCnt); // 일일 기록
+//                movieDailyStat.setScrnCnt(scrnCnt); // 스크린 수
+//                movieDailyStat.setShowCnt(showCnt); // 상영 횟수
+//                movieDailyStatRepository.save(movieDailyStat); //수정
             } else {
                 //1. Movie객체가 없을때
                 Movie movie = new Movie(); //Movie 엔티티
@@ -456,7 +411,7 @@ public class MovieService {
         JsonNode weeklyBoxOfficeList = jsonNode.path("boxOfficeResult").path("weeklyBoxOfficeList");
 
         //실제로 JsonNode를 탐색해서 Entity를 DB에 저장 하는 로직
-        saveEntityAsBoxOfficeResponse(weeklyBoxOfficeList, currentDay);
+        saveEntityAsBoxOffice(weeklyBoxOfficeList, currentDay);
     }
 
     //KOBIS에서 일별박스오피스 결과로 받은 response을 파싱해서 Entity를 DB에 추가하는 함수
@@ -483,8 +438,246 @@ public class MovieService {
         }
 
         //실제로 JsonNode를 탐색해서 Entity를 DB에 저장 하는 로직
-        saveEntityAsBoxOfficeResponse(todayBoxOfficeList, currentDay);
+        saveEntityAsBoxOffice(todayBoxOfficeList, currentDay);
     }
+
+
+
+
+    //박스오피스 데이터는 이미 DB에 저장한 상태이다. (앱실행시나)
+    //response에서 영화 목록만을 참고하고 실제 영화 데이터는 DB에서 가져옴
+    public List<MovieDTO> getMovieDTOAsBoxOffice(HttpResponse<String> response, String boxOfficeList) throws Exception {
+        String boxOfficeResponseBody = response.body();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(boxOfficeResponseBody);
+        JsonNode jsonNodeList = jsonNode.path("boxOfficeResult").path(boxOfficeList);
+
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+        //영화 목록중 현재 영화에 대한 처리
+        for (int i = 0; i < jsonNodeList.size() && i < 10; i++) {
+            JsonNode movieJsonNode = jsonNodeList.get(i);
+            String movieCd = movieJsonNode.path("movieCd").asText();
+            Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);
+            //1. 등록되지 않은 영화는 제외
+            if(!movieObj.isPresent()) continue;
+            //2. 미공개 영화는 제외
+            if(movieObj.get().getStatus() == 0) continue;
+            Movie movie = movieObj.get();
+            Long movieId = movie.getId();
+            //3. 사용할 필드만 DTO에 담는다.
+            MovieDTO.MovieDTOBuilder movieDTOBuilder = MovieDTO.builder();
+            movieDTOBuilder.movieCd(movie.getMovieCd());
+            movieDTOBuilder.movieNm(movie.getMovieNm());
+            movieDTOBuilder.showTm(movie.getShowTm());
+            movieDTOBuilder.openDt(movie.getOpenDt());
+            movieDTOBuilder.audiAcc(movie.getAudiAcc());
+            movieDTOBuilder.posterURL(movie.getPosterURL());
+            //3-1. 장르 가져오기 (MovieGenre에서)
+            List<MovieGenre> movieGenreList = movieGenreRepository.findByMovieIdAndStatus(movieId);
+            if(movieGenreList.isEmpty()){
+                log.error("{} 영화 객체와 관련된 MovieGenre객체에 문제가 있음", movie);
+                continue;
+            }
+            movieDTOBuilder.genreList(movieGenreList);
+            //3-2. 시청 가이드라인 가져오기 (MovieAudit에서)
+            List<MovieAudit> movieAuditList = movieAuditRepository.findByMovieIdAndStatus(movieId);
+            if(movieAuditList.isEmpty()){
+                log.error("{} 영화 객체와 관련된 MovieAudit객체에 문제가 있음", movie);
+                continue;
+            }
+            movieDTOBuilder.auditList(movieAuditList);
+            //3-3. 관객수 가져오기 (MovieDailyStat에서)
+            List<MovieDailyStat> movieDailyStatList = movieDailyStatRepository.findByMovieIdAndStatus(movieId);
+            if(movieDailyStatList.isEmpty()){
+                log.error("{} 영화 객체와 관련된 MovieDailyStat객체에 문제가 있음", movie);
+                continue;
+            }
+            movieDTOBuilder.audiCnt(movieDailyStatList.get(0).getAudiCnt()); //값만 보냄
+
+            //4. 마지막으로 결과를 담음
+            MovieDTO movieDTO = movieDTOBuilder.build();
+            movieDTOList.add(movieDTO);
+        }
+        return movieDTOList;
+    }
+
+
+    public List<MovieDTO> getMovieDTOAsMovieList(HttpResponse<String> response) throws Exception {
+        //영화목록response을 파싱해서 나온 JsonNode로 MovieDTO를 생성
+        String movieListResponseBody = response.body();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(movieListResponseBody);
+        JsonNode jsonNodeList = jsonNode.path("movieListResult").path("movieList");
+
+        String currentDay = getCurrentDay();
+
+        //영화 목록중 현재 영화에 대한 처리
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+        for (int i = 0; i < jsonNodeList.size() && i < 10; i++) {
+            JsonNode movieJsonNode = jsonNodeList.get(i);
+            log.info("{} 시작", i);
+            String movieCd = movieJsonNode.path("movieCd").asText();
+            String movieNm = movieJsonNode.path("movieNm").asText();
+            String movieNmEn = movieJsonNode.path("movieNmEn").asText();
+            String prdtYear = movieJsonNode.path("prdtYear").asText();
+            String openDt = movieJsonNode.path("openDt").asText();
+            String typeNm = movieJsonNode.path("typeNm").asText();
+
+            //DB에서 검색해서 있으면 가져다가 씀
+            //아래 코드는 MovieService에 있는 코드와 동일함
+            Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);
+            if (movieObj.isPresent()) {
+                //미공개 영화는 보여주지 않
+                if(movieObj.get().getStatus() == 0)
+                    continue;
+
+                Movie movie = movieObj.get();
+                Long movie_id = movie.getId();
+
+                //2. MovieDailyStat 업데이트
+                Optional<MovieDailyStat> movieDailyStatObj = movieDailyStatRepository.findByDayAndMovieIdAndStatus(currentDay, movie_id);
+                if (!movieDailyStatObj.isPresent()) {
+                    //하루가 지난것이므로 새로이 갱신
+                    List<MovieDailyStat> movieDailyStatList = movieDailyStatRepository.findByMovieIdAndStatus(movie_id);
+                    //3. movie_id와 일치하는 MovieDailyStat이 존재 할때
+                    if (!movieDailyStatList.isEmpty()) {
+                        MovieDailyStat movieDailyStat = movieDailyStatList.get(movieDailyStatList.size() - 1); //가장 최근것
+                        movieDailyStat.setDay(currentDay); //현재 날짜로 수정
+                        //값들 업데이트
+                        //박스오피스 전용 데이터는 제외하고 생성
+//                        movieDailyStat.setSalesAmt(salesAmt);
+//                        movieDailyStat.setAudiCnt(audiCnt);
+//                        movieDailyStat.setScrnCnt(scrnCnt);
+//                        movieDailyStat.setShowCnt(showCnt);
+                        movieDailyStat.setMovie(movie); //외래키로 사용
+                        movieDailyStatRepository.save(movieDailyStat);
+                    }
+                }
+
+            } else {
+                //Movie 저장
+                Movie movie = new Movie(); 
+                movie.setMovieCd(movieCd);
+                movie.setMovieNm(movieNm);
+                movie.setMovieNmEn(movieNmEn);
+                movie.setOpenDt(openDt);
+                movie.setPrdtYear(prdtYear);
+                movie.setMovieNmEn(movieNmEn);
+                movie.setTypeNm(typeNm);
+                //포스터 가져오기 총 3차시도. 그래도 못가져오면 movie객체의 poster를 null로 지정하고, 다른엔티티를 저장하지 않고 스킵
+                String posterURL = tmdbRequestService.getMoviePosterURL(movieNm); //영화이름으로 검색
+                if(posterURL == null){
+                    posterURL = tmdbRequestService.getMoviePosterURLByEn(movieNmEn); //영화영문이름으로 검색
+                    if(posterURL == null){
+                        posterURL = tmdbRequestService.getMoviePostURLBySelenium(movieCd); //웹크롤링 시도
+                        if(posterURL == null){
+                            movie.setPosterURL("null");
+                            movie.setStatus(0); //미공개 영화로 저장
+                            movieRepository.save(movie);
+                            continue; //다른 엔티티를 저장하지 않음.
+                        }
+                    }
+                }
+                movie.setPosterURL(posterURL);
+
+                //영화의 상세 정보를 받기 새로운 KOBIS API 요청을 날림
+                HttpResponse<String> movieDetailResponse = kobisRequestService.sendMovieDetailRequest(movieCd);
+                String movieDetailResponseBody = movieDetailResponse.body();
+                ObjectMapper movieDetailObjectMapper = new ObjectMapper();
+                JsonNode movieDetailJsonNode = movieDetailObjectMapper.readTree(movieDetailResponseBody);
+                JsonNode movieDetail = movieDetailJsonNode.path("movieInfoResult").path("movieInfo");
+                String showTm = movieDetail.path("showTm").asText();
+                movie.setShowTm(showTm);
+                movieRepository.save(movie);
+
+                //MovieDailyStat 저장
+                MovieDailyStat movieDailyStat = new MovieDailyStat();
+                movieDailyStat.setDay(currentDay); //"20241220"
+                movieDailyStat.setMovie(movie); //외래키로 사용
+                movieDailyStatRepository.save(movieDailyStat);
+
+                //나머지 엔티티들 저장
+                JsonNode nationsList = movieDetail.path("nations");
+                for (int j = 0; j < nationsList.size(); j++) {
+                    MovieNation movieNation = new MovieNation();
+                    movieNation.setNationNm(nationsList.get(j).path("nationNm").asText());
+                    movieNation.setMovie(movie); //외래키로 사용
+                    movieNationRepository.save(movieNation);
+                }
+                JsonNode genresList = movieDetail.path("genres");
+                for (int j = 0; j < genresList.size(); j++) {
+                    MovieGenre movieGenre = new MovieGenre();
+                    movieGenre.setGenreNm(genresList.get(j).path("genreNm").asText());
+                    movieGenre.setMovie(movie); //외래키로 사용
+                    movieGenreRepository.save(movieGenre);
+                }
+                JsonNode directorsList = movieDetail.path("directors");
+                for (int j = 0; j < directorsList.size(); j++) {
+                    MovieDirector movieDirector = new MovieDirector();
+                    movieDirector.setPeopleNm(directorsList.get(j).path("peopleNm").asText());
+                    movieDirector.setPeopleNmEn(directorsList.get(j).path("peopleNmEn").asText());
+                    movieDirector.setMovie(movie); //외래키로 사용
+                    movieDirectorRepository.save(movieDirector);
+                }
+                JsonNode actorsList = movieDetail.path("actors");
+                for (int j = 0; j < actorsList.size(); j++) {
+                    MovieActor movieActor = new MovieActor();
+                    movieActor.setPeopleNm(actorsList.get(j).path("peopleNm").asText());
+                    movieActor.setPeopleNmEn(actorsList.get(j).path("peopleNmEn").asText());
+                    movieActor.setMovie(movie); //외래키로 사용
+                    movieActorRepository.save(movieActor);
+                }
+                JsonNode companysList = movieDetail.path("companys");
+                for (int j = 0; j < companysList.size(); j++) {
+                    MovieCompany movieCompany = new MovieCompany();
+                    movieCompany.setCompanyCd(companysList.get(j).path("").asText());
+                    movieCompany.setCompanyNm(companysList.get(j).path("companyNm").asText());
+                    movieCompany.setCompanyNmEn(companysList.get(j).path("companyNmEn").asText());
+                    movieCompany.setCompanyPartNm(companysList.get(j).path("companyPartNm").asText());
+                    movieCompany.setMovie(movie); //외래키로 사용
+                    movieCompanyRepository.save(movieCompany);
+                }
+                JsonNode auditsList = movieDetail.path("audits");
+                for (int j = 0; j < auditsList.size(); j++) {
+                    MovieAudit movieAudit = new MovieAudit();
+                    movieAudit.setWatchGradeNm(auditsList.get(j).path("watchGradeNm").asText());
+                    movieAudit.setMovie(movie); //외래키로 사용
+                    movieAuditRepository.save(movieAudit);
+                }
+            }
+
+            Optional<Movie> movieObj2 = movieRepository.findByMovieCd(movieCd);
+            if(movieObj2.isPresent())
+                movieDTOList.add( getMovieDTO(movieObj2.get().getId()) );
+            log.info("{} 끝", i);
+        }
+
+        return movieDTOList;
+    }
+
+
+
+
+    //search : 영화 이름으로 영화리스트를 검색
+    public List<MovieDTO> searchMovieAsMovieName(String keyword) throws Exception{
+        HttpResponse<String> response = kobisRequestService.sendMovieListRequestByMovieNm(keyword);
+        log.info("가져온 response body = > {}", response.body());
+        List<MovieDTO> movieList = getMovieDTOAsMovieList(response);
+        return movieList;
+    }
+
+
+    //search : 인물 이름으로 인물의 프로필리스트 검색
+//    public List<PeopleDTO> searchProfilePeopleName(String keyword){
+//        return null;
+//    }
+
+    //search : 인물 이름으로 영화리스트를 검색
+    public List<MovieDTO> searchMovieAsPeopleName(String keyword){
+        return null;
+    }
+
+
 
 
 }
