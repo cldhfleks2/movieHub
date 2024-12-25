@@ -61,6 +61,7 @@ select {
     padding: 1rem 1.5rem;
     font-size: 1rem;
     outline: none;
+    caret-color: auto;
 }
 
 .searchWrapper:focus-within {
@@ -68,11 +69,12 @@ select {
     box-shadow: 0 0 0 3px rgba(229,9,20,0.1);
 }
 
-.searchInput:focus {
-    outline: none;
-    border-color: #e50914;
-    box-shadow: 0 0 0 3px rgba(229,9,20,0.1);
-}
+/* 검색바 ㅋ르릭하면 빨간 사각형 생기는것*/
+/*.searchInput:focus {*/
+/*    outline: none;*/
+/*    border-color: #e50914;*/
+/*    box-shadow: 0 0 0 3px rgba(229,9,20,0.1);*/
+/*}*/
 
 .searchButton {
     padding: 0 2rem;
@@ -188,6 +190,11 @@ select {
     font-size: 1.2rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    color: #b4b3b3;
+}
+
+.btnLike.active{
+    color: red;
 }
 
 .btnLike:hover, .btnBookmark:hover {
@@ -282,11 +289,6 @@ select {
 
 
 
-
-
-
-
-
 /* 기존 CSS에 추가 */
 .notification {
     position: absolute;
@@ -308,6 +310,7 @@ select {
     top: 190px;
     opacity: 1;
 }
+
 
 
 
@@ -337,6 +340,16 @@ select {
 
 .profileSection {
     margin: 0 0 3rem;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease, visibility 0s linear 0.3s; /* smooth transition */
+}
+
+.profileSection.active {
+    visibility: visible;
+    height: auto;
+    transition: height 0.3s ease, visibility 0s;
 }
 
 .profileContainer {
@@ -347,13 +360,11 @@ select {
 }
 
 .profileCard {
-    /*position: relative;*/
-    /*transition: transform 0.3s ease;*/
     min-width: 0;
 }
 
-.profileCard:hover {
-    transform: scale(1.05);
+.profileImageWrapper:hover {
+    transform: scale(1.1);
 }
 
 .profileImageWrapper {
@@ -416,28 +427,21 @@ select {
 .profileInfo {
     padding: 1rem 0.5rem;
     text-align: center;
+    height: 100px;
 }
 
 .profileName {
-    /*font-size: 1.1rem;*/
-    /*font-weight: 500;*/
-    /*margin-bottom: 0.5rem;*/
-    /*color: #333;*/
     font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 10px;
 }
 
 .profileRole {
-    /*display: inline-block;*/
-    /*padding: 0.3rem 0.8rem;*/
-    /*color: #ba0eeb;*/
-    /*border-radius: 15px;*/
-    /*font-size: 0.85rem;*/
-    /*font-weight: 1000;*/
-    font-size: 0.75rem;
-    padding: 0.25rem 0.6rem;
+    color: #ba0eeb;
+    font-size: 0.85rem;
+    font-weight: 1000;
 }
 
 

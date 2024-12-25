@@ -16,8 +16,8 @@
         <div class="searchBar">
             <div class="searchWrapper">
                 <select class="categorySelect">
-                    <option value="title">영화제목</option>
-                    <option value="actor">배우/감독명</option>
+                    <option value="movieName">영화제목</option>
+                    <option value="moviePeople">배우/감독명</option>
                 </select>
                 <span class="divider"></span>
                 <input type="text" placeholder="검색어를 입력하세요" class="searchInput">
@@ -38,8 +38,7 @@
             </div>
         </div>
 
-<!--        <div class="profileSection" th:if="${not #lists.isEmpty(persons)}">-->
-        <div class="profileSection" style="display: none">
+        <div class="profileSection">
 <!--            <div class="sectionDivider">-->
 <!--                <h2 class="sectionTitle">Crew & Cast</h2>-->
 <!--                <div class="dividerLine"></div>-->
@@ -51,12 +50,6 @@
 <!--                        <img th:src="${person.profilePath != null} ? 'https://image.tmdb.org/t/p/w300' + ${person.profilePath} : '/image/blank.png'"-->
 <!--                             th:alt="${person.name}" class="profileImage">-->
                         <img src="/image/blank.png" class="profileImage">
-                        <div class="profileHoverInfo">
-                            <div class="knownForMovies">
-<!--                                <p class="movieTitle" th:each="movie : ${person.knownFor}" th:if="${movieStat.index < 3}"-->
-<!--                                   th:text="${movie.title}">영화제목</p>-->
-                            </div>
-                        </div>
                     </div>
                     <div class="profileInfo">
                         <h3 class="profileName">이름</h3>
@@ -70,24 +63,23 @@
 <!--            <span class="resultCount">총 <strong>24</strong>개의 검색결과</span>-->
 <!--        </div>-->
 
-        <div class="movieGrid">
-            <div class="movieCard">
+        <div class="movieGrid" id="movieGrid">
+            <div class="movieCard" th:each="movie : ${movieList}">
                 <div class="moviePoster">
-                    <img src="/image/blank.png" alt="영화 포스터">
+                    <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터">
                     <div class="movieOverlay">
                         <button class="btnLike">♥</button>
                         <button class="btnBookmark">🏷️</button>
                     </div>
                 </div>
                 <div class="movieInfo">
-                    <h3 class="movieTitle">영화 제목</h3>
+                    <h3  class="movieTitle" th:text="${movie.movieNm}">영화 제목</h3>
                     <div class="movieMeta">
-                        <span class="movieYear">2024</span>
+                        <span class="movieYear" th:text="${movie.openDt}">2024 일단 개봉일 넣어둠</span>
                         <span class="movieRating">⭐ 4.5</span>
                     </div>
                     <div class="movieGenres">
-                        <span class="genre">액션</span>
-                        <span class="genre">스릴러</span>
+                        <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">액션</span>
                     </div>
                 </div>
             </div>
