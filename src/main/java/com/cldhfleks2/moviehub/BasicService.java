@@ -7,6 +7,7 @@ import com.cldhfleks2.moviehub.movie.*;
 import com.cldhfleks2.moviehub.movie.audit.MovieAuditRepository;
 import com.cldhfleks2.moviehub.movie.dailystat.MovieDailyStatRepository;
 import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
+import com.cldhfleks2.moviehub.movie.people.PeopleDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -132,16 +133,20 @@ public class BasicService {
             return "search/search";
         
         //키워드로 검색 진행
-        if(category.equals("movieName")){
+        if(category.equals("movieName")){ //KOBIS API 사용
             log.info("영화제목 검색시작");
-            List<MovieDTO> movieList = movieService.searchMovieAsMovieName(keyword);
+            List<MovieDTO> movieList = movieService.searchMovieAsMovieName(keyword); //영화 검색결과를 가져옴
             model.addAttribute("movieList", movieList);
             log.info("영화제목으로 영화 리스트를 잘 갖고옴.");
-        }else if(category.equals("moviePeople")){
+            
+        }else if(category.equals("moviePeople")){ //TMDB API 사용
             log.info("배우/감독명 검색시작");
-
-
-
+            List<PeopleDTO> peopleDTOList = movieService.searchProfileAsPeopleName(keyword); //프로필이미지만 가져옴
+            model.addAttribute("peopleDTOList", peopleDTOList);
+            log.info("배우/감독명으로 프로필들을 잘 갖고옴.");
+            
+        }else if(category.equals("peopleClick")){
+            //프로필을 클릭했을때 그 사람의 영화 목록을 줌
         }
 
         log.info("페이지 전송, category = {}", category);

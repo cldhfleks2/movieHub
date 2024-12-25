@@ -42,10 +42,6 @@ public class TMDBRequestService {
         return response;
     }
 
-    //TMDB API 영화이름 검색 : languae지정안하면 기본값 "ko"
-    public HttpResponse<String> sendSearchMovie(String movieNm) throws Exception{
-        return sendSearchMovie(movieNm, "ko"); //기본값
-    }
     //TMDB API 영화이름 검색 : language지정
     public HttpResponse<String> sendSearchMovie(String movieNm, String language) throws Exception{
         // 영화 제목을 인코딩
@@ -60,8 +56,25 @@ public class TMDBRequestService {
         HttpResponse<String> response = sendRequest(URL);
         return response;
     }
+    //TMDB API 영화이름 검색 : languae지정안하면 기본값 "ko"
+    public HttpResponse<String> sendSearchMovie(String movieNm) throws Exception{
+        return sendSearchMovie(movieNm, "ko"); //기본값
+    }
 
+    //TMDB API 인물이름 검색 : peopleNm으로 검색
+    public HttpResponse<String> sendSearchPeople(String peopleNm, Long page) throws Exception{
+        String encodedPersonNm = encodeString(peopleNm);
 
+        String URL = "https://api.themoviedb.org/3/search/person"
+                + "?api_key=" + tmdbkey
+                + "&query=" + encodedPersonNm //영화 코드를 보냄
+                + "&page=" + page;
+
+//        log.info("요청 URL >> " + URL);
+
+        HttpResponse<String> response = sendRequest(URL);
+        return response;
+    }
 
 
 

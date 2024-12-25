@@ -18,6 +18,7 @@ import com.cldhfleks2.moviehub.movie.genre.MovieGenre;
 import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
 import com.cldhfleks2.moviehub.movie.nation.MovieNation;
 import com.cldhfleks2.moviehub.movie.nation.MovieNationRepository;
+import com.cldhfleks2.moviehub.movie.people.PeopleDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -89,38 +90,40 @@ public class MovieService {
         List<MovieDirector> directorList = movieDirectorRepository.findByMovieIdAndStatus(movieId);
         List<MovieActor> actorList = movieActorRepository.findByMovieIdAndStatus(movieId);
 
-        MovieDTO.MovieDTOBuilder builder = MovieDTO.builder();
-        builder.movieCd(movie.getMovieCd());
-        builder.movieNm(movie.getMovieNm());
-        builder.movieNmEn(movie.getMovieNmEn());
-        builder.genreList(genreList);
-        builder.auditList(auditList);
-        builder.showTm(movie.getShowTm());
-        builder.openDt(movie.getOpenDt());
-        builder.audiAcc(movie.getAudiAcc());
-        builder.audiCnt(movieDailyStat.getAudiCnt());
-        builder.posterURL(movie.getPosterURL());
-        builder.directorList(directorList);
-        builder.actorList(actorList);
+        MovieDTO movieDTO = MovieDTO.builder()
+                .movieCd(movie.getMovieCd())
+                .movieNm(movie.getMovieNm())
+                .movieNmEn(movie.getMovieNmEn())
+                .genreList(genreList)
+                .auditList(auditList)
+                .showTm(movie.getShowTm())
+                .openDt(movie.getOpenDt())
+                .audiAcc(movie.getAudiAcc())
+                .audiCnt(movieDailyStat.getAudiCnt())
+                .posterURL(movie.getPosterURL())
+                .directorList(directorList)
+                .actorList(actorList)
+                .build();
 
-        return builder.build();
+        return movieDTO;
     }
 
     //ReturnEntitysDTO(영화관련묶음엔티티) => MovieDTO
     public MovieDTO convertToMovieDTO(ReturnEntitysDTO returnEntitysDTO) {
-        MovieDTO.MovieDTOBuilder builder = MovieDTO.builder();
-        builder.movieCd(returnEntitysDTO.getMovie().getMovieCd());
-        builder.movieNm(returnEntitysDTO.getMovie().getMovieNm());
-        builder.movieNmEn(returnEntitysDTO.getMovie().getMovieNmEn());
-        builder.genreList(returnEntitysDTO.getMovieGenreList());
-        builder.auditList(returnEntitysDTO.getMovieAuditList());
-        builder.showTm(returnEntitysDTO.getMovie().getShowTm());
-        builder.openDt(returnEntitysDTO.getMovie().getOpenDt());
-        builder.audiAcc(returnEntitysDTO.getMovie().getAudiAcc());
-        builder.audiCnt(returnEntitysDTO.getMovieDailyStat().getAudiCnt());
-        builder.posterURL(returnEntitysDTO.getMovie().getPosterURL());
+        MovieDTO movieDTO = MovieDTO.builder()
+                .movieCd(returnEntitysDTO.getMovie().getMovieCd())
+                .movieNm(returnEntitysDTO.getMovie().getMovieNm())
+                .movieNmEn(returnEntitysDTO.getMovie().getMovieNmEn())
+                .genreList(returnEntitysDTO.getMovieGenreList())
+                .auditList(returnEntitysDTO.getMovieAuditList())
+                .showTm(returnEntitysDTO.getMovie().getShowTm())
+                .openDt(returnEntitysDTO.getMovie().getOpenDt())
+                .audiAcc(returnEntitysDTO.getMovie().getAudiAcc())
+                .audiCnt(returnEntitysDTO.getMovieDailyStat().getAudiCnt())
+                .posterURL(returnEntitysDTO.getMovie().getPosterURL())
+                .build();
 
-        return builder.build();
+        return movieDTO;
     }
 
     //영화 상세 정보을 DB에 저장 : movieInfo가 정상적으로 있는지 확인은 상위 함수에서 처리했을거임. 저장만 하는함수
@@ -224,16 +227,16 @@ public class MovieService {
             movieAuditList.add(movieAudit);
         }
 
-        ReturnEntitysDTO.ReturnEntitysDTOBuilder builder = ReturnEntitysDTO.builder();
-        builder.movie(movie);
-        builder.movieDailyStat(movieDailyStat);
-        builder.movieDirectorList(movieDirectorList);
-        builder.movieActorList(movieActorList);
-        builder.movieNationList(movieNationList);
-        builder.movieGenreList(movieGenreList);
-        builder.movieCompanyList(movieCompanyList);
-        builder.movieAuditList(movieAuditList);
-        ReturnEntitysDTO returnEntitysDTO = builder.build();
+        ReturnEntitysDTO returnEntitysDTO = ReturnEntitysDTO.builder()
+                .movie(movie)
+                .movieDailyStat(movieDailyStat)
+                .movieDirectorList(movieDirectorList)
+                .movieActorList(movieActorList)
+                .movieNationList(movieNationList)
+                .movieGenreList(movieGenreList)
+                .movieCompanyList(movieCompanyList)
+                .movieAuditList(movieAuditList)
+                .build();
 
         return returnEntitysDTO;
     }
@@ -444,8 +447,9 @@ public class MovieService {
 
 
 
-    //박스오피스 데이터는 이미 DB에 저장한 상태이다. (앱실행시나)
-    //response에서 영화 목록만을 참고하고 실제 영화 데이터는 DB에서 가져옴
+    //KOBIS API의 박스 오피스 데이터로 MovieDTO를 만드는 함수
+    //이때 박스오피스 데이터는 파싱해서 DB에 저장되있다. (앱실행시나)
+    //response에서 영화 이름들만 참고한다. 실제 영화 데이터는 DB에서 가져옴
     public List<MovieDTO> getMovieDTOAsBoxOffice(HttpResponse<String> response, String boxOfficeList) throws Exception {
         String boxOfficeResponseBody = response.body();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -501,7 +505,7 @@ public class MovieService {
         return movieDTOList;
     }
 
-
+    //KOBIS API의 영화 목록으로 MovieDTO를 만드는 함수
     public List<MovieDTO> getMovieDTOAsMovieList(HttpResponse<String> response) throws Exception {
         //영화목록response을 파싱해서 나온 JsonNode로 MovieDTO를 생성
         String movieListResponseBody = response.body();
@@ -655,27 +659,88 @@ public class MovieService {
         return movieDTOList;
     }
 
+    //TMDB API의 인물 검색 목록으로 MovieDTO를 만드는 함수
+    public List<PeopleDTO> getMovieDTOAsSearchPeople(String keyword) throws Exception{
+        HttpResponse<String> response = tmdbRequestService.sendSearchPeople(keyword, 1L); //첫번째 페이지 가져옴
+        String responseBody = response.body();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        Long totalPage = jsonNode.path("total_pages").asLong();
+        if(totalPage > 20L) totalPage = 20L; //인물 페이지 최대 20개로 제한
+        log.info(totalPage.toString());
+        //1. 유효한 인물 정보를 찾는다.
+        List<PeopleDTO> peopleDTOList = new ArrayList<>();
+        for(Long i = 0L ; i < totalPage ; i++){
+            response = tmdbRequestService.sendSearchPeople(keyword, i+1);
+            responseBody = response.body();
+            objectMapper = new ObjectMapper();
+            jsonNode = objectMapper.readTree(responseBody);
+            //현재 페이지의 인물 리스트
+            JsonNode peopleList = jsonNode.path("results");
+            for(int j = 0 ; j < peopleList.size(); j++){
+                JsonNode peopleNode = peopleList.get(j); //현재 인물
+                log.warn(peopleNode.asText());
+                log.error("{}index 파싱 시작", i);
+                JsonNode profilePathNode = peopleNode.path("profile_path");
+                if (profilePathNode.isNull() || profilePathNode.asText().isEmpty()){ //프로필 사진 없으면 제외
+                    log.error("프로필 사진 없으면 제외");
+                    continue;
+                }
+                JsonNode knownForNode = peopleNode.path("known_for");
+                if (!knownForNode.isArray() || knownForNode.size() == 0){ //출연작 없으면 제외
+                    log.error("출연작 없으면 제외");
+                    continue;
+                }
 
+                String peopleNm = peopleNode.path("original_name").asText();
+                Long peopleId = peopleNode.path("id").asLong();
+                String profilePath = "https://image.tmdb.org/t/p/w500" + peopleNode.path("profile_path").asText();
+                String moviePartNm = peopleNode.path("known_for_department").asText();
+                if ("Acting".equals(moviePartNm)) {
+                    moviePartNm = "배우";
+                } else if ("Directing".equals(moviePartNm)) {
+                    moviePartNm = "감독";
+                } else if ("Writing".equals(moviePartNm)) {
+                    moviePartNm = "작가";
+                } else {
+                    //그 외의 직업은 검색결과에서 제외
+                    log.error("그 외의 직업은 검색결과에서 제외");
+                    continue;
+                }
+
+                log.warn("{}index => peopleDTO 잘 가져옴", i);
+                PeopleDTO peopleDTO = PeopleDTO.builder()
+                        .peopleNm(peopleNm)
+                        .peopleId(peopleId)
+                        .profilePath(profilePath)
+                        .moviePartNm(moviePartNm)
+                        .build();
+                log.info("인물 추가 >> peopleNm: {}, peopleId: {}, profilePath: {}, moviePartNm: {}", peopleNm, peopleId, profilePath, moviePartNm);
+                peopleDTOList.add(peopleDTO);
+            }
+        }
+        return peopleDTOList;
+    }
 
 
     //search : 영화 이름으로 영화리스트를 검색
     public List<MovieDTO> searchMovieAsMovieName(String keyword) throws Exception{
         HttpResponse<String> response = kobisRequestService.sendMovieListRequestByMovieNm(keyword);
-        log.info("가져온 response body = > {}", response.body());
+        log.info("영화이름으로 검색 결과 response body = > {}", response.body());
         List<MovieDTO> movieList = getMovieDTOAsMovieList(response);
         return movieList;
     }
 
-
     //search : 인물 이름으로 인물의 프로필리스트 검색
-//    public List<PeopleDTO> searchProfilePeopleName(String keyword){
-//        return null;
-//    }
-
-    //search : 인물 이름으로 영화리스트를 검색
-    public List<MovieDTO> searchMovieAsPeopleName(String keyword){
-        return null;
+    public List<PeopleDTO> searchProfileAsPeopleName(String keyword) throws Exception{
+        List<PeopleDTO> peopleDTOList = getMovieDTOAsSearchPeople(keyword);
+        return peopleDTOList;
     }
+
+    //프로필을 클릭했을때 해당 사람의 출연 영화를 전부 보여줌
+
+
+
 
 
 
