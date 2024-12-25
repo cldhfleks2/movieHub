@@ -7,17 +7,16 @@ $(document).ready(function() {
     likeSection();
 
     // paginationSection();
-
 });
 
-//카테고리 선택에따라 프로필뷰를 보여줄지 아닐지
-function categorySelectSection(){
+//배우또는 감독명으로 검색시에만 프로필 결과 뷰를 보여줌
+function categorySelectSection() {
     $('.categorySelect').change(function () {
         const selectedValue = $(this).val();
         if (selectedValue === 'title') {
-            $('.profileSection').css('display', 'none');
+            $('.profileSection').removeClass('active');
         } else if (selectedValue === 'actor') {
-            $('.profileSection').css('display', 'block');
+            $('.profileSection').addClass('active');
         }
     });
 }
@@ -136,9 +135,43 @@ function searchSection(){
     });
 
     // 검색 수행 함수
-    function performSearch(query) {
-        console.log('Searching for:', query);
-        // 여기에 실제 검색 API 호출 로직 추가
+    function performSearch(keyword) {
+        const category = $(".categorySelect").val();
+
+        if(!keyword.trim()){
+            alert("검색어를 입력하세요.")
+            return;
+        }
+
+
+        
+        $.ajax({
+            url: "/search",
+            method: "get",
+            data: {keyword: keyword, category: category},
+            success: function (data){
+                if(category === "movieName"){
+                    //결과로 영화 리스트를 갱신
+                    var data = $.parseHTML(data);
+                    var dataHtml = $("<div>").append(data);
+                    $("#movieGrid").replaceWith(dataHtml.find("#movieGrid"));
+
+                    console.log("/search ajax success")
+                }else if(category === "moviePeople"){
+
+                    //결과로 프로필 리스트, 영화리스트 갱신
+                    console.log("/search ajax success")
+                }
+            },
+            error: function (err){
+                console.log(err)
+                console.log("/search ajax failed")
+            }
+
+        })
+
+
+
     }
 }
 
