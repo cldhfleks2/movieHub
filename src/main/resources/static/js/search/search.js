@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     likeSection();
 
-    // paginationSection();
+    clickPeopleProfile();
 });
 
 //배우또는 감독명으로 검색시에만 프로필 결과 뷰를 보여줌
@@ -139,6 +139,14 @@ function filterSection(){
     });
 }
 
+function showLoading() {
+    $('#loadingOverlay').addClass('active');
+}
+
+function hideLoading() {
+    $('#loadingOverlay').removeClass('active');
+}
+
 function searchSection(){
     // 검색 기능
     $('.searchButton').on('click', function() {
@@ -153,13 +161,6 @@ function searchSection(){
 
     // 검색 수행 함수
     function performSearch(keyword) {
-        function showLoading() {
-            $('#loadingOverlay').addClass('active');
-        }
-        function hideLoading() {
-            $('#loadingOverlay').removeClass('active');
-        }
-
         const category = $(".categorySelect").val();
 
         if(!keyword.trim()){
@@ -186,7 +187,6 @@ function searchSection(){
 
                     console.log("/search/movie ajax success")
                 }else if(category === "moviePeople"){
-                    console.log(data);
                     var data = $.parseHTML(data);
                     var dataHtml = $("<div>").append(data);
                     $("#profileSection").replaceWith(dataHtml.find("#profileSection"));
@@ -202,14 +202,47 @@ function searchSection(){
                 console.log(err)
                 console.log("/search ajax failed")
             }
-
         })
-
-
 
     }
 }
 
+function clickPeopleProfile(){
+    $(document).on("click", ".profileImageWrapper", function (){
+        const peopleId =  $(this).data("people-id");
+        const category = "peopleClick";
 
+        showLoading();
+
+        $.ajax({
+            url: "/search",
+            method: "get",
+            data: {keyword: peopleId, category: category},
+            success: function (data){
+                hideLoading(); // 로딩 화면 숨김
+                
+                //결과로 영화 리스트를 갱신
+                var data = $.parseHTML(data);
+                var dataHtml = $("<div>").append(data);
+                $("#movieGrid").replaceWith(dataHtml.find("#movieGrid"));
+                
+                //기본의 영화 결과 뷰를 재사용
+                $(".noResults").hide();
+                $(".movieGrid").show();
+
+                console.log("/search/people/movie ajax success")
+            },
+            error: function (err){
+                hideLoading(); // 로딩 화면 숨김
+                console.log(err)
+                console.log("/search/people/movie ajax failed")
+            }
+
+        })
+    })
+
+
+
+}
 
 

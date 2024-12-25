@@ -49,8 +49,8 @@
                 </div>
 <!--                아래 반복, 최대 10개만 보여줌-->
                 <div class="profileCard" th:each="people : ${peopleDTOList}">
-                    <div class="profileImageWrapper">
-                        <img class="profileImage" th:src="@{${people.profilePath}}" src="/image/blank.png" >
+                    <div class="profileImageWrapper" th:data-people-id="${people.peopleId}">
+                        <img class="profileImage" th:src="@{${people.profilePath}}" src="/image/blank.png"  title="클릭시 해당 인물의 영화 목록을 가져옵니다.">
                     </div>
                     <div class="profileInfo">
                         <h3 class="profileName" th:text="${people.peopleNm}">이름</h3>
@@ -70,8 +70,6 @@
                     <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터">
                     <div class="movieOverlay">
                         <button class="btnLike">♥</button>
-<!--                        북마크 없앰 하려면 상세페이지가서 해라-->
-<!--                        <button class="btnBookmark">🏷️</button>-->
                     </div>
                 </div>
                 <div class="movieInfo">
