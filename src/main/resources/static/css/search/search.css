@@ -339,17 +339,15 @@ select {
 }
 
 .profileSection {
+    display: none; /* visibility 대신 display 사용 */
     margin: 0 0 3rem;
-    visibility: hidden;
-    height: 0;
-    overflow: hidden;
-    transition: height 0.3s ease, visibility 0s linear 0.3s; /* smooth transition */
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .profileSection.active {
-    visibility: visible;
-    height: auto;
-    transition: height 0.3s ease, visibility 0s;
+    display: block;
+    opacity: 1;
 }
 
 .profileContainer {
@@ -357,6 +355,7 @@ select {
     grid-template-columns: repeat(10, 1fr);
     gap: 1.2rem;
     padding: 0.5rem;
+    margin-top: 1rem;
 }
 
 .profileCard {
@@ -374,7 +373,8 @@ select {
     border-radius: 100%;
     overflow: hidden;
     background: #1a1a1a;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
 
 .profileImage {
@@ -387,8 +387,8 @@ select {
     transition: transform 0.3s ease;
 }
 
-.profileCard:hover .profileImage {
-    transform: scale(1.1);
+.profileImage {
+    transform: scale(1.2);
 }
 
 .profileHoverInfo {
@@ -425,16 +425,17 @@ select {
 }
 
 .profileInfo {
-    padding: 1rem 0.5rem;
+    padding: 0.8rem 0.5rem;
     text-align: center;
-    height: 100px;
+    height: auto;
+    min-height: 70px;
 }
 
 .profileName {
     font-size: 0.9rem;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
     overflow: hidden;
-    text-overflow: ellipsis;
+    /*text-overflow: ellipsis;*/
     margin-bottom: 10px;
 }
 
@@ -471,3 +472,57 @@ select {
 
 
 
+
+
+/* 로딩 오버레이 스타일 */
+.loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10000; /* 값 높이기 */
+}
+
+/* 로딩 오버레이 활성화 상태 */
+.loadingOverlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 원형 로딩 애니메이션 */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+/* 로딩 애니메이션 키프레임 */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 로딩 텍스트 스타일 */
+.loadingOverlay p {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}

@@ -11,14 +11,31 @@ $(document).ready(function() {
 
 //배우또는 감독명으로 검색시에만 프로필 결과 뷰를 보여줌
 function categorySelectSection() {
-    $('.categorySelect').change(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue === 'title') {
-            $('.profileSection').removeClass('active');
-        } else if (selectedValue === 'actor') {
-            $('.profileSection').addClass('active');
-        }
+    updateProfileSectionVisibility(); //초기상태
+
+    // 카테고리 변경 이벤트
+    $('.categorySelect').change(function() {
+        updateProfileSectionVisibility();
+        // 카테고리 변경시 검색 결과 초기화
+        $('.searchInput').val('');
+        // input 태그로 포커스 이동
+        $('.searchInput').focus();
     });
+}
+
+//프로필 뷰 보여지게 설정
+function updateProfileSectionVisibility() {
+    const selectedValue = $('.categorySelect').val();
+    const $profileSection = $('.profileSection');
+
+    if (selectedValue === 'moviePeople') {
+        $profileSection.addClass('active');
+        $(".movieGrid").hide();
+        $(".noResults").hide();
+    } else if(selectedValue === 'movieName'){
+        $profileSection.removeClass('active');
+        $(".movieGrid").show();
+    }
 }
 
 // function paginationSection(){
@@ -136,6 +153,13 @@ function searchSection(){
 
     // 검색 수행 함수
     function performSearch(keyword) {
+        function showLoading() {
+            $('#loadingOverlay').addClass('active');
+        }
+        function hideLoading() {
+            $('#loadingOverlay').removeClass('active');
+        }
+
         const category = $(".categorySelect").val();
 
         if(!keyword.trim()){
@@ -144,26 +168,37 @@ function searchSection(){
         }
 
 
-        
+        // "검색 중" 표시 보여주기
+        showLoading();
+
         $.ajax({
             url: "/search",
             method: "get",
             data: {keyword: keyword, category: category},
             success: function (data){
+                hideLoading(); // 로딩 화면 숨김
+
                 if(category === "movieName"){
                     //결과로 영화 리스트를 갱신
                     var data = $.parseHTML(data);
                     var dataHtml = $("<div>").append(data);
                     $("#movieGrid").replaceWith(dataHtml.find("#movieGrid"));
 
-                    console.log("/search ajax success")
+                    console.log("/search/movie ajax success")
                 }else if(category === "moviePeople"){
+                    console.log(data);
+                    var data = $.parseHTML(data);
+                    var dataHtml = $("<div>").append(data);
+                    $("#profileSection").replaceWith(dataHtml.find("#profileSection"));
+                    updateProfileSectionVisibility();
+                    $(".noResults").show();
 
                     //결과로 프로필 리스트, 영화리스트 갱신
-                    console.log("/search ajax success")
+                    console.log("/search/people ajax success")
                 }
             },
             error: function (err){
+                hideLoading(); // 로딩 화면 숨김
                 console.log(err)
                 console.log("/search ajax failed")
             }

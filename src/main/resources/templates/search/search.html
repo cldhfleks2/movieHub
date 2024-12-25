@@ -38,22 +38,23 @@
             </div>
         </div>
 
-        <div class="profileSection">
+        <div class="profileSection" id="profileSection">
 <!--            <div class="sectionDivider">-->
 <!--                <h2 class="sectionTitle">Crew & Cast</h2>-->
 <!--                <div class="dividerLine"></div>-->
 <!--            </div>-->
             <div class="profileContainer" style="margin-bottom: -40px;">
+                <div th:if="${#lists.isEmpty(peopleDTOList)}" class="noResults" >
+                    검색 결과가 없습니다.
+                </div>
 <!--                아래 반복, 최대 10개만 보여줌-->
-                <div class="profileCard">
+                <div class="profileCard" th:each="people : ${peopleDTOList}">
                     <div class="profileImageWrapper">
-<!--                        <img th:src="${person.profilePath != null} ? 'https://image.tmdb.org/t/p/w300' + ${person.profilePath} : '/image/blank.png'"-->
-<!--                             th:alt="${person.name}" class="profileImage">-->
-                        <img src="/image/blank.png" class="profileImage">
+                        <img class="profileImage" th:src="@{${people.profilePath}}" src="/image/blank.png" >
                     </div>
                     <div class="profileInfo">
-                        <h3 class="profileName">이름</h3>
-                        <span class="profileRole">역할</span>
+                        <h3 class="profileName" th:text="${people.peopleNm}">이름</h3>
+                        <span class="profileRole" th:text="${people.moviePartNm}">역할</span>
                     </div>
                 </div>
             </div>
@@ -69,7 +70,8 @@
                     <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터">
                     <div class="movieOverlay">
                         <button class="btnLike">♥</button>
-                        <button class="btnBookmark">🏷️</button>
+<!--                        북마크 없앰 하려면 상세페이지가서 해라-->
+<!--                        <button class="btnBookmark">🏷️</button>-->
                     </div>
                 </div>
                 <div class="movieInfo">
@@ -98,6 +100,11 @@
 <!--        </div>-->
     </div>
 </main>
+
+<div class="loadingOverlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p>검색 중입니다...</p>
+</div>
 
 <div th:replace="~{ footer/footer::footer }"></div>
 <script>
