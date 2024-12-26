@@ -2,7 +2,6 @@ package com.cldhfleks2.moviehub.movie;
 
 import com.cldhfleks2.moviehub.api.KOBISRequestService;
 import com.cldhfleks2.moviehub.api.TMDBRequestService;
-import com.cldhfleks2.moviehub.config.SeleniumWebDriver;
 import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.movie.actor.MovieActor;
 import com.cldhfleks2.moviehub.movie.actor.MovieActorRepository;
@@ -18,14 +17,12 @@ import com.cldhfleks2.moviehub.movie.genre.MovieGenre;
 import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
 import com.cldhfleks2.moviehub.movie.nation.MovieNation;
 import com.cldhfleks2.moviehub.movie.nation.MovieNationRepository;
-import com.cldhfleks2.moviehub.movie.people.PeopleDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.net.URLEncoder;
 import java.net.http.HttpResponse;
