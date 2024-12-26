@@ -314,12 +314,10 @@ function gotoPostDetail(){
             data: {movieNm: movieNm, openDt: openDt},
             type: 'GET',
             success: function (movieCd) {
-                hideLoading();
                 // 정상 응답일때 movieCd값이 전달됨
                 window.location.href = "/detail/" + movieCd; //영화 상세 페이지로 이동
             },
             error: function (xhr) {
-                hideLoading();
                 console.warn(xhr);
                 if (xhr.status === 404) {
                     // 영화 정보가 없는 경우 (status 404)
@@ -332,6 +330,8 @@ function gotoPostDetail(){
                 }
             }
         });
+        //ajax통신후 로딩 표시 숨기기
+        hideLoading();
     })
 }
 
