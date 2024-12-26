@@ -31,7 +31,7 @@ public class MovieDTO {
     private List<MovieActor> actorList;
 
     //검색에서 사용
-    private String average;
+    private String rating;
 
 }
 

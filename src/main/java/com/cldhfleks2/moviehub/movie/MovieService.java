@@ -536,37 +536,37 @@ public class MovieService {
                 continue;
 
             //평점 가져오기 (소숫점 1자리까지만)
-            String average = "not-found";
+            String rating = "not-found";
             String primaryReleaseYear = openDt.substring(0, 4);
             //1차: 영화이름과 개봉년도로 검색
-            HttpResponse<String> averageResponse = tmdbRequestService.sendSearchMovieAsMovieNmAndYear(movieNm, primaryReleaseYear);
-            String averageResponseBody = averageResponse.body();
+            HttpResponse<String> ratingResponse = tmdbRequestService.sendSearchMovieAsMovieNmAndYear(movieNm, primaryReleaseYear);
+            String ratingResponseBody = ratingResponse.body();
             objectMapper = new ObjectMapper();
-            JsonNode averageJsonNode = objectMapper.readTree(averageResponseBody);
-            JsonNode averageNodeList = averageJsonNode.path("results");
+            JsonNode ratingJsonNode = objectMapper.readTree(ratingResponseBody);
+            JsonNode ratingNodeList = ratingJsonNode.path("results");
             //2차 : 개봉년도를 제외하고 다시 검색
-            if (!(averageNodeList.isArray() && averageNodeList.size() > 0)) {
-                averageResponse =tmdbRequestService.sendSearchMovieAsMovieNm(movieNm);
-                averageResponseBody = averageResponse.body();
+            if (!(ratingNodeList.isArray() && ratingNodeList.size() > 0)) {
+                ratingResponse =tmdbRequestService.sendSearchMovieAsMovieNm(movieNm);
+                ratingResponseBody = ratingResponse.body();
                 objectMapper = new ObjectMapper();
-                averageJsonNode = objectMapper.readTree(averageResponseBody);
-                averageNodeList = averageJsonNode.path("results");
+                ratingJsonNode = objectMapper.readTree(ratingResponseBody);
+                ratingNodeList = ratingJsonNode.path("results");
             }
             //검색결과를 파싱해서 average추출
-            average = "not-found"; // 기본값을 "not-found"로 설정
-            if (averageNodeList.isArray() && averageNodeList.size() > 0) {
-                JsonNode firstMovie = averageNodeList.get(0); // 첫 번째 영화 객체 가져오기
-                JsonNode averageNode = firstMovie.path("vote_average"); // vote_average 값 추출
+            rating = "not-found"; // 기본값을 "not-found"로 설정
+            if (ratingNodeList.isArray() && ratingNodeList.size() > 0) {
+                JsonNode firstMovie = ratingNodeList.get(0); // 첫 번째 영화 객체 가져오기
+                JsonNode ratingNode = firstMovie.path("vote_average"); // vote_average 값 추출
 
                 // "vote_average"가 null이 아니고 비어있지 않으면, 평점 값을 처리
-                if (!averageNode.isNull() && !averageNode.asText().isEmpty()) {
-                    double voteAverage = averageNode.asDouble(); // "vote_average" 값을 double로 가져오기
+                if (!ratingNode.isNull() && !ratingNode.asText().isEmpty()) {
+                    double voteRating = ratingNode.asDouble(); // "vote_average" 값을 double로 가져오기
                     // 0.00 ~ 10.00 범위를 0.0 ~ 5.0 범위로 변환
-                    double convertedAverage = voteAverage / 2.0;
+                    double convertedRating = voteRating / 2.0;
                     // 소수 첫 번째 자리까지 포맷팅
-                    average = String.format("%.1f", convertedAverage);
+                    rating = String.format("%.1f", convertedRating);
                 }
-                log.info("getMovieDTOAsMovieList >> movieNm: {}, primaryReleaseYear:{},  average: {}", movieNm, primaryReleaseYear, average);
+                log.info("getMovieDTOAsMovieList >> movieNm: {}, primaryReleaseYear:{},  rating: {}", movieNm, primaryReleaseYear, rating);
             } else {
                 log.warn("getMovieDTOAsMovieList >> response에 영화 결과가 없거나 'results' 배열이 비어 있습니다.");
             }
@@ -588,7 +588,7 @@ public class MovieService {
                         .openDt(openDt)
                         .posterURL(posterURL)
 //                        .genreList(genreList) //장르는 제외
-                        .average(average)
+                        .rating(rating)
                         .build();
                 movieDTOList.add(movieDTO);
             } else { //DB에 없으면 포스터, 장르등을 추가로 API요청해서 보여줌
@@ -620,7 +620,7 @@ public class MovieService {
                         .openDt(openDt)
                         .posterURL(posterURL)
 //                        .genreList(genreList) //너무 느려서 뺌
-                        .average(average)
+                        .rating(rating)
                         .build();
                 movieDTOList.add(movieDTO);
             }
@@ -769,13 +769,13 @@ public class MovieService {
                     JsonNode posterPathNode = movieNode.path("poster_path");
                     String posterURL = "https://image.tmdb.org/t/p/w500" + posterPathNode.asText();
                     //평점 가져오기 (소숫점 1자리까지만)
-                    JsonNode averageNode = movieNode.path("vote_average");
-                    String average = averageNode.asText().split(".")[0] + averageNode.asText().split(".")[1].substring(0, 1);
+                    JsonNode ratingNode = movieNode.path("vote_average");
+                    String rating = ratingNode.asText().split(".")[0] + ratingNode.asText().split(".")[1].substring(0, 1);
                     MovieDTO movieDTO = MovieDTO.builder()
                             .movieNm(movieNm)
                             .openDt(openStartDt)
                             .posterURL(posterURL)
-                            .average(average) //평점 기록
+                            .rating(rating) //평점 기록
                             .build();
                     findMovieDTO = new ArrayList<>();
                     findMovieDTO.add(movieDTO);
