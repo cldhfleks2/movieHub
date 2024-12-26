@@ -3,11 +3,12 @@ package com.cldhfleks2.moviehub;
 import com.cldhfleks2.moviehub.api.KOBISRequestService;
 import com.cldhfleks2.moviehub.api.TMDBRequestService;
 import com.cldhfleks2.moviehub.config.SeleniumWebDriver;
+import com.cldhfleks2.moviehub.like.MovieLike;
+import com.cldhfleks2.moviehub.like.MovieLikeRepository;
 import com.cldhfleks2.moviehub.movie.*;
 import com.cldhfleks2.moviehub.movie.audit.MovieAuditRepository;
 import com.cldhfleks2.moviehub.movie.dailystat.MovieDailyStatRepository;
 import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
-import com.cldhfleks2.moviehub.movie.PeopleDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -39,6 +41,7 @@ public class BasicService {
     private final MovieDailyStatRepository movieDailyStatRepository;
     private final KOBISRequestService kobisRequestService;
     private final TMDBRequestService tmdbRequestService;
+    private final MovieLikeRepository movieLikeRepository;
 
     @Value("${kobis.key}")
     private String kobiskey;
@@ -142,7 +145,7 @@ public class BasicService {
     }
 
     //영화 상세 페이지 GET
-    String getDetail(String movieCd, Model model, RedirectAttributes redirectAttributes) throws Exception{
+    String getDetail(String movieCd, Model model, Authentication auth, RedirectAttributes redirectAttributes) throws Exception{
         //DB에 없으면 DB에 추가하고 보여줌
         Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);
         if(!movieObj.isPresent()){
@@ -177,12 +180,6 @@ public class BasicService {
             //모델에 MovieDTO 담기
             MovieDTO movieDetail = movieService.convertToMovieDTO(returnEntitysDTO);
             model.addAttribute("movieDetail", movieDetail);
-
-            //모델에 영화의 좋아요 갯수 담아서 보여주기
-            
-            
-
-            return "detail/detail";
         }else{
             //DB에 있으면 그대로 영화 정보를 보여준다.
             Movie movie = movieObj.get();
@@ -191,11 +188,28 @@ public class BasicService {
             //MovieDailyStat은 아래 getMovieDTO에서 진행
             MovieDTO movieDetail = movieService.getMovieDTO(movieId);
             model.addAttribute("movieDetail", movieDetail);
-
-            //모델에 영화의 좋아요 갯수 담기
-
-            return "detail/detail";
         }
+
+        //영화의 좋아요 상태 : 내가 좋아요 눌렀는지
+        String username = auth.getName();
+        Boolean likeStatus;
+        Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsername(username);
+        if(movieLikeObj.isPresent()){
+            MovieLike movieLike = movieLikeObj.get();
+            int status = movieLike.getStatus();
+            status = (status + 1) % 2; //toggle
+            likeStatus = (status == 1); //상태 저장
+        }else{
+            likeStatus = false;
+        }
+        model.addAttribute("likeStatus", likeStatus);
+
+        //좋아요 총 갯수 구하기
+        List<MovieLike> movieLikeList = movieLikeRepository.findAllByMovieCdAndStatus(movieCd);
+        int totalLikeCnt = (movieLikeList != null) ? movieLikeList.size() : 0;
+        model.addAttribute("totalLikeCnt", totalLikeCnt);
+
+        return "detail/detail";
     }
 
     //검색 페이지 GET

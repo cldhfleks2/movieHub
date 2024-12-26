@@ -2,6 +2,7 @@ package com.cldhfleks2.moviehub;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +34,8 @@ public class BasicController {
 
     //영화 상세 페이지 GET
     @GetMapping("/detail/{movieCd}")
-    String getDetail(@PathVariable String movieCd, Model model, RedirectAttributes redirectAttributes)  throws Exception{
-        return basicService.getDetail(movieCd, model, redirectAttributes);
+    String getDetail(@PathVariable String movieCd, Model model, Authentication auth, RedirectAttributes redirectAttributes)  throws Exception{
+        return basicService.getDetail(movieCd, model, auth, redirectAttributes);
     }
 
     //검색 페이지 GET

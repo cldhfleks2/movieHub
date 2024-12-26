@@ -1,5 +1,6 @@
 package com.cldhfleks2.moviehub.like;
 
+import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.movie.Movie;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,16 +18,18 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE movie_like SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
 public class MovieLike {
+    @ToString.Exclude
+    @ManyToOne
+    private Movie movie;
 
-    private Long cnt=0L; //최초에는 0개
+    @ToString.Exclude
+    @ManyToOne
+    private Member member;
 
     //아래는 기본 필드들
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Movie movie;
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createDate;
