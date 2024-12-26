@@ -22,8 +22,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +58,46 @@ public class BasicService {
         LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         return currentDate.format(formatter);
+    }
+
+    //검색결과 정렬 담당 함수 : getSearch에서 사용
+    public List<MovieDTO> sortMovieList(List<MovieDTO> movieDTOList, String keyword, String sortBy) {
+// 기본 Comparator 생성 (전체 정렬 조건은 없으므로 기본값은 null 처리)
+        Comparator<MovieDTO> comparator = null;
+
+        // 1. 관련도순 (relevance) 정렬
+        if (sortBy.equals("relevance")) {
+            comparator = (movie1, movie2) -> {
+                boolean movie1Matches = movie1.getMovieNm().contains(keyword);
+                boolean movie2Matches = movie2.getMovieNm().contains(keyword);
+                return Boolean.compare(movie2Matches, movie1Matches); // 매칭된 영화가 앞에 오도록
+            };
+        }
+        // 2. 개봉일순 (date) 정렬
+        else if (sortBy.equals("date")) {
+            comparator = (movie1, movie2) -> {
+                String openDt1 = movie1.getOpenDt();
+                String openDt2 = movie2.getOpenDt();
+                return openDt2.compareTo(openDt1); // 최신 개봉일이 먼저 오도록
+            };
+        }
+        // 3. 평점순 (rating) 정렬
+        else if (sortBy.equals("rating")) {
+            comparator = (movie1, movie2) -> {
+                double rating1 = movie1.getRating() != null ? Double.parseDouble(movie1.getRating()) : 0.0;
+                double rating2 = movie2.getRating() != null ? Double.parseDouble(movie2.getRating()) : 0.0;
+                return Double.compare(rating2, rating1); // 높은 평점이 먼저 오도록
+            };
+        }
+
+        // 조건에 맞는 정렬 기준이 있는 경우에만 적용
+        if (comparator != null) {
+            return movieDTOList.stream()
+                    .sorted(comparator)
+                    .collect(Collectors.toList());
+        }
+
+        return movieDTOList; // 정렬 기준이 안맞으면 원래 그대로
     }
 
     //메인 페이지 GET
@@ -139,20 +181,23 @@ public class BasicService {
         }
     }
 
-
     //검색 페이지 GET
-    String getSearch(String keyword, String category, Model model)  throws Exception{
-        if(keyword == null) keyword = ""; //검색어 없을때
-        if(category == null) category = ""; //검색 조건 : 영화제목, 배우/감독명
+    String getSearch(String keyword, String category, String sortBy, Model model)  throws Exception{
+        //기본값 지정
+        if(keyword == null) keyword = ""; 
+        if(category == null) category = ""; 
+        if(sortBy == null) sortBy = "relevance"; //관련도 순
 
         if(keyword == "")
             return "search/search";
+
         
         //키워드로 검색 진행
         if(category.equals("movieName")){ //KOBIS API 사용
             log.info("영화제목으로 영화 목록 검색 시작");
             List<MovieDTO> movieList = movieService.searchMovieAsMovieName(keyword, 50); //영화 검색결과를 가져옴 갯수제한
-            model.addAttribute("movieList", movieList);
+            List<MovieDTO> sortedMovieList = sortMovieList(movieList, keyword ,sortBy);
+            model.addAttribute("movieList", sortedMovieList); //정렬된 영화 목록을 전달
             log.info("영화제목으로 영화 목록을  갖고옴.");
             
         }else if(category.equals("moviePeople")){ //TMDB API 사용
@@ -167,11 +212,16 @@ public class BasicService {
             //이때 키워드는 peopleId를 전달 해줌.
             Long peopleId = Long.parseLong(keyword);
             List<MovieDTO> movieList = movieService.searchMovieAsPeopleId(peopleId, 50); //검색결과 최대 8개 제한
-            model.addAttribute("movieList", movieList);
+            List<MovieDTO> sortedMovieList = sortMovieList(movieList, keyword ,sortBy);
+            model.addAttribute("movieList", sortedMovieList); //정렬된 영화 목록을 전달
             log.info("해당 인물에 대한 영화 목록을 갖고옴.");
         }
 
         log.info("페이지 전송, category = {}", category);
         return "search/search";
     }
+
+
+
+
 }

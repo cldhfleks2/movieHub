@@ -38,8 +38,8 @@ public class BasicController {
 
     //검색 페이지 GET
     @GetMapping("/search")
-    String getSearch(String keyword, String category, Model model)  throws Exception{
-        return basicService.getSearch(keyword, category, model);
+    String getSearch(String keyword, String category, String sortBy, Model model)  throws Exception{
+        return basicService.getSearch(keyword, category, sortBy, model);
     }
 
 }

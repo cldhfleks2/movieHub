@@ -25,17 +25,17 @@
             <button class="searchButton">검색</button>
         </div>
 
-        <div class="filterBar">
-            <select class="filterSelect">
+        <div class="sortBar">
+            <select class="sortSelect">
                 <option value="relevance">관련도순</option>
                 <option value="date">개봉일순</option>
                 <option value="rating">평점순</option>
             </select>
-            <div class="filterTags">
-                <button class="filterTag active">전체</button>
-                <button class="filterTag">국내영화</button>
-                <button class="filterTag">해외영화</button>
-            </div>
+<!--            <div class="filterTags">-->
+<!--                <button class="filterTag active">전체</button>-->
+<!--                <button class="filterTag">국내영화</button>-->
+<!--                <button class="filterTag">해외영화</button>-->
+<!--            </div>-->
         </div>
 
         <div class="profileSection" id="profileSection">
@@ -77,7 +77,7 @@
                     <div class="movieMeta">
                         <span class="movieYear" th:text="${movie.openDt}">2024 일단 개봉일 넣어둠</span>
 <!--                        <span class="movieRating">⭐ 4.5</span>-->
-                        <div class="average" th:text="'⭐ ' + ${movie.average}"></div>
+                        <div class="rating" th:text="'⭐ ' + ${movie.rating}"></div>
                     </div>
 
                     <!--                    장르는 KOBIS API를 사용 해야해서 검색이 느려져서 제외-->
