@@ -25,4 +25,18 @@ public class MemberController {
         return memberService.getLogin(auth);
     }
 
+    //회원가입 페이지 GET
+    @GetMapping("/register")
+    String getRegister (Authentication auth) {
+        return memberService.getRegister(auth);
+    }
+
+    //회원가입
+    @PostMapping("/register")
+    ResponseEntity<String> register(Member member) {
+        return memberService.register(member);
+    }
+
+
 }
+
