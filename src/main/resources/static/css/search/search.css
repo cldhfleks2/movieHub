@@ -2,12 +2,14 @@ body{
     caret-color: transparent;
 }
 .mainContent {
+    min-height: 680px;
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
 }
 
 .searchContainer {
+    min-height: 280px;
     background: white;
     border-radius: 12px;
     padding: 2rem;

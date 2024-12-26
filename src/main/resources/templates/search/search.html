@@ -76,14 +76,18 @@
                     <h3  class="movieTitle" th:text="${movie.movieNm}">영화 제목</h3>
                     <div class="movieMeta">
                         <span class="movieYear" th:text="${movie.openDt}">2024 일단 개봉일 넣어둠</span>
-                        <span class="movieRating">⭐ 4.5</span>
+<!--                        <span class="movieRating">⭐ 4.5</span>-->
+                        <div class="average" th:text="'⭐ ' + ${movie.average}"></div>
                     </div>
-                    <div class="movieGenres">
-                        <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">액션</span>
-                    </div>
+
+                    <!--                    장르는 KOBIS API를 사용 해야해서 검색이 느려져서 제외-->
+<!--                    <div class="movieGenres">-->
+<!--                        <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">액션</span>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
+
 
 <!--        <div class="pagination">-->
 <!--            <button class="pageBtn" disabled>◀</button>-->
@@ -103,7 +107,7 @@
     <div class="spinner"></div>
     <p>검색 중입니다...</p>
     <div class="explain" style="display: none;">
-        <p>작품수에 따라 5~50초정도 소요 됩니다...</p>
+        <p>작품수에 따라 5~20초정도 소요 됩니다...</p>
     </div>
 </div>
 

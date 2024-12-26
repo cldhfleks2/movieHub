@@ -29,10 +29,14 @@ function updateProfileSectionVisibility() {
     const $profileSection = $('.profileSection');
 
     if (selectedValue === 'moviePeople') {
+        //기존 결과 제거
+        $(".movieCard").empty();
         $profileSection.addClass('active');
         $(".movieGrid").hide();
         $(".noResults").hide();
     } else if(selectedValue === 'movieName'){
+        //기존 결과 제거
+        $(".movieCard").empty();
         $profileSection.removeClass('active');
         $(".movieGrid").show();
     }
@@ -222,12 +226,12 @@ function clickPeopleProfile(){
             success: function (data){
                 hideLoading(); // 로딩 화면 숨김
                 $(".explain").hide();
-                
+
                 //결과로 영화 리스트를 갱신
                 var data = $.parseHTML(data);
                 var dataHtml = $("<div>").append(data);
                 $("#movieGrid").replaceWith(dataHtml.find("#movieGrid"));
-                
+
                 //기본의 영화 결과 뷰를 재사용
                 $(".noResults").hide();
                 $(".movieGrid").show();
