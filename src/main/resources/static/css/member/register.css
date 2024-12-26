@@ -1,6 +1,6 @@
 /* login.css & signup.css 공통 스타일 */
 .loginContainer, .signupContainer {
-    min-height: 100vh;
+    min-height: 82vh;
     display: flex;
     justify-content: center;
     align-items: center;
