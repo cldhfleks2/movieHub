@@ -30,5 +30,8 @@ public class MovieDTO {
     private List<MovieDirector> directorList;
     private List<MovieActor> actorList;
 
+    //검색에서 사용
+    private String average;
+
 }
 

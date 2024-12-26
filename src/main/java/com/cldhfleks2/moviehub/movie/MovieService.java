@@ -502,7 +502,7 @@ public class MovieService {
     }
 
     //KOBIS API의 영화 목록으로 MovieDTO를 만드는 함수
-    //저장하지 않고 뷰에 필요한 정보만 보여줌
+    //search뷰에 필요한 정보만 보여줌 저장X
     public List<MovieDTO> getMovieDTOAsMovieList(HttpResponse<String> response, int limit) throws Exception {
         //영화목록response을 파싱해서 나온 JsonNode로 MovieDTO를 생성
         String movieListResponseBody = response.body();
@@ -515,9 +515,14 @@ public class MovieService {
         JsonNode jsonNode = objectMapper.readTree(movieListResponseBody);
         JsonNode jsonNodeList = jsonNode.path("movieListResult").path("movieList");
 
-        //영화 목록중 현재 영화에 대한 처리
         List<MovieDTO> movieDTOList = new ArrayList<>();
-        int totalLimit = jsonNodeList.size() > limit ? limit : jsonNodeList.size(); //최대 갯수를 지정
+
+        if(!jsonNodeList.isArray() || jsonNodeList.size() == 0){ //KOBIS에 없는 영화일경우 지금 까지 아는정보만으로 보여줌
+            return null;
+        }
+
+        //영화 목록중 현재 영화에 대한 처리
+        int totalLimit = Math.min(jsonNodeList.size(), limit); //최대 갯수를 지정
         for (int i = 0; i < totalLimit; i++) {
             JsonNode movieJsonNode = jsonNodeList.get(i);
             String movieCd = movieJsonNode.path("movieCd").asText();
@@ -526,6 +531,46 @@ public class MovieService {
             String openDt = movieJsonNode.path("openDt").asText();
 //            String prdtYear = movieJsonNode.path("prdtYear").asText(); //안쓰는값이라 주석
 //            String typeNm = movieJsonNode.path("typeNm").asText(); //안쓰는값이라 주석
+            // 하나라도 빈 값이 있을 때 실행할 코드
+            if (movieCd.isEmpty() || movieNm.isEmpty() || movieNmEn.isEmpty() || openDt.isEmpty())
+                continue;
+
+            //평점 가져오기 (소숫점 1자리까지만)
+            String average = "not-found";
+            String primaryReleaseYear = openDt.substring(0, 4);
+            //1차: 영화이름과 개봉년도로 검색
+            HttpResponse<String> averageResponse = tmdbRequestService.sendSearchMovieAsMovieNmAndYear(movieNm, primaryReleaseYear);
+            String averageResponseBody = averageResponse.body();
+            objectMapper = new ObjectMapper();
+            JsonNode averageJsonNode = objectMapper.readTree(averageResponseBody);
+            JsonNode averageNodeList = averageJsonNode.path("results");
+            //2차 : 개봉년도를 제외하고 다시 검색
+            if (!(averageNodeList.isArray() && averageNodeList.size() > 0)) {
+                averageResponse =tmdbRequestService.sendSearchMovieAsMovieNm(movieNm);
+                averageResponseBody = averageResponse.body();
+                objectMapper = new ObjectMapper();
+                averageJsonNode = objectMapper.readTree(averageResponseBody);
+                averageNodeList = averageJsonNode.path("results");
+            }
+            //검색결과를 파싱해서 average추출
+            average = "not-found"; // 기본값을 "not-found"로 설정
+            if (averageNodeList.isArray() && averageNodeList.size() > 0) {
+                JsonNode firstMovie = averageNodeList.get(0); // 첫 번째 영화 객체 가져오기
+                JsonNode averageNode = firstMovie.path("vote_average"); // vote_average 값 추출
+
+                // "vote_average"가 null이 아니고 비어있지 않으면, 평점 값을 처리
+                if (!averageNode.isNull() && !averageNode.asText().isEmpty()) {
+                    double voteAverage = averageNode.asDouble(); // "vote_average" 값을 double로 가져오기
+                    // 0.00 ~ 10.00 범위를 0.0 ~ 5.0 범위로 변환
+                    double convertedAverage = voteAverage / 2.0;
+                    // 소수 첫 번째 자리까지 포맷팅
+                    average = String.format("%.1f", convertedAverage);
+                }
+                log.info("getMovieDTOAsMovieList >> movieNm: {}, primaryReleaseYear:{},  average: {}", movieNm, primaryReleaseYear, average);
+            } else {
+                log.warn("getMovieDTOAsMovieList >> response에 영화 결과가 없거나 'results' 배열이 비어 있습니다.");
+            }
+
 
             //DB에 존재하는 영화이면 그대로 보여줌
             Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);
@@ -537,12 +582,13 @@ public class MovieService {
                 Movie movie = movieObj.get();
                 Long movieId = movie.getId();
                 String posterURL = movie.getPosterURL();
-                List<MovieGenre> genreList = movieGenreRepository.findByMovieIdAndStatus(movieId);
+//                List<MovieGenre> genreList = movieGenreRepository.findByMovieIdAndStatus(movieId); //장르 제외
                 MovieDTO movieDTO = MovieDTO.builder()
                         .movieNm(movieNm)
                         .openDt(openDt)
                         .posterURL(posterURL)
-                        .genreList(genreList)
+//                        .genreList(genreList) //장르는 제외
+                        .average(average)
                         .build();
                 movieDTOList.add(movieDTO);
             } else { //DB에 없으면 포스터, 장르등을 추가로 API요청해서 보여줌
@@ -552,20 +598,20 @@ public class MovieService {
                     posterURL = "/image/noImage.png"; //이미지없음으로 보여줄거임
                 }
 
-                //장르 리스트를 가져오기위해
-                //영화의 상세 정보를 받기 새로운 KOBIS API 요청을 날림
-                HttpResponse<String> movieDetailResponse = kobisRequestService.sendMovieDetailRequest(movieCd);
-                String movieDetailResponseBody = movieDetailResponse.body();
-                ObjectMapper movieDetailObjectMapper = new ObjectMapper();
-                JsonNode movieDetailJsonNode = movieDetailObjectMapper.readTree(movieDetailResponseBody);
-                JsonNode movieDetailNode = movieDetailJsonNode.path("movieInfoResult").path("movieInfo");
-                JsonNode genresListNode = movieDetailNode.path("genres");
-                List<MovieGenre> genreList = new ArrayList<>();
-                for (int j = 0; j < genresListNode.size(); j++) {
-                    MovieGenre movieGenre = new MovieGenre();
-                    movieGenre.setGenreNm(genresListNode.get(j).path("genreNm").asText());
-                    genreList.add(movieGenre);
-                }
+                //장르 리스트를 가져오기위해 : 너무 느려서 뺀다.
+//                //영화의 상세 정보를 받기 새로운 KOBIS API 요청을 날림
+//                HttpResponse<String> movieDetailResponse = kobisRequestService.sendMovieDetailRequest(movieCd);
+//                String movieDetailResponseBody = movieDetailResponse.body();
+//                ObjectMapper movieDetailObjectMapper = new ObjectMapper();
+//                JsonNode movieDetailJsonNode = movieDetailObjectMapper.readTree(movieDetailResponseBody);
+//                JsonNode movieDetailNode = movieDetailJsonNode.path("movieInfoResult").path("movieInfo");
+//                JsonNode genresListNode = movieDetailNode.path("genres");
+//                List<MovieGenre> genreList = new ArrayList<>();
+//                for (int j = 0; j < genresListNode.size(); j++) {
+//                    MovieGenre movieGenre = new MovieGenre();
+//                    movieGenre.setGenreNm(genresListNode.get(j).path("genreNm").asText());
+//                    genreList.add(movieGenre);
+//                }
 
                 //나중에 영화검색결과에 필요한 엔티티가있으면 추가할것...
 
@@ -573,7 +619,8 @@ public class MovieService {
                         .movieNm(movieNm)
                         .openDt(openDt)
                         .posterURL(posterURL)
-                        .genreList(genreList)
+//                        .genreList(genreList) //너무 느려서 뺌
+                        .average(average)
                         .build();
                 movieDTOList.add(movieDTO);
             }
@@ -703,6 +750,7 @@ public class MovieService {
                 String movieNm = movieNmNode.asText();
                 String openStartDt = openStartDtNode.asText().substring(0, 4);
                 String openEndDt = openStartDt; //검색 기간을 해당 년도만으로 제한
+                log.info("getMovieDTOAsSearchPeopleId movieNm:{}", movieNm);
                 response = kobisRequestService.sendMovieListRequestByMovieNm(movieNm, openStartDt, openEndDt);
                 if(response == null){
                     log.error("getMovieDTOAsSearchPeopleId kobisRequestService.sendMovieListRequestByMovieNm 요청 실패!!!!");
@@ -715,6 +763,24 @@ public class MovieService {
                 //DTO생성
                 int remainCnt = limit - movieDTOList.size();
                 List<MovieDTO> findMovieDTO = getMovieDTOAsMovieList(response, remainCnt); //최대 갯수 제한해서 검색
+
+                if(findMovieDTO == null){
+                    //포스터 가져오기
+                    JsonNode posterPathNode = movieNode.path("poster_path");
+                    String posterURL = "https://image.tmdb.org/t/p/w500" + posterPathNode.asText();
+                    //평점 가져오기 (소숫점 1자리까지만)
+                    JsonNode averageNode = movieNode.path("vote_average");
+                    String average = averageNode.asText().split(".")[0] + averageNode.asText().split(".")[1].substring(0, 1);
+                    MovieDTO movieDTO = MovieDTO.builder()
+                            .movieNm(movieNm)
+                            .openDt(openStartDt)
+                            .posterURL(posterURL)
+                            .average(average) //평점 기록
+                            .build();
+                    findMovieDTO = new ArrayList<>();
+                    findMovieDTO.add(movieDTO);
+                }
+                //결과에 추가
                 movieDTOList.addAll(findMovieDTO);
 
                 //최대 제한에 다다르면 함수를 종료
@@ -736,10 +802,11 @@ public class MovieService {
         }
         log.info("영화이름으로 검색 결과 response body = > {}", response.body());
         List<MovieDTO> movieList = getMovieDTOAsMovieList(response, limit); //최대 갯수 제한
+
         return movieList;
     }
 
-    //search : 인물 이름으로 인물의 프로필리스트 검색
+    //search : 인물 이름으로 인물들의 프로필 리스트 검색
     public List<PeopleDTO> searchProfileAsPeopleName(String keyword) throws Exception{
         List<PeopleDTO> peopleDTOList = getPeopleDTOAsSearchPeople(keyword);
         return peopleDTOList;
