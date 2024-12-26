@@ -31,7 +31,7 @@ public class MemberController {
         return memberService.getRegister(auth);
     }
 
-    //회원가입
+    //회원가입 : DB에 저장
     @PostMapping("/register")
     ResponseEntity<String> register(Member member) {
         return memberService.register(member);

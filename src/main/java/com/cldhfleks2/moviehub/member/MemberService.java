@@ -44,7 +44,7 @@ public class MemberService {
         return "member/register";
     }
 
-    //회원가입
+    //회원가입 : DB에 저장
     @Transactional
     ResponseEntity<String> register (Member member) {
         //아이디 중복확인은 이미 거친 상태
@@ -57,5 +57,7 @@ public class MemberService {
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
 
 }
