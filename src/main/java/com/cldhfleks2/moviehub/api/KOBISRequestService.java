@@ -70,6 +70,11 @@ public class KOBISRequestService {
                 .GET()
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        //에러 발생시 null값 리턴
+        if (response.statusCode() != 200 || (response.body() != null && response.body().startsWith("<"))) {
+            log.error("getMovieDTOAsMovieList 에러발생 response.body(): {}", response.body());
+            return null;
+        }
         return response;
     }
 
@@ -121,7 +126,7 @@ public class KOBISRequestService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
 
-        String URL = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+        String URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
                 + "?key=" + kobiskey
                 + "&targetDt=" + currentDay;
 
@@ -136,7 +141,7 @@ public class KOBISRequestService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
 
-        String URL = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
+        String URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
                 + "?key=" + kobiskey
                 + "&targetDt=" + currentDay
                 + "&weekGb=0";
@@ -152,7 +157,7 @@ public class KOBISRequestService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDay = currentDate.format(formatter);
 
-        String URL = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
+        String URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
                 + "?key=" + kobiskey
                 + "&targetDt=" + currentDay
                 + "&weekGb=0"
@@ -169,7 +174,7 @@ public class KOBISRequestService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDay = currentDate.format(formatter);
 
-        String URL = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
+        String URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json"
                 + "?key=" + kobiskey
                 + "&targetDt=" + currentDay
                 + "&weekGb=0"
@@ -186,9 +191,11 @@ public class KOBISRequestService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
 
-        String URL = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
+        String URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
                 + "?key=" + kobiskey
                 + "&movieCd=" + movieCd; //영화 코드를 보냄
+
+        log.info("sendMovieDetailRequest 요청 URL >> " + URL);
 
         HttpResponse<String> response = sendRequest(URL);
         return response;
@@ -197,21 +204,34 @@ public class KOBISRequestService {
 
 
     //movieNm으로 영화 목록을 response로 가져오는 함수
-    //URL-safe하게 movieNm을 보내야함
     public HttpResponse<String> sendMovieListRequestByMovieNm(String movieNm) throws Exception{
         String encodedMovieNm = encodeString(movieNm);
 
-        String URL = "http://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json"
+        String URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json"
                 + "?key=" + kobiskey
                 + "&movieNm=" + encodedMovieNm; //영화 코드를 보냄
 
-        log.info("요청 URL >> " + URL);
+        log.info("sendMovieListRequestByMovieNm 요청 URL >> " + URL);
 
         HttpResponse<String> response = sendRequest(URL);
         return response;
     }
 
+    //movieNm와 openStartDt로 영화 목록을 response로 가져오는 함수
+    public HttpResponse<String> sendMovieListRequestByMovieNm(String movieNm, String openStartDt, String openEndDt) throws Exception{
+        String encodedMovieNm = encodeString(movieNm);
 
+        String URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json"
+                + "?key=" + kobiskey
+                + "&movieNm=" + encodedMovieNm
+                + "&openStartDt=" + openStartDt
+                + "&openEndDt=" + openEndDt;
+
+        log.info("sendMovieListRequestByMovieNm 요청 URL >> " + URL);
+
+        HttpResponse<String> response = sendRequest(URL);
+        return response;
+    }
 
 
 

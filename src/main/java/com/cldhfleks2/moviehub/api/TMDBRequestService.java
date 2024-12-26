@@ -39,6 +39,11 @@ public class TMDBRequestService {
                 .GET()
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        //에러 발생시 null값 리턴
+        if (response.statusCode() != 200 || (response.body() != null && response.body().startsWith("<"))) {
+            log.error("getMovieDTOAsMovieList 에러발생 response.body(): {}", response.body());
+            return null;
+        }
         return response;
     }
 
@@ -76,13 +81,86 @@ public class TMDBRequestService {
         return response;
     }
 
+    //TMDB API 인물이 참여한 영화목록을 검색 : peopleId값
+    //정렬기준을 최신순으로 저장
+    public HttpResponse<String> sendSearchMovieListAsPeopleId(Long peopleId, Long page) throws Exception{
+        //Long값이므로 인코딩 안함
+        
+        String URL = "https://api.themoviedb.org/3/discover/movie"
+                + "?api_key=" + tmdbkey
+                + "&with_cast=" + peopleId
+                + "&sort_by=release_date.desc" //최신순으로
+                + "&page=" + page;
+
+        log.info("sendSearchMovieListAsPeopleId 요청 URL >> " + URL);
+        HttpResponse<String> response = sendRequest(URL);
+        return response;
+
+    }
 
 
+    //영화 포스터URL를 가져오는 함수
+    //1차 : 셀레니움 웹 크롤링
+    //2차 : TMDB에서 영화 한글 명으로 검색
+    //3차 : TMDB에서 영화 영문 명으로 검색
+    //response가 null을 가져옴에대한 예외 처리를 안했다.
+    public String getMoviePostURL(String movieCd, String movieNm, String movieNmEn) throws Exception {
+        log.info("getMoviePostURL 셀레니움으로 이미지 검색 시도... >>  movieCd: {}, movieCd:{}", movieCd, movieNm);
+        String posterURL =  seleniumWebDriver.getMoviePosterURL(movieCd);
 
-    //영화 포스터URL를 가져오는 함수 1차 시도
-    //TMDB에서 movieNm 으로 검색
-    public String getMoviePosterURL(String movieNm) throws Exception {
-        HttpResponse<String> response = sendSearchMovie(movieNm);
+        if(posterURL != null){ //못찾았을때 null값임
+            log.info("getMoviePostURL 셀레니움으로 이미지 검색 성공 >>  movieCd: {}, movieCd:{}", movieCd, movieNm);
+            return posterURL;
+        }else{ //2차 : TMDB에서 영화한글명 검색
+            log.warn("getMoviePostURL 셀레니움 실패 >> movieCd: {}, movieCd:{}", movieCd, movieNm);
+            log.info("getMoviePostURL TMDB에서 영화한글명 검색 시도... >>  movieCd: {}, movieCd:{}", movieCd, movieNm);
+            HttpResponse<String> response = sendSearchMovie(movieNm); //language지정 안하면 기본값 ko
+            String responseBody = response.body();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            JsonNode resultsNode = rootNode.path("results");
+            //영화 검색 성공 : movieNm사용
+            if (resultsNode.isArray() && resultsNode.size() > 0) {
+                JsonNode firstMovieNode = resultsNode.get(0);
+
+                String posterPath = firstMovieNode.path("poster_path").asText();
+                posterURL = "https://image.tmdb.org/t/p/w500" + posterPath;
+                log.info("getMoviePostURL TMDB에서 영화한글명 검색 성공 >>  movieCd: {}, movieCd:{}", movieCd, movieNm);
+                return posterURL;
+            } else { //3차 : TMDB에서 영화영문명 검색
+                log.warn("getMoviePostURL TMDB에서 영화한글명 검색 실패 >> movieCd: {}, movieCd:{}", movieCd, movieNm);
+                log.info("getMoviePostURL TMDB에서 영화영문명 검색 시도... >>  movieCd: {}, movieCd:{}", movieCd, movieNm);
+                response = sendSearchMovie(movieNmEn, "en");
+                responseBody = response.body();
+                //log.info("TMDB Response >> " + responseBody);
+                objectMapper = new ObjectMapper();
+                rootNode = objectMapper.readTree(responseBody);
+                resultsNode = rootNode.path("results");
+
+                //똑같은 분기 : 영화 검색 성공 (movieNmEn사용)
+                if (resultsNode.isArray() && resultsNode.size() > 0) {
+                    JsonNode firstMovieNode = resultsNode.get(0);
+
+                    String posterPath = firstMovieNode.path("poster_path").asText();
+                    posterURL = "https://image.tmdb.org/t/p/w500" + posterPath;
+                    log.info("getMoviePostURL TMDB에서 영화영문명 검색 성공 >>  movieCd: {}, movieNm:{}", movieCd, movieNm);
+                    return posterURL;
+                }else{
+                    log.error("getMoviePostURL 포스터를 가져오는데 3차 전부 실패 >>  movieCd: {}, movieNm:{}", movieCd, movieNm);
+                    return null; //TMDB에서 movieNmEn으로 검색 실패
+                }
+
+            }
+
+        }
+    }
+
+    //영화 포스터URL를 빠르게 가져오자. 셀레니움없이
+    //1차 : TMDB에서 영화 한글 명으로 검색
+    //2차 : TMDB에서 영화 영문 명으로 검색
+    public String getMoviePostURLFAST(String movieCd, String movieNm, String movieNmEn) throws Exception {
+        log.info("getMoviePostURLFAST TMDB에서 영화한글명 검색 시도... >>  movieCd: {}, movieCd:{}", movieCd, movieNm);
+        HttpResponse<String> response = sendSearchMovie(movieNm); //language지정 안하면 기본값 ko
         String responseBody = response.body();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(responseBody);
@@ -93,52 +171,32 @@ public class TMDBRequestService {
 
             String posterPath = firstMovieNode.path("poster_path").asText();
             String posterURL = "https://image.tmdb.org/t/p/w500" + posterPath;
+            log.info("getMoviePostURLFAST TMDB에서 영화한글명 검색 성공 >>  movieCd: {}, movieCd:{}", movieCd, movieNm);
             return posterURL;
-        } else {
-            return null;  //TMDB에서 movieNm으로 검색 실패
+        } else { //3차 : TMDB에서 영화영문명 검색
+            log.warn("getMoviePostURLFAST TMDB에서 영화한글명 검색 실패 >> movieCd: {}, movieCd:{}", movieCd, movieNm);
+            log.info("getMoviePostURLFAST TMDB에서 영화영문명 검색 시도... >>  movieCd: {}, movieCd:{}", movieCd, movieNm);
+            response = sendSearchMovie(movieNmEn, "en");
+            responseBody = response.body();
+            //log.info("TMDB Response >> " + responseBody);
+            objectMapper = new ObjectMapper();
+            rootNode = objectMapper.readTree(responseBody);
+            resultsNode = rootNode.path("results");
+
+            //똑같은 분기 : 영화 검색 성공 (movieNmEn사용)
+            if (resultsNode.isArray() && resultsNode.size() > 0) {
+                JsonNode firstMovieNode = resultsNode.get(0);
+
+                String posterPath = firstMovieNode.path("poster_path").asText();
+                String posterURL = "https://image.tmdb.org/t/p/w500" + posterPath;
+                log.info("getMoviePostURLFAST TMDB에서 영화영문명 검색 성공 >>  movieCd: {}, movieNm:{}", movieCd, movieNm);
+                return posterURL;
+            }else{
+                log.error("getMoviePostURLFAST 포스터를 가져오는데 전부 실패 >>  movieCd: {}, movieNm:{}", movieCd, movieNm);
+                return null; //TMDB에서 movieNmEn으로 검색 실패
+            }
         }
     }
-
-    //영화 포스터URL를 가져오는 함수 2차 시도
-    //TMDB에서 movieNmEm 으로 검색
-    public String getMoviePosterURLByEn(String movieNmEn) throws Exception {
-        //영문이름으로 검색해서 결과를 가져옴
-        HttpResponse<String> response = sendSearchMovie(movieNmEn, "en");
-        String responseBody = response.body();
-        //log.info("TMDB Response >> " + responseBody);
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(responseBody);
-        JsonNode resultsNode = rootNode.path("results");
-
-        //똑같은 분기 : 영화 검색 성공 (movieNmEn사용)
-        if (resultsNode.isArray() && resultsNode.size() > 0) {
-            JsonNode firstMovieNode = resultsNode.get(0); //문제가 되진 않겠지? 같은 변수명을 두번 선언해서..
-
-            String posterPath = firstMovieNode.path("poster_path").asText();
-            String posterURL = "https://image.tmdb.org/t/p/w500" + posterPath;
-            return posterURL;
-        }else{
-            return null; //TMDB에서 movieNmEn으로 검색 실패
-        }
-    }
-
-    //영화 포스터URL를 가져오는 함수 3차 시도
-    //셀레니움 웹 크롤링
-    public String getMoviePostURLBySelenium(String movieCd){
-        log.info("이미지 검색중 >>  movieCd: {}", movieCd);
-        String posterURL =  seleniumWebDriver.getMoviePosterURL(movieCd);
-
-        if(posterURL != null){ //못찾았을때 null값임
-            return posterURL;
-        }else{ //그래도 못찾으면 gg
-            log.error("포스터를 가져오는데 오류 발생 >>  movieCd: {}", movieCd);
-            return null; //셀레니움 웹 크롤링도 실패
-        }
-    }
-
-
-
-
 
 
 }

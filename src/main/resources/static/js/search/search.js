@@ -213,6 +213,7 @@ function clickPeopleProfile(){
         const category = "peopleClick";
 
         showLoading();
+        $(".explain").show();
 
         $.ajax({
             url: "/search",
@@ -220,6 +221,7 @@ function clickPeopleProfile(){
             data: {keyword: peopleId, category: category},
             success: function (data){
                 hideLoading(); // 로딩 화면 숨김
+                $(".explain").hide();
                 
                 //결과로 영화 리스트를 갱신
                 var data = $.parseHTML(data);
@@ -234,6 +236,7 @@ function clickPeopleProfile(){
             },
             error: function (err){
                 hideLoading(); // 로딩 화면 숨김
+                $(".explain").hide();
                 console.log(err)
                 console.log("/search/people/movie ajax failed")
             }

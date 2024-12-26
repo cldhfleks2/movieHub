@@ -63,6 +63,7 @@ public class MovieService {
     }
 
     //MovieId 로 MovieDTO를 생성
+    //동시에 MovieDailyStat을 갱신
     public MovieDTO getMovieDTO(Long movieId) {
         Optional<Movie> movieObj = movieRepository.findById(movieId);
         if(!movieObj.isPresent()){ //존재하지않는 movieId
@@ -126,7 +127,7 @@ public class MovieService {
         return movieDTO;
     }
 
-    //영화 상세 정보을 DB에 저장 : movieInfo가 정상적으로 있는지 확인은 상위 함수에서 처리했을거임. 저장만 하는함수
+    //영화 상세 정보를 DB에 저장 : movieInfo가 정상적으로 있는지 확인은 상위 함수에서 처리했을거임. 저장만 하는함수
     public ReturnEntitysDTO saveEntityAsMovieDetail(JsonNode movieInfo, String currentDay) throws Exception {
         String movieCd = movieInfo.get("movieCd").asText();
         String movieNm = movieInfo.get("movieNm").asText();
@@ -144,14 +145,15 @@ public class MovieService {
         movie.setShowTm(showTm);
         movie.setPrdtYear(prdtYear);
         movie.setTypeNm(typeNm);
-        //포스터 가져오기
-        String posterURL = tmdbRequestService.getMoviePosterURL(movieNm); //새로운 기능. 영화이름으로 검색
+        //포스터 가져오기 : 3차에 걸쳐서 시도함
+        String posterURL = tmdbRequestService.getMoviePostURL(movieCd, movieNm, movieNmEn);
         if(posterURL == null){
             movie.setPosterURL("null");
             movie.setStatus(0); //미공개 영화로 저장
             movieRepository.save(movie);
-            return null; //다른 엔티티를 저장하지 않으며 null값 리턴
+            return null; //다른 엔티티를 저장하지 않음.
         }
+
         movie.setPosterURL(posterURL);
         movieRepository.save(movie); //외래키로 사용하기위해 먼저 저장
 
@@ -295,14 +297,7 @@ public class MovieService {
                 movie.setAudiAcc(audiAcc);
                 movieRepository.save(movie); //수정
 
-                //movieDailyStat 정보 업데이트 : 뭐지? 없을땐 새로 생성해줘야 하는거 근데 왜 그동안은 잘 작동했지
-                //추가하면 안되겟지..?
-//                MovieDailyStat movieDailyStat = movieDailyStatObj.get();
-//                movieDailyStat.setSalesAmt(salesAmt); // 일일 기록
-//                movieDailyStat.setAudiCnt(audiCnt); // 일일 기록
-//                movieDailyStat.setScrnCnt(scrnCnt); // 스크린 수
-//                movieDailyStat.setShowCnt(showCnt); // 상영 횟수
-//                movieDailyStatRepository.save(movieDailyStat); //수정
+
             } else {
                 //1. Movie객체가 없을때
                 Movie movie = new Movie(); //Movie 엔티티
@@ -311,15 +306,6 @@ public class MovieService {
                 movie.setOpenDt(openDt);
                 movie.setSalesAcc(salesAcc);
                 movie.setAudiAcc(audiAcc);
-                //포스터 가져오기
-                String posterURL = tmdbRequestService.getMoviePosterURL(movieNm); //새로운 기능. 영화이름으로 검색
-                if(posterURL == null){
-                    movie.setPosterURL("null");
-                    movie.setStatus(0); //미공개 영화로 저장
-                    movieRepository.save(movie);
-                    continue; //다른 엔티티를 저장하지 않음.
-                }
-                movie.setPosterURL(posterURL);
 
                 //영화의 상세 정보를 받기 새로운 KOBIS API 요청을 날림
                 HttpResponse<String> movieDetailResponse = kobisRequestService.sendMovieDetailRequest(movieCd);
@@ -331,11 +317,21 @@ public class MovieService {
                 String showTm = movieDetail.path("showTm").asText();
                 String prdtYear = movieDetail.path("prdtYear").asText();
                 String typeNm = movieDetail.path("typeNm").asText();
-
                 movie.setMovieNmEn(movieNmEn);
                 movie.setShowTm(showTm);
                 movie.setPrdtYear(prdtYear);
                 movie.setTypeNm(typeNm);
+
+                //포스터 가져오기
+                String posterURL = tmdbRequestService.getMoviePostURL(movieCd, movieNm, movieNmEn);
+                if(posterURL == null){
+                    movie.setPosterURL("null");
+                    movie.setStatus(0); //미공개 영화로 저장
+                    movieRepository.save(movie);
+                    continue; //다른 엔티티를 저장하지 않음.
+                }
+
+                movie.setPosterURL(posterURL);
                 movieRepository.save(movie); //가장 먼저 저장해줘야 다른 엔티티들이 외래키로 사용가능
 
                 MovieDailyStat movieDailyStat = new MovieDailyStat(); //MovieDailyStat 엔티티
@@ -506,29 +502,32 @@ public class MovieService {
     }
 
     //KOBIS API의 영화 목록으로 MovieDTO를 만드는 함수
-    public List<MovieDTO> getMovieDTOAsMovieList(HttpResponse<String> response) throws Exception {
+    //저장하지 않고 뷰에 필요한 정보만 보여줌
+    public List<MovieDTO> getMovieDTOAsMovieList(HttpResponse<String> response, int limit) throws Exception {
         //영화목록response을 파싱해서 나온 JsonNode로 MovieDTO를 생성
         String movieListResponseBody = response.body();
+        if (response == null) {
+            log.error("getMovieDTOAsMovieList 에러 발생!: {}", movieListResponseBody);
+            return null;
+        }
+        log.info("getMovieDTOAsMovieList responseBody: {}", movieListResponseBody);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(movieListResponseBody);
         JsonNode jsonNodeList = jsonNode.path("movieListResult").path("movieList");
 
-        String currentDay = getCurrentDay();
-
         //영화 목록중 현재 영화에 대한 처리
         List<MovieDTO> movieDTOList = new ArrayList<>();
-        for (int i = 0; i < jsonNodeList.size() && i < 10; i++) {
+        int totalLimit = jsonNodeList.size() > limit ? limit : jsonNodeList.size(); //최대 갯수를 지정
+        for (int i = 0; i < totalLimit; i++) {
             JsonNode movieJsonNode = jsonNodeList.get(i);
-            log.info("{} 시작", i);
             String movieCd = movieJsonNode.path("movieCd").asText();
             String movieNm = movieJsonNode.path("movieNm").asText();
             String movieNmEn = movieJsonNode.path("movieNmEn").asText();
-            String prdtYear = movieJsonNode.path("prdtYear").asText();
             String openDt = movieJsonNode.path("openDt").asText();
-            String typeNm = movieJsonNode.path("typeNm").asText();
+//            String prdtYear = movieJsonNode.path("prdtYear").asText(); //안쓰는값이라 주석
+//            String typeNm = movieJsonNode.path("typeNm").asText(); //안쓰는값이라 주석
 
-            //DB에서 검색해서 있으면 가져다가 씀
-            //아래 코드는 MovieService에 있는 코드와 동일함
+            //DB에 존재하는 영화이면 그대로 보여줌
             Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);
             if (movieObj.isPresent()) {
                 //미공개 영화는 보여주지 않
@@ -536,142 +535,76 @@ public class MovieService {
                     continue;
 
                 Movie movie = movieObj.get();
-                Long movie_id = movie.getId();
-
-                //2. MovieDailyStat 업데이트
-                Optional<MovieDailyStat> movieDailyStatObj = movieDailyStatRepository.findByDayAndMovieIdAndStatus(currentDay, movie_id);
-                if (!movieDailyStatObj.isPresent()) {
-                    //하루가 지난것이므로 새로이 갱신
-                    List<MovieDailyStat> movieDailyStatList = movieDailyStatRepository.findByMovieIdAndStatus(movie_id);
-                    //3. movie_id와 일치하는 MovieDailyStat이 존재 할때
-                    if (!movieDailyStatList.isEmpty()) {
-                        MovieDailyStat movieDailyStat = movieDailyStatList.get(movieDailyStatList.size() - 1); //가장 최근것
-                        movieDailyStat.setDay(currentDay); //현재 날짜로 수정
-                        //값들 업데이트
-                        //박스오피스 전용 데이터는 제외하고 생성
-//                        movieDailyStat.setSalesAmt(salesAmt);
-//                        movieDailyStat.setAudiCnt(audiCnt);
-//                        movieDailyStat.setScrnCnt(scrnCnt);
-//                        movieDailyStat.setShowCnt(showCnt);
-                        movieDailyStat.setMovie(movie); //외래키로 사용
-                        movieDailyStatRepository.save(movieDailyStat);
-                    }
-                }
-
-            } else {
-                //Movie 저장
-                Movie movie = new Movie(); 
-                movie.setMovieCd(movieCd);
-                movie.setMovieNm(movieNm);
-                movie.setMovieNmEn(movieNmEn);
-                movie.setOpenDt(openDt);
-                movie.setPrdtYear(prdtYear);
-                movie.setMovieNmEn(movieNmEn);
-                movie.setTypeNm(typeNm);
-                //포스터 가져오기 총 3차시도. 그래도 못가져오면 movie객체의 poster를 null로 지정하고, 다른엔티티를 저장하지 않고 스킵
-                String posterURL = tmdbRequestService.getMoviePosterURL(movieNm); //영화이름으로 검색
+                Long movieId = movie.getId();
+                String posterURL = movie.getPosterURL();
+                List<MovieGenre> genreList = movieGenreRepository.findByMovieIdAndStatus(movieId);
+                MovieDTO movieDTO = MovieDTO.builder()
+                        .movieNm(movieNm)
+                        .openDt(openDt)
+                        .posterURL(posterURL)
+                        .genreList(genreList)
+                        .build();
+                movieDTOList.add(movieDTO);
+            } else { //DB에 없으면 포스터, 장르등을 추가로 API요청해서 보여줌
+                //포스터 가져오기
+                String posterURL = tmdbRequestService.getMoviePostURLFAST(movieCd, movieNm, movieNmEn);
                 if(posterURL == null){
-                    posterURL = tmdbRequestService.getMoviePosterURLByEn(movieNmEn); //영화영문이름으로 검색
-                    if(posterURL == null){
-                        posterURL = tmdbRequestService.getMoviePostURLBySelenium(movieCd); //웹크롤링 시도
-                        if(posterURL == null){
-                            movie.setPosterURL("null");
-                            movie.setStatus(0); //미공개 영화로 저장
-                            movieRepository.save(movie);
-                            continue; //다른 엔티티를 저장하지 않음.
-                        }
-                    }
+                    posterURL = "/image/noImage.png"; //이미지없음으로 보여줄거임
                 }
-                movie.setPosterURL(posterURL);
 
+                //장르 리스트를 가져오기위해
                 //영화의 상세 정보를 받기 새로운 KOBIS API 요청을 날림
                 HttpResponse<String> movieDetailResponse = kobisRequestService.sendMovieDetailRequest(movieCd);
                 String movieDetailResponseBody = movieDetailResponse.body();
                 ObjectMapper movieDetailObjectMapper = new ObjectMapper();
                 JsonNode movieDetailJsonNode = movieDetailObjectMapper.readTree(movieDetailResponseBody);
-                JsonNode movieDetail = movieDetailJsonNode.path("movieInfoResult").path("movieInfo");
-                String showTm = movieDetail.path("showTm").asText();
-                movie.setShowTm(showTm);
-                movieRepository.save(movie);
-
-                //MovieDailyStat 저장
-                MovieDailyStat movieDailyStat = new MovieDailyStat();
-                movieDailyStat.setDay(currentDay); //"20241220"
-                movieDailyStat.setMovie(movie); //외래키로 사용
-                movieDailyStatRepository.save(movieDailyStat);
-
-                //나머지 엔티티들 저장
-                JsonNode nationsList = movieDetail.path("nations");
-                for (int j = 0; j < nationsList.size(); j++) {
-                    MovieNation movieNation = new MovieNation();
-                    movieNation.setNationNm(nationsList.get(j).path("nationNm").asText());
-                    movieNation.setMovie(movie); //외래키로 사용
-                    movieNationRepository.save(movieNation);
-                }
-                JsonNode genresList = movieDetail.path("genres");
-                for (int j = 0; j < genresList.size(); j++) {
+                JsonNode movieDetailNode = movieDetailJsonNode.path("movieInfoResult").path("movieInfo");
+                JsonNode genresListNode = movieDetailNode.path("genres");
+                List<MovieGenre> genreList = new ArrayList<>();
+                for (int j = 0; j < genresListNode.size(); j++) {
                     MovieGenre movieGenre = new MovieGenre();
-                    movieGenre.setGenreNm(genresList.get(j).path("genreNm").asText());
-                    movieGenre.setMovie(movie); //외래키로 사용
-                    movieGenreRepository.save(movieGenre);
+                    movieGenre.setGenreNm(genresListNode.get(j).path("genreNm").asText());
+                    genreList.add(movieGenre);
                 }
-                JsonNode directorsList = movieDetail.path("directors");
-                for (int j = 0; j < directorsList.size(); j++) {
-                    MovieDirector movieDirector = new MovieDirector();
-                    movieDirector.setPeopleNm(directorsList.get(j).path("peopleNm").asText());
-                    movieDirector.setPeopleNmEn(directorsList.get(j).path("peopleNmEn").asText());
-                    movieDirector.setMovie(movie); //외래키로 사용
-                    movieDirectorRepository.save(movieDirector);
-                }
-                JsonNode actorsList = movieDetail.path("actors");
-                for (int j = 0; j < actorsList.size(); j++) {
-                    MovieActor movieActor = new MovieActor();
-                    movieActor.setPeopleNm(actorsList.get(j).path("peopleNm").asText());
-                    movieActor.setPeopleNmEn(actorsList.get(j).path("peopleNmEn").asText());
-                    movieActor.setMovie(movie); //외래키로 사용
-                    movieActorRepository.save(movieActor);
-                }
-                JsonNode companysList = movieDetail.path("companys");
-                for (int j = 0; j < companysList.size(); j++) {
-                    MovieCompany movieCompany = new MovieCompany();
-                    movieCompany.setCompanyCd(companysList.get(j).path("").asText());
-                    movieCompany.setCompanyNm(companysList.get(j).path("companyNm").asText());
-                    movieCompany.setCompanyNmEn(companysList.get(j).path("companyNmEn").asText());
-                    movieCompany.setCompanyPartNm(companysList.get(j).path("companyPartNm").asText());
-                    movieCompany.setMovie(movie); //외래키로 사용
-                    movieCompanyRepository.save(movieCompany);
-                }
-                JsonNode auditsList = movieDetail.path("audits");
-                for (int j = 0; j < auditsList.size(); j++) {
-                    MovieAudit movieAudit = new MovieAudit();
-                    movieAudit.setWatchGradeNm(auditsList.get(j).path("watchGradeNm").asText());
-                    movieAudit.setMovie(movie); //외래키로 사용
-                    movieAuditRepository.save(movieAudit);
-                }
-            }
 
-            Optional<Movie> movieObj2 = movieRepository.findByMovieCd(movieCd);
-            if(movieObj2.isPresent())
-                movieDTOList.add( getMovieDTO(movieObj2.get().getId()) );
-            log.info("{} 끝", i);
+                //나중에 영화검색결과에 필요한 엔티티가있으면 추가할것...
+
+                MovieDTO movieDTO = MovieDTO.builder()
+                        .movieNm(movieNm)
+                        .openDt(openDt)
+                        .posterURL(posterURL)
+                        .genreList(genreList)
+                        .build();
+                movieDTOList.add(movieDTO);
+            }
         }
 
         return movieDTOList;
     }
-
+    
     //TMDB API의 인물 검색 목록으로 MovieDTO를 만드는 함수
-    public List<PeopleDTO> getMovieDTOAsSearchPeople(String keyword) throws Exception{
+    public List<PeopleDTO> getPeopleDTOAsSearchPeople(String keyword) throws Exception{
         HttpResponse<String> response = tmdbRequestService.sendSearchPeople(keyword, 1L); //첫번째 페이지 가져옴
+        if(response == null){
+            log.error("getPeopleDTOAsSearchPeople response 요청 실패!!!!");
+            //에러 처리
+            return null;
+        }
         String responseBody = response.body();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long totalPage = jsonNode.path("total_pages").asLong();
         if(totalPage > 20L) totalPage = 20L; //인물 페이지 최대 20개로 제한
-        log.info(totalPage.toString());
+
         //1. 유효한 인물 정보를 찾는다.
         List<PeopleDTO> peopleDTOList = new ArrayList<>();
         for(Long i = 0L ; i < totalPage ; i++){
             response = tmdbRequestService.sendSearchPeople(keyword, i+1);
+            if(response == null){
+                log.error("getPeopleDTOAsSearchPeople response 요청 실패!!!!");
+                //에러 처리
+                continue;
+            }
             responseBody = response.body();
             objectMapper = new ObjectMapper();
             jsonNode = objectMapper.readTree(responseBody);
@@ -722,23 +655,101 @@ public class MovieService {
         return peopleDTOList;
     }
 
+    //프로필을 누르면 해당 인물의 출연 영화를 전부 보여주는 함수 : 내부적으로 getMovieDTOAsMovieList을 재사용
+    public List<MovieDTO> getMovieDTOAsSearchPeopleId(Long peopleId, int limit) throws Exception{
+        HttpResponse<String> response = tmdbRequestService.sendSearchMovieListAsPeopleId(peopleId, 1L); //첫번째 페이지 가져옴
+        if(response == null){
+            log.error("getMovieDTOAsSearchPeopleId response 요청 실패!!!!");
+            //에러 처리
+            return null;
+        }
+        String responseBody = response.body();
+//        log.info("getMovieDTOAsSearchPeopleId responseBody: {}", responseBody);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        Long totalPage = jsonNode.path("total_pages").asLong();
+        if(totalPage > 10L) totalPage = 10L; //영화 페이지 최대 10개로 제한
+//        log.info("getMovieDTOAsSearchPeopleId totalPage: {}", totalPage);
+        //???
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+        for(Long i = 0L ; i < totalPage ; i++){
+            response = tmdbRequestService.sendSearchMovieListAsPeopleId(peopleId, i + 1); //1페이지부터 다시 요청
+            if(response == null){
+                log.error("getMovieDTOAsSearchPeopleId response 요청 실패!!!!");
+                //에러 처리
+                continue;
+            }
+            responseBody = response.body();
+//            log.info("getMovieDTOAsSearchPeopleId index:{}  responseBody: {}", i, responseBody);
+            objectMapper = new ObjectMapper();
+            jsonNode = objectMapper.readTree(responseBody);
+            //???
+            JsonNode movieList = jsonNode.path("results");
+//            log.info("getMovieDTOAsSearchPeopleId movieList.size(): {}", movieList.size());
+            for(int j = 0 ; j < movieList.size(); j++) {
+                JsonNode movieNode = movieList.get(j); //현재 영화
+                JsonNode movieNmNode = movieNode.path("original_title");
+                JsonNode openStartDtNode = movieNode.path("release_date");
+                if (movieNmNode.isNull() || movieNmNode.asText().isEmpty()) { //영화 제목이 없으면 제외
+//                    log.error("getMovieDTOAsSearchPeopleId : 영화제목이 없음 >> {}", movieNmNode.asText());
+                    continue;
+                }
+                if (openStartDtNode.isNull() || openStartDtNode.asText().isEmpty()) { //영화 제작년도가 없으면 제외
+//                    log.error("getMovieDTOAsSearchPeopleId : 개봉년도가 없음 >> {}", openStartDtNode.asText());
+                    continue;
+                }
+
+                //영화에 필요한 정보를 가져옴
+                String movieNm = movieNmNode.asText();
+                String openStartDt = openStartDtNode.asText().substring(0, 4);
+                String openEndDt = openStartDt; //검색 기간을 해당 년도만으로 제한
+                response = kobisRequestService.sendMovieListRequestByMovieNm(movieNm, openStartDt, openEndDt);
+                if(response == null){
+                    log.error("getMovieDTOAsSearchPeopleId kobisRequestService.sendMovieListRequestByMovieNm 요청 실패!!!!");
+                    //에러 처리
+                    continue;
+                }
+
+//                log.info("getMovieDTOAsSearchPeopleId i-index:{} j-index:{}  영화제목,조회기간으로 영화 검색 결과 responseBody: {}", i, j, response);
+
+                //DTO생성
+                int remainCnt = limit - movieDTOList.size();
+                List<MovieDTO> findMovieDTO = getMovieDTOAsMovieList(response, remainCnt); //최대 갯수 제한해서 검색
+                movieDTOList.addAll(findMovieDTO);
+
+                //최대 제한에 다다르면 함수를 종료
+                if(movieDTOList.size() >= limit) return movieDTOList;
+            }
+        }
+
+        return movieDTOList;
+    }
+
 
     //search : 영화 이름으로 영화리스트를 검색
-    public List<MovieDTO> searchMovieAsMovieName(String keyword) throws Exception{
+    public List<MovieDTO> searchMovieAsMovieName(String keyword, int limit) throws Exception{
         HttpResponse<String> response = kobisRequestService.sendMovieListRequestByMovieNm(keyword);
+        if(response == null){
+            log.error("searchMovieAsMovieName response 요청 실패!!!!");
+            //에러 처리
+            return null;
+        }
         log.info("영화이름으로 검색 결과 response body = > {}", response.body());
-        List<MovieDTO> movieList = getMovieDTOAsMovieList(response);
+        List<MovieDTO> movieList = getMovieDTOAsMovieList(response, limit); //최대 갯수 제한
         return movieList;
     }
 
     //search : 인물 이름으로 인물의 프로필리스트 검색
     public List<PeopleDTO> searchProfileAsPeopleName(String keyword) throws Exception{
-        List<PeopleDTO> peopleDTOList = getMovieDTOAsSearchPeople(keyword);
+        List<PeopleDTO> peopleDTOList = getPeopleDTOAsSearchPeople(keyword);
         return peopleDTOList;
     }
 
     //프로필을 클릭했을때 해당 사람의 출연 영화를 전부 보여줌
-
+    public List<MovieDTO> searchMovieAsPeopleId(Long peopleId, int limit) throws Exception{
+        List<MovieDTO> movieDTOList = getMovieDTOAsSearchPeopleId(peopleId, limit); //검색 결과 제한
+        return movieDTOList;
+    }
 
 
 

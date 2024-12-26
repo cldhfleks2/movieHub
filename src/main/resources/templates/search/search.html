@@ -67,7 +67,7 @@
         <div class="movieGrid" id="movieGrid">
             <div class="movieCard" th:each="movie : ${movieList}">
                 <div class="moviePoster">
-                    <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터">
+                    <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터" style="object-fit: contain;">
                     <div class="movieOverlay">
                         <button class="btnLike">♥</button>
                     </div>
@@ -102,6 +102,9 @@
 <div class="loadingOverlay" id="loadingOverlay">
     <div class="spinner"></div>
     <p>검색 중입니다...</p>
+    <div class="explain" style="display: none;">
+        <p>작품수에 따라 5~50초정도 소요 됩니다...</p>
+    </div>
 </div>
 
 <div th:replace="~{ footer/footer::footer }"></div>
