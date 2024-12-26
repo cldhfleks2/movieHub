@@ -142,7 +142,7 @@ function gotoSearchpage(){
         const keyword = $('#movieSearchInput').val().trim();
         if (keyword) {
             // 검색 페이지로 이동하면서 검색어를 쿼리 파라미터로 전달
-            window.location.href = `/search?initialKeyword=${encodeURIComponent(keyword)}`;
+            window.location.href = `/search?movieNm=${encodeURIComponent(keyword)}`;
         }
     }
 }

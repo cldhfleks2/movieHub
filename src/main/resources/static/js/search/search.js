@@ -13,6 +13,7 @@ $(document).ready(function() {
     initialSearching();
 });
 
+//다른 페이지에서 키워드로 넘어온 경우 페이지 로딩 되자마자 검색 진행
 function initialSearching(){
     // URL에서 initialKeyword 파라미터 확인
     const urlParams = new URLSearchParams(window.location.search);
@@ -78,6 +79,7 @@ function updateProfileSectionVisibility() {
     }
 }
 
+//좋아요 기능 : 할지 말지 고민
 function likeSection(){
     // 버튼 클릭시 문구를 출력하는 코드
     $(document).on('click', '.btnLike', function(e) {
@@ -129,6 +131,7 @@ function likeSection(){
     }
 }
 
+//필터 기능 : 정렬기능아닌 다른것.. 할지말지 고민
 function filterSection(){
     // 필터 태그 토글 : 안씀
     // $('.filterTag').on('click', function() {
@@ -204,10 +207,12 @@ function filterSection(){
 
 }
 
+//로딩중 뷰를 보여줌
 function showLoading() {
     $('#loadingOverlay').addClass('active');
 }
 
+//로딩중 뷰를 감춤
 function hideLoading() {
     $('#loadingOverlay').removeClass('active');
 }
