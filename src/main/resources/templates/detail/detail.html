@@ -39,7 +39,8 @@
                 </div>
             </div>
             <div class="movieActions">
-                <button class="actionBtn likeBtn">
+<!--               기존에 좋아요 여부를 보내줘서 fill해라-->
+                <button class="actionBtn likeBtn" th:data-moviecd="${movieDetail.movieCd}">
                     <span class="icon">♥</span>
                     <span>좋아요</span>
                     <span></span>
