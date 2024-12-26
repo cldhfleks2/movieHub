@@ -3,6 +3,7 @@
     background-color: #2c2c2c;
     padding: 2rem;
     text-align: center;
+    height: 150px;
 }
 
 .searchWrapper {
@@ -22,6 +23,8 @@
     border: none;
     border-radius: 5px;
     font-size: 16px;
+    margin-top: 20px;
+    padding-left: 30px;
 }
 
 .searchBar button {
@@ -33,6 +36,8 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.2s;
+    height: 45px;
+    margin-top: 20px;
 }
 
 .searchBar button:hover {
