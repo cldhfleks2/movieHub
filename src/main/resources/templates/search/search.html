@@ -31,22 +31,14 @@
                 <option value="date">개봉일순</option>
                 <option value="rating">평점순</option>
             </select>
-<!--            <div class="filterTags">-->
-<!--                <button class="filterTag active">전체</button>-->
-<!--                <button class="filterTag">국내영화</button>-->
-<!--                <button class="filterTag">해외영화</button>-->
-<!--            </div>-->
         </div>
 
+
         <div class="profileSection" id="profileSection">
-<!--            <div class="sectionDivider">-->
-<!--                <h2 class="sectionTitle">Crew & Cast</h2>-->
-<!--                <div class="dividerLine"></div>-->
-<!--            </div>-->
+            <div class="messageContainer">
+                <div th:if="${#lists.isEmpty(peopleDTOList)}" class="noResults">인물 검색 결과가 없습니다.</div>
+            </div>
             <div class="profileContainer" style="margin-bottom: -40px;">
-                <div th:if="${#lists.isEmpty(peopleDTOList)}" class="noResults" >
-                    검색 결과가 없습니다.
-                </div>
 <!--                아래 반복, 최대 10개만 보여줌-->
                 <div class="profileCard" th:each="people : ${peopleDTOList}">
                     <div class="profileImageWrapper" th:data-people-id="${people.peopleId}">
@@ -60,11 +52,8 @@
             </div>
         </div>
 
-<!--        <div class="resultsInfo" style="margin-bottom: 45px">-->
-<!--            <span class="resultCount">총 <strong>24</strong>개의 검색결과</span>-->
-<!--        </div>-->
-
         <div class="movieGrid" id="movieGrid">
+            <div th:if="${#lists.isEmpty(movieList)}" class="noResultsMovie" style="margin-left: 420px;width: 300px;">영화 검색 결과가 없습니다.</div>
             <div class="movieCard" th:each="movie : ${movieList}"
                  th:data-movienm="${movie.movieNm}"
                  th:data-opendt="${movie.openDt}"
@@ -86,18 +75,6 @@
             </div>
         </div>
 
-
-<!--        <div class="pagination">-->
-<!--            <button class="pageBtn" disabled>◀</button>-->
-<!--            <div class="pageNumbers">-->
-<!--                <button class="pageNum active">1</button>-->
-<!--                <button class="pageNum">2</button>-->
-<!--                <button class="pageNum">3</button>-->
-<!--                <button class="pageNum">4</button>-->
-<!--                <button class="pageNum">5</button>-->
-<!--            </div>-->
-<!--            <button class="pageBtn">▶</button>-->
-<!--        </div>-->
     </div>
 </main>
 

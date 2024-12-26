@@ -1,6 +1,7 @@
 package com.cldhfleks2.moviehub;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,9 +44,9 @@ public class BasicController {
     }
 
     //영화이름으로 해당 영화
-    @GetMapping("/validate/movieNm/{movieNm}/openDt/{openDt}")
-    String validateMovieByMovieNm(@PathVariable String movieNm, @PathVariable String openDt, Model model, RedirectAttributes redirectAttributes)  throws Exception{
-        return basicService.validateMovieByMovieNm(movieNm, openDt, model, redirectAttributes);
+    @GetMapping("/validate/movieNm")
+    ResponseEntity<String> validateMovieByMovieNm(String movieNm, String openDt, Model model)  throws Exception{
+        return basicService.validateMovieByMovieNm(movieNm, openDt, model);
     }
 
 }

@@ -35,7 +35,9 @@ function updateProfileSectionVisibility() {
         $profileSection.addClass('active');
         $('.sortSelect').hide(); //인물 검색은 정렬 기능이 없음
         $(".movieGrid").hide(); //영화 목록 숨김
-        $(".noResults").hide(); //찾는 결과가 없음 메시지 숨김
+        //카테고리를 바꿀때 검색결과 없다는 메시지를 숨김
+        $(".noResults").hide();
+        $(".noResultsMovie").hide();
     //영화이름 검색
     } else if(selectedValue === 'movieName'){
         //기존 결과 제거
@@ -43,6 +45,9 @@ function updateProfileSectionVisibility() {
         $profileSection.removeClass('active');
         $('.sortSelect').show(); //정렬 기능 보여줌
         $(".movieGrid").show(); //영화 목록 보여줌
+
+        $(".noResults").hide();
+        $(".noResultsMovie").hide();
     }
 }
 
@@ -230,6 +235,7 @@ function searchMovieListOrPeopleProfile(keyword) {
                 var data = $.parseHTML(data);
                 var dataHtml = $("<div>").append(data);
                 $("#movieGrid").replaceWith(dataHtml.find("#movieGrid"));
+                $(".noResultsMovie").show(); //만약 검색결과가 없다면 메시지를 출력
 
                 console.log("/search/movie ajax success")
             }else if(category === "moviePeople"){
@@ -237,7 +243,7 @@ function searchMovieListOrPeopleProfile(keyword) {
                 var dataHtml = $("<div>").append(data);
                 $("#profileSection").replaceWith(dataHtml.find("#profileSection"));
                 updateProfileSectionVisibility();
-                $(".noResults").show();
+                $(".noResults").show(); //만약 검색결과가 없다면 메시지를 출력
 
                 //결과로 프로필 리스트, 영화리스트 갱신
                 console.log("/search/people ajax success")
@@ -254,7 +260,6 @@ function searchMovieListOrPeopleProfile(keyword) {
 
 //인물 프로필 클릭했을때 참여한 영화 목록을 가져옴
 function searchPeopleMovieList(peopleId, category){
-
     showLoading();
     $(".explain").show();
 
@@ -272,7 +277,8 @@ function searchPeopleMovieList(peopleId, category){
             $("#movieGrid").replaceWith(dataHtml.find("#movieGrid"));
 
             //기본의 영화 결과 뷰를 재사용
-            $(".noResults").hide();
+            // $(".noResults").hide();
+            $(".noResultsMovie").show();
             $(".movieGrid").show();
 
             console.log("/search/people/movie ajax success")
@@ -292,6 +298,8 @@ function gotoPostDetail(){
     $(document).on("click", ".btnLink", function (){
         const movieNm = $(this).data("movienm")
         var openDt = $(this).data("opendt")
+        console.log("movieNm: " + movieNm);
+        console.log("openDt: " + openDt);
         if(!openDt || !movieNm){ //날짜를 못 읽으면 검색이 불가
             alert("영화 정보를 불러올 수 없습니다.")
             return;
@@ -299,7 +307,31 @@ function gotoPostDetail(){
         openDt = String(openDt) //문자열 변환후
         openDt = openDt.substring(0, 4); //yyyy 추출
 
-        window.location.href = "/validate/movieNm/" + movieNm + "/openDt/" + openDt;
+        showLoading(); //로딩 표시 표현
+
+        $.ajax({
+            url: "/validate/movieNm",
+            data: {movieNm: movieNm, openDt: openDt},
+            type: 'GET',
+            success: function (movieCd) {
+                hideLoading();
+                // 정상 응답일때 movieCd값이 전달됨
+                window.location.href = "/detail/" + movieCd; //영화 상세 페이지로 이동
+            },
+            error: function (xhr) {
+                hideLoading();
+                console.warn(xhr);
+                if (xhr.status === 404) {
+                    // 영화 정보가 없는 경우 (status 404)
+                    console.error("/validate/movieNm ajax failed")
+                    alert("영화 정보를 찾을 수 없습니다.");
+                } else {
+                    // 기타 오류 처리
+                    console.error("/validate/movieNm ajax failed")
+                    alert("영화 정보를 불러올 수 없습니다.");
+                }
+            }
+        });
     })
 }
 

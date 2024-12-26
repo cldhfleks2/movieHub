@@ -14,6 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -238,28 +241,26 @@ public class BasicService {
         return "search/search";
     }
 
-    //영화이름으로 해당 영화
-    String validateMovieByMovieNm(String movieNm, @PathVariable String openDt, Model model, RedirectAttributes redirectAttributes)  throws Exception{
+    //영화이름으로 해당 영화의 상세페이지로 이동 가능한지 결과를 리턴
+    ResponseEntity<String> validateMovieByMovieNm(String movieNm, String openDt, Model model)  throws Exception{
         //movieNm에 해당하는 데이터가 KOBIS API에 있는지 먼저 확인
         HttpResponse<String> response = kobisRequestService.sendMovieListRequestByMovieNm(movieNm, openDt, openDt);
         //응답을 못받은 경우 에러
-        if(response == null){ 
-            redirectAttributes.addFlashAttribute("alertMessage", "영화가 존재하지 않습니다.");
-            return "redirect:/main";
+        if(response == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         String responseBody = response.body();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode movieListJsonNode = objectMapper.readTree(responseBody);
         //결과가 없으면 에러
         if(movieListJsonNode.isNull() || movieListJsonNode.path("movieListResult").path("totCnt").asInt() == 0){
-            redirectAttributes.addFlashAttribute("alertMessage", "영화가 존재하지 않습니다.");
-            return "redirect:/main";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         //movieCd값 추출
         String movieCd = movieListJsonNode.path("movieListResult").path("movieList").get(0).path("movieCd").asText();
 
         //있으면 detail/detail 페이지 렌더링
-        return getDetail(movieCd, model, redirectAttributes);
+        return ResponseEntity.status(HttpStatus.OK).body(movieCd);
     }
 
 
