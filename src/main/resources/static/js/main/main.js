@@ -3,6 +3,8 @@ $(document).ready(function() {
     addMovieRanks();
 
     initializeSliders();
+
+    gotoSearchpage();
 });
 
 function initializeSliders() {
@@ -120,4 +122,27 @@ function addMovieRanks() {
             $(this).find('.rank').text(rankTxt);
         });
     });
+}
+
+function gotoSearchpage(){
+    // 검색 버튼 클릭 시
+    $('#searchButton').on('click', function() {
+        executeSearch();
+    });
+
+    // 검색창에서 엔터 키 입력 시
+    $('#movieSearchInput').on('keypress', function(e) {
+        if (e.key === 'Enter') {
+            executeSearch();
+        }
+    });
+    
+    //이동하는 함수
+    function executeSearch() {
+        const keyword = $('#movieSearchInput').val().trim();
+        if (keyword) {
+            // 검색 페이지로 이동하면서 검색어를 쿼리 파라미터로 전달
+            window.location.href = `/search?initialKeyword=${encodeURIComponent(keyword)}`;
+        }
+    }
 }

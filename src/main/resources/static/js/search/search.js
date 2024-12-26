@@ -9,7 +9,24 @@ $(document).ready(function() {
     likeSection();
 
     gotoPostDetail();
+
+    initialSearching();
 });
+
+function initialSearching(){
+    // URL에서 initialKeyword 파라미터 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialKeyword = urlParams.get('initialKeyword');
+
+    if (initialKeyword) {
+        // 검색창에 키워드 설정
+        $('.searchInput').val(decodeURIComponent(initialKeyword));
+        // 카테고리를 영화이름으로 설정 (혹시 모를 상황을 대비해)
+        $('.categorySelect').val('movieName');
+        // 자동으로 검색 실행
+        searchMovieListOrPeopleProfile(decodeURIComponent(initialKeyword));
+    }
+}
 
 //검색바 카테고리 선택시
 function categorySelectSection() {
@@ -334,4 +351,5 @@ function gotoPostDetail(){
         hideLoading();
     })
 }
+
 
