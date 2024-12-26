@@ -1,5 +1,5 @@
 /* login.css & signup.css 공통 스타일 */
-.login-container, .signup-container {
+.loginContainer, .signupContainer {
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -8,7 +8,7 @@
     padding: 2rem;
 }
 
-.login-box, .signup-box {
+.loginBox, .signupBox {
     background: white;
     padding: 2.5rem;
     border-radius: 10px;
@@ -17,18 +17,18 @@
     max-width: 400px;
 }
 
-.login-title, .signup-title {
+.loginTitle, .signupTitle {
     text-align: center;
     color: #333;
     margin-bottom: 2rem;
     font-size: 2rem;
 }
 
-.form-group {
+.formGroup {
     margin-bottom: 1.5rem;
 }
 
-.input-with-button {
+.inputWithButton {
     display: flex;
     gap: 0.5rem;
 }
@@ -47,7 +47,7 @@ input:focus {
     outline: none;
 }
 
-.check-button {
+.checkButton {
     padding: 0 1rem;
     background: #e50914;
     color: white;
@@ -57,7 +57,7 @@ input:focus {
     white-space: nowrap;
 }
 
-.error-message {
+.errorMessage {
     display: block;
     color: #e50914;
     font-size: 0.85rem;
@@ -65,7 +65,7 @@ input:focus {
     min-height: 1.2em;
 }
 
-.login-button, .signup-button {
+.loginButton, .signupButton {
     width: 100%;
     padding: 1rem;
     background: #e50914;
@@ -77,29 +77,29 @@ input:focus {
     transition: background 0.3s ease;
 }
 
-.login-button:hover, .signup-button:hover,
-.check-button:hover {
+.loginButton:hover, .signupButton:hover,
+.checkButton:hover {
     background: #f40612;
 }
 
-.remember-me {
+.rememberMe {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: #666;
 }
 
-.login-link, .signup-link {
+.loginLink, .signupLink {
     text-align: center;
     margin-top: 1.5rem;
     color: #666;
 }
 
-.login-link a, .signup-link a {
+.loginLink a, .signupLink a {
     color: #e50914;
     text-decoration: none;
 }
 
-.login-link a:hover, .signup-link a:hover {
+.loginLink a:hover, .signupLink a:hover {
     text-decoration: underline;
 }

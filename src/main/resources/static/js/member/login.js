@@ -2,7 +2,7 @@ $(document).ready(function() {
     validation();
 });
 
-function validation(){
+function validation() {
     const validators = {
         username: {
             regex: /^[a-zA-Z]{4,}$/,
@@ -26,7 +26,7 @@ function validation(){
 
     function validateField(fieldId, value) {
         const validator = validators[fieldId];
-        const $error = $(`#${fieldId}-error`);
+        const $error = $(`#${fieldId}Error`);
 
         if (!validator.regex.test(value)) {
             $error.text(validator.message);
@@ -37,7 +37,7 @@ function validation(){
     }
 
     // 폼 제출
-    $('.login-form').on('submit', function(e) {
+    $('.loginForm').on('submit', function(e) {
         e.preventDefault();
 
         const username = $('#username').val();
@@ -48,6 +48,6 @@ function validation(){
             return;
         }
 
-        this.submit();
+        this.submit(); //제출
     });
 }
