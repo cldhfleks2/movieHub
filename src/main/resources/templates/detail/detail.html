@@ -26,12 +26,12 @@
             </div>
             <div class="movieAdditionalInfo">
                 <strong>감독:</strong>
-                <div class="movieDirectorList" style="display: flex">
+                <div class="movieDirectorList" style="display: flex; margin-bottom: 15px;">
                     <p th:each="director : ${movieDetail.directorList}" th:text="${director.peopleNm}">홍길동</p>
                 </div>
                 <strong>출연:</strong>
-                <div class="movieActorList" style="display: flex">
-                    <p th:each="actor : ${movieDetail.actorList}" th:text="${actor.peopleNm}">홍길동</p>
+                <div class="movieActorList" style="display: flex; margin-bottom: 15px;">
+                    <p class="actorBox" th:each="actor : ${movieDetail.actorList}" th:text="${actor.peopleNm}" th:data-peoplenm="${actor.peopleNm}">홍길동</p>
                 </div>
                 <strong>개봉일:</strong>
                 <div class="movieOpenDate" style="display: flex">
@@ -138,12 +138,13 @@
     </section>
 </main>
 
-<aside class="theaterMap">
-    <h3>주변 영화관</h3>
-    <div class="mapContainer">
-        <!-- 카카오맵이 들어갈 자리 -->
-    </div>
-</aside>
+<!--사용할 거면 csㄴ도 생성-->
+<!--<aside class="theaterMap">-->
+<!--    <h3>주변 영화관</h3>-->
+<!--    <div class="mapContainer">-->
+<!--        &lt;!&ndash; 카카오맵이 들어갈 자리 &ndash;&gt;-->
+<!--    </div>-->
+<!--</aside>-->
 
 <div th:replace="~{ footer/footer::footer }"></div>
 <script>

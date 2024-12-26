@@ -16,15 +16,25 @@ $(document).ready(function() {
 function initialSearching(){
     // URL에서 initialKeyword 파라미터 확인
     const urlParams = new URLSearchParams(window.location.search);
-    const initialKeyword = urlParams.get('initialKeyword');
+    const movieNm = urlParams.get('movieNm');
+    const peopleNm = urlParams.get('peopleNm'); // peopleNm 파라미터 추가
 
-    if (initialKeyword) {
+    if (movieNm) {
         // 검색창에 키워드 설정
-        $('.searchInput').val(decodeURIComponent(initialKeyword));
+        $('.searchInput').val(decodeURIComponent(movieNm));
         // 카테고리를 영화이름으로 설정 (혹시 모를 상황을 대비해)
         $('.categorySelect').val('movieName');
-        // 자동으로 검색 실행
-        searchMovieListOrPeopleProfile(decodeURIComponent(initialKeyword));
+        //영화이름 검색 진행
+        searchMovieListOrPeopleProfile(decodeURIComponent(movieNm));
+    }
+
+    if (peopleNm) {
+        // 검색창에 키워드 설정
+        $('.searchInput').val(decodeURIComponent(peopleNm));
+        // 카테고리를 사람 이름으로 설정
+        $('.categorySelect').val('moviePeople');
+        //인물 검색 진행 : 함수는 똑같음
+        searchMovieListOrPeopleProfile(decodeURIComponent(peopleNm));
     }
 }
 

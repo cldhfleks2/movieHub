@@ -2,104 +2,298 @@ body{
     caret-color: transparent;
 }
 
-.movieInfo {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
-    align-items: center;
+.mainContent {
+    max-width: 1200px;
+    margin: 6rem auto 2rem;
+    padding: 0 1rem;
 }
 
+/* Movie Info Section */
+.movieInfo {
+    display: flex;
+    gap: 3rem;
+    background: linear-gradient(to right, rgba(26,26,26,0.95), rgba(26,26,26,0.85));
+    padding: 2rem;
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Poster Styles */
 .moviePoster {
-    /*width: 120px;*/
-    /*height: 180px;*/
     height: 600px;
-    object-fit: cover;
-    border-radius: 4px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.moviePoster:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+
+/* Movie Details */
+.movieDetails {
+    flex: 1;
 }
 
 .movieDetails h1 {
-    font-size: 24px;
-    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, #ffffff, #e50914);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
+/* Movie Meta Information */
 .movieMeta {
-    color: #666;
-    font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
-.theaterSearch {
+.movieMeta span {
+    padding: 0.5rem 1rem;
+    background: rgba(229, 9, 20, 0.2);
+    border: 1px solid rgba(229, 9, 20, 0.3);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.movieMeta span:hover {
+    background: rgba(229, 9, 20, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Additional Movie Information */
+.movieAdditionalInfo {
+    margin-top: 2rem;
+}
+
+.movieAdditionalInfo strong {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #e50914;
+}
+
+/* Actor List */
+/* Actor List */
+.movieActorList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem !important;
+}
+
+.movieActorList p {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    writing-mode: vertical-rl;
+    height: fit-content;
+    min-height: 120px;
+    position: relative;
+}
+
+.movieActorList p:hover {
+    background: rgba(229, 9, 20, 0.2);
+    transform: translateY(-5px);
+    border-color: #e50914;
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.2);
+}
+
+.movieActorList p:hover::after {
+    content: '클릭하여 배우 검색';
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    writing-mode: horizontal-tb;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    color: white;
+}
+
+/* Director List */
+.movieDirectorList {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem !important;
+}
+
+.movieDirectorList p {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.movieDirectorList p:hover {
+    background: rgba(229, 9, 20, 0.2);
+    border-color: #e50914;
+}
+
+/* Movie Actions */
+.movieActions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.actionBtn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(45deg, #e50914, #ff3b30);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.actionBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
+}
+
+.actionBtn .icon {
+    font-size: 1.2rem;
+}
+
+/* Movie Links */
+.movieLinks {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.linkBtn {
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.linkBtn:hover {
+    background: rgba(229, 9, 20, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.2);
+    border-color: transparent;
+}
+
+/* Showtime Section */
+.movieShowtime {
+    margin-top: 2rem;
     background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.movieShowtime h2 {
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+/* Theater Search */
+.theaterSearch {
     margin-bottom: 2rem;
 }
 
 .searchOptions {
     display: flex;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
+.filterGroup {
+    flex: 1;
+}
+
+.filterLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Date Selector */
 .dateSelector {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
     overflow-x: auto;
     padding: 0.5rem 0;
 }
 
 .dateItem {
-    padding: 0.8rem 1.2rem;
+    padding: 1rem 1.5rem;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    min-width: 100px;
     text-align: center;
-    min-width: 80px;
+    transition: all 0.3s ease;
 }
 
 .dateItem.active {
-    background-color: #e50914;
+    background: #e50914;
     color: white;
     border-color: #e50914;
 }
 
-.dateDay {
-    font-size: 14px;
-    color: #666;
-}
-
-.dateItem.active .dateDay {
-    color: white;
-}
-
+/* Theater List */
 .theaterList {
     background: white;
-    padding: 1.5rem;
     border-radius: 8px;
 }
 
 .theaterItem {
+    padding: 1.5rem;
     border-bottom: 1px solid #eee;
-    padding: 1.5rem 0;
 }
 
 .theaterName {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 1rem;
 }
 
 .distance {
-    font-size: 14px;
     color: #666;
+    font-size: 0.9rem;
 }
 
+/* Showtime Grid */
 .showtimeGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -107,353 +301,60 @@ body{
 }
 
 .showtimeItem {
-    border: 1px solid #ddd;
-    border-radius: 5px;
     padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
 }
 
 .showtimeItem:hover {
-    background-color: #f8f8f8;
-}
-
-.showtimeTime {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.showtimeInfo {
-    font-size: 13px;
-    color: #666;
-}
-
-.seatsAvailable {
-    color: #e50914;
-    font-weight: bold;
-}
-
-.theaterMap {
-    position: fixed;
-    top: 82px;
-    right: 0;
-    width: 400px;
-    height: 90vh;
-    background: white;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-    padding: 1rem;
-}
-
-.mapContainer {
-    width: 100%;
-    height: calc(100% - 50px);
-    background: #eee;
-    border-radius: 8px;
-}
-
-.filterGroup {
-    margin-right: 1rem;
-}
-
-.filterLabel {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 14px;
-    color: #666;
-}
-
-select {
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.hintText {
-    font-size: 13px;
-    color: #666;
-    margin-top: 0.5rem;
-}
-
-/* 기존 CSS에 추가할 스타일 */
-.movieAdditionalInfo {
-    margin-top: 1rem;
-    color: #333;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.movieAdditionalInfo p {
-    margin: 0.5rem 0;
-}
-
-.movieActions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 5.5rem;
-}
-
-.actionBtn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: white;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.actionBtn:hover {
-    background: #f5f5f5;
-}
-
-.actionBtn .icon {
-    font-size: 1.2rem;
-}
-
-.likeBtn.active {
-    color: #e50914;
-    border-color: #e50914;
-}
-
-.bookmarkBtn.active {
-    color: #1a73e8;
-    border-color: #1a73e8;
-}
-
-.movieLinks {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.linkBtn {
-    padding: 0.5rem 1rem;
-    background: #e50914;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: background 0.2s;
-}
-
-.linkBtn:hover {
-    background: #c4000f;
-}
-
-.movieShowtime {
-    margin-top: 2rem;
-}
-
-.movieShowtime h2 {
-    margin-bottom: 1rem;
-    font-size: 20px;
-    color: #333;
-}
-
-.mainContent {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
-
-
-
-
-
-
-
-
-
-
-
-/* 포스터 호버 효과를 위한 컨테이너 */
-.posterContainer {
-    position: relative;
-    cursor: zoom-in;
-}
-
-/* 포스터 이미지 기본 스타일 */
-.moviePoster {
-    height: 600px;
-    object-fit: cover;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-}
-
-.moviePoster:hover {
-    transform: scale(1.10);
-    z-index: 100;
-}
-
-/* 호버 시 확대된 포스터를 보여주는 오버레이 */
-.posterOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.posterOverlay img {
-    max-height: 90vh;
-    max-width: 90vw;
-    object-fit: contain;
-}
-
-.posterContainer:hover .posterOverlay {
-    display: flex;
-}
-
-/* 영화 제목 애니메이션 */
-.movieDetails h1 {
-    font-size: 28px;
-    margin-bottom: 0.8rem;
-    position: relative;
-    display: inline-block;
-}
-
-.movieDetails h1::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: #e50914;
-    transition: width 0.3s ease;
-}
-
-.movieDetails h1:hover::after {
-    width: 100%;
-}
-
-/* 액션 버튼 개선 */
-.actionBtn {
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    border: 2px solid #ddd;
-    background: white;
-    transform: translateY(0);
-    transition: all 0.2s ease;
-}
-
-.actionBtn:hover {
+    background: #f8f8f8;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.likeBtn:hover {
-    background-color: #fff0f0;
-    border-color: #e50914;
-}
-
-.bookmarkBtn:hover {
-    background-color: #f0f7ff;
-    border-color: #1a73e8;
-}
-
-/* 상영시간 카드 개선 */
-.showtimeItem {
-    background: white;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 1.2rem;
-    transition: all 0.3s ease;
-}
-
-.showtimeItem:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-    border-color: #e50914;
-}
-
-/* 날짜 선택기 개선 */
-.dateItem {
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.dateItem::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, #e50914, #ff3b30);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: -1;
-}
-
-.dateItem:hover::before {
-    opacity: 0.1;
-}
-
-.dateItem.active::before {
-    opacity: 1;
-}
-
-/* 장르 태그 스타일링 */
-.movieMeta span {
-    display: inline-block;
-    padding: 4px 12px;
-    background-color: #f5f5f5;
-    border-radius: 15px;
-    margin-right: 8px;
-    font-size: 13px;
-    transition: all 0.2s ease;
-}
-
-.movieMeta span:hover {
-    background-color: #e50914;
+/* Footer */
+.footer {
+    background-color: #1a1a1a;
     color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
 }
 
-/* 링크 버튼 개선 */
-.linkBtn {
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    background: linear-gradient(45deg, #e50914, #ff3b30);
-    transform: translateY(0);
-    transition: all 0.3s ease;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+/* Responsive Design */
+@media (max-width: 768px) {
+    .movieInfo {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+    .moviePoster {
+        height: auto;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .movieActorList {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .movieLinks {
+        flex-direction: column;
+    }
+
+    .searchOptions {
+        flex-direction: column;
+    }
+
+    .showtimeGrid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
 }
 
-.linkBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(229,9,20,0.3);
-    background: linear-gradient(45deg, #ff3b30, #e50914);
-}
-
-/* 영화관 리스트 아이템 개선 */
-.theaterItem {
-    border: 1px solid #eee;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.theaterItem:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-    border-color: #e50914;
-}
-
-/* 스크롤바 커스터마이징 */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
