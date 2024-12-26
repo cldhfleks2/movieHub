@@ -4,13 +4,13 @@ import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
+import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,6 @@ public class MovieLikeService {
 
 
     //영화 상세 페이지에서 좋아요 버튼 눌렀을때
-    @GetMapping("/api/movieDetail/like")
     String clickLikeBtn(String movieCd, Model model, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -59,6 +58,10 @@ public class MovieLikeService {
         List<MovieLike> movieLikeList = movieLikeRepository.findAllByMovieCdAndStatus(movieCd);
         int totalLikeCnt = (movieLikeList != null) ? movieLikeList.size() : 0;
         model.addAttribute("totalLikeCnt", totalLikeCnt);
+
+        //movieCd값 전달을 위해 MovieDTO선언
+        MovieDTO movieDetail = MovieDTO.builder().movieCd(movieCd).build();
+        model.addAttribute("movieDetail", movieDetail);
 
         return "detail/detail";
     }

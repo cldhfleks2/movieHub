@@ -197,7 +197,6 @@ public class BasicService {
         if(movieLikeObj.isPresent()){
             MovieLike movieLike = movieLikeObj.get();
             int status = movieLike.getStatus();
-            status = (status + 1) % 2; //toggle
             likeStatus = (status == 1); //상태 저장
         }else{
             likeStatus = false;
