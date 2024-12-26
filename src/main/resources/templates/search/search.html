@@ -27,7 +27,7 @@
 
         <div class="sortBar">
             <select class="sortSelect">
-                <option value="relevance">관련도순</option>
+                <option class="sort1" value="relevance">관련도순</option>
                 <option value="date">개봉일순</option>
                 <option value="rating">평점순</option>
             </select>
@@ -65,25 +65,23 @@
 <!--        </div>-->
 
         <div class="movieGrid" id="movieGrid">
-            <div class="movieCard" th:each="movie : ${movieList}">
+            <div class="movieCard" th:each="movie : ${movieList}"
+                 th:data-movienm="${movie.movieNm}"
+                 th:data-opendt="${movie.openDt}"
+                 th:data-rating="${movie.rating}">
                 <div class="moviePoster">
                     <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터" style="object-fit: contain;">
                     <div class="movieOverlay">
                         <button class="btnLike">♥</button>
+                        <button class="btnLink" th:data-movieNm="${movie.movieNm}" th:data-openDt="${movie.openDt}">📄</button>
                     </div>
                 </div>
                 <div class="movieInfo">
-                    <h3  class="movieTitle" th:text="${movie.movieNm}">영화 제목</h3>
+                    <h3 class="movieTitle" th:text="${movie.movieNm}">영화 제목</h3>
                     <div class="movieMeta">
                         <span class="movieYear" th:text="${movie.openDt}">2024 일단 개봉일 넣어둠</span>
-<!--                        <span class="movieRating">⭐ 4.5</span>-->
                         <div class="rating" th:text="'⭐ ' + ${movie.rating}"></div>
                     </div>
-
-                    <!--                    장르는 KOBIS API를 사용 해야해서 검색이 느려져서 제외-->
-<!--                    <div class="movieGenres">-->
-<!--                        <span class="genre" th:each="genre : ${movie.genreList}" th:text="${genre.genreNm}">액션</span>-->
-<!--                    </div>-->
                 </div>
             </div>
         </div>

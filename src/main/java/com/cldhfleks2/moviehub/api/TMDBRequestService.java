@@ -47,7 +47,7 @@ public class TMDBRequestService {
         return response;
     }
 
-    //영화목록 검색 : query(movieNm), language
+    //영화 목록 검색 : &query=(movieNm), &language=(ko 또는 en)
     public HttpResponse<String> sendSearchMovie(String movieNm, String language) throws Exception{
         // 영화 제목을 인코딩
         String encodedMovieNm = encodeString("{" + movieNm + "}");
@@ -62,12 +62,12 @@ public class TMDBRequestService {
         HttpResponse<String> response = sendRequest(URL);
         return response;
     }
-    //영화목록 검색 : query, language 위와 동일
+    //영화 목록 검색 : 위와 동일
     public HttpResponse<String> sendSearchMovie(String movieNm) throws Exception{
         return sendSearchMovie(movieNm, "ko"); //기본값
     }
 
-    //인물 검색 : query(peopleNm), page
+    //인물 검색 : &query=(peopleNm), &page=(page)
     public HttpResponse<String> sendSearchPeople(String peopleNm, Long page) throws Exception{
         String encodedPersonNm = encodeString(peopleNm);
 
@@ -82,7 +82,7 @@ public class TMDBRequestService {
         return response;
     }
 
-    //영화목록을 검색 : with_cast(peopleId), page, sort_by=release_date.desc(최신순정렬)
+    //영화 목록 검색 : &with_cast=(peopleId), &sort_by=release_date.desc최신순정렬, &page=(page)
     public HttpResponse<String> sendSearchMovieListAsPeopleId(Long peopleId, Long page) throws Exception{
         //Long값이므로 인코딩 안함
         
@@ -98,7 +98,7 @@ public class TMDBRequestService {
 
     }
 
-    //영화 검색 : query(movieNm), primary_release_year(개봉년도, Movie.prdtYear)
+    //영화 검색 : &query=(movieNm), &primary_release_year=(primaryReleaseYear 개봉년도. Movie.prdtYear와 동일)
     public HttpResponse<String> sendSearchMovieAsMovieNmAndYear(String movieNm, String primaryReleaseYear) throws Exception{
         String encodedMovieNm = encodeString(movieNm);
 
@@ -113,7 +113,7 @@ public class TMDBRequestService {
         return response;
     }
 
-    //영화 검색 : query(movieNm),
+    //영화 검색 : &query=(movieNm)
     public HttpResponse<String> sendSearchMovieAsMovieNm(String movieNm) throws Exception{
         String encodedMovieNm = encodeString(movieNm);
 

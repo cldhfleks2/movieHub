@@ -1,80 +1,50 @@
 $(document).ready(function() {
+    updateProfileSectionVisibility(); //처음 보여지는 뷰 설정
     categorySelectSection();
+
     searchSection();
 
     filterSection();
 
     likeSection();
+
+    gotoPostDetail();
 });
 
-//배우또는 감독명으로 검색시에만 프로필 결과 뷰를 보여줌
+//검색바 카테고리 선택시
 function categorySelectSection() {
-    updateProfileSectionVisibility(); //초기상태
-
     // 카테고리 변경 이벤트
     $('.categorySelect').change(function() {
+        $(".profileImageWrapper").removeClass("active"); //클릭한 이미지에서 active 지움
+
         updateProfileSectionVisibility();
-        // 카테고리 변경시 검색 결과 초기화
-        $('.searchInput').val('');
-        // input 태그로 포커스 이동
-        $('.searchInput').focus();
+        $('.searchInput').val('');// 카테고리 변경시 검색 결과 초기화
+        $('.searchInput').focus();// input 태그로 포커스 이동
     });
 }
 
-//프로필 뷰 보여지게 설정
+//인물검색일때와 아닐때의 뷰 컨트롤하는 함수
 function updateProfileSectionVisibility() {
     const selectedValue = $('.categorySelect').val();
     const $profileSection = $('.profileSection');
 
+    //인물 검색
     if (selectedValue === 'moviePeople') {
         //기존 결과 제거
         $(".movieCard").empty();
         $profileSection.addClass('active');
-        $(".movieGrid").hide();
-        $(".noResults").hide();
+        $('.sortSelect').hide(); //인물 검색은 정렬 기능이 없음
+        $(".movieGrid").hide(); //영화 목록 숨김
+        $(".noResults").hide(); //찾는 결과가 없음 메시지 숨김
+    //영화이름 검색
     } else if(selectedValue === 'movieName'){
         //기존 결과 제거
-        $(".movieCard").empty();
+        $(".movieCard").empty(); //영화 목록 리셋(지움)
         $profileSection.removeClass('active');
-        $(".movieGrid").show();
+        $('.sortSelect').show(); //정렬 기능 보여줌
+        $(".movieGrid").show(); //영화 목록 보여줌
     }
 }
-
-// function paginationSection(){
-//     // 페이지네이션
-//     $('.pageNum').on('click', function() {
-//         $('.pageNum').removeClass('active');
-//         $(this).addClass('active');
-//         loadPage(parseInt($(this).text(), 10));
-//     });
-//
-//
-//     // 페이지 로드 함수
-//     function loadPage(pageNumber) {
-//         console.log('Loading page:', pageNumber);
-//         // 여기에 페이지 데이터 로드 로직 추가
-//     }
-//
-//     $('.pageBtn:first-child').on('click', function() {
-//         if (!$(this).prop('disabled')) {
-//             const $currentPage = $('.pageNum.active');
-//             const $prevPage = $currentPage.prev('.pageNum');
-//             if ($prevPage.length) {
-//                 $prevPage.trigger('click');
-//             }
-//         }
-//     });
-//
-//     $('.pageBtn:last-child').on('click', function() {
-//         if (!$(this).prop('disabled')) {
-//             const $currentPage = $('.pageNum.active');
-//             const $nextPage = $currentPage.next('.pageNum');
-//             if ($nextPage.length) {
-//                 $nextPage.trigger('click');
-//             }
-//         }
-//     });
-// }
 
 function likeSection(){
     // 버튼 클릭시 문구를 출력하는 코드
@@ -128,23 +98,78 @@ function likeSection(){
 }
 
 function filterSection(){
-    // 필터 태그 토글
-    $('.filterTag').on('click', function() {
-        $('.filterTag').removeClass('active');
-        $(this).addClass('active');
-        // 여기에 필터링 로직 추가
+    // 필터 태그 토글 : 안씀
+    // $('.filterTag').on('click', function() {
+    //     $('.filterTag').removeClass('active');
+    //     $(this).addClass('active');
+    //     // 여기에 필터링 로직 추가
+    // });
+    
+    //DOM요소를 정렬하는 함수
+    function sortMovieCards(movieCards, keyword, sortBy) {
+        movieCards.sort(function(a, b) {
+            // 관련도순 (relevance)
+            if (sortBy === "relevance") {
+                let movieNmA = $(a).data('movienm').toLowerCase();
+                let movieNmB = $(b).data('movienm').toLowerCase();
+                let movie1Matches = movieNmA.includes(keyword.toLowerCase());
+                let movie2Matches = movieNmB.includes(keyword.toLowerCase());
+                return movie2Matches - movie1Matches; // 매칭된 영화가 앞에 오도록
+            }
+
+            // 개봉일순 (date)
+            else if (sortBy === "date") {
+                let openDtA = $(a).data('opendt');
+                let openDtB = $(b).data('opendt');
+                return new Date(openDtB) - new Date(openDtA); // 최신 개봉일이 먼저 오도록
+            }
+
+            // 평점순 (rating)
+            else if (sortBy === "rating") {
+                let ratingA = $(a).data('rating');
+                let ratingB = $(b).data('rating');
+
+                if (ratingA === "not-found" && ratingB !== "not-found") {
+                    return 1; // "not-found"인 영화는 마지막으로 배치
+                } else if (ratingA !== "not-found" && ratingB === "not-found") {
+                    return -1; // "not-found"인 영화는 마지막으로 배치
+                } else if (ratingA === "not-found" && ratingB === "not-found") {
+                    return 0; // 둘 다 "not-found"일 경우 순서 유지
+                } else {
+                    return parseFloat(ratingB) - parseFloat(ratingA); // 평점 내림차순
+                }
+            }
+            return 0; // 기본값: 변경 없이 그대로
+        });
+
+        return movieCards;
+    }
+
+
+    //정렬기준을 선택하면
+    $('.sortSelect').on('change', function() {
+        // 영화 카드들 가져오기
+        const movieCards = $('.movieCard');
+        const keyword = $('.searchInput').val();
+        const sortBy = $(".sortSelect").val();// 정렬 기준 : 'relevance', 'date', 'rating'
+        const category = $(".categorySelect").val();
+
+        if(category === "movieName"){
+            // 영화 카드 정렬
+            const sortedMovies = sortMovieCards(movieCards, keyword, sortBy);
+
+            // 정렬된 결과로 업데이트
+            $('#movieGrid').empty(); // 기존 내용 제거
+            sortedMovies.each(function() {
+                $('#movieGrid').append(this); // 정렬된 영화 카드를 추가
+            });
+        }else if(category === "moviePeople"){
+            //인물검색은 정렬이 없음.
+        }
+
     });
 
-    // 정렬 변경
-    $('.sortSelect').on('change', function() {
-        // 여기에 정렬 로직 추가
-        var keyword = $('.searchInput').val()
-        if(keyword.trim()){
-            //키워드를 입력했을때 검색 진행
-            searchMovieListOrPeopleProfile(keyword)
-        }
-    });
-    
+
 }
 
 function showLoading() {
@@ -159,17 +184,24 @@ function hideLoading() {
 function searchSection(){
     //검색 버튼 클릭
     $('.searchButton').on('click', function() {
+        $(".profileImageWrapper").removeClass("active"); //클릭한 이미지에서 active 지움
         searchMovieListOrPeopleProfile($('.searchInput').val());
     });
     //검색바에서 엔터 입력
-    $('.searchInput').on('keypress', function(e) { 
+    $('.searchInput').on('keypress', function(e) {
+        $(".profileImageWrapper").removeClass("active"); //클릭한 이미지에서 active 지움
         if (e.key === 'Enter') {
             searchMovieListOrPeopleProfile($(this).val());
         }
     });
+
     //인물 프로필 클릭시 영화 목록을 가져와야함
     $(document).on("click", ".profileImageWrapper", function (){
-        searchPeopleMovieList();
+        $(".profileImageWrapper").removeClass("active"); //클릭한 이미지에서 active 지움
+        $(this).addClass("active");
+        const peopleId =  $(this).data("people-id");
+        const category = "peopleClick";
+        searchPeopleMovieList(peopleId, category);
     })
 }
 
@@ -221,9 +253,7 @@ function searchMovieListOrPeopleProfile(keyword) {
 }
 
 //인물 프로필 클릭했을때 참여한 영화 목록을 가져옴
-function searchPeopleMovieList(){
-    const peopleId =  $(this).data("people-id");
-    const category = "peopleClick";
+function searchPeopleMovieList(peopleId, category){
 
     showLoading();
     $(".explain").show();
@@ -257,5 +287,19 @@ function searchPeopleMovieList(){
     })
 }
 
+//영화 상세 페이지로 이동 하는 함수
+function gotoPostDetail(){
+    $(document).on("click", ".btnLink", function (){
+        const movieNm = $(this).data("movienm")
+        var openDt = $(this).data("opendt")
+        if(!openDt || !movieNm){ //날짜를 못 읽으면 검색이 불가
+            alert("영화 정보를 불러올 수 없습니다.")
+            return;
+        }
+        openDt = String(openDt) //문자열 변환후
+        openDt = openDt.substring(0, 4); //yyyy 추출
 
+        window.location.href = "/validate/movieNm/" + movieNm + "/openDt/" + openDt;
+    })
+}
 

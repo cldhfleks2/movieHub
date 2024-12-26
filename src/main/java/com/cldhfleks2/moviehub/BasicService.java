@@ -62,7 +62,10 @@ public class BasicService {
 
     //검색결과 정렬 담당 함수 : getSearch에서 사용
     public List<MovieDTO> sortMovieList(List<MovieDTO> movieDTOList, String keyword, String sortBy) {
-// 기본 Comparator 생성 (전체 정렬 조건은 없으므로 기본값은 null 처리)
+        if(movieDTOList == null || movieDTOList.isEmpty()) //유효한 리스트인지 확인
+            return movieDTOList;
+
+        // 기본 Comparator 생성 (전체 정렬 조건은 없으므로 기본값은 null 처리)
         Comparator<MovieDTO> comparator = null;
 
         // 1. 관련도순 (relevance) 정렬
@@ -175,14 +178,15 @@ public class BasicService {
             MovieDTO movieDetail = movieService.convertToMovieDTO(returnEntitysDTO);
             model.addAttribute("movieDetail", movieDetail);
 
-            //모델에 영화의 좋아요 갯수 담기
+            //모델에 영화의 좋아요 갯수 담아서 보여주기
+            
+            
 
             return "detail/detail";
         }else{
             //DB에 있으면 그대로 영화 정보를 보여준다.
             Movie movie = movieObj.get();
             Long movieId = movie.getId();
-            String currentDay = getCurrentDay();
 
             //MovieDailyStat은 아래 getMovieDTO에서 진행
             MovieDTO movieDetail = movieService.getMovieDTO(movieId);
@@ -234,7 +238,29 @@ public class BasicService {
         return "search/search";
     }
 
+    //영화이름으로 해당 영화
+    String validateMovieByMovieNm(String movieNm, @PathVariable String openDt, Model model, RedirectAttributes redirectAttributes)  throws Exception{
+        //movieNm에 해당하는 데이터가 KOBIS API에 있는지 먼저 확인
+        HttpResponse<String> response = kobisRequestService.sendMovieListRequestByMovieNm(movieNm, openDt, openDt);
+        //응답을 못받은 경우 에러
+        if(response == null){ 
+            redirectAttributes.addFlashAttribute("alertMessage", "영화가 존재하지 않습니다.");
+            return "redirect:/main";
+        }
+        String responseBody = response.body();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode movieListJsonNode = objectMapper.readTree(responseBody);
+        //결과가 없으면 에러
+        if(movieListJsonNode.isNull() || movieListJsonNode.path("movieListResult").path("totCnt").asInt() == 0){
+            redirectAttributes.addFlashAttribute("alertMessage", "영화가 존재하지 않습니다.");
+            return "redirect:/main";
+        }
+        //movieCd값 추출
+        String movieCd = movieListJsonNode.path("movieListResult").path("movieList").get(0).path("movieCd").asText();
 
+        //있으면 detail/detail 페이지 렌더링
+        return getDetail(movieCd, model, redirectAttributes);
+    }
 
 
 }

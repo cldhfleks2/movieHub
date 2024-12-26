@@ -702,7 +702,7 @@ public class MovieService {
         return peopleDTOList;
     }
 
-    //프로필을 누르면 해당 인물의 출연 영화를 전부 보여주는 함수 : 내부적으로 getMovieDTOAsMovieList을 재사용
+    //프로필 클릭시 해당 인물의 출연 영화를 전부 보여주는 함수 : 내부적으로 getMovieDTOAsMovieList을 재사용
     public List<MovieDTO> getMovieDTOAsSearchPeopleId(Long peopleId, int limit) throws Exception{
         HttpResponse<String> response = tmdbRequestService.sendSearchMovieListAsPeopleId(peopleId, 1L); //첫번째 페이지 가져옴
         if(response == null){
@@ -763,14 +763,22 @@ public class MovieService {
                 //DTO생성
                 int remainCnt = limit - movieDTOList.size();
                 List<MovieDTO> findMovieDTO = getMovieDTOAsMovieList(response, remainCnt); //최대 갯수 제한해서 검색
-
+                
+                //getMovieDTOAsMovieList에 실패했을때 : 직접 생성
                 if(findMovieDTO == null){
                     //포스터 가져오기
                     JsonNode posterPathNode = movieNode.path("poster_path");
                     String posterURL = "https://image.tmdb.org/t/p/w500" + posterPathNode.asText();
                     //평점 가져오기 (소숫점 1자리까지만)
                     JsonNode ratingNode = movieNode.path("vote_average");
-                    String rating = ratingNode.asText().split(".")[0] + ratingNode.asText().split(".")[1].substring(0, 1);
+                    //평점이 존재할때만 가져옴
+                    String rating = "not-found";
+                    if (!ratingNode.isNull() && !ratingNode.asText().isEmpty()) {
+                        double voteRating = ratingNode.asDouble();
+                        double convertedRating = voteRating / 2.0;
+                        rating = String.format("%.1f", convertedRating);
+                    }
+
                     MovieDTO movieDTO = MovieDTO.builder()
                             .movieNm(movieNm)
                             .openDt(openStartDt)

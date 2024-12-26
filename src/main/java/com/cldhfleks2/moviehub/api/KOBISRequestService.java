@@ -62,7 +62,7 @@ public class KOBISRequestService {
         return URLEncoder.encode(keyword, "UTF-8");
     }
 
-    //KOBIS API URL로 요청을 보내고 응답을 리턴 해주는 함수 : 외부에서 사용할 수 도 있음
+    //KOBIS API로 요청을 보내는 함수
     public HttpResponse<String> sendRequest(String URL) throws Exception {
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -78,7 +78,7 @@ public class KOBISRequestService {
         return response;
     }
 
-    //1. 전체일일박스오피스 10개 response Get
+    //전체 일일 박스오피스(10개) response GETTER
     public HttpResponse<String> getTotalTodayBoxOfficeResponse() {
         if (totalTodayBoxOfficeResponse == null) {
             throw new RuntimeException("API 응답이 없습니다. 서버와의 연결 문제일 수 있습니다.");
@@ -87,8 +87,7 @@ public class KOBISRequestService {
         }
         return totalTodayBoxOfficeResponse;
     }
-
-    //2. 전체주간박스오피스 10개 response Get
+    //전체 주간 박스오피스(10개) response GETTER
     public HttpResponse<String> getTotalWeeklyBoxOfficeResponse() {
         if (totalWeeklyBoxOfficeResponse == null) {
             throw new RuntimeException("API 응답이 없습니다. 서버와의 연결 문제일 수 있습니다.");
@@ -97,8 +96,7 @@ public class KOBISRequestService {
         }
         return totalWeeklyBoxOfficeResponse;
     }
-
-    //3. 주간한국박스오피스 10개 response Get
+    //주간 한국 박스오피스(10개) response GETTER
     public HttpResponse<String> getKoreaWeeklyBoxOfficeResponse() {
         if (koreaWeeklyBoxOfficeResponse == null) {
             throw new RuntimeException("API 응답이 없습니다. 서버와의 연결 문제일 수 있습니다.");
@@ -107,8 +105,7 @@ public class KOBISRequestService {
         }
         return koreaWeeklyBoxOfficeResponse;
     }
-
-    //4. 주간외국박스오피스 10개 response Get
+    //주간 외국 박스오피스(10개) response GETTER
     public HttpResponse<String> getForeignWeeklyBoxOfficeResponse() {
         if (foreignWeeklyBoxOfficeResponse == null) {
             throw new RuntimeException("API 응답이 없습니다. 서버와의 연결 문제일 수 있습니다.");
@@ -118,8 +115,7 @@ public class KOBISRequestService {
         return foreignWeeklyBoxOfficeResponse;
     }
 
-
-    //1. KOBIS API 전체 일일 박스오피스 10개 : 응답을 필드에 저장
+    //전체 일일 박스오피스(10개) : 응답을 필드에 저장
     public HttpResponse<String> sendTotalTodayBoxOfficeRequest() throws Exception {
         //KOBIS에서 통계가 하루 이전날 까지만 계산 되므로 날짜를 -1
         LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
@@ -134,8 +130,7 @@ public class KOBISRequestService {
         totalTodayBoxOfficeResponse = response; //필드에 저장
         return response;
     }
-
-    //2. KOBIS API 전체주간박스오피스 10개 (월~일) > 최소 7일전 즉 지난주의 통계만 나오는 형식.
+    //전체 주간 박스오피스(10개) (월~일) : 최소 7일전 즉 지난주의 통계만 나오는 형식.
     public HttpResponse<String> sendTotalWeeklyBoxOfficeRequest() throws Exception{
         LocalDate currentDate = LocalDate.now().minusDays(8); //최소 일주일전 통계만 잡히나 안전을위해 8일전
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -150,8 +145,7 @@ public class KOBISRequestService {
         totalWeeklyBoxOfficeResponse = response; //필드에 저장
         return response;
     }
-
-    //3. KOBIS API 주간한국박스오피스 10개 (월~일)
+    //주간 한국 박스오피스(10개) (월~일)
     public HttpResponse<String> sendKoreaWeeklyBoxOfficeRequest() throws Exception{
         LocalDate currentDate = LocalDate.now().minusDays(8);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -167,8 +161,7 @@ public class KOBISRequestService {
         koreaWeeklyBoxOfficeResponse = response; //필드에 저장
         return response;
     }
-
-    //4. KOBIS API 주간외국박스오피스 10개 (월~일)
+    //주간 외국 박스오피스(10개) (월~일)
     public HttpResponse<String> sendForeignWeeklyBoxOfficeRequest() throws Exception{
         LocalDate currentDate = LocalDate.now().minusDays(8);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -185,12 +178,10 @@ public class KOBISRequestService {
         return response;
     }
 
-    //영화 상세 정보 요청을 보내는 함수 : movieCd 사용
-    public HttpResponse<String> sendMovieDetailRequest(String movieCd) throws Exception{
-        LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String currentDay = currentDate.format(formatter); //현재 날짜  예) "20241220"
+    /// ////////////////////////////////////기본 함수
 
+    //영화 상세 정보 : &movieCd=(movieCd)
+    public HttpResponse<String> sendMovieDetailRequest(String movieCd) throws Exception{
         String URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
                 + "?key=" + kobiskey
                 + "&movieCd=" + movieCd; //영화 코드를 보냄
@@ -201,9 +192,7 @@ public class KOBISRequestService {
         return response;
     }
 
-
-
-    //movieNm으로 영화 목록을 response로 가져오는 함수
+    //영화 목록 검색 : &movieNm=(movieNm)
     public HttpResponse<String> sendMovieListRequestByMovieNm(String movieNm) throws Exception{
         String encodedMovieNm = encodeString(movieNm);
 
@@ -217,7 +206,7 @@ public class KOBISRequestService {
         return response;
     }
 
-    //movieNm와 openStartDt로 영화 목록을 response로 가져오는 함수
+    //영화 목록 검색 : &movieNm=(movieNm), &openStartDt=(openStartDt yyyy), &openEndDt=(openEndDt yyyy) 검색기간 설정하는것
     public HttpResponse<String> sendMovieListRequestByMovieNm(String movieNm, String openStartDt, String openEndDt) throws Exception{
         String encodedMovieNm = encodeString(movieNm);
 
@@ -232,7 +221,6 @@ public class KOBISRequestService {
         HttpResponse<String> response = sendRequest(URL);
         return response;
     }
-
 
 
 
