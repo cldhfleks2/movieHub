@@ -5,8 +5,8 @@ $(document).ready(function() {
 function validation() {
     const validators = {
         username: {
-            regex: /^[a-zA-Z]{4,}$/,
-            message: '아이디는 영문자로 4자 이상이어야 합니다.'
+            regex: /^[A-Za-z0-9]{4,}$/,
+            message: '아이디는 영어와 숫자로 4자 이상이어야 합니다.'
         },
         password: {
             regex: /.{4,}/,
