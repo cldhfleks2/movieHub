@@ -2,6 +2,10 @@ $(document).ready(function (){
     A();
 
     clickActorSearching();
+
+    likeBtn();
+
+    bookmarkBtn();
 })
 
 function A(){
@@ -34,5 +38,41 @@ function clickActorSearching(){
             // 검색 페이지로 이동하면서 peopleNm을 쿼리 파라미터로 전달
             window.location.href = `/search?peopleNm=${encodeURIComponent(peopleNm)}`;
         }
+    });
+}
+
+//좋아요 버튼 동작
+function likeBtn(){
+    $(document).on("click", ".actionBtn.likeBtn", function (){
+        const movieCd = $(this).data("moviecd");
+
+        $.ajax({
+            url: "/api/movieDetail/like",
+            method: "get",
+            data: {movieCd: movieCd},
+            success: function (data){
+                //좋아요 부분 새로고침
+                var data = $.parseHTML(data);
+                var dataHtml = $("<div>").append(data);
+                $("#likeBtn").replaceWith(dataHtml.find("#likeBtn"));
+
+            },
+            error: function () {
+
+            }
+        })
+
+
+    });
+
+
+}
+
+
+
+//찜하기 버튼 동작
+function bookmarkBtn() {
+    $(document).on("click", ".actionBtn.bookmarkBtn", function (){
+
     });
 }

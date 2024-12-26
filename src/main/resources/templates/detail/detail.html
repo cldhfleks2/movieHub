@@ -38,16 +38,28 @@
                     <p th:text="${movieDetail.openDt}"></p>
                 </div>
             </div>
-            <div class="movieActions">
+            <div class="movieActions" id="movieActions">
 <!--               기존에 좋아요 여부를 보내줘서 fill해라-->
-                <button class="actionBtn likeBtn" th:data-moviecd="${movieDetail.movieCd}">
-                    <span class="icon">♥</span>
-                    <span>좋아요</span>
-                    <span></span>
+                <button class="actionBtn likeBtn" id="likeBtn" th:data-moviecd="${movieDetail.movieCd}">
+                    <div th:unless="${likeStatus}">
+                        <span class="icon">♡</span>
+                        <span>좋아요</span>
+                    </div>
+                    <div th:if="${likeStatus}">
+                        <span class="icon">♥</span>
+                        <span>좋아요취소</span>
+                    </div>
+                    <span class="likeCount" th:text="${totalLikeCnt}">갯수</span>
                 </button>
-                <button class="actionBtn bookmarkBtn">
-                    <span class="icon">🏷️</span>
-                    <span>찜하기</span>
+                <button class="actionBtn bookmarkBtn" id="bookmarkBtn" th:data-moviecd="${movieDetail.movieCd}">
+                    <div th:unless="${bookmarkStatus}">
+                        <span class="icon">🏷️</span>
+                        <span>찜하기</span>
+                    </div>
+                    <div th:if="${bookmarkStatus}">
+                        <span class="icon">✔️</span>
+                        <span>찜하기취소</span>
+                    </div>
                 </button>
             </div>
             <div class="movieLinks">

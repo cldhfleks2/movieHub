@@ -373,3 +373,35 @@ select {
 ::-webkit-scrollbar-thumb:hover {
     background: #c4000f;
 }
+
+/* 좋아요 뷰 */
+.likeBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    position: relative;
+}
+
+.likeCount {
+    position: absolute;
+    top: -15px;
+    left: 25px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    min-width: 45px;
+    text-align: center;
+}
+
+.likeCount::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 10px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgba(0, 0, 0, 0.8);
+}
