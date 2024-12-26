@@ -81,12 +81,25 @@ public class BasicService {
                 return openDt2.compareTo(openDt1); // 최신 개봉일이 먼저 오도록
             };
         }
-        // 3. 평점순 (rating) 정렬
+        // 3. 평점순 (rating) 정렬 : not-found값은 최하위 우선순위로 지정
         else if (sortBy.equals("rating")) {
             comparator = (movie1, movie2) -> {
-                double rating1 = movie1.getRating() != null ? Double.parseDouble(movie1.getRating()) : 0.0;
-                double rating2 = movie2.getRating() != null ? Double.parseDouble(movie2.getRating()) : 0.0;
-                return Double.compare(rating2, rating1); // 높은 평점이 먼저 오도록
+                // "not-found"인 경우 0으로 처리하여 마지막으로 정렬
+                String rating1 = movie1.getRating();
+                String rating2 = movie2.getRating();
+
+                if ("not-found".equals(rating1) && !"not-found".equals(rating2)) {
+                    return 1; // movie1을 마지막으로 배치
+                } else if (!"not-found".equals(rating1) && "not-found".equals(rating2)) {
+                    return -1; // movie2를 마지막으로 배치
+                } else if ("not-found".equals(rating1) && "not-found".equals(rating2)) {
+                    return 0; // 둘 다 "not-found"일 경우 순서 유지
+                } else {
+                    // 정상적인 평점 값 비교
+                    double rt1 = Double.parseDouble(rating1);
+                    double rt2 = Double.parseDouble(rating2);
+                    return Double.compare(rt2, rt1); // 높은 평점이 먼저 오도록
+                }
             };
         }
 
