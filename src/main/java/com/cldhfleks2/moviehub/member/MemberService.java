@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.Optional;
 
@@ -55,6 +56,15 @@ public class MemberService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    //마이페이지 GET
+    String getMyPage(Model model, Authentication auth) {
+        return "member/mypage";
+    }
 
+
+    //유저 프로필 GET
+    String getUserprofile(Long memberId, Model model, Authentication auth) {
+        return "member/userprofile";
+    }
 
 }

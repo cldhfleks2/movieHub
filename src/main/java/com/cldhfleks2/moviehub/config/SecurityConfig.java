@@ -28,7 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/register", "/login").permitAll()
 //                        .requestMatchers("/detail/**").permitAll()
 //                        .requestMatchers("/admin/report").hasRole("ADMIN") //아직 개발 안함
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated() //그 외 모든건 로그인을 필요로함
         );
 
         //로그인 설정
