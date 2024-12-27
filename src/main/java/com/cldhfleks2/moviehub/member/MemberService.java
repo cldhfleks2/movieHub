@@ -1,5 +1,6 @@
 package com.cldhfleks2.moviehub.member;
 
+import com.cldhfleks2.moviehub.error.ErrorService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,12 +59,27 @@ public class MemberService {
 
     //마이페이지 GET
     String getMyPage(Model model, Authentication auth) {
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "", "유저 정보를 찾을 수 없습니다.", String.class);
+
+        Member member = memberObj.get();
+        MemberDTO memberDTO = MemberDTO.builder()
+                .username(member.getUsername())
+                .nickname(member.getNickname())
+                .profileImage(member.getProfileImage()).build();
+        model.addAttribute("member", memberDTO);
+
+        System.out.println(memberDTO.getUsername());
+        System.out.println(memberDTO.getNickname());
+
         return "member/mypage";
     }
 
-
     //유저 프로필 GET
     String getUserprofile(Long memberId, Model model, Authentication auth) {
+
         return "member/userprofile";
     }
 
