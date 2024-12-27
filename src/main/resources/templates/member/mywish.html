@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내가 찜한 리스트 페이지</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/member/mywish.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:replace="~{ header/header::header }"></div>
+
+<main class="wishlistContainer">
+    <div class="wishlistHeader">
+        <h1>내가 찜한 영화</h1>
+        <div class="wishlistControls">
+            <select id="sortSelect" class="wishlistSort">
+                <option value="latest">최신순</option>
+                <option value="rating">평점순</option>
+                <option value="title">제목순</option>
+            </select>
+            <div class="wishlistViewToggle">
+                <button id="gridView" class="viewButton active">바둑판</button>
+                <button id="listView" class="viewButton">목록</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="wishlistGrid" id="wishlistContent">
+        <!-- Movie Card Template -->
+        <div class="movieCard" th:each="movie : ${movieDTOPage}">
+            <div class="moviePoster">
+                <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터">
+                <div class="movieOverlay">
+                    <button class="btnWatchNow">예매하기</button>
+                    <button class="btnRemoveWish">찜 해제</button>
+                </div>
+            </div>
+            <div class="movieInfo" style="padding: 10px;">
+                <h3 class="movieTitle" th:text="${movie.movieNm}">영화 제목</h3>
+                <div class="movieTitleWrapper"></div>
+                <span class="ageRating" th:each="watchGrade : ${movie.auditList}"
+                      th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
+                <div class="movieMeta">
+                    <div class="metaGroup">
+                            <span class="genre" th:each="genre : ${movie.genreList}"
+                                  th:text="${genre.genreNm}">드라마</span>
+                        <span class="runtime" th:text="${movie.showTm} + '분'">106분</span>
+                    </div>
+                    <div class="releaseDate" th:text="${movie.openDt} + ' 개봉'">2024.12.04</div>
+                </div>
+                <div class="movieStats">
+                    <div class="statItem">
+                        <span class="statLabel">누적관객</span>
+                        <span class="statValue" th:text="${movie.audiAcc} + '명'">2,191,719명</span>
+                    </div>
+                    <div class="statItem">
+                        <span class="statLabel">일일관객</span>
+                        <span class="statValue" th:text="${movie.audiCnt} + '명'">1,438명</span>
+                    </div>
+                </div>
+                <div class="movieButtons">
+                    <a href="#" class="btnReserve">예매하기</a>
+                    <a th:href="@{/detail/{movieCd}(movieCd=${movie.movieCd})}" class="btnDetail">상세정보</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="wishlistPagination" th:if="${movieDTOPage.totalPages > 0}">
+        <button class="pageButton" id="prevPage" th:disabled="${movieDTOPage.first}" th:onclick="'location.href=\'/mywish?pageIdx=' + ${movieDTOPage.number} + '\''">
+            이전
+        </button>
+
+        <div class="pageNumbers">
+            <th:block th:each="pageNum : ${#numbers.sequence(0, movieDTOPage.totalPages - 1)}">
+                <button class="pageNumber"
+                        th:classappend="${pageNum == movieDTOPage.number} ? 'active'"
+                        th:onclick="'location.href=\'/mywish?pageIdx=' + ${pageNum + 1} + '\''"
+                        th:text="${pageNum + 1}">
+                </button>
+            </th:block>
+        </div>
+
+        <button class="pageButton" id="nextPage" th:disabled="${movieDTOPage.last}" th:onclick="'location.href=\'/mywish?pageIdx=' + ${movieDTOPage.number + 2} + '\''">
+            다음
+        </button>
+    </div>
+</main>
+
+<div th:replace="~{ footer/footer::footer }"></div>
+
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
+<script src="/js/member/mywish.js"></script>
+</body>
+</html>
