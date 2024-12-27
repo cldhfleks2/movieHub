@@ -31,17 +31,14 @@
 
         <!-- 우측 유저 메뉴 -->
         <div class="headerUserMenu">
-            <!-- 비로그인 상태 -->
-            <!--            <div sec:authorize="isAnonymous()" class="headerAuthButtons" 잠시 가림>-->
-            <div class="headerAuthButtons" style="display: none">
-                <a href="#" class="headerBtnLogin">로그인</a>
-                <a href="#" class="headerBtnSignup">회원가입</a>
+            <!-- 비로그인시 보이는 메뉴 -->
+            <div class="headerAuthButtons" sec:authorize="isAnonymous()">
+                <a href="/login" class="headerBtnLogin">로그인</a>
+                <a href="/register" class="headerBtnSignup">회원가입</a>
             </div>
 
-            <!-- 로그인 상태 -->
-            <!--            <div sec:authorize="isAuthenticated()" class="headerUserControls" 잠시 가림>-->
-            <div class="headerUserControls">
-                <!-- 알림 아이콘 -->
+            <!-- 로그인 해야 보이는 메뉴 -->
+            <div class="headerUserControls" sec:authorize="isAuthenticated()">
                 <div class="headerNotificationWrapper">
                     <div class="headerNotificationIcon">
                         <div style="width: 20px; font-size: 25px;">🔔</div>
@@ -67,22 +64,21 @@
 
                 <!-- 프로필 드롭다운 -->
                 <div class="headerProfileDropdown">
-                    <a href="/mypage">
-                        <img src="/image/profile.png" style="" alt="프로필" class="headerProfileImg">
-                        <div class="headerProfileMenu">
-                            <div class="headerProfileInfo">
-                                <img src="/image/blank.png" alt="프로필" class="headerProfileImgLarge">
-                                <!--  <span class="headerProfileEmail" sec:authentication="name에 알맞는 변수로 가져와">user@email.com</span>-->
-                                <span class="headerProfileEmail">user@email.com</span>
-                            </div>
-                            <div class="headerProfileActions">
-                                <a href="#" class="headerBtnProfile">프로필</a>
-                                <form th:action="@{/logout}" method="post" class="headerLogoutForm">
-                                    <button type="submit" class="headerBtnLogout">로그아웃</button>
-                                </form>
-                            </div>
-                        </div>
+                    <a href="/mypage" class="headerProfileLink">
+                        <img src="/image/profile.png" alt="프로필" class="headerProfileImg">
                     </a>
+                    <div class="headerProfileMenu">
+                        <div class="headerProfileInfo">
+                            <img src="/image/blank.png" alt="프로필" class="headerProfileImgLarge">
+                            <!--  <span class="headerProfileEmail" sec:authentication="name에 알맞는 변수로 가져와">user@email.com</span>-->
+                            <span class="headerProfileEmail">user@email.com</span>
+                        </div>
+                        <div class="headerProfileActions">
+                            <form action="/logout" method="post" class="headerLogoutForm">
+                                <button type="submit" class="headerBtnLogout" style="margin-left: 44px;">로그아웃</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
