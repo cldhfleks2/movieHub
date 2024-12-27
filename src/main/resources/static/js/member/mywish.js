@@ -1,12 +1,17 @@
 $(document).ready(function() {
+    initializeSetting();
     viewStyle();
-
-    sortSection();
-
     deleteWishList();
-
     pagination();
 });
+
+function initializeSetting(){
+    sortSection(); //페이지 로딩되자마자 한번 정렬
+    //정렬기준을 선택하면 정렬하도록 지시
+    $('#sortSelect').on('change', function() {
+        sortSection();
+    });
+}
 
 function pagination(){
     $('#prevPage, #nextPage').click(function() {
@@ -37,30 +42,6 @@ function viewStyle(){
         $(this).addClass('active');
         $('#gridView').removeClass('active');
         $('#wishlistContent').removeClass('wishlistGrid').addClass('wishlistList');
-    });
-}
-
-function sortSection(){
-    // Sort functionality
-    $('#sortSelect').change(function() {
-        const sortValue = $(this).val();
-        const $wishlistContent = $('#wishlistContent');
-        const $movies = $wishlistContent.children('.movieCard').get();
-
-        $movies.sort(function(a, b) {
-            switch(sortValue) {
-                case 'latest':
-                    return $(b).find('.movieYear').text() - $(a).find('.movieYear').text();
-                case 'rating':
-                    return $(b).find('.movieRating').text() - $(a).find('.movieRating').text();
-                case 'title':
-                    return $(a).find('.movieTitle').text().localeCompare($(b).find('.movieTitle').text());
-                default:
-                    return 0;
-            }
-        });
-
-        $wishlistContent.empty().append($movies);
     });
 }
 
@@ -150,5 +131,64 @@ function deleteWishList(){
     //     }, 1000);
     // }
 }
+
+//DOM요소를 정렬하는 함수
+function sortMovieCards(movieCards, sortBy) {
+    movieCards.sort(function(a, b) {
+        // 제목 순
+        if (sortBy === "title") {
+            let movieNmA = $(a).data('movienm').toLowerCase();
+            let movieNmB = $(b).data('movienm').toLowerCase();
+
+            // 알파벳 순으로 정렬
+            if (movieNmA < movieNmB) return -1;
+            if (movieNmA > movieNmB) return 1;
+            return 0;
+        }
+
+        // 개봉일순
+        else if (sortBy === "latest") {
+            let openDtA = $(a).data('opendt');
+            let openDtB = $(b).data('opendt');
+            return new Date(openDtB) - new Date(openDtA); // 최신 개봉일이 먼저 오도록
+        }
+
+        // // 평점순 (rating)
+        // else if (sortBy === "rating") {
+        //     let ratingA = $(a).data('rating');
+        //     let ratingB = $(b).data('rating');
+        //
+        //     if (ratingA === "not-found" && ratingB !== "not-found") {
+        //         return 1; // "not-found"인 영화는 마지막으로 배치
+        //     } else if (ratingA !== "not-found" && ratingB === "not-found") {
+        //         return -1; // "not-found"인 영화는 마지막으로 배치
+        //     } else if (ratingA === "not-found" && ratingB === "not-found") {
+        //         return 0; // 둘 다 "not-found"일 경우 순서 유지
+        //     } else {
+        //         return parseFloat(ratingB) - parseFloat(ratingA); // 평점 내림차순
+        //     }
+        // }
+        return 0; // 기본값: 변경 없이 그대로
+    });
+
+    return movieCards;
+}
+
+function sortSection(){
+    // 영화 카드들 가져오기
+    const movieCards = $('.movieCard');
+    const sortBy = $("#sortSelect").val();// 정렬 기준 : 'relevance', 'date'
+
+    // 영화 카드 정렬
+    const sortedMovies = sortMovieCards(movieCards, sortBy);
+
+    // 정렬된 결과로 업데이트
+    $('#wishlistContent').empty(); // 기존 내용 제거
+    sortedMovies.each(function() {
+        $('#wishlistContent').append(this); // 컨테이너의 자식으로 삽입
+    });
+}
+
+
 
 

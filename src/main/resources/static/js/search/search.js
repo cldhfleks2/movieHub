@@ -79,7 +79,7 @@ function updateProfileSectionVisibility() {
     }
 }
 
-//좋아요 기능 : 할지 말지 고민
+//좋아요 기능 : 아직 서버로 요청을 보내진 않음.. 뷰만 바뀜
 function likeSection(){
     // 버튼 클릭시 문구를 출력하는 코드
     $(document).on('click', '.btnLike', function(e) {
@@ -131,7 +131,7 @@ function likeSection(){
     }
 }
 
-//필터 기능 : 정렬기능아닌 다른것.. 할지말지 고민
+//정렬 기능 : 관련도순, 개봉일순, 평점순
 function filterSection(){
     // 필터 태그 토글 : 안씀
     // $('.filterTag').on('click', function() {
@@ -179,8 +179,7 @@ function filterSection(){
 
         return movieCards;
     }
-
-
+    
     //정렬기준을 선택하면
     $('.sortSelect').on('change', function() {
         // 영화 카드들 가져오기
