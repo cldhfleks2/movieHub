@@ -3,7 +3,7 @@ $(document).ready(function (){
 
     clickActorSearching();
 
-    likeBtn();
+    actionBtns()
 
     bookmarkBtn();
 })
@@ -42,13 +42,14 @@ function clickActorSearching(){
 }
 
 //좋아요 버튼 동작
-function likeBtn(){
+function actionBtns(){
+    //좋아요 버튼
     $(document).on("click", ".actionBtn.likeBtn", function (){
         const movieCd = $(this).data("moviecd");
 
         $.ajax({
             url: "/api/movieDetail/like",
-            method: "get",
+            method: "post",
             data: {movieCd: movieCd},
             success: function (data){
                 //좋아요 부분 새로고침
@@ -56,23 +57,36 @@ function likeBtn(){
                 var dataHtml = $("<div>").append(data);
                 $("#likeBtn").replaceWith(dataHtml.find("#likeBtn"));
 
+                console.log("/api/movieDetail/like ajax success")
             },
             error: function () {
-
+                console.log("/api/movieDetail/like ajax failed")
             }
         })
-
-
     });
 
-
-}
-
-
-
-//찜하기 버튼 동작
-function bookmarkBtn() {
+    //찜하기 버튼
     $(document).on("click", ".actionBtn.bookmarkBtn", function (){
+        const movieCd = $(this).data("moviecd");
 
+        $.ajax({
+            url: "/api/movieDetail/bookmark",
+            method: "post",
+            data: {movieCd: movieCd},
+            success: function (data){
+                //좋아요 부분 새로고침
+                var data = $.parseHTML(data);
+                var dataHtml = $("<div>").append(data);
+                $("#likeBtn").replaceWith(dataHtml.find("#likeBtn"));
+
+                console.log("/api/movieDetail/like ajax success")
+            },
+            error: function () {
+                console.log("/api/movieDetail/like ajax failed")
+            }
+        })
     });
+
+
 }
+
