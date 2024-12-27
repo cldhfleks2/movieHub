@@ -86,14 +86,14 @@ public class MemberService {
         return "member/mypage";
     }
 
-    //유저 프로필 GET
+    //TODO : 유저 프로필 GET
     String getUserprofile(Long memberId, Model model, Authentication auth) {
 
         return "member/userprofile";
     }
 
     //내가 찜한 리스트 GET
-    String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
+    public String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
         if(pageIdx == null) pageIdx = 1;
 
         String username = auth.getName();

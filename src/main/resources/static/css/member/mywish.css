@@ -1,3 +1,7 @@
+body{
+    caret-color: transparent;
+}
+
 .wishlistContainer {
     max-width: 1400px;
     margin: 2rem auto;
@@ -111,18 +115,21 @@
     justify-content: space-between;
 }
 
-/* Common Styles */
+
+
+
+
 .movieOverlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.5);
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
+    padding-bottom: 13rem; /*사진 중앙 쯤에 위치*/
     gap: 1rem;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -131,6 +138,63 @@
 .movieCard:hover .movieOverlay {
     opacity: 1;
 }
+
+.btnWatchNow, .btnRemoveWish {
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #b4b3b3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnWatchNow:hover, .btnRemoveWish:hover {
+    transform: scale(1.1);
+}
+
+.btnRemoveWish.active {
+    color: red;
+}
+
+/* 알림 스타일 */
+.notification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+/* 버튼 내부 아이콘 스타일 */
+.btnWatchNow::before {
+    content: '🎬';
+}
+
+.btnRemoveWish::before {
+    content: '💔';
+}
+
+
+
+
+
+
 
 /*.movieTitleWrapper {*/
 /*    display: flex;*/
@@ -143,6 +207,7 @@
     font-size: 1.25rem;
     font-weight: bold;
     margin: 0;
+    margin-bottom: 10px;
 }
 
 .ageRating {
@@ -155,6 +220,7 @@
 
 .movieMeta {
     margin-bottom: 1rem;
+    margin-top: 10px;
 }
 
 .metaGroup {
@@ -287,4 +353,51 @@
         flex-direction: column;
         gap: 1rem;
     }
+}
+
+
+
+/* 찜한내역삭제 문구 */
+
+.btnRemoveWish {
+    position: relative;  /* 툴팁 포지셔닝을 위해 필요 */
+}
+
+.btnRemoveWish::after {
+    content: "찜한 내역에서 삭제";
+    position: absolute;
+    bottom: -40px;  /* 버튼 아래에 위치 */
+    left: 50%;
+    transform: translateX(-50%);  /* 중앙 정렬 */
+
+    /* 말풍선 스타일링 */
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+
+    /* 기본적으로 숨김 */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+
+    /* 말풍선 꼭지점 */
+    &::before {
+        content: "";
+        position: absolute;
+        top: -4px;
+        left: 50%;
+        transform: translateX(-50%) rotate(45deg);
+        width: 8px;
+        height: 8px;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+}
+
+.btnRemoveWish:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: -35px;  /* 호버시 살짝 위로 올라오는 효과 */
 }

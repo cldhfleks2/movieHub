@@ -11,7 +11,7 @@
 <body>
 <div th:replace="~{ header/header::header }"></div>
 
-<main class="wishlistContainer">
+<main class="wishlistContainer" id="wishlistContainer">
     <div class="wishlistHeader">
         <h1>내가 찜한 영화</h1>
         <div class="wishlistControls">
@@ -31,15 +31,14 @@
         <!-- Movie Card Template -->
         <div class="movieCard" th:each="movie : ${movieDTOPage}">
             <div class="moviePoster">
-                <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터">
+                <img th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터" style="object-fit: contain;">
                 <div class="movieOverlay">
-                    <button class="btnWatchNow">예매하기</button>
-                    <button class="btnRemoveWish">찜 해제</button>
+<!--                    <button class="btnWatchNow" th:data-movienm="${movie.movieNm}" th:data-opendt="${movie.openDt}"></button>-->
+                    <button class="btnRemoveWish" th:data-moviecd="${movie.movieCd}" th:data-current-pageIdx="${movieDTOPage.getNumber()}"></button>
                 </div>
             </div>
             <div class="movieInfo" style="padding: 10px;">
                 <h3 class="movieTitle" th:text="${movie.movieNm}">영화 제목</h3>
-                <div class="movieTitleWrapper"></div>
                 <span class="ageRating" th:each="watchGrade : ${movie.auditList}"
                       th:text="${watchGrade.watchGradeNm}">12세이상관람가</span>
                 <div class="movieMeta">
