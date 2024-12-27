@@ -20,12 +20,6 @@ public class BasicController {
         return basicService.test(model);
     }
 
-    //test page GET
-//    @GetMapping("/test2")
-//    String test2(Model model) throws Exception {
-//        return basicService.test2(model);
-//    }
-
     //메인 페이지 GET
     @GetMapping({"/", "/main"})
     String getMain(Model model) throws Exception {

@@ -44,11 +44,6 @@ public class BasicService {
         return "test";
     }
 
-    String test2(Model model) throws Exception {
-
-        return "test";
-    }
-
     //날짜 가져오는 함수
     private String getCurrentDay() {
         LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴

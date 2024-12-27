@@ -9,25 +9,6 @@
             <a href="/mywish" class="headerDropdownItem">내가 찜한 리스트</a>
             <a href="#" class="headerDropdownItem">영화 리뷰 게시판</a>
             <a href="#" class="headerDropdownItem">영화 토론 게시판</a>
-            <!-- 영화 드롭다운 -->
-            <!--            <div class="headerNavItem headerDropdown">-->
-            <!--                <a href="#" class="headerDropdownToggle">영화</a>-->
-            <!--                <div class="headerDropdownMenu">-->
-            <!--                    <a href="#" class="headerDropdownItem">박스오피스</a>-->
-            <!--                    <a href="#" class="headerDropdownItem">영화검색</a>-->
-            <!--                    <a href="#" class="headerDropdownItem">장르별영화</a>-->
-            <!--                </div>-->
-            <!--            </div>-->
-
-            <!-- 커뮤니티 드롭다운 -->
-<!--            <div class="headerNavItem headerDropdown">-->
-<!--                <a href="#" class="headerDropdownToggle">커뮤니티</a>-->
-<!--                <div class="headerDropdownMenu">-->
-<!--                    <a href="#" class="headerDropdownItem">영화리뷰</a>-->
-<!--                    <a href="#" class="headerDropdownItem">영화추천</a>-->
-<!--                    <a href="#" class="headerDropdownItem">영화토론</a>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
 
         <!-- 우측 유저 메뉴 -->
@@ -66,13 +47,13 @@
                 <!-- 프로필 드롭다운 -->
                 <div class="headerProfileDropdown">
                     <a href="/mypage" class="headerProfileLink">
-                        <img class="headerProfileImg" sec:authentication="principal.profileImage" alt="프로필 이미지" />
+                        <img class="headerProfileImg" th:src="@{${principal.profileImage}}" alt="프로필 이미지" />
                     </a>
                     <div class="headerProfileMenu">
                         <div class="headerProfileInfo">
-                            <img src="/image/blank.png" alt="프로필" class="headerProfileImgLarge">
-                            <!--  <span class="headerProfileEmail" sec:authentication="name에 알맞는 변수로 가져와">user@email.com</span>-->
-                            <span class="headerProfileEmail" sec:authentication="principal.username">회원 닉네임</span>
+                            <img class="headerProfileImgLarge" th:src="@{${principal.profileImage}}" alt="프로필 이미지" />
+<!--                            아래랑 똑같음<span class="headerProfileEmail" sec:authentication="principal.username">회원 닉네임</span>-->
+                            <span class="headerProfileEmail" th:text="${principal.username}">회원 닉네임</span>
                         </div>
                         <div class="headerProfileActions">
                             <form action="/logout" method="post" class="headerLogoutForm">
