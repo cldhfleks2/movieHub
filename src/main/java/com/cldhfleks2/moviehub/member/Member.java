@@ -24,6 +24,7 @@ public class Member {
     private String username;
     private String nickname;
     private String password;
+    private String profileImage;
 
     @Column(updatable = false)
     @CreationTimestamp
