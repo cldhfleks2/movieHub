@@ -11,25 +11,30 @@ function initializeTabs() {
     $('.tabButton').on('click', function() {
         const tabId = $(this).data('tab');
 
+        //현재 선택한 탭 하이라이트
+        //모든 탭에서 active클래스를 제거하고 현재 선택한 탭만 active추가
         $('.tabButton').removeClass('active');
         $(this).addClass('active');
 
+        //모든 섹션의 active클래스를 제거하고 현재 선택한 섹션만 active추가
         $('.contentSection').removeClass('active');
         $(`#${tabId}Section`).addClass('active');
+
+        //모든 섹션을 숨기고 현재 선택한 섹션만 보여준다
+        $(".contentSection").hide();
+        $(`#${tabId}Section`).show();
     });
 }
-
-let originalData = {
-
-}; // 원본 데이터 저장용 객체
+// 원본 데이터 저장용
+let originalData = {};
 //개인 정보 : 서버에서 가져온 값을 기록해둠
 function getUserData(){
-    // 원래 데이터로 복원  이거 참고ㅓ해서 다시 작성해라
-    $('#username').val(originalData.username);
-    $('#nickname').val(originalData.nickname);
-    $('#profilePreview').attr('src', originalData.profileImage);
+    originalData = {
+        username: $('#username').val(),
+        nickname: $('#nickname').val(),
+        profileImage: $('#profilePreview').attr('src') // 예시 이미지
+    };
 }
-
 //개인 정보 : 수정하기 버튼 눌렀을때 수정 기능을 제공
 function initializeEditMode() {
     let isEditMode = false;
