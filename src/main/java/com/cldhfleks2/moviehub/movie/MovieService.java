@@ -28,7 +28,9 @@ import java.net.URLEncoder;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -104,6 +106,12 @@ public class MovieService {
                 .build();
 
         return movieDTO;
+    }
+
+    //version 2
+    public MovieDTO getMovieDTO(Movie movie) throws Exception {
+        Long movieId = movie.getId();
+        return getMovieDTO(movieId);
     }
 
     //ReturnEntitysDTO(영화관련묶음엔티티) => MovieDTO
