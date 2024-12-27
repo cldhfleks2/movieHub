@@ -1,14 +1,11 @@
 package com.cldhfleks2.moviehub;
 
 import com.cldhfleks2.moviehub.api.KOBISRequestService;
-import com.cldhfleks2.moviehub.api.TMDBRequestService;
-import com.cldhfleks2.moviehub.config.SeleniumWebDriver;
+import com.cldhfleks2.moviehub.bookmark.BookMark;
+import com.cldhfleks2.moviehub.bookmark.BookMarkRepository;
 import com.cldhfleks2.moviehub.like.MovieLike;
 import com.cldhfleks2.moviehub.like.MovieLikeRepository;
 import com.cldhfleks2.moviehub.movie.*;
-import com.cldhfleks2.moviehub.movie.audit.MovieAuditRepository;
-import com.cldhfleks2.moviehub.movie.dailystat.MovieDailyStatRepository;
-import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +32,9 @@ import java.util.stream.Collectors;
 public class BasicService {
     private final MovieService movieService;
     private final MovieRepository movieRepository;
-    private final SeleniumWebDriver seleniumWebDriver;
-    private final MovieGenreRepository movieGenreRepository;
-    private final MovieAuditRepository movieAuditRepository;
-    private final MovieDailyStatRepository movieDailyStatRepository;
     private final KOBISRequestService kobisRequestService;
-    private final TMDBRequestService tmdbRequestService;
     private final MovieLikeRepository movieLikeRepository;
+    private final BookMarkRepository bookMarkRepository;
 
     @Value("${kobis.key}")
     private String kobiskey;
@@ -190,10 +183,10 @@ public class BasicService {
             model.addAttribute("movieDetail", movieDetail);
         }
 
-        //영화의 좋아요 상태 : 내가 좋아요 눌렀는지
+        //좋아요 상태 보내기
         String username = auth.getName();
         Boolean likeStatus;
-        Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsername(username);
+        Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsernameAndMovieCd(username, movieCd);
         if(movieLikeObj.isPresent()){
             MovieLike movieLike = movieLikeObj.get();
             int status = movieLike.getStatus();
@@ -203,7 +196,19 @@ public class BasicService {
         }
         model.addAttribute("likeStatus", likeStatus);
 
-        //좋아요 총 갯수 구하기
+        //찜한 상태 보내기
+        Boolean bookmarkStatus;
+        Optional<BookMark> bookmarkObj = bookMarkRepository.findByUsernameAndMovieCd(username, movieCd);
+        if(bookmarkObj.isPresent()){
+            BookMark bookmark = bookmarkObj.get();
+            int status = bookmark.getStatus();
+            bookmarkStatus = (status == 1); //상태 저장
+        }else{
+            bookmarkStatus = false;
+        }
+        model.addAttribute("bookmarkStatus", bookmarkStatus);
+
+        //영화의 좋아요 총 갯수
         List<MovieLike> movieLikeList = movieLikeRepository.findAllByMovieCdAndStatus(movieCd);
         int totalLikeCnt = (movieLikeList != null) ? movieLikeList.size() : 0;
         model.addAttribute("totalLikeCnt", totalLikeCnt);

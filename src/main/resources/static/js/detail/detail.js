@@ -77,12 +77,12 @@ function actionBtns(){
                 //좋아요 부분 새로고침
                 var data = $.parseHTML(data);
                 var dataHtml = $("<div>").append(data);
-                $("#likeBtn").replaceWith(dataHtml.find("#likeBtn"));
+                $("#bookmarkBtn").replaceWith(dataHtml.find("#bookmarkBtn"));
 
-                console.log("/api/movieDetail/like ajax success")
+                console.log("/api/movieDetail/bookmark ajax success")
             },
             error: function () {
-                console.log("/api/movieDetail/like ajax failed")
+                console.log("/api/movieDetail/bookmark ajax failed")
             }
         })
     });

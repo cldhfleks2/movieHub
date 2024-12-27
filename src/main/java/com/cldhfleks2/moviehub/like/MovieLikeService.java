@@ -37,7 +37,7 @@ public class MovieLikeService {
         Member member = memberObj.get();
         Movie movie = movieObj.get();
         Boolean likeStatus;
-        Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsername(username);
+        Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsernameAndMovieCd(username, movieCd);
         if(!movieLikeObj.isPresent()){ //처음 눌렀을때 : DB에 추가
             MovieLike movieLike = new MovieLike();
             movieLike.setMember(member);
