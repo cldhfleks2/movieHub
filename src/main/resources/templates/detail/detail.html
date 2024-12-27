@@ -27,7 +27,7 @@
             <div class="movieAdditionalInfo">
                 <strong>감독:</strong>
                 <div class="movieDirectorList" style="display: flex; margin-bottom: 15px;">
-                    <p th:each="director : ${movieDetail.directorList}" th:text="${director.peopleNm}">홍길동</p>
+                    <p class="directorBox" th:each="director : ${movieDetail.directorList}" th:text="${director.peopleNm}" th:data-peoplenm="${director.peopleNm}">홍길동</p>
                 </div>
                 <strong>출연:</strong>
                 <div class="movieActorList" style="display: flex; margin-bottom: 15px;">

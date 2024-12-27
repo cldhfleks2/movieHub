@@ -4,8 +4,6 @@ $(document).ready(function (){
     clickActorSearching();
 
     actionBtns()
-
-    bookmarkBtn();
 })
 
 function A(){
@@ -29,8 +27,19 @@ function A(){
     });
 }
 
-//배우 이름 클릭시 배우 검색 하러 페이지 이동
+//배우나 감독 이름 클릭시 검색 하러 페이지 이동
 function clickActorSearching(){
+    //감독명 검색
+    $(document).on("click", ".directorBox", function (){
+        const peopleNm = $(this).data("peoplenm").trim();
+
+        if (peopleNm) {
+            // 검색 페이지로 이동하면서 peopleNm을 쿼리 파라미터로 전달
+            window.location.href = `/search?peopleNm=${encodeURIComponent(peopleNm)}`;
+        }
+    });
+    
+    //배우명 검색
     $(document).on("click", ".actorBox", function (){
         const peopleNm = $(this).data("peoplenm").trim();
 
@@ -86,7 +95,10 @@ function actionBtns(){
             }
         })
     });
-
-
 }
+
+
+
+
+
 
