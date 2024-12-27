@@ -63,6 +63,8 @@ public class MemberService {
         //비밀번호 암호화
         String passwordEncoded = passwordEncoder.encode(member.getPassword());
         member.setPassword(passwordEncoded);
+        member.setProfileImage("/image/blank.png"); //기본적 프로필 지정
+
         //DB저장
         memberRepository.save(member);
 

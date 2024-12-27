@@ -66,13 +66,13 @@
                 <!-- 프로필 드롭다운 -->
                 <div class="headerProfileDropdown">
                     <a href="/mypage" class="headerProfileLink">
-                        <img src="/image/profile.png" alt="프로필" class="headerProfileImg">
+                        <img class="headerProfileImg" sec:authentication="principal.profileImage" alt="프로필 이미지" />
                     </a>
                     <div class="headerProfileMenu">
                         <div class="headerProfileInfo">
                             <img src="/image/blank.png" alt="프로필" class="headerProfileImgLarge">
                             <!--  <span class="headerProfileEmail" sec:authentication="name에 알맞는 변수로 가져와">user@email.com</span>-->
-                            <span class="headerProfileEmail">user@email.com</span>
+                            <span class="headerProfileEmail" sec:authentication="principal.username">회원 닉네임</span>
                         </div>
                         <div class="headerProfileActions">
                             <form action="/logout" method="post" class="headerLogoutForm">

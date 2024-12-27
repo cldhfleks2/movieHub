@@ -12,6 +12,7 @@ import java.util.Collection;
 public class MemberDetail extends User {
     private String username;
     private String role;
+    private String profileImage;  // 프로필 이미지
 
     public MemberDetail(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);

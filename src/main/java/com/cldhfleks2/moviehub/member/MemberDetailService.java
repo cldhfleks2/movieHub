@@ -38,6 +38,7 @@ public class MemberDetailService implements UserDetailsService {
         MemberDetail realMember = new MemberDetail(loginMember.getUsername(), loginMember.getPassword(), authorities);
         realMember.setUsername(loginMember.getUsername());
         realMember.setRole(role);
+        realMember.setProfileImage(loginMember.getProfileImage());  // 프로필 이미지 설정
         return realMember;
     }
 
