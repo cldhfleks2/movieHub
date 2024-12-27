@@ -50,5 +50,11 @@ public class MemberController {
         return memberService.getUserprofile(memberId, model, auth);
     }
 
+    //내가 찜한 리스트 GET
+    @GetMapping("/mywish")
+    String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
+        return memberService.getMyWish(model, auth, pageIdx);
+    }
+
 }
 

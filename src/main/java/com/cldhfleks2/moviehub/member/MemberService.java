@@ -1,8 +1,16 @@
 package com.cldhfleks2.moviehub.member;
 
 import com.cldhfleks2.moviehub.error.ErrorService;
+import com.cldhfleks2.moviehub.like.MovieLike;
+import com.cldhfleks2.moviehub.like.MovieLikeRepository;
+import com.cldhfleks2.moviehub.movie.Movie;
+import com.cldhfleks2.moviehub.movie.MovieDTO;
+import com.cldhfleks2.moviehub.movie.MovieService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -10,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +27,8 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MovieLikeRepository movieLikeRepository;
+    private final MovieService movieService;
 
     //회원가입시 아이디 중복검사
     ResponseEntity<String> checkUsername(String username) {
@@ -71,9 +83,6 @@ public class MemberService {
                 .profileImage(member.getProfileImage()).build();
         model.addAttribute("member", memberDTO);
 
-        System.out.println(memberDTO.getUsername());
-        System.out.println(memberDTO.getNickname());
-
         return "member/mypage";
     }
 
@@ -81,6 +90,39 @@ public class MemberService {
     String getUserprofile(Long memberId, Model model, Authentication auth) {
 
         return "member/userprofile";
+    }
+
+    //내가 찜한 리스트 GET
+    String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
+        if(pageIdx == null) pageIdx = 1;
+
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/mywish", "유저 정보를 찾을 수 없습니다.", String.class);
+
+        //좋아요한 전체 영화 객체를 가져오기
+        Page<MovieLike> movieLikePage = movieLikeRepository.findAllByUsernameAndStatus(username, PageRequest.of(pageIdx - 1, 8));
+        List<Movie> movieList = new ArrayList<>();
+        for (MovieLike movieLike : movieLikePage)  movieList.add(movieLike.getMovie());
+
+        //movieDTO만들기
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+        for(Movie movie : movieList) {
+            MovieDTO movieDTO = movieService.getMovieDTO(movie);
+            movieDTOList.add(movieDTO);
+        }
+
+        //페이지로 전달
+        Page<MovieDTO> movieDTOPage = new PageImpl<>(
+                movieDTOList,
+                movieLikePage.getPageable(),
+                movieLikePage.getTotalElements()
+        );
+
+        model.addAttribute("movieDTOPage", movieDTOPage);
+
+        return "member/mywish";
     }
 
 }
