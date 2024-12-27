@@ -67,20 +67,22 @@
 
                 <!-- 프로필 드롭다운 -->
                 <div class="headerProfileDropdown">
-                    <img src="/image/profile.png" style="" alt="프로필" class="headerProfileImg">
-                    <div class="headerProfileMenu">
-                        <div class="headerProfileInfo">
-                            <img src="/image/blank.png" alt="프로필" class="headerProfileImgLarge">
-                            <!--  <span class="headerProfileEmail" sec:authentication="name에 알맞는 변수로 가져와">user@email.com</span>-->
-                            <span class="headerProfileEmail">user@email.com</span>
+                    <a href="/mypage">
+                        <img src="/image/profile.png" style="" alt="프로필" class="headerProfileImg">
+                        <div class="headerProfileMenu">
+                            <div class="headerProfileInfo">
+                                <img src="/image/blank.png" alt="프로필" class="headerProfileImgLarge">
+                                <!--  <span class="headerProfileEmail" sec:authentication="name에 알맞는 변수로 가져와">user@email.com</span>-->
+                                <span class="headerProfileEmail">user@email.com</span>
+                            </div>
+                            <div class="headerProfileActions">
+                                <a href="#" class="headerBtnProfile">프로필</a>
+                                <form th:action="@{/logout}" method="post" class="headerLogoutForm">
+                                    <button type="submit" class="headerBtnLogout">로그아웃</button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="headerProfileActions">
-                            <a href="#" class="headerBtnProfile">프로필</a>
-                            <form th:action="@{/logout}" method="post" class="headerLogoutForm">
-                                <button type="submit" class="headerBtnLogout">로그아웃</button>
-                            </form>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
