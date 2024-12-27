@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/member/userprofile.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:replace="~{ header/header::header }"></div>
+
+<main class="profileContainer">
+    <div class="profileHeader">
+        <img class="profileImage" src="/image/profile.png" alt="프로필 이미지">
+        <div class="profileInfo">
+            <h1>사용자 닉네임</h1>
+            <p>@사용자아이디</p>
+            <div class="userStats">
+                <div class="statItem">
+                    <div class="statNumber">0</div>
+                    <div>게시글</div>
+                </div>
+                <div class="statItem">
+                    <div class="statNumber">0</div>
+                    <div>리뷰</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contentTabs">
+        <button class="tabButton active" data-tab="posts">게시글</button>
+        <button class="tabButton" data-tab="reviews">리뷰</button>
+    </div>
+
+    <section id="postsSection" class="contentSection active">
+        <div class="gridLayout">
+            <div class="postItem">
+                <img src="/image/default-post.png" alt="게시글 이미지" class="postImage">
+                <div class="postContent">
+                    <h3 class="postTitle">게시글 제목</h3>
+                    <p class="postDate">2024.12.27</p>
+                    <p class="postDescription">게시글 내용 미리보기...</p>
+                    <div class="postStats">
+                        <span class="likeCount">❤️ 0</span>
+                        <span class="commentCount">💬 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviewsSection" class="contentSection">
+        <div class="gridLayout">
+            <div class="reviewItem">
+                <div class="reviewHeader">
+                    <img src="/image/default-product.png" alt="상품 이미지" class="productImage">
+                    <div class="productInfo">
+                        <h3 class="productName">상품명</h3>
+                        <div class="rating">★★★★★</div>
+                    </div>
+                </div>
+                <p class="reviewContent">리뷰 내용...</p>
+                <p class="reviewDate">2024.12.27</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{ footer/footer::footer }"></div>
+<script src="/js/member/userprofile.js"></script>
+</body>
+</html>

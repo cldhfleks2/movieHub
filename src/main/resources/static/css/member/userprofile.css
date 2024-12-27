@@ -1,0 +1,152 @@
+.profileContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.profileImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profileInfo {
+    flex: 1;
+}
+
+.profileInfo h1 {
+    margin: 0 0 10px 0;
+}
+
+.userStats {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.statItem {
+    text-align: center;
+}
+
+.statNumber {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.contentTabs {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.tabButton {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.tabButton.active {
+    border-bottom: 2px solid #007bff;
+    color: #007bff;
+}
+
+.contentSection {
+    display: none;
+}
+
+.contentSection.active {
+    display: block;
+}
+
+.gridLayout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.postItem, .reviewItem {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+
+/* 게시글 리뷰 목록*/
+.postImage {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.postTitle {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+}
+
+.postDate {
+    color: #666;
+    font-size: 0.9em;
+    margin: 0 0 5px 0;
+}
+
+.postDescription {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.postStats {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9em;
+}
+
+.reviewHeader {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.productImage {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.productInfo {
+    flex: 1;
+}
+
+.productName {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+}
+
+.rating {
+    color: #ffd700;
+}
+
+.reviewContent {
+    margin: 0 0 5px 0;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.reviewDate {
+    color: #666;
+    font-size: 0.8em;
+    margin: 0;
+}
