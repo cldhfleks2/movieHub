@@ -1,5 +1,7 @@
 package com.cldhfleks2.moviehub.like;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +16,14 @@ public interface MovieLikeRepository extends JpaRepository<MovieLike, Long> {
     // movieCd로 모든 MovieLike 찾기
     @Query("SELECT ml FROM MovieLike ml WHERE ml.movie.movieCd = :movieCd AND ml.status = 1")
     List<MovieLike> findAllByMovieCdAndStatus(String movieCd);
+
+    // username으로 모든 MovieLike 찾기 이때 MovieLike, Movie모두 status=1인것만 가져온다.
+    @Query("SELECT ml FROM MovieLike ml " +
+            "JOIN ml.member m " +
+            "JOIN ml.movie mv " +
+            "WHERE m.username = :username " +
+            "AND ml.status = 1 " +
+            "AND mv.status = 1")
+    Page<MovieLike> findAllByUsernameAndStatus(String username, Pageable pageable);
+
 }
