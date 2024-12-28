@@ -4,6 +4,8 @@ $(document).ready(function (){
     clickActorSearching();
 
     actionBtns()
+
+    gotoReviewPage();
 })
 
 function A(){
@@ -97,7 +99,12 @@ function actionBtns(){
     });
 }
 
-
+function gotoReviewPage(){
+    $(document).on("click", ".linkBtn", function (){
+        const movieCd = $(this).data("moviecd")
+        window.location.href="/movieReview?isCometoMovieDetailPage=1&movieCd=" + movieCd; //파라미터 담아서 보냄
+    })
+}
 
 
 

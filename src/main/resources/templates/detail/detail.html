@@ -63,9 +63,10 @@
                 </button>
             </div>
             <div class="movieLinks">
-                <a href="/movie/review" class="linkBtn">리뷰 작성</a>
+                <div class="linkBtn" th:data-moviecd="${movieDetail.movieCd}">리뷰 작성</div>
+<!--                <a href="/movie/review" class="linkBtn">리뷰 작성</a>-->
 <!--                <a href="/movie/recommend" class="linkBtn">추천 게시판</a>-->
-                <a href="/movie/discussion" class="linkBtn">토론 게시판</a>
+                <a href="#" class="linkBtn">토론 게시판</a>
             </div>
         </div>
     </div>
