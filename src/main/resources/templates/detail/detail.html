@@ -61,6 +61,9 @@
                         <span>찜한 영화</span>
                     </div>
                 </button>
+                <button class="actionBtn reportBtn" th:data-moviecd="${movieDetail.movieCd}">
+                    🚨 영화 신고하기
+                </button>
             </div>
             <div class="movieLinks">
                 <div class="linkBtn" th:data-moviecd="${movieDetail.movieCd}">리뷰 작성</div>
@@ -158,6 +161,57 @@
 <!--        &lt;!&ndash; 카카오맵이 들어갈 자리 &ndash;&gt;-->
 <!--    </div>-->
 <!--</aside>-->
+
+<!-- 신고 오버레이 : flex로 보여줘야함 -->
+<div class="reportModalOverlay" id="movieReviewReportModal" style="display: none;">
+    <div class="reportModalContent">
+        <h2 class="reportModalTitle">신고하기</h2>
+        <form class="reportModalForm" id="movieReviewReportForm" action="/api" method="POST">
+            <input type="hidden" id="movieCd" name="movieCd">
+
+            <div class="reportModalSubTitle">신고 사유를 선택해주세요.</div>
+            <div class="reportCheckboxGroup">
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="POSTER" id="movieReviewSpoiler" value="true">
+                    <input type="hidden" name="POSTER" value="false">
+                    <label for="movieReviewSpoiler">영화 포스터가 다릅니다.</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="MOVIENAME" id="movieReviewWrongInfo" value="true">
+                    <input type="hidden" name="MOVIENAME" value="false">
+                    <label for="movieReviewWrongInfo">영화 제목이 다릅니다.</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="MOVIEPEOPLE" id="movieReviewUnrelatedContent" value="true">
+                    <input type="hidden" name="MOVIEPEOPLE" value="false">
+                    <label for="movieReviewUnrelatedContent">인물 정보가 잘못 되었습니다.</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="HARMFUL" id="movieReviewHarmfulContent" value="true">
+                    <input type="hidden" name="HARMFUL" value="false">
+                    <label for="movieReviewHarmfulContent">유해하거나 불건전한 내용이 포함되있습니다.</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="HATE" id="movieReviewHateSpeech" value="true">
+                    <input type="hidden" name="HATE" value="false">
+                    <label for="movieReviewHateSpeech">불건전한 내용입니다.</label>
+                </div>
+            </div>
+
+            <div class="reportTextareaWrapper">
+                <label for="movieReviewReportDetail">추가 설명 (선택사항)</label>
+                <textarea name="reportDetail"
+                          id="movieReviewReportDetail"
+                          placeholder="신고 사유에 대해 자세히 설명해주세요." maxlength="500"></textarea>
+            </div>
+
+            <div class="reportModalActions">
+                <button type="button" class="reportCancelBtn">취소</button>
+                <button type="submit" class="reportSubmitBtn" th:data-moviecd="${movieDetail.movieCd}">신고하기</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <div th:replace="~{ footer/footer::footer }"></div>
 <script>

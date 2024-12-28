@@ -6,8 +6,11 @@ $(document).ready(function (){
     actionBtns()
 
     gotoReviewPage();
+
+    reportBtn();
 })
 
+//쓸지안쓸지모르는 기능
 function A(){
     // 날짜 선택 기능
     $('.date-item').on('click', function () {
@@ -99,6 +102,7 @@ function actionBtns(){
     });
 }
 
+//리뷰 작성 버튼 동작 : 리뷰 페이지로 이동
 function gotoReviewPage(){
     $(document).on("click", ".linkBtn", function (){
         const movieCd = $(this).data("moviecd")
@@ -106,6 +110,42 @@ function gotoReviewPage(){
     })
 }
 
+function reportBtn(){
+    //신고 모달창 보이기
+    $(document).on('click', '.reportBtn', function() {
+        const movieCd = $(this).data('moviecd');
+        $('#movieCd').val(movieCd); //폼 안에 movieCd값을 담음
+        $('#movieReviewReportModal').fadeIn().css('display', 'flex');
+    });
 
+    //신고 모달창 숨기기
+    $(document).on('click', '.reportCancelBtn', function() {
+        $('#movieReviewReportModal').fadeOut();
+    });
+
+    //신고 제출 버튼 클릭시
+    $('.reportSubmitBtn').on('click', function(e) {
+        e.preventDefault(); // 기본 폼 제출 방지
+
+        // 폼 데이터를 직렬화해서 쿼리스트링으로 만듬
+        var formData = $('#movieReviewReportForm').serialize();
+
+        // 서버로 폼 제출
+        $.ajax({
+            url: '/api/movie/report', // 서버 URL
+            type: 'POST',
+            data: formData,  // 폼 데이터를 전송
+            success: function() {
+                alert('신고가 완료되었습니다.');
+                $('#movieReviewReportModal').fadeOut();
+            },
+            error: function() {
+                // 서버에서 에러가 발생했을 때 처리
+                alert('신고를 처리하는 동안 오류가 발생했습니다. 다시 시도해주세요.');
+                $('#movieReviewReportModal').fadeOut();
+            }
+        });
+    });
+}
 
 
