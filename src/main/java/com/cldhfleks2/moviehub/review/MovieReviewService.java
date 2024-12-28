@@ -173,6 +173,21 @@ public class MovieReviewService {
 
     //리뷰 좋아요 요청
     ResponseEntity<String> addMovieReviewLike(Long reviewId, Authentication auth) {
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/movieReview/like", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Optional<MovieReview> movieReviewObj = movieReviewRepository.findById(reviewId);
+        if(!movieReviewObj.isPresent()) //리뷰 정보 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movieReview/like", "영화 리뷰를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Member member = memberObj.get();
+        MovieReview movieReview = movieReviewObj.get();
+        MovieReviewLike movieReviewLike = new MovieReviewLike();
+        movieReviewLike.setMember(member);
+        movieReviewLike.setMovieReview(movieReview);
+        movieReviewLikeRepository.save(movieReviewLike); //리뷰 좋아요 저장
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
