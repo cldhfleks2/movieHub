@@ -23,11 +23,11 @@ public class MovieReview {
 
     @ToString.Exclude
     @ManyToOne
-    private Movie movie; //영화 아이디
+    private Member member; //작성 유저
 
     @ToString.Exclude
     @ManyToOne
-    private Member member; //작성 유저
+    private Movie movie; //영화 아이디
 
     //아래는 기본 필드들
     @Id

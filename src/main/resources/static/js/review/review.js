@@ -229,28 +229,33 @@ function submitReview() {
 
 //페이지네이션 동작
 function pagination(){
-    $('#prevPage, #nextPage').click(function() {
-        const $activeButton = $('.pageNumber.active');
-        let $targetButton;
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const movieCd = $(this).data("moviecd");
+        const pageIdx = $(this).data("next-pageidx")
+        $.ajax({
+            url: "/movieReview",
+            method: "get",
+            data: {movieCd: movieCd, pageIdx: pageIdx},
+            success: function (data){
+                var data = $.parseHTML(data);
+                var dataHtml = $("<div>").append(data);
+                $("#reviewListSection").replaceWith(dataHtml.find("#reviewListSection"));
 
-        if ($(this).attr('id') === 'prevPage') {
-            $targetButton = $activeButton.prev('.pageNumber');
-        } else {
-            $targetButton = $activeButton.next('.pageNumber');
-        }
+                console.log("/movieReview pagination ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("/movieReview pagination ajax failed")
+            }
+        });
+    })
+}
 
-        if ($targetButton.length) {
-            $targetButton.click();
-        }
-    });
-
-    //이거는 참고만 하자.
-    // $('.pageNum').removeClass('active');
-    // $('.pageNum').each(function() {
-    //     if (parseInt($(this).text()) === pageNum) {
-    //         $(this).addClass('active');
-    //     }
-    // });
+// 페이지네이션 처리 및 movieCd 값 전달
+function goToReviewPage(button) {
+    const movieCd = button.getAttribute('data-movie-cd');
+    const pageIdx = button.getAttribute('data-page-idx');
+    location.href = '/movieReview?pageIdx=' + pageIdx + '&movieCd=' + movieCd;
 }
 
 //리뷰 리스트 : 좋아요 버튼 클릭시

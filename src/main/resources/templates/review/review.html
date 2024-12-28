@@ -13,7 +13,7 @@
 
 <main class="mainContent">
     <div class="reviewContainer">
-        <div class="reviewListSection">
+        <div class="reviewListSection" id="reviewListSection">
             <div class="reviewFilters">
                 <div class="filterGroup">
                     <button class="filterBtn active" data-filter="latest" data-order="desc">최신순</button>
@@ -26,42 +26,68 @@
             </div>
 
 <!--           한페이지에 최대 5개 보여주자-->
-            <div class="reviewItem">
+            <div class="reviewItem" th:each="review : ${movieReviewDTOPage}">
                 <div class="reviewItemContent">
-                    <img class="moviePoster" src="/image/blank.png" alt="영화 포스터">
+                    <img class="moviePoster" th:src="@{${review.moviePosterURL}}" src="/image/blank.png" alt="영화 포스터">
                     <div class="reviewMainInfo">
                         <div class="reviewHeader">
-                            <h3 class="movieTitle">영화 제목</h3>
+                            <h3 class="movieTitle" th:text="${review.movieNm}">영화 제목</h3>
                             <div class="reviewActions">
                                 <button class="likeBtn">
-                                    <span class="icon">♡</span>
-                                    <span class="likeCount">0</span>
+<!--                                    현재 내가 좋아요를 눌렀는지 확인-->
+                                    <div th:unless="${review.isLiked}">
+                                        <span class="icon">♡</span>
+                                        <span>좋아요</span>
+                                    </div>
+                                    <div th:if="${review.isLiked}">
+                                        <span class="icon">♥</span>
+                                        <span>좋아요 취소</span>
+                                    </div>
+                                    <span class="likeCount" th:text="${review.likeCount}">0</span>
                                 </button>
-                                <button class="reportBtn">신고</button>
+                                <button class="reportBtn">🚨</button>
                             </div>
                         </div>
                         <div class="reviewMetaInfo">
                             <div class="userInfo">
-                                <img class="userProfile" alt="프로필">
-                                <span class="userName">사용자</span>
+                                <img class="userProfile" th:src="@{${review.authorProfileImage}}" src="/image/blank.png" alt="프로필">
+                                <span class="userNickName" th:text="${review.authorNickname}">사용자 닉네임</span>
                             </div>
                             <div class="reviewRating">
-                                <span class="ratingStars">★★★★★</span>
-                                <span class="ratingValue">5.0</span>
+                                <!-- 별을 채우기 위한 동적 텍스트 표시 -->
+                                <span class="ratingStars" th:text="${#strings.repeat('★', review.ratingValue)}">★★★★★</span>
+                                <span class="ratingStars" th:text="${#strings.repeat('ㅤ', 5 - review.ratingValue)}">빈문자 5개</span>
                             </div>
-                            <span class="reviewDate">2024.12.27</span>
+                            <span class="reviewDate" th:text="${#temporals.format(review.reviewUpdateDate, 'yyyy.MM.dd')}">2024.12.27</span>
                         </div>
-                        <p class="reviewContent">리뷰 내용이 여기에 표시됩니다.</p>
+                        <p class="reviewContent" th:text="${review.content}">리뷰 내용이 여기에 표시됩니다.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="pagination">
-                <button class="pageBtn prev">이전</button>
+            <div class="pagination" id="pagination" th:if="${movieReviewDTOPage.totalPages > 0}">
+                <button class="pageBtn prev" id="prevPage"
+                        th:disabled="${movieReviewDTOPage.first}"
+                        th:data-moviecd="${movieCd}"
+                        th:data-next-pageidx="${movieReviewDTOPage.number}">
+                    이전
+                </button>
                 <div class="pageNumbers">
-                    <button class="pageNum active">1</button>
+                    <th:block th:each="pageNum : ${#numbers.sequence(0, movieReviewDTOPage.totalPages - 1)}">
+                        <button class="pageNum"
+                                th:classappend="${pageNum == movieReviewDTOPage.number} ? 'active'"
+                                th:data-moviecd="${movieCd}"
+                                th:data-next-pageidx="${pageNum + 1}"
+                                th:text="${pageNum + 1}">
+                        </button>
+                    </th:block>
                 </div>
-                <button class="pageBtn next">다음</button>
+                <button class="pageBtn next" id="nextPage"
+                         th:disabled="${movieReviewDTOPage.last}"
+                         th:data-moviecd="${movieCd}"
+                         th:data-next-pageidx="${movieReviewDTOPage.number + 2}">
+                다음
+            </button>
             </div>
         </div>
 

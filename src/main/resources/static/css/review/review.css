@@ -242,7 +242,6 @@ textarea.addReviewText:focus {
 .reviewRating {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
 }
 
 .ratingStars {
@@ -276,6 +275,7 @@ textarea.addReviewText:focus {
     align-items: center;
     gap: 0.3rem;
     transition: all 0.3s ease;
+    font-size: 19px;
 }
 
 .likeBtn:hover {
