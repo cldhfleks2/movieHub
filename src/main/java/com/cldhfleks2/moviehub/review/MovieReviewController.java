@@ -1,6 +1,5 @@
 package com.cldhfleks2.moviehub.review;
 
-import com.cldhfleks2.moviehub.report.MovieReviewReportDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,13 +31,5 @@ public class MovieReviewController {
     ResponseEntity<String> addMovieReviewLike(Long reviewId, Authentication auth) {
         return movieReviewService.addMovieReviewLike(reviewId, auth);
     }
-
-    //리뷰 신고 요청
-    @PostMapping("/api/movieReview/report")
-    ResponseEntity<String> addMovieReviewReport(MovieReviewReportDTO movieReviewReportDTO, Authentication auth) {
-        return movieReviewService.addMovieReviewReport(movieReviewReportDTO, auth);
-    }
-
-
 
 }

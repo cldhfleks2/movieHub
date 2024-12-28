@@ -44,4 +44,5 @@ public class BasicController {
         return basicService.validateMovieByMovieNm(movieNm, openDt, model);
     }
 
+
 }

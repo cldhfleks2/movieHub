@@ -32,11 +32,11 @@ public class MovieReviewReport {
 
     @ToString.Exclude
     @ManyToOne
-    private Member member; //작성 유저
+    private Member member; //신고한 유저
 
     @ToString.Exclude
     @ManyToOne
-    private MovieReview movieReview; //좋아요 누른 리뷰
+    private MovieReview movieReview; //신고할 리뷰
 
     //아래는 기본 필드들
     @Id
