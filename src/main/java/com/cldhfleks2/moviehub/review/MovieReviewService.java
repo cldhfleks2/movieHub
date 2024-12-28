@@ -5,6 +5,9 @@ import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
+import com.cldhfleks2.moviehub.report.MovieReviewReport;
+import com.cldhfleks2.moviehub.report.MovieReviewReportDTO;
+import com.cldhfleks2.moviehub.report.MovieReviewReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,7 +32,8 @@ public class MovieReviewService {
     private final MemberRepository memberRepository;
     private final MovieReviewRepository movieReviewRepository;
     private final MovieReviewLikeRepository movieReviewLikeRepository;
-
+    private final MovieReviewReportRepository movieReviewReportRepository;
+    
     //정렬 하는 함수
     List<MovieReviewDTO> sortReviews(List<MovieReviewDTO> reviews, String dateSort, String ratingSort) {
         // 날짜 정렬 기준 (recent, old)
@@ -192,5 +196,40 @@ public class MovieReviewService {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    //리뷰 신고 요청
+    ResponseEntity<String> addMovieReviewReport(MovieReviewReportDTO movieReviewReportDTO, Authentication auth) {
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/movieReview/report", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        if(movieReviewReportDTO == null) //신고 내용이 전달 안된경우
+            return ErrorService.send(HttpStatus.BAD_REQUEST.value(), "/api/movieReview/report", "신고 정보가 전달 되지 않았습니다.", ResponseEntity.class);
+
+        Long reviewId = movieReviewReportDTO.getMovieReviewId();
+        if(reviewId == null) //신고할 리뷰 id가 전달 안된경우
+            return ErrorService.send(HttpStatus.BAD_REQUEST.value(), "/api/movieReview/report", "신고 리뷰 id를 찾을 수 없습니다.", ResponseEntity.class);
+        
+        Optional<MovieReview> movieReviewObj = movieReviewRepository.findById(reviewId);
+        if(!movieReviewObj.isPresent()) //리뷰 정보 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movieReview/report", "영화 리뷰를 찾을 수 없습니다.", ResponseEntity.class);
+
+        MovieReview movieReview = movieReviewObj.get();
+        Member member = memberObj.get();
+        MovieReviewReport movieReviewReport = new MovieReviewReport();
+        movieReviewReport.setMember(member);
+        movieReviewReport.setMovieReview(movieReview);
+        movieReviewReport.setSPOILER(movieReviewReportDTO.getSPOILER());
+        movieReviewReport.setWRONG(movieReviewReportDTO.getWRONG());
+        movieReviewReport.setUNRELATED(movieReviewReportDTO.getUNRELATED());
+        movieReviewReport.setHARMFUL(movieReviewReportDTO.getHARMFUL());
+        movieReviewReport.setHATE(movieReviewReportDTO.getHATE());
+        movieReviewReport.setCOPYRIGHT(movieReviewReportDTO.getCOPYRIGHT());
+        movieReviewReport.setSPAM(movieReviewReportDTO.getSPAM());
+        movieReviewReport.setReportDetail(movieReviewReportDTO.getReportDetail());
+        movieReviewReportRepository.save(movieReviewReport); //신고내용 DB저장
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 }

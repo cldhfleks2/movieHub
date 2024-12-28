@@ -154,6 +154,68 @@
     </div>
 </main>
 
+<!-- 신고 오버레이 : flex로 보여줘야함 -->
+<div class="reportModalOverlay" id="movieReviewReportModal" style="display: none;">
+    <div class="reportModalContent">
+        <h2 class="reportModalTitle">신고하기</h2>
+        <form class="reportModalForm" id="movieReviewReportForm">
+            <input type="hidden" id="movieReviewId" name="movieReviewId">
+
+            <div class="reportModalSubTitle">신고 사유를 선택해주세요.</div>
+            <div class="reportCheckboxGroup">
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="SPOILER" id="movieReviewSpoiler" value="true">
+                    <input type="hidden" name="SPOILER" value="false">
+                    <label for="movieReviewSpoiler">주요 스포일러 포함</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="WRONG" id="movieReviewWrongInfo" value="true">
+                    <input type="hidden" name="WRONG" value="false">
+                    <label for="movieReviewWrongInfo">영화 내용 왜곡/잘못된 정보 전달</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="UNRELATED" id="movieReviewUnrelatedContent" value="true">
+                    <input type="hidden" name="UNRELATED" value="false">
+                    <label for="movieReviewUnrelatedContent">영화와 무관한 내용/광고성 홍보</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="HARMFUL" id="movieReviewHarmfulContent" value="true">
+                    <input type="hidden" name="HARMFUL" value="false">
+                    <label for="movieReviewHarmfulContent">유해하거나 불건전한 내용</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="HATE" id="movieReviewHateSpeech" value="true">
+                    <input type="hidden" name="HATE" value="false">
+                    <label for="movieReviewHateSpeech">혐오 발언/차별적 내용</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="COPYRIGHT" id="movieReviewCopyright" value="true">
+                    <input type="hidden" name="COPYRIGHT" value="false">
+                    <label for="movieReviewCopyright">저작권 침해 의심</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="SPAM" id="movieReviewPersonalInfo" value="true">
+                    <input type="hidden" name="SPAM" value="false">
+                    <label for="movieReviewPersonalInfo">개인정보 노출</label>
+                </div>
+            </div>
+
+            <div class="reportTextareaWrapper">
+                <label for="movieReviewReportDetail">추가 설명 (선택사항)</label>
+                <textarea name="reportDetail"
+                          id="movieReviewReportDetail"
+                          placeholder="신고 사유에 대해 자세히 설명해주세요." maxlength="500"></textarea>
+            </div>
+
+            <div class="reportModalActions">
+                <button type="button" class="reportCancelBtn">취소</button>
+                <button type="submit" class="reportSubmitBtn">신고하기</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
 <div th:replace="~{ footer/footer::footer }"></div>
 <script src="/js/review/review.js"></script>
 </body>

@@ -439,8 +439,44 @@ function reviewLikeBtn() {
             }
         })
     });
-
-
 }
 
+
+function reviewReportBtn(){
+    //신고 모달창 보이기
+    $(document).on('click', '.reportBtn', function() {
+        const reviewId = $(this).data('reviewid');
+        $('#movieReviewId').val(reviewId); //전달할 reviewId값을 담음
+        $('#movieReviewReportModal').fadeIn().css('display', 'flex');
+    });
+
+    //신고 모달창 숨기기
+    $(document).on('click', '.reportCancelBtn', function() {
+        $('#movieReviewReportModal').fadeOut();
+    });
+
+    //신고 제출 버튼 클릭시
+    $('.reportSubmitBtn').on('click', function(e) {
+        e.preventDefault(); // 기본 폼 제출 방지
+
+        // 폼 데이터를 직렬화해서 쿼리스트링으로 만듬
+        var formData = $('#movieReviewReportForm').serialize();
+
+        // 서버로 폼 제출
+        $.ajax({
+            url: '/api/movieReview/report', // 서버 URL
+            type: 'POST',
+            data: formData,  // 폼 데이터를 전송
+            success: function() {
+                alert('신고가 완료되었습니다.');
+                $('#movieReviewReportModal').fadeOut();
+            },
+            error: function(xhr, status, error) {
+                // 서버에서 에러가 발생했을 때 처리
+                alert('신고를 처리하는 동안 오류가 발생했습니다. 다시 시도해주세요.');
+                $('#movieReviewReportModal').fadeOut();
+            }
+        });
+    });
+}
 
