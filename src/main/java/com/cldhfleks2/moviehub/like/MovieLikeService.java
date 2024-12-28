@@ -34,7 +34,7 @@ public class MovieLikeService {
 
         Optional<Movie> movieObj = movieRepository.findByMovieCdAndStatus(movieCd);
         if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/movieDetail/like", "영화 정보를 찾을 수 없습니다.", String.class);
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movieDetail/like", "영화 정보를 찾을 수 없습니다.", String.class);
 
         Member member = memberObj.get();
         Movie movie = movieObj.get();
@@ -77,7 +77,7 @@ public class MovieLikeService {
 
         Optional<Movie> movieObj = movieRepository.findByMovieCdAndStatus(movieCd);
         if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "영화 정보를 찾을 수 없습니다.", String.class);
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/remove/movielike", "영화 정보를 찾을 수 없습니다.", String.class);
 
         //찜한리스트에서 삭제
         Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsernameAndMovieCd(username, movieCd);
