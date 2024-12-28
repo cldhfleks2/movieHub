@@ -15,9 +15,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +30,56 @@ public class MovieReviewService {
     private final MovieReviewRepository movieReviewRepository;
     private final MovieReviewLikeRepository movieReviewLikeRepository;
 
+    //정렬 하는 함수
+    private List<MovieReviewDTO> sortReviews(List<MovieReviewDTO> reviews, String dateSort, String ratingSort) {
+        // 날짜 정렬 기준 (recent, old)
+        Comparator<MovieReviewDTO> dateComparator = (review1, review2) -> {
+            // 날짜만 비교하기 위해 LocalDate로 변환
+            LocalDate date1 = review1.getReviewUpdateDate().toLocalDate();
+            LocalDate date2 = review2.getReviewUpdateDate().toLocalDate();
+
+            if ("recent".equals(dateSort)) {
+                return date2.compareTo(date1); // 최신순
+            } else {
+                return date1.compareTo(date2); // 오래된순
+            }
+        };
+
+        // 별점 정렬 기준 (high, low)
+        Comparator<MovieReviewDTO> ratingComparator = (review1, review2) -> {
+            if ("high".equals(ratingSort)) {
+                return review2.getRatingValue().compareTo(review1.getRatingValue()); // 별점 높은순
+            } else {
+                return review1.getRatingValue().compareTo(review2.getRatingValue()); // 별점 낮은순
+            }
+        };
+
+        // 날짜 기준을 우선적으로 적용하고 같은 날짜 내에서만 별점 기준을 적용
+        return reviews.stream()
+                .sorted((review1, review2) -> {
+                    // 날짜 비교
+                    int dateComparison = dateComparator.compare(review1, review2);
+
+                    // 같은 날짜라면 별점 비교
+                    if (dateComparison == 0) {
+                        return ratingComparator.compare(review1, review2);
+                    }
+
+                    // 날짜가 다르면 날짜 비교 결과 반환
+                    return dateComparison;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
     //영화 리뷰 페이지 GET
-    String getMovieReview(String movieCd, Model model, Authentication auth, Integer pageIdx) {
+    String getMovieReview(String movieCd, Model model, Authentication auth, Integer pageIdx, String dateSort, String ratingSort) {
         if(pageIdx == null) pageIdx = 1;
+        if(dateSort == null) dateSort = "recent"; //결과물인 movieReviewDTOPage을 어떻게 정렬할지.
+        if(ratingSort == null) ratingSort = "high";
+        model.addAttribute("dateSort", dateSort);
+        model.addAttribute("ratingSort", ratingSort);
 
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -76,6 +126,9 @@ public class MovieReviewService {
                     .build();
             movieReviewDTOList.add(movieReviewDTO); //전체 DTO 리스트에 추가
         }
+
+        //정렬 기준으로 정렬!
+        movieReviewDTOList = sortReviews(movieReviewDTOList, dateSort, ratingSort);
 
         //페이지로 전달
         Page<MovieReviewDTO> movieReviewDTOPage = new PageImpl<>(

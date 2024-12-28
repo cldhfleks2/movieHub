@@ -157,8 +157,76 @@ textarea.addReviewText:focus {
 }
 
 .filterGroup {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdownBtn {
+    padding: 0.6rem 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
     display: flex;
-    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdownBtn:hover {
+    background: rgba(229, 9, 20, 0.8);
+}
+
+.dropdownBtn .arrow {
+    margin-left: 8px;
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+}
+
+.dropdownBtn.active .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdownContent {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+    background: rgba(26, 26, 26, 0.95);
+    min-width: 160px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.dropdownContent .filterBtn {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    color: white;
+    border-radius: 0;
+}
+
+.dropdownContent .filterBtn:first-child {
+    border-radius: 10px 10px 0 0;
+}
+
+.dropdownContent .filterBtn:last-child {
+    border-radius: 0 0 10px 10px;
+}
+
+.dropdownContent .filterBtn:hover {
+    background: rgba(229, 9, 20, 0.8);
+}
+
+.dropdownContent .filterBtn.active {
+    background: #e50914;
 }
 
 .filterBtn {

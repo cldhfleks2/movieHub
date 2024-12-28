@@ -16,8 +16,8 @@ public class MovieReviewController {
 
     //영화 리뷰 페이지 GET
     @GetMapping("/movieReview")
-    String getMovieReview(String movieCd, Model model, Authentication auth, Integer pageIdx) {
-        return movieReviewService.getMovieReview(movieCd, model, auth, pageIdx);
+    String getMovieReview(String movieCd, Model model, Authentication auth, Integer pageIdx, String dateSort, String ratingSort) {
+        return movieReviewService.getMovieReview(movieCd, model, auth, pageIdx, dateSort, ratingSort);
     }
 
     //영화 리뷰 작성 내용을 서버에 저장

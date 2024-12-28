@@ -14,14 +14,29 @@
 <main class="mainContent">
     <div class="reviewContainer">
         <div class="reviewListSection" id="reviewListSection">
+<!--            정렬 기준 선택-->
             <div class="reviewFilters">
                 <div class="filterGroup">
-                    <button class="filterBtn active" data-filter="latest" data-order="desc">최신순</button>
-                    <button class="filterBtn" data-filter="latest" data-order="asc">오래된순</button>
+<!--                    최초 선택된 옵션은 최신순-->
+                    <button class="dropdownBtn" th:text="${dateSort == 'recent' ? '최신순' : '오래된순'}">
+                        최신순
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="dropdownContent latest">
+                        <button class="filterBtn" th:classappend="${dateSort == 'recent' ? 'active' : ''}">최신순</button>
+                        <button class="filterBtn" th:classappend="${dateSort == 'old' ? 'active' : ''}">오래된순</button>
+                    </div>
                 </div>
                 <div class="filterGroup">
-                    <button class="filterBtn" data-filter="rating" data-order="desc">별점 높은순</button>
-                    <button class="filterBtn" data-filter="rating" data-order="asc">별점 낮은순</button>
+<!--                    최초선택된 옵션은 별점 높은순-->
+                    <button class="dropdownBtn" th:text="${ratingSort == 'high' ? '별점높은순' : '별점낮은순'}">
+                        별점높은순
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="dropdownContent rating">
+                        <button class="filterBtn" th:classappend="${ratingSort == 'high' ? 'active' : ''}">별점높은순</button>
+                        <button class="filterBtn" th:classappend="${ratingSort == 'low' ? 'active' : ''}" >별점낮은순</button>
+                    </div>
                 </div>
             </div>
 
@@ -69,7 +84,7 @@
                 <button class="pageBtn prev" id="prevPage"
                         th:disabled="${movieReviewDTOPage.first}"
                         th:data-moviecd="${movieCd}"
-                        th:data-next-pageidx="${movieReviewDTOPage.number}">
+                        th:data-pageidx="${movieReviewDTOPage.number}">
                     이전
                 </button>
                 <div class="pageNumbers">
@@ -77,7 +92,7 @@
                         <button class="pageNum"
                                 th:classappend="${pageNum == movieReviewDTOPage.number} ? 'active'"
                                 th:data-moviecd="${movieCd}"
-                                th:data-next-pageidx="${pageNum + 1}"
+                                th:data-pageidx="${pageNum + 1}"
                                 th:text="${pageNum + 1}">
                         </button>
                     </th:block>
@@ -85,19 +100,21 @@
                 <button class="pageBtn next" id="nextPage"
                          th:disabled="${movieReviewDTOPage.last}"
                          th:data-moviecd="${movieCd}"
-                         th:data-next-pageidx="${movieReviewDTOPage.number + 2}">
+                         th:data-pageidx="${movieReviewDTOPage.number + 2}">
                 다음
             </button>
             </div>
         </div>
 
         <div style="display: flex">
-            <button id="writeReviewBtn" class="submitBtn" style="margin-bottom: 20px; margin-left: auto; margin-right: 10px;">리뷰 작성하기</button>
+            <button id="writeReviewBtn" class="submitBtn" style="margin-bottom: 20px; margin-left: auto; margin-right: 10px;">
+                리뷰 작성하기
+            </button>
         </div>
 
         <h1 class="reviewSectionExplain" style="display: none;margin-bottom: 30px;">영화 리뷰 작성하기</h1>
         <div class="reviewSection" style="display: none;">
-            <div class="reviewHeader">
+            <div class="reviewHeader" th:if="${movie}">
                 <div class="movieInfoBox">
                     <img class="miniPoster" id="moviePosterURL" th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터">
 

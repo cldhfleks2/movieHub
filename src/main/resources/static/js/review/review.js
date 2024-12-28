@@ -5,6 +5,8 @@ $(document).ready(function() {
     reviewActions()
     writeReviewButtonAnimation();
     pagination();
+
+    filterSection()
 });
 
 let isCometoMovieDetailPage = false;
@@ -212,13 +214,14 @@ function submitReview() {
             if (xhr.status === 200) {
                 alert("영화 리뷰를 작성했습니다.")
                 console.log(response); // 콘솔 출력
-                window.location.reload(); // 페이지 리로드
             }else {
                 alert("서버 응답이 이상합니다.")
                 console.log(response); // 콘솔 출력
-                window.location.reload(); // 페이지 리로드
             }
             console.log("/api/movieReview/add ajax success")
+
+            const movieCd = $("#movieCd").data("moviecd");
+            window.location.href = "/movieReview?movieCd=" + movieCd; // 페이지 리로드
         },
         error: function (xhr){
             console.log(xhr.responseText);
@@ -231,7 +234,7 @@ function submitReview() {
 function pagination(){
     $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
         const movieCd = $(this).data("moviecd");
-        const pageIdx = $(this).data("next-pageidx")
+        const pageIdx = $(this).data("pageidx")
         $.ajax({
             url: "/movieReview",
             method: "get",
@@ -251,12 +254,92 @@ function pagination(){
     })
 }
 
-// 페이지네이션 처리 및 movieCd 값 전달
-function goToReviewPage(button) {
-    const movieCd = button.getAttribute('data-movie-cd');
-    const pageIdx = button.getAttribute('data-page-idx');
-    location.href = '/movieReview?pageIdx=' + pageIdx + '&movieCd=' + movieCd;
+function filterSection() {
+    // 드롭다운 토글 : 정렬 기준을 선택가능
+    $(document).on("click", ".dropdownBtn", function (e){
+        e.stopPropagation();
+        const $btn = $(this);
+        const $dropdown = $btn.next('.dropdownContent');
+
+        // 다른 열린 드롭다운 닫기
+        $('.dropdownContent').not($dropdown).fadeOut(200);
+        $('.dropdownBtn').not($btn).removeClass('active');
+
+        // 현재 드롭다운 토글
+        $dropdown.fadeToggle(200);
+        $btn.toggleClass('active');
+
+        // 드롭다운 버튼 텍스트 업데이트
+        let $filterGroup = $btn.parent()
+        const $activeFilter = $filterGroup.find('.filterBtn.active');
+        if ($activeFilter.length) {
+            const newText = $activeFilter.text();
+            $filterGroup.find('.dropdownBtn').html(newText + ' <span class="arrow">▼</span>');
+        }
+    })
+
+    // 정렬 기준 선택시
+    $(document).on("click", ".filterBtn", function (e){
+        e.stopPropagation();
+        const $btn = $(this);
+
+        // 해당 그룹의 다른 버튼들 비활성화
+        $btn.closest('.dropdownContent').find('.filterBtn').removeClass('active');
+        $btn.addClass('active');
+
+        // 드롭다운 닫기
+        $btn.closest('.dropdownContent').fadeOut(200);
+        $btn.closest('.filterGroup').find('.dropdownBtn').removeClass('active');
+
+        // 드롭다운 버튼 텍스트 업데이트
+        let $filterGroup = $btn.closest('.filterGroup');
+        const $activeFilter = $filterGroup.find('.filterBtn.active');
+        if ($activeFilter.length) {
+            const newText = $activeFilter.text();
+            $filterGroup.find('.dropdownBtn').html(newText + ' <span class="arrow">▼</span>');
+        }
+
+        //정렬된 요소로 다시 페이지를 가져옴
+        const movieCd = $("#movieCd").data("moviecd");
+        const pageIdx = $(this).data("pageidx")
+        const dateSort = $(".dropdownContent.latest .filterBtn.active").text() === "최신순" ? "recent" : "old";
+        const ratingSort = $(".dropdownContent.rating .filterBtn.active").text() === "별점높은순" ? "high" : "low";
+        $.ajax({
+            url: "/movieReview",
+            method: "get",
+            data: {movieCd: movieCd, pageIdx: pageIdx, dateSort: dateSort, ratingSort: ratingSort},
+            success: function (data){
+                var data = $.parseHTML(data);
+                var dataHtml = $("<div>").append(data);
+                $("#reviewListSection").replaceWith(dataHtml.find("#reviewListSection"));
+                console.log("/movieReview select-filter ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("/movieReview select-filter ajax failed")
+            }
+        });
+    })
+    
+    // 페이지의 다른곳 클릭시 드랍다운 메뉴 닫기
+    $(document).click(function() {
+        $('.dropdownContent').fadeOut(200);
+        $('.dropdownBtn').removeClass('active');
+    });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //리뷰 리스트 : 좋아요 버튼 클릭시
 //좋아요를 이미 했는지도 표시 해줘야할듯
