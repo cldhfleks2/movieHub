@@ -1,0 +1,368 @@
+body{
+    caret-color: transparent;
+}
+
+.mainContent {
+    max-width: 1200px;
+    margin: 6rem auto 2rem;
+    padding: 0 1rem;
+}
+
+.reviewContainer {
+    background: linear-gradient(to right, rgba(26,26,26,0.95), rgba(26,26,26,0.85));
+    padding: 2rem;
+    border-radius: 16px;
+    color: white;
+    min-height: 590px;
+}
+
+
+/* Review Header Styles */
+.reviewHeader {
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.reviewHeader h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, #ffffff, #e50914);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.movieInfoBox {
+    display: flex;
+    /*align-items: center;*/
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.miniPoster {
+    width: 200px;
+    height: 300px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.movieBasicInfo{
+    width: 220px;
+    padding-top: 20px;
+}
+
+.movieBasicInfo h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Star Rating Styles */
+.movieRating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stars {
+    display: flex;
+    gap: 0.2rem;
+}
+
+.star {
+    color: #ffd700;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.star:hover {
+    transform: scale(1.2);
+}
+
+.star.active {
+    color: #ffd700;
+}
+
+.star.inactive {
+    color: rgba(255, 215, 0, 0.3);
+}
+
+/* Review Form Styles */
+.reviewSection {
+    display: flex;
+    align-items: center;
+}
+
+.reviewInput {
+    position: relative;
+}
+
+textarea.addReviewText {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    resize: vertical;
+    transition: all 0.3s ease;
+    caret-color: white;
+    resize: none;
+}
+
+textarea.addReviewText:focus {
+    outline: none;
+    border-color: #e50914;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.reviewControls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.charCount {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.submitBtn {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(45deg, #e50914, #ff3b30);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submitBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
+}
+
+/* Review List Styles */
+.reviewFilters {
+    display: flex;
+    justify-content: flex-start;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.filterGroup {
+    display: flex;
+    gap: 1rem;
+}
+
+.filterBtn {
+    padding: 0.6rem 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filterBtn.active {
+    background: #e50914;
+    border-color: #e50914;
+}
+
+.filterBtn:hover {
+    background: rgba(229, 9, 20, 0.8);
+}
+
+/* Review Item Styles */
+.reviewItem {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.reviewItemContent {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.moviePoster {
+    width: 120px;
+    height: 180px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.reviewMainInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.movieTitle {
+    font-size: 1.4rem;
+    color: #ffffff;
+    margin: 0;
+}
+
+.reviewMetaInfo {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.reviewItem .reviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.userProfile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.reviewRating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ratingStars {
+    color: #ffd700;
+}
+
+.reviewContent {
+    line-height: 1.6;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.reviewFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.reviewActions {
+    display: flex;
+    gap: 1rem;
+}
+
+.likeBtn, .reportBtn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.3s ease;
+}
+
+.likeBtn:hover {
+    color: #e50914;
+}
+
+.reportBtn:hover {
+    color: #ffd700;
+}
+
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.pageBtn, .pageNum {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pageBtn:hover, .pageNum:hover {
+    background: rgba(229, 9, 20, 0.8);
+}
+
+.pageNum.active {
+    background: #e50914;
+    border-color: #e50914;
+}
+
+.pageNumbers {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .movieInfoBox {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .reviewFilters {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .reviewItemContent {
+        flex-direction: column;
+    }
+
+    .moviePoster {
+        width: 100%;
+        height: 200px;
+    }
+
+    .reviewItem .reviewHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+    }
+
+    .reviewMetaInfo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+}
+
+
+.reviewFormSection {
+    width: 100%;
+}
+
+.addReviewText{
+    height: 236px;
+}
+

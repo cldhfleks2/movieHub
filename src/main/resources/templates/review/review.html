@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 리뷰</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/review/review.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:replace="~{ header/header::header }"></div>
+
+<main class="mainContent">
+    <div class="reviewContainer">
+        <div class="reviewListSection">
+            <div class="reviewFilters">
+                <div class="filterGroup">
+                    <button class="filterBtn active" data-filter="latest" data-order="desc">최신순</button>
+                    <button class="filterBtn" data-filter="latest" data-order="asc">오래된순</button>
+                </div>
+                <div class="filterGroup">
+                    <button class="filterBtn" data-filter="rating" data-order="desc">별점 높은순</button>
+                    <button class="filterBtn" data-filter="rating" data-order="asc">별점 낮은순</button>
+                </div>
+            </div>
+
+<!--           한페이지에 최대 5개 보여주자-->
+            <div class="reviewItem">
+                <div class="reviewItemContent">
+                    <img class="moviePoster" src="/image/blank.png" alt="영화 포스터">
+                    <div class="reviewMainInfo">
+                        <div class="reviewHeader">
+                            <h3 class="movieTitle">영화 제목</h3>
+                            <div class="reviewActions">
+                                <button class="likeBtn">
+                                    <span class="icon">♡</span>
+                                    <span class="likeCount">0</span>
+                                </button>
+                                <button class="reportBtn">신고</button>
+                            </div>
+                        </div>
+                        <div class="reviewMetaInfo">
+                            <div class="userInfo">
+                                <img class="userProfile" alt="프로필">
+                                <span class="userName">사용자</span>
+                            </div>
+                            <div class="reviewRating">
+                                <span class="ratingStars">★★★★★</span>
+                                <span class="ratingValue">5.0</span>
+                            </div>
+                            <span class="reviewDate">2024.12.27</span>
+                        </div>
+                        <p class="reviewContent">리뷰 내용이 여기에 표시됩니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <button class="pageBtn prev">이전</button>
+                <div class="pageNumbers">
+                    <button class="pageNum active">1</button>
+                </div>
+                <button class="pageBtn next">다음</button>
+            </div>
+        </div>
+
+        <div style="display: flex">
+            <button id="writeReviewBtn" class="submitBtn" style="margin-bottom: 20px; margin-left: auto; margin-right: 10px;">리뷰 작성하기</button>
+        </div>
+
+        <h1 class="reviewSectionExplain" style="display: none;margin-bottom: 30px;">영화 리뷰 작성하기</h1>
+        <div class="reviewSection" style="display: none;">
+            <div class="reviewHeader">
+                <div class="movieInfoBox">
+                    <img class="miniPoster" id="moviePosterURL" th:src="@{${movie.posterURL}}" src="/image/blank.png" alt="영화 포스터">
+
+                    <div class="movieBasicInfo">
+                        <h2 id="movieCd" th:text="${movie.movieNm}" th:data-moviecd="${movie.movieCd}">영화 제목</h2>
+                        <div class="movieRating">
+                            <div class="stars">
+                                <span class="star active" data-rating="1">★</span>
+                                <span class="star active" data-rating="2">★</span>
+                                <span class="star active" data-rating="3">★</span>
+                                <span class="star inactive" data-rating="4">★</span>
+                                <span class="star inactive" data-rating="5">★</span>
+                            </div>
+                            <span class="ratingValue" id="ratingValue">3.0</span>
+                        </div>
+                    </div>
+
+                    <div class="reviewFormSection">
+                        <form id="reviewForm">
+                            <input type="hidden" id="movieRating" name="rating" value="3">
+                            <div class="reviewInput">
+                                <textarea class="addReviewText" name="content" placeholder="이 영화에 대한 생각을 자유롭게 작성해주세요." maxlength="1000"></textarea>
+                                <div class="reviewControls">
+                                    <span class="charCount">0/1000</span>
+                                    <button type="submit" class="submitBtn">리뷰 등록</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{ footer/footer::footer }"></div>
+<script src="/js/review/review.js"></script>
+</body>
+</html>
