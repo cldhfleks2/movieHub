@@ -31,7 +31,7 @@ public class MovieReviewService {
     private final MovieReviewLikeRepository movieReviewLikeRepository;
 
     //정렬 하는 함수
-    private List<MovieReviewDTO> sortReviews(List<MovieReviewDTO> reviews, String dateSort, String ratingSort) {
+    List<MovieReviewDTO> sortReviews(List<MovieReviewDTO> reviews, String dateSort, String ratingSort) {
         // 날짜 정렬 기준 (recent, old)
         Comparator<MovieReviewDTO> dateComparator = (review1, review2) -> {
             // 날짜만 비교하기 위해 LocalDate로 변환
@@ -71,13 +71,12 @@ public class MovieReviewService {
                 .collect(Collectors.toList());
     }
 
-
-
     //영화 리뷰 페이지 GET
-    String getMovieReview(String movieCd, Model model, Authentication auth, Integer pageIdx, String dateSort, String ratingSort) {
+    String getMovieReview(Model model, Authentication auth, String searchText, Integer pageIdx, String dateSort, String ratingSort, String movieCd) {
         if(pageIdx == null) pageIdx = 1;
         if(dateSort == null) dateSort = "recent"; //결과물인 movieReviewDTOPage을 어떻게 정렬할지.
         if(ratingSort == null) ratingSort = "high";
+        if(searchText == null) searchText = "";
         model.addAttribute("dateSort", dateSort);
         model.addAttribute("ratingSort", ratingSort);
 
@@ -95,9 +94,13 @@ public class MovieReviewService {
             Movie movie = movieObj.get();
             model.addAttribute("movie", movie);
         }
+//        //페이지네이션사용시 현재 컨트롤러를 다시 호출하므로 필요한 값.
+//        model.addAttribute("movieCd", movieCd);
 
         //리뷰 목록을 보여줌 : 한페이지에 5개 보여주도록
-        Page<MovieReview> movieReviewList = movieReviewRepository.findAllByMovieCdAndStatus(movieCd, PageRequest.of(pageIdx - 1, 5));
+        //검색어없으면 ""을 검색하므로 모든 결과가 가져올것
+        //Page<MovieReview> movieReviewList = movieReviewRepository.findAllByMovieCdAndStatus(movieCd, PageRequest.of(pageIdx - 1, 5));
+        Page<MovieReview> movieReviewList = movieReviewRepository.search(searchText, PageRequest.of(pageIdx - 1, 5));
         List<MovieReviewDTO> movieReviewDTOList = new ArrayList<>();
         for (MovieReview movieReview : movieReviewList) {
             //리뷰 총 좋아요 가져오기
@@ -114,6 +117,7 @@ public class MovieReviewService {
                 isLiked = false; //좋아요 안누름 상태 저장
             }
             MovieReviewDTO movieReviewDTO = MovieReviewDTO.builder()
+                    .movieReviewId(movieReviewId)
                     .content(movieReview.getContent())
                     .ratingValue(movieReview.getRatingValue())
                     .movieNm(movieReview.getMovie().getMovieNm())
@@ -139,8 +143,7 @@ public class MovieReviewService {
 
         model.addAttribute("movieReviewDTOPage",movieReviewDTOPage);
 
-        //페이지네이션사용시 현재 컨트롤러를 다시 호출하므로 필요한 값.
-        model.addAttribute("movieCd", movieCd);
+
 
         return "review/review";
     }
@@ -168,7 +171,11 @@ public class MovieReviewService {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    
+    //리뷰 좋아요 요청
+    ResponseEntity<String> addMovieReviewLike(Long reviewId, Authentication auth) {
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 
 }

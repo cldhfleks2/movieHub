@@ -16,8 +16,8 @@ public class MovieReviewController {
 
     //영화 리뷰 페이지 GET
     @GetMapping("/movieReview")
-    String getMovieReview(String movieCd, Model model, Authentication auth, Integer pageIdx, String dateSort, String ratingSort) {
-        return movieReviewService.getMovieReview(movieCd, model, auth, pageIdx, dateSort, ratingSort);
+    String getMovieReview(Model model, Authentication auth, String searchText, Integer pageIdx, String dateSort, String ratingSort, String movieCd) {
+        return movieReviewService.getMovieReview(model, auth, searchText, pageIdx, dateSort, ratingSort, movieCd);
     }
 
     //영화 리뷰 작성 내용을 서버에 저장
@@ -25,5 +25,12 @@ public class MovieReviewController {
     ResponseEntity<String> addMovieReview(@RequestBody MovieReviewDTO movieReviewDTO, Model model, Authentication auth) {
         return movieReviewService.addMovieReview(movieReviewDTO, model, auth);
     }
+
+    //리뷰 좋아요 요청
+    @PostMapping("/api/movieReview/like")
+    ResponseEntity<String> addMovieReviewLike(Long reviewId, Authentication auth) {
+        return movieReviewService.addMovieReviewLike(reviewId, auth);
+    }
+
 
 }

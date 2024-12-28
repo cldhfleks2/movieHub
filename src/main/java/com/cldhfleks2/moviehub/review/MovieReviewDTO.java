@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class MovieReviewDTO {
+    private Long movieReviewId;
     private String movieCd;
     private String content; //리뷰 내용
     private Double ratingValue; //리뷰 별점

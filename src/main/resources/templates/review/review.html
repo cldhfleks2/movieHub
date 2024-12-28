@@ -13,34 +13,39 @@
 
 <main class="mainContent">
     <div class="reviewContainer">
-        <div class="reviewListSection" id="reviewListSection">
-<!--            정렬 기준 선택-->
-            <div class="reviewFilters">
-                <div class="filterGroup">
-<!--                    최초 선택된 옵션은 최신순-->
-                    <button class="dropdownBtn" th:text="${dateSort == 'recent' ? '최신순' : '오래된순'}">
-                        최신순
-                        <span class="arrow">▼</span>
-                    </button>
-                    <div class="dropdownContent latest">
-                        <button class="filterBtn" th:classappend="${dateSort == 'recent' ? 'active' : ''}">최신순</button>
-                        <button class="filterBtn" th:classappend="${dateSort == 'old' ? 'active' : ''}">오래된순</button>
-                    </div>
-                </div>
-                <div class="filterGroup">
-<!--                    최초선택된 옵션은 별점 높은순-->
-                    <button class="dropdownBtn" th:text="${ratingSort == 'high' ? '별점높은순' : '별점낮은순'}">
-                        별점높은순
-                        <span class="arrow">▼</span>
-                    </button>
-                    <div class="dropdownContent rating">
-                        <button class="filterBtn" th:classappend="${ratingSort == 'high' ? 'active' : ''}">별점높은순</button>
-                        <button class="filterBtn" th:classappend="${ratingSort == 'low' ? 'active' : ''}" >별점낮은순</button>
-                    </div>
+        <!--            정렬 기준 선택-->
+        <div class="reviewFilters">
+            <div class="filterGroup">
+                <button class="dropdownBtn" th:text="${dateSort == 'recent' ? '최신순' : '오래된순'}">
+                    최신순 <span class="arrow">▼</span>
+                </button>
+                <div class="dropdownContent latest">
+                    <button class="filterBtn" th:classappend="${dateSort == 'recent' ? 'active' : ''}">최신순</button>
+                    <button class="filterBtn" th:classappend="${dateSort == 'old' ? 'active' : ''}">오래된순</button>
                 </div>
             </div>
+            <div class="filterGroup">
+                <button class="dropdownBtn" th:text="${ratingSort == 'high' ? '별점높은순' : '별점낮은순'}">
+                    별점높은순 <span class="arrow">▼</span>
+                </button>
+                <div class="dropdownContent rating">
+                    <button class="filterBtn" th:classappend="${ratingSort == 'high' ? 'active' : ''}">별점높은순</button>
+                    <button class="filterBtn" th:classappend="${ratingSort == 'low' ? 'active' : ''}" >별점낮은순</button>
+                </div>
+            </div>
+            <!--                검색 바-->
+            <div class="searchGroup">
+                <div class="searchIcon">
+                    <span class="searchIconText">🔍</span>
+                </div>
+                <div class="searchBar">
+                    <input type="text" class="searchInput" placeholder="리뷰 내용 검색...">
+                </div>
+            </div>
+        </div>
 
-<!--           한페이지에 최대 5개 보여주자-->
+        <div id="reviewListSection">
+            <!--           한페이지에 최대 5개 보여주자-->
             <div class="reviewItem" th:each="review : ${movieReviewDTOPage}">
                 <div class="reviewItemContent">
                     <img class="moviePoster" th:src="@{${review.moviePosterURL}}" src="/image/blank.png" alt="영화 포스터">
@@ -48,19 +53,18 @@
                         <div class="reviewHeader">
                             <h3 class="movieTitle" th:text="${review.movieNm}">영화 제목</h3>
                             <div class="reviewActions">
-                                <button class="likeBtn">
-<!--                                    현재 내가 좋아요를 눌렀는지 확인-->
-                                    <div th:unless="${review.isLiked}">
+                                <button class="likeBtn" th:data-reviewid="${review.movieReviewId}">
+                                    <div class="red" th:unless="${review.isLiked}">
                                         <span class="icon">♡</span>
-                                        <span>좋아요</span>
+                                        <span class="iconMessage">좋아요</span>
                                     </div>
-                                    <div th:if="${review.isLiked}">
+                                    <div class="red" th:if="${review.isLiked}">
                                         <span class="icon">♥</span>
-                                        <span>좋아요 취소</span>
+                                        <span class="iconMessage">좋아요 취소</span>
                                     </div>
-                                    <span class="likeCount" th:text="${review.likeCount}">0</span>
+                                    <span class="likeCount" th:text="${review.likeCount} + ' '">0</span>
                                 </button>
-                                <button class="reportBtn">🚨</button>
+                                <button class="reportBtn" th:data-reviewid="${review.movieReviewId}">🚨</button>
                             </div>
                         </div>
                         <div class="reviewMetaInfo">
@@ -83,7 +87,6 @@
             <div class="pagination" id="pagination" th:if="${movieReviewDTOPage.totalPages > 0}">
                 <button class="pageBtn prev" id="prevPage"
                         th:disabled="${movieReviewDTOPage.first}"
-                        th:data-moviecd="${movieCd}"
                         th:data-pageidx="${movieReviewDTOPage.number}">
                     이전
                 </button>
@@ -91,26 +94,26 @@
                     <th:block th:each="pageNum : ${#numbers.sequence(0, movieReviewDTOPage.totalPages - 1)}">
                         <button class="pageNum"
                                 th:classappend="${pageNum == movieReviewDTOPage.number} ? 'active'"
-                                th:data-moviecd="${movieCd}"
                                 th:data-pageidx="${pageNum + 1}"
                                 th:text="${pageNum + 1}">
                         </button>
                     </th:block>
                 </div>
                 <button class="pageBtn next" id="nextPage"
-                         th:disabled="${movieReviewDTOPage.last}"
-                         th:data-moviecd="${movieCd}"
-                         th:data-pageidx="${movieReviewDTOPage.number + 2}">
-                다음
-            </button>
+                        th:disabled="${movieReviewDTOPage.last}"
+                        th:data-pageidx="${movieReviewDTOPage.number + 2}">
+                    다음
+                </button>
             </div>
         </div>
+
 
         <div style="display: flex">
             <button id="writeReviewBtn" class="submitBtn" style="margin-bottom: 20px; margin-left: auto; margin-right: 10px;">
                 리뷰 작성하기
             </button>
         </div>
+
 
         <h1 class="reviewSectionExplain" style="display: none;margin-bottom: 30px;">영화 리뷰 작성하기</h1>
         <div class="reviewSection" style="display: none;">
@@ -146,10 +149,8 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
+
     </div>
 </main>
 

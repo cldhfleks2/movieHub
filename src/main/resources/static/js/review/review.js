@@ -2,19 +2,24 @@ $(document).ready(function() {
     initialize();
     settingStarRating();
     reviewForm();
-    reviewActions()
     writeReviewButtonAnimation();
     pagination();
 
     filterSection()
+    searchSection()
+
+    reviewLikeBtn();
+    reviewReportBtn()
 });
 
 let isCometoMovieDetailPage = false;
+let movieCd;
 
 //기본 세팅 : url파라미터 검색등
 function initialize(){
     const urlParams = new URLSearchParams(window.location.search);
     const value = urlParams.get('isCometoMovieDetailPage');
+    movieCd = urlParams.get("movieCd");
 
     if (value) { //다른 페이지에서 영화를 선택하고 넘어왔을때 값이 전달되는 파라미터
         isCometoMovieDetailPage = true
@@ -220,8 +225,7 @@ function submitReview() {
             }
             console.log("/api/movieReview/add ajax success")
 
-            const movieCd = $("#movieCd").data("moviecd");
-            window.location.href = "/movieReview?movieCd=" + movieCd; // 페이지 리로드
+            window.location.href = "/movieReview"; // 페이지 리로드
         },
         error: function (xhr){
             console.log(xhr.responseText);
@@ -233,12 +237,13 @@ function submitReview() {
 //페이지네이션 동작
 function pagination(){
     $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
-        const movieCd = $(this).data("moviecd");
         const pageIdx = $(this).data("pageidx")
+        const dateSort = $(".dropdownContent.latest .filterBtn.active").text() === "최신순" ? "recent" : "old";
+        const ratingSort = $(".dropdownContent.rating .filterBtn.active").text() === "별점높은순" ? "high" : "low";
         $.ajax({
             url: "/movieReview",
             method: "get",
-            data: {movieCd: movieCd, pageIdx: pageIdx},
+            data: {pageIdx: pageIdx, dateSort: dateSort, ratingSort: ratingSort},
             success: function (data){
                 var data = $.parseHTML(data);
                 var dataHtml = $("<div>").append(data);
@@ -254,6 +259,7 @@ function pagination(){
     })
 }
 
+//정렬 기준 동작
 function filterSection() {
     // 드롭다운 토글 : 정렬 기준을 선택가능
     $(document).on("click", ".dropdownBtn", function (e){
@@ -300,14 +306,13 @@ function filterSection() {
         }
 
         //정렬된 요소로 다시 페이지를 가져옴
-        const movieCd = $("#movieCd").data("moviecd");
         const pageIdx = $(this).data("pageidx")
         const dateSort = $(".dropdownContent.latest .filterBtn.active").text() === "최신순" ? "recent" : "old";
         const ratingSort = $(".dropdownContent.rating .filterBtn.active").text() === "별점높은순" ? "high" : "low";
         $.ajax({
             url: "/movieReview",
             method: "get",
-            data: {movieCd: movieCd, pageIdx: pageIdx, dateSort: dateSort, ratingSort: ratingSort},
+            data: {pageIdx: pageIdx, dateSort: dateSort, ratingSort: ratingSort, movieCd: movieCd},
             success: function (data){
                 var data = $.parseHTML(data);
                 var dataHtml = $("<div>").append(data);
@@ -328,36 +333,114 @@ function filterSection() {
     });
 }
 
+//서버로 검색을 요청해서 영화 리뷰 게시판 부분 새로고침
+function searchingAndReplaceList(){
+    const pageIdx = $(".pageNum.active").data("pageidx"); //페이지 네이션의 활성화된 버튼으로부터 페이지 번호를 가져옴
+    const dateSort = $(".dropdownContent.latest .filterBtn.active").text() === "최신순" ? "recent" : "old";
+    const ratingSort = $(".dropdownContent.rating .filterBtn.active").text() === "별점높은순" ? "high" : "low";
+    const searchText = $(".searchInput").val().trim();
 
+    // 검색 결과로 영화리뷰 게시판을 새로고침
+    $.ajax({
+        url: "/movieReview",
+        method: "get",
+        data: {
+            pageIdx: pageIdx,
+            dateSort: dateSort,
+            ratingSort: ratingSort,
+            searchText: searchText,
+            movieCd: movieCd
+        },
+        success: function(data) {
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#reviewListSection").replaceWith(dataHtml.find("#reviewListSection"));
+            console.log("/movieReview search ajax success");
+        },
+        error: function(xhr) {
+            console.log(xhr.responseText);
+            console.log("/movieReview search ajax failed");
+        }
+    });
+}
 
+//검색 뷰 동작
+function searchSection() {
+    let isSearchBarOpen = false;
 
+    // 검색 아이콘에 호버했을 때
+    $(document).on('mouseenter', '.searchIcon', function() {
+        if (!isSearchBarOpen) {
+            isSearchBarOpen = true;
+            $('.searchBar').addClass('active');
+            setTimeout(() => {
+                $('.searchInput').focus();
+            }, 300);
+        }
+    });
 
+    
+    // 엔터키 입력시 검색 실행
+    $(document).on('keypress', '.searchInput', function(e) {
+        if (e.which === 13) {
+            if (isSearchBarOpen) {
+                searchingAndReplaceList();
+            }
+        }
+    });
 
+    // 또는 검색바가 열리고난뒤 돋보기 클릭시 검색 실행
+    $(document).on('click', '.searchInput', function() {
+        if (isSearchBarOpen) {
+            searchingAndReplaceList();
+        }
+    });
 
-
-
-
-
-
+    // 검색바 외부 클릭시 닫기
+    $(document).click(function(e) {
+        if (!$(e.target).closest('.searchGroup').length) {
+            if (isSearchBarOpen && $('.searchInput').val() === '') {
+                isSearchBarOpen = false;
+                $('.searchBar').removeClass('active');
+            }
+        }
+    });
+}
 
 
 //리뷰 리스트 : 좋아요 버튼 클릭시
 //좋아요를 이미 했는지도 표시 해줘야할듯
-function reviewActions() {
+function reviewLikeBtn() {
     $(document).on('click', '.likeBtn', function() {
         const reviewId = $(this).data('reviewid');
-        
-        //ajax
-        
+
+        //리뷰 좋아요를 요청
+        $.ajax({
+            url: "/api/movieReview/like",
+            method: "post",
+            data: {reviewId: reviewId},
+            success: function (response, textStatus, xhr){
+                //리뷰 좋아요 성공시 리뷰 목록을 새로고침(총 좋아요수를 최신으로 반영하기 위함)
+                if (xhr.status === 200) {
+                    alert("리뷰 좋아요를 눌렀습니다.")
+                    //두번째로 페이지 비동기 리로딩
+                    searchingAndReplaceList()
+
+                    console.log(response); // 콘솔 출력
+                }else {
+                    alert("이상하게 좋아요 성공. 페이지는 새로고침 X")
+                    console.log(response); // 콘솔 출력
+                }
+                console.log("/api/movieReview/like ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("/api/movieReview/like ajax failed")
+            }
+        })
     });
 
-    $(document).on('click', '.reportBtn', function() {
-        const reviewId = $(this).data('reviewid');
 
-        if (confirm('이 리뷰를 신고하시겠습니까?')) {
-            //ajax
-
-        }
-    });
 }
+
 
