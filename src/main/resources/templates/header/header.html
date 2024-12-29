@@ -24,21 +24,23 @@
                 <div class="headerNotificationWrapper">
                     <div class="headerNotificationIcon">
                         <div style="width: 20px; font-size: 25px;">🔔</div>
-                        <span class="headerNotificationCount">2</span>
+                        <span class="headerNotificationCount" th:text="${notificationCnt}">2</span>
                     </div>
                     <div class="headerNotificationDropdown">
                         <div class="headerNotificationHeader">
                             <span>알림</span>
-                            <a href="#" class="headerReadAll">모두 읽음</a>
+                            <a class="headerReadAll">모두 읽음</a>
                         </div>
                         <div class="headerNotificationContent">
-                            <div class="headerNotificationItem">
-                                <div class="headerNotificationText">새로운 댓글이 달렸습니다.</div>
-                                <div class="headerNotificationTime">방금 전</div>
+                            <div class="headerNotificationItem" th:each="notification : ${notificationList}">
+                                <div class="headerNotificationText" th:text="${notification.message}">알림 메시지</div>
+<!--                                <div class="headerNotificationTime">방금 전</div>-->
+                                <div class="headerNotificationTime">
+                                    <span th:text="${#dates.format(notification.updateDate, 'yyyy-MM-dd HH:mm:ss')}">시간 출력</span>
+                                </div>
                             </div>
-                            <div class="headerNotificationItem">
-                                <div class="headerNotificationText">새로운 쪽지가 도착했습니다.</div>
-                                <div class="headerNotificationTime">1시간 전</div>
+                            <div class="headerNotificationItem" th:if="${notificationList == null || notificationList.size() == 0}">
+                                <div class="headerNotificationText">새로운 알림이 없습니다.</div>
                             </div>
                         </div>
                     </div>
