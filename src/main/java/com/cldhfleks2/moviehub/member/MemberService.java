@@ -32,7 +32,9 @@ public class MemberService {
 
     //회원가입시 아이디 중복검사
     ResponseEntity<String> checkUsername(String username) {
-        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        //회원인것들에서만 중복 검사
+        //오류를 막기위해 회원탈퇴한 유저의 아이디를 사용 불가능
+        Optional<Member> memberObj = memberRepository.findByUsername(username);
 
         if(memberObj.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); //중복됨을 전달
