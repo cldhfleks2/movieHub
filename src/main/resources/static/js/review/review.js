@@ -409,12 +409,24 @@ function searchSection() {
 
 
 //리뷰 리스트 : 좋아요 버튼 클릭시
-//좋아요를 이미 했는지도 표시 해줘야할듯
 function reviewLikeBtn() {
     $(document).on('click', '.likeBtn', function() {
         const reviewId = $(this).data('reviewid');
+        const iconMessage = $(this).find(".iconMessage").text().trim();
+        let message;
 
-        //리뷰 좋아요를 요청
+        // 좋아요인지 좋아요 취소인지 확인
+        if (iconMessage === '좋아요') {
+            message = "좋아요를 눌렀습니다.";
+            // 좋아요 로직 추가
+        } else if (iconMessage === '좋아요 취소') {
+            message = "좋아요를 취소했습니다.";
+            // 좋아요 취소 로직 추가
+        } else {
+            message = "알 수 없는 상태입니다.";
+        }
+
+        //리뷰 좋아요/취소 요청
         $.ajax({
             url: "/api/movieReview/like",
             method: "post",
@@ -422,7 +434,7 @@ function reviewLikeBtn() {
             success: function (response, textStatus, xhr){
                 //리뷰 좋아요 성공시 리뷰 목록을 새로고침(총 좋아요수를 최신으로 반영하기 위함)
                 if (xhr.status === 200) {
-                    alert("리뷰 좋아요를 눌렀습니다.")
+                    alert(message)
                     //두번째로 페이지 비동기 리로딩
                     searchingAndReplaceList()
 
