@@ -45,6 +45,11 @@ public class BasicService {
         return "test";
     }
 
+    //헤더 페이지 GET
+    String getHeader(){
+        return "header :: #header";
+    }
+
     //날짜 가져오는 함수
     private String getCurrentDay() {
         LocalDate currentDate = LocalDate.now().minusDays(1); //하루 이전 날짜 가져옴
