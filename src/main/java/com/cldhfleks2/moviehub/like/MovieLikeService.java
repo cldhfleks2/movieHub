@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class MovieLikeService {
 
 
     //영화 상세 페이지에서 좋아요 버튼 눌렀을때 detail페이지도 전송
+    @Transactional
     String addMovieLike(String movieCd, Model model, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -69,6 +71,7 @@ public class MovieLikeService {
     }
 
     //찜한 영화 삭제 요청 : mywish페이지를 전달할 것인지 check
+    @Transactional
     String removeLike(String movieCd, Integer pageIdx, Model model, Boolean render, Authentication auth) throws Exception {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);

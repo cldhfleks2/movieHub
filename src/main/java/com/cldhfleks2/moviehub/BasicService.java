@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -133,6 +134,7 @@ public class BasicService {
     }
 
     //영화 상세 페이지 GET
+    @Transactional
     String getDetail(String movieCd, Model model, Authentication auth, RedirectAttributes redirectAttributes) throws Exception{
         //DB에 없으면 DB에 추가하고 보여줌
         Optional<Movie> movieObj = movieRepository.findByMovieCd(movieCd);

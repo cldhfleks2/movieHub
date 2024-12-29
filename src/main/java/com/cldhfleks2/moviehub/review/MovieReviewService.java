@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.time.LocalDate;
@@ -151,6 +152,7 @@ public class MovieReviewService {
     }
 
     //영화 리뷰 작성 내용을 서버에 저장
+    @Transactional
     ResponseEntity<String> addMovieReview(MovieReviewDTO movieReviewDTO, Model model, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -174,6 +176,7 @@ public class MovieReviewService {
     }
 
     //리뷰 좋아요 요청
+    @Transactional
     ResponseEntity<String> addMovieReviewLike(Long reviewId, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);

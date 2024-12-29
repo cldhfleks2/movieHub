@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class BookMarkService {
     private final MemberRepository memberRepository;
     private final MovieRepository movieRepository;
 
+    @Transactional
     String clickBookmarkBtn(String movieCd, Model model, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);

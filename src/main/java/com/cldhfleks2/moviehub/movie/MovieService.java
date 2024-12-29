@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URLEncoder;
 import java.net.http.HttpResponse;
@@ -63,6 +64,7 @@ public class MovieService {
 
     //MovieId 로 MovieDTO를 생성
     //동시에 MovieDailyStat을 갱신
+    @Transactional
     public MovieDTO getMovieDTO(Long movieId) {
         Optional<Movie> movieObj = movieRepository.findById(movieId);
         if(!movieObj.isPresent()){ //존재하지않는 movieId
@@ -133,6 +135,7 @@ public class MovieService {
     }
 
     //영화 상세 정보를 DB에 저장 : movieInfo가 정상적으로 있는지 확인은 상위 함수에서 처리했을거임. 저장만 하는함수
+    @Transactional
     public ReturnEntitysDTO saveEntityAsMovieDetail(JsonNode movieInfo, String currentDay) throws Exception {
         String movieCd = movieInfo.get("movieCd").asText();
         String movieNm = movieInfo.get("movieNm").asText();
@@ -250,6 +253,7 @@ public class MovieService {
 
     //박스오피스 목록을 DB에 저장 : 실제 JsonNode를 탐색하여 저장
     //saveTodayBoxOfficeOnDB, saveWeeklyBoxOfficeOnDB 에서 사용
+    @Transactional
     public void saveEntityAsBoxOffice(JsonNode boxOfficeList, String currentDay) throws Exception {
         //response에 존재하는 전체 영화 목록을 DB에 저장하는 로직
         for (int i = 0; i < boxOfficeList.size() && i < 10; i++) {

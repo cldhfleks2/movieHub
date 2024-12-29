@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class ReportService {
     private final MovieReportRepository memberReportRepository;
 
     //리뷰 신고 요청
+    @Transactional
     ResponseEntity<String> saveMovieReviewReport(MovieReviewReportDTO movieReviewReportDTO, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -61,6 +63,7 @@ public class ReportService {
     }
 
     //영화 신고 요청
+    @Transactional
     ResponseEntity<String> saveMovieReport(MovieReportDTO movieReportDTO, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
