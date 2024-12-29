@@ -1,42 +1,46 @@
 $(document).ready(function() {
-    initializeTab();
+    tabs();
+    pagination();
 });
 
-//탭 클릭시 목록을 보여줌
-function initializeTab(){
-    // 탭 전환 기능
+function tabs() {
     $('.tabButton').on('click', function() {
-        // 활성 탭 변경
+        const tabId = $(this).data('tab');
+
+        // 탭 버튼 활성화 상태 변경
         $('.tabButton').removeClass('active');
         $(this).addClass('active');
 
-        // 섹션 전환
-        const targetTab = $(this).data('tab');
+        // 컨텐츠 섹션 표시/숨김
         $('.contentSection').removeClass('active');
-        $(`#${targetTab}Section`).addClass('active');
+        $(".contentSection").hide();
+        $(`#${tabId}Section`).addClass('active');
+        $(`#${tabId}Section`).show();
     });
 }
 
-// 별점 표시 함수
-function displayRating(score) {
-    const fullStar = '★';
-    const emptyStar = '☆';
-    const totalStars = 5;
-    const fullStars = Math.round(score);
+function pagination(){
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const pageIdx = $(this).data("pageidx")
+        //const dateSort = $(".dropdownContent.latest .filterBtn.active").text() === "최신순" ? "recent" : "old";
+        //const ratingSort = $(".dropdownContent.rating .filterBtn.active").text() === "별점높은순" ? "high" : "low";
+        $.ajax({
+            url: "",
+            method: "",
+            //data: {pageIdx: pageIdx, dateSort: dateSort, ratingSort: ratingSort},
+            data: {pageIdx: pageIdx},
+            success: function (data){
+                var data = $.parseHTML(data);
+                var dataHtml = $("<div>").append(data);
+                $("#전체뷰").replaceWith(dataHtml.find("#전체뷰"));
 
-    return fullStar.repeat(fullStars) + emptyStar.repeat(totalStars - fullStars);
+                console.log(" pagination ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log(" pagination ajax failed")
+            }
+        });
+    })
 }
-
-// 날짜 포맷 함수
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day}`;
-}
-
-
-
-
 

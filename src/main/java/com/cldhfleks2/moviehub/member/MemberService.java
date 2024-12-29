@@ -81,7 +81,7 @@ public class MemberService {
             return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "", "유저 정보를 찾을 수 없습니다.", String.class);
 
         Member member = memberObj.get();
-        MemberDTO memberDTO = MemberDTO.builder()
+        MemberDTO memberDTO = MemberDTO.create()
                 .username(member.getUsername())
                 .nickname(member.getNickname())
                 .profileImage(member.getProfileImage()).build();
@@ -92,6 +92,18 @@ public class MemberService {
 
     //TODO : 유저 프로필 GET
     String getUserprofile(Long memberId, Model model, Authentication auth) {
+        Optional<Member> memberObj = memberRepository.findById(memberId);
+        if(!memberObj.isPresent())
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "", "유저 정보를 찾을 수 없습니다.", String.class);
+
+        Member member = memberObj.get();
+        MemberDTO memberDTO = MemberDTO.create()
+                .username(member.getUsername())
+                .nickname(member.getNickname())
+                .profileImage(member.getProfileImage())
+                .build();
+
+        model.addAttribute("memberDTO", memberDTO);
 
         return "member/userprofile";
     }

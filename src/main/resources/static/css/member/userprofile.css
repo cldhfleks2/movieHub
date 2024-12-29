@@ -1,35 +1,51 @@
 .profileContainer {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 40px 20px;
+    color: #fff;
+    background-color: #141414;
+    caret-color: transparent;
 }
 
 .profileHeader {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 30px;
+    gap: 40px;
+    margin-bottom: 50px;
+    padding: 20px;
+    background: linear-gradient(to right, #1f1f1f, #141414);
+    border-radius: 10px;
 }
 
 .profileImage {
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
     object-fit: cover;
+    border: 4px solid #e50914;
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
 }
 
 .profileInfo {
     flex: 1;
 }
 
-.profileInfo h1 {
-    margin: 0 0 10px 0;
+.userName {
+    font-size: 2.5em;
+    margin: 0 0 5px 0;
+    color: #fff;
+}
+
+.userId {
+    color: #808080;
+    font-size: 1.1em;
+    margin: 0 0 20px 0;
 }
 
 .userStats {
     display: flex;
-    gap: 20px;
-    margin-top: 10px;
+    align-items: center;
+    gap: 30px;
 }
 
 .statItem {
@@ -37,116 +53,191 @@
 }
 
 .statNumber {
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: bold;
+    color: #e50914;
+}
+
+.messageButton {
+    margin-left: auto;
+    padding: 10px 20px;
+    background-color: #e50914;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.messageButton:hover {
+    background-color: #f40612;
 }
 
 .contentTabs {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
 }
 
 .tabButton {
-    padding: 10px 20px;
+    padding: 15px 30px;
     border: none;
     background: none;
+    color: #808080;
     cursor: pointer;
-    margin-right: 10px;
+    font-size: 1.1em;
+    transition: all 0.3s;
+}
+
+.tabButton:hover {
+    color: #fff;
 }
 
 .tabButton.active {
-    border-bottom: 2px solid #007bff;
-    color: #007bff;
+    color: #e50914;
+    border-bottom: 3px solid #e50914;
 }
 
-.contentSection {
-    display: none;
+.tableLayout {
+    background: #1f1f1f;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
-.contentSection.active {
-    display: block;
-}
-
-.gridLayout {
+.tableHeader {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    grid-template-columns: 3fr 1fr 1fr;
+    padding: 15px 20px;
+    background: #2a2a2a;
+    font-weight: bold;
+    text-align: center;
+}
+
+.tableHeader > div {
+    color: #fff;
+}
+
+.tableBody {
+    display: flex;
+    flex-direction: column;
 }
 
 .postItem, .reviewItem {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+    transition: background-color 0.3s;
 }
 
-
-/* 게시글 리뷰 목록*/
-.postImage {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
+.postItem:hover, .reviewItem:hover {
+    background-color: #3f3f3f;
 }
 
-.postTitle {
-    margin: 0 0 5px 0;
-    font-size: 1.1em;
-}
-
-.postDate {
-    color: #666;
-    font-size: 0.9em;
-    margin: 0 0 5px 0;
-}
-
-.postDescription {
-    margin: 0 0 10px 0;
-    font-size: 0.9em;
-    line-height: 1.4;
-}
-
-.postStats {
+.tdTitle {
     display: flex;
-    gap: 10px;
-    font-size: 0.9em;
+    gap: 15px;
+    align-items: center;
 }
 
-.reviewHeader {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.productImage {
-    width: 60px;
-    height: 60px;
+.postThumbnail {
+    width: 80px;
+    height: 80px;
     object-fit: cover;
     border-radius: 4px;
 }
 
-.productInfo {
+.postInfo {
     flex: 1;
 }
 
-.productName {
+.postTitle {
     margin: 0 0 5px 0;
-    font-size: 1.1em;
+    color: #fff;
+}
+
+.postDescription {
+    color: #808080;
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.tdDate {
+    color: #808080;
+    align-self: center;
+}
+
+.tdStats {
+    display: flex;
+    gap: 15px;
+    align-self: center;
+}
+
+/* 리뷰 섹션 특별 스타일 */
+#reviewsSection .tableHeader {
+    grid-template-columns: 2fr 4fr 1fr 1fr;
+}
+
+#reviewsSection .reviewItem {
+    grid-template-columns: 2fr 4fr 1fr 1fr;
+}
+
+.moviePoster {
+    width: 60px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 10px;
 }
 
 .rating {
     color: #ffd700;
 }
 
-.reviewContent {
-    margin: 0 0 5px 0;
-    font-size: 0.9em;
-    line-height: 1.4;
+
+
+
+
+
+
+
+
+/* 페이지네이션 스타일 */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
-.reviewDate {
-    color: #666;
-    font-size: 0.8em;
-    margin: 0;
+.pageBtn, .pageNum {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pageBtn:hover, .pageNum:hover {
+    background: rgba(229, 9, 20, 0.8);
+}
+
+.pageNum.active {
+    background: #e50914;
+    border-color: #e50914;
+}
+
+.pageNumbers {
+    display: flex;
+    gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .pagination {
+        flex-wrap: wrap;
+    }
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
+@Builder(builderMethodName = "create")
 public class MemberDTO {
     private String username;
     private String nickname;
