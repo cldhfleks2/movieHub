@@ -71,10 +71,10 @@
                             </div>
                         </div>
                         <div class="reviewMetaInfo">
-                            <div class="userInfo">
+                            <a th:href="@{'/userprofile/' + ${review.authorMemberId}}" class="userInfo" style="cursor: pointer; text-decoration: none; color: inherit;">
                                 <img class="userProfile" th:src="@{${review.authorProfileImage}}" src="/image/blank.png" alt="프로필">
                                 <span class="userNickName" th:text="${review.authorNickname}">사용자 닉네임</span>
-                            </div>
+                            </a>
                             <div class="reviewRating">
                                 <!-- 별을 채우기 위한 동적 텍스트 표시 -->
                                 <span class="ratingStars" th:text="${#strings.repeat('★', review.ratingValue)}">★★★★★</span>

@@ -22,5 +22,7 @@ public class MovieReviewDTO {
     private String authorNickname; //리뷰 작성자 닉네임
     private String authorProfileImage; //리뷰 작성자 사진
 
+    private Long authorMemberId; //작성자의 memberId
+
     private Boolean isLiked; //현재 사용자 auth.getName()가 좋아요를 누른 상태인지
 }

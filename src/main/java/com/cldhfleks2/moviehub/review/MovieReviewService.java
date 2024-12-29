@@ -126,6 +126,7 @@ public class MovieReviewService {
             }else{
                 isLiked = false; //좋아요 안누름 상태 저장
             }
+            Long authorMemberId = movieReview.getMember().getId(); //review.html에서 유저 프로필로 link하기위해 필요
             MovieReviewDTO movieReviewDTO = MovieReviewDTO.builder()
                     .movieReviewId(movieReviewId)
                     .content(movieReview.getContent())
@@ -136,6 +137,7 @@ public class MovieReviewService {
                     .likeCount(likeCount)
                     .authorNickname(movieReview.getMember().getNickname())
                     .authorProfileImage(movieReview.getMember().getProfileImage())
+                    .authorMemberId(authorMemberId)
                     .isLiked(isLiked) //내가 좋아요를 눌렀는지 보냄
                     .build();
             movieReviewDTOList.add(movieReviewDTO); //전체 DTO 리스트에 추가
