@@ -1,0 +1,227 @@
+.notificationContainer {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    min-height: 640px;
+    caret-color: transparent;
+}
+
+.notificationHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.notificationHeader h1 {
+    font-size: 1.8rem;
+    color: #333;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.notificationHeader h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 87px;
+    height: 3px;
+    background: linear-gradient(90deg, #e50914, #341e1f);
+    border-radius: 2px;
+}
+
+.notificationControls {
+    display: flex;
+    gap: 1rem;
+}
+
+.notificationControls button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #e50914;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+.notificationControls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.notificationControls button:active {
+    transform: translateY(0);
+}
+
+.notificationItem {
+    padding: 12px 1.2rem;
+    border-radius: 8px;
+    background-color: #ffffff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.notificationItem::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, #e50914, #341e1f);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.notificationItem:hover {
+    transform: scale(1.06);
+    box-shadow: 7px 6px 8px rgb(255 0 0 / 10%);
+}
+
+.notificationItem:hover::before {
+    opacity: 1;
+}
+
+.notificationItem.read {
+    background-color: #f8f9fa;
+}
+
+.notificationItem.read::before {
+    background: linear-gradient(to bottom, #6c757d, #adb5bd);
+}
+
+.notificationContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notificationInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.notificationSender {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+.notificationMessage {
+    color: #505965;
+    font-size: 0.9rem;
+}
+
+.notificationMeta {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.notificationTime {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btnDelete {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #dc3545;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    opacity: 0;
+}
+
+.notificationItem:hover .btnDelete {
+    opacity: 1;
+}
+
+.btnDelete:hover {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.notificationEmpty {
+    padding: 3rem;
+    text-align: center;
+    color: #6b7280;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-top: 1rem;
+}
+
+.notificationEmpty p {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.notificationPagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.notificationPagination button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(to right, #007bff, #00d2ff);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+.notificationPagination button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.notificationPagination button:disabled {
+    background: linear-gradient(to right, #cbd5e1, #e2e8f0);
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    color: #4b5563;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notificationItem {
+    animation: fadeIn 0.3s ease-out;
+}
