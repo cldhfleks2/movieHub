@@ -102,6 +102,8 @@ public class MovieReviewService {
         }
 //        //페이지네이션사용시 현재 컨트롤러를 다시 호출하므로 필요한 값.
 //        model.addAttribute("movieCd", movieCd);
+        Member member = memberObj.get();
+        Long currentUserId = member.getId();
 
         //리뷰 목록을 보여줌 : 한페이지에 5개 보여주도록
         //검색어없으면 ""을 검색하므로 모든 결과가 가져올것
@@ -110,10 +112,12 @@ public class MovieReviewService {
         List<MovieReviewDTO> movieReviewDTOList = new ArrayList<>();
         for (MovieReview movieReview : movieReviewList) {
             //리뷰 총 좋아요 가져오기
-            List<MovieReviewLike> movieReviewLikeList = movieReviewLikeRepository.findAllByMovieReviewIdAndStatus(movieReview.getId());
+            Long movieReviewId = movieReview.getId();
+            Long movieReviewAuthorId = movieReview.getMember().getId();
+            if(currentUserId == movieReviewAuthorId) movieReviewId = null; //본인의 리뷰는 좋아요를 누를수없게. null값 전달
+            List<MovieReviewLike> movieReviewLikeList = movieReviewLikeRepository.findAllByMovieReviewIdAndStatus(movieReviewId);
             int likeCount = movieReviewLikeList.size();
             //내가 좋아요를 눌렀는지 상태 가져오기
-            Long movieReviewId = movieReview.getId();
             Optional<MovieReviewLike> movieReviewLikeObj = movieReviewLikeRepository.findByUsernameAndMovieReviewId(username, movieReviewId);
             Boolean isLiked;
             if(movieReviewLikeObj.isPresent()){
