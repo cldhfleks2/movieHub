@@ -289,3 +289,8 @@
         font-size: 0.9rem;
     }
 }
+
+.notificationItem a{
+    text-decoration: none;
+    color: inherit;
+}

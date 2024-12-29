@@ -21,47 +21,48 @@
     </div>
 
     <div class="notificationList">
-        <div th:each="notification : ${notificationPage.content}"
-             th:class="${notification.isRead == 1 ? 'notificationItem' : 'notificationItem read'}"
-             th:data-id="${notification.id}">
-            <div class="notificationContent">
-                <div class="notificationInfo">
-                    <span class="notificationSender" >카테고리</span>
-                    <span class="notificationMessage" th:text="${notification.message}">알림 내용</span>
-                </div>
-                <div class="notificationMeta">
+        <div th:each="notification : ${notificationDTOPage.content}"
+             th:class="${notification.isRead == 1 ? 'notificationItem' : 'notificationItem read'}">
+            <a th:href="${notification.URL}">
+                <div class="notificationContent">
+                    <div class="notificationInfo">
+                        <span class="notificationSender" >카테고리</span>
+                        <span class="notificationMessage" th:text="${notification.message}">알림 내용</span>
+                    </div>
+                    <div class="notificationMeta">
                         <span class="notificationTime"
                               th:text="${#temporals.format(notification.updateDate, 'yyyy-MM-dd HH:mm')}">시간</span>
-                    <button class="btnDelete">삭제</button>
+                        <button class="btnDelete">삭제</button>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
-        <div th:if="${notificationPage.content.isEmpty()}" class="notificationEmpty">
+        <div th:if="${notificationDTOPage.content.isEmpty()}" class="notificationEmpty">
             <p>새로운 알림이 없습니다.</p>
         </div>
     </div>
 
 
     <!--    <div class="notificationPagination" th:if="${!notificationList.isEmpty()}">-->
-    <div class="pagination" id="pagination" th:if="${notificationPage.totalPages > 0}">
+    <div class="pagination" id="pagination" th:if="${notificationDTOPage.totalPages > 0}">
         <button class="pageBtn prev" id="prevPage"
-                th:disabled="${notificationPage.first}"
-                th:data-pageidx="${notificationPage.number}">
+                th:disabled="${notificationDTOPage.first}"
+                th:data-pageidx="${notificationDTOPage.number}">
             이전
         </button>
         <div class="pageNumbers">
-            <th:block th:each="pageNum : ${#numbers.sequence(0, notificationPage.totalPages - 1)}">
+            <th:block th:each="pageNum : ${#numbers.sequence(0, notificationDTOPage.totalPages - 1)}">
                 <button class="pageNum"
-                        th:classappend="${pageNum == notificationPage.number} ? 'active'"
+                        th:classappend="${pageNum == notificationDTOPage.number} ? 'active'"
                         th:data-pageidx="${pageNum + 1}"
                         th:text="${pageNum + 1}">
                 </button>
             </th:block>
         </div>
         <button class="pageBtn next" id="nextPage"
-                th:disabled="${notificationPage.last}"
-                th:data-pageidx="${notificationPage.number + 2}">
+                th:disabled="${notificationDTOPage.last}"
+                th:data-pageidx="${notificationDTOPage.number + 2}">
             다음
         </button>
     </div>
