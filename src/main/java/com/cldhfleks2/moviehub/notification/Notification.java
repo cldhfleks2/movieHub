@@ -44,7 +44,7 @@ public class Notification {
     private String message;
 
     @Column(nullable = false)
-    private int isRead = 0; //확인 여부 : 기본값 안읽음
+    private int isRead = 1; //확인 여부 : 기본값 안읽음
 
     @Builder(builderMethodName = "create")
     public Notification(Member receiver, Member sender,
