@@ -1,6 +1,7 @@
 package com.cldhfleks2.moviehub.notification;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,7 @@ public class NotificationController {
 
     //알림 모두 읽도록 요청 : 헤더만 새로고침할거임
     @PostMapping("/api/notification/readAll")
-    String readAllNotification(Model model, Authentication auth) {
+    ResponseEntity<String> readAllNotification(Model model, Authentication auth) {
         return notificationService.readAllNotification(model, auth);
     }
 
