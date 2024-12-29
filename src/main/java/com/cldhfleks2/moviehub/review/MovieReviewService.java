@@ -184,12 +184,22 @@ public class MovieReviewService {
         if(!movieReviewObj.isPresent()) //리뷰 정보 체크
             return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movieReview/like", "영화 리뷰를 찾을 수 없습니다.", ResponseEntity.class);
 
-        Member member = memberObj.get();
-        MovieReview movieReview = movieReviewObj.get();
-        MovieReviewLike movieReviewLike = new MovieReviewLike();
-        movieReviewLike.setMember(member);
-        movieReviewLike.setMovieReview(movieReview);
-        movieReviewLikeRepository.save(movieReviewLike); //리뷰 좋아요 저장
+        //이미 좋아요를 누른상태인지
+        Optional<MovieReviewLike> movieReviewLikeObj = movieReviewLikeRepository.findByUsernameAndMovieReviewId(username, reviewId);
+        if(!movieReviewLikeObj.isPresent()){ //처음 누를때
+            Member member = memberObj.get();
+            MovieReview movieReview = movieReviewObj.get();
+            MovieReviewLike movieReviewLike = new MovieReviewLike();
+            movieReviewLike.setMember(member);
+            movieReviewLike.setMovieReview(movieReview);
+            movieReviewLikeRepository.save(movieReviewLike); //리뷰 좋아요 저장
+        }else{
+            MovieReviewLike movieReviewLike = movieReviewLikeObj.get();
+            int status = movieReviewLike.getStatus();
+            status = (status + 1) % 2; //상태 toggle
+            movieReviewLike.setStatus(status);
+            movieReviewLikeRepository.save(movieReviewLike); //상태를 바꿔서 저장
+        }
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

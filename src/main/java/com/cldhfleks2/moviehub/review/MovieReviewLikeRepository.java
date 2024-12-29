@@ -12,7 +12,7 @@ public interface MovieReviewLikeRepository extends JpaRepository<MovieReviewLike
     List<MovieReviewLike> findAllByMovieReviewIdAndStatus(Long movieReviewId);
 
     //username과 movieReviewId로 MovieReviewLike 리스트를 조회
-    @Query("SELECT mrl FROM MovieReviewLike mrl WHERE mrl.member.username = :username AND mrl.movieReview.id = :movieReviewId AND mrl.status = 1")
+    @Query("SELECT mrl FROM MovieReviewLike mrl WHERE mrl.member.username = :username AND mrl.movieReview.id = :movieReviewId")
     Optional<MovieReviewLike> findByUsernameAndMovieReviewId(String username, Long movieReviewId);
 
 }
