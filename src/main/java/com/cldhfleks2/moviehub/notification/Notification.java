@@ -35,30 +35,28 @@ public class Notification {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TargetType targetType; //알림이 발생한 타겟
+    private NotificationTargetType targetType; //알림이 발생한 타겟
 
     @Column(nullable = false)
     private Long targetId;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
+    private String message;
 
     @Column(nullable = false)
     private int isRead = 0; //확인 여부 : 기본값 안읽음
 
-    @Builder
+    @Builder(builderMethodName = "create")
     public Notification(Member receiver, Member sender,
-                        NotificationType notificationType, TargetType targetType,
-                        Long targetId, String content) {
+                        NotificationType notificationType, NotificationTargetType targetType,
+                        Long targetId, String message) {
         this.receiver = receiver;
         this.sender = sender;
         this.notificationType = notificationType;
         this.targetType = targetType;
         this.targetId = targetId;
-        this.content = content;
+        this.message = message;
     }
-
-
 
     //아래는 기본 필드들
     @Id

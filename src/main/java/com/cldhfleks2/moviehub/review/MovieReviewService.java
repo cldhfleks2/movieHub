@@ -5,7 +5,10 @@ import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
-import com.cldhfleks2.moviehub.report.MovieReviewReportRepository;
+import com.cldhfleks2.moviehub.notification.Notification;
+import com.cldhfleks2.moviehub.notification.NotificationRepository;
+import com.cldhfleks2.moviehub.notification.NotificationTargetType;
+import com.cldhfleks2.moviehub.notification.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,7 +34,7 @@ public class MovieReviewService {
     private final MemberRepository memberRepository;
     private final MovieReviewRepository movieReviewRepository;
     private final MovieReviewLikeRepository movieReviewLikeRepository;
-    private final MovieReviewReportRepository movieReviewReportRepository;
+    private final NotificationRepository notificationRepository;
     
     //정렬 하는 함수
     List<MovieReviewDTO> sortReviews(List<MovieReviewDTO> reviews, String dateSort, String ratingSort) {
@@ -146,8 +149,6 @@ public class MovieReviewService {
 
         model.addAttribute("movieReviewDTOPage",movieReviewDTOPage);
 
-
-
         return "review/review";
     }
 
@@ -202,6 +203,26 @@ public class MovieReviewService {
             status = (status + 1) % 2; //상태 toggle
             movieReviewLike.setStatus(status);
             movieReviewLikeRepository.save(movieReviewLike); //상태를 바꿔서 저장
+        }
+
+        //알림 보내기 : 회원인 유저에게만 보냄
+        MovieReview movieReview = movieReviewObj.get();
+        Long receiverId = movieReview.getMember().getId();
+        Optional<Member> receiverObj = memberRepository.findByIdAndStatus(receiverId); //회원인 유저만 가져옴
+        if(receiverObj.isPresent()){ //보낼 사람이 존재할때만 ㅇㅇ
+            Member receiver = receiverObj.get();
+            Member sender = memberObj.get();
+            String nickname = sender.getNickname();
+            String message = nickname + "님이 리뷰에 좋아요를 눌렀습니다.";
+            Notification notification = Notification.create()
+                    .receiver(receiver)
+                    .sender(sender)
+                    .notificationType(NotificationType.LIKE_RECEIVED)
+                    .targetType(NotificationTargetType.REVIEW)
+                    .targetId(reviewId) //이 리뷰에서 이벤트가 일어남
+                    .message(message)
+                    .build();
+            notificationRepository.save(notification); //DB 저장
         }
 
         return ResponseEntity.status(HttpStatus.OK).build();
