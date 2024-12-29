@@ -11,6 +11,7 @@ import java.util.Collection;
 @Setter
 public class MemberDetail extends User {
     private String username;
+    private String nickname;
     private String role;
     private String profileImage;  // 프로필 이미지
 
