@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE movie_review SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
 @ToString
 public class MovieReview {
+    @Column(columnDefinition = "TEXT")
     private String content;
     private Double ratingValue;
 
