@@ -55,7 +55,7 @@
                                 <img class="headerProfileImgLarge" th:src="@{${principal.profileImage}}" alt="프로필 이미지" />
                             </a>
 <!--                            아래랑 똑같음<span class="headerProfileEmail" sec:authentication="principal.username">회원 닉네임</span>-->
-                            <span class="headerProfileEmail" th:text="${principal.username}">회원 닉네임</span>
+                            <span class="headerProfileEmail" th:text="${principal.username}">회원 아이디</span>
                         </div>
                         <div class="headerProfileActions">
                             <form action="/logout" method="post" class="headerLogoutForm">
