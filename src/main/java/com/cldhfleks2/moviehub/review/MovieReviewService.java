@@ -192,6 +192,12 @@ public class MovieReviewService {
         if(!movieReviewObj.isPresent()) //리뷰 정보 체크
             return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movieReview/like", "영화 리뷰를 찾을 수 없습니다.", ResponseEntity.class);
 
+        //리뷰 작성자는 좋아요 요청 불가
+        Long currentUserId = memberObj.get().getId();
+        Long movieReviewAuthorId = movieReviewObj.get().getMember().getId();
+        if(currentUserId == movieReviewAuthorId) 
+            return ErrorService.send(HttpStatus.FORBIDDEN.value(), "/api/movieReview/like", "본인의 리뷰는 좋아요를 요청할 수 없습니다.", ResponseEntity.class);
+
         //이미 좋아요를 누른상태인지
         Optional<MovieReviewLike> movieReviewLikeObj = movieReviewLikeRepository.findByUsernameAndMovieReviewId(username, reviewId);
         boolean pushNotification = false; //알림을 보낼건지
@@ -233,6 +239,8 @@ public class MovieReviewService {
                 notificationRepository.save(notification); //DB 저장
             }
         }
+
+
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
