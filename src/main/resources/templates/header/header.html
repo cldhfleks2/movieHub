@@ -36,7 +36,7 @@
                                 <div class="headerNotificationText" th:text="${notification.message}">알림 메시지</div>
 <!--                                <div class="headerNotificationTime">방금 전</div>-->
                                 <div class="headerNotificationTime">
-                                    <span th:text="${#dates.format(notification.updateDate, 'yyyy-MM-dd HH:mm:ss')}">시간 출력</span>
+                                    <span th:text="${#temporals.format(notification.updateDate, 'yyyy-MM-dd HH:mm:ss')}">시간 출력</span>
                                 </div>
                             </div>
                             <div class="headerNotificationItem" th:if="${notificationList == null || notificationList.size() == 0}">

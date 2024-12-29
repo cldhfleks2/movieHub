@@ -170,10 +170,10 @@ body {
 .headerNotificationDropdown {
     display: none;
     position: absolute;
-    top: calc(100% + 0.5rem);
-    right: -100px;
+    top: calc(100% + 0.1rem);
+    right: -150px;
     background-color: #2a2a2a;
-    min-width: 300px;
+    min-width: 400px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     border-radius: 4px;
     z-index: 1000;

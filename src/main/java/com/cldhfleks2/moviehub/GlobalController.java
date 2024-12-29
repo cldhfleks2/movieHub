@@ -29,6 +29,7 @@ public class GlobalController {
     //notificationRepository 에서 알림가져와서 넣어줌
     @ModelAttribute
     public void addNotification(Authentication auth, Model model){
+        if(auth == null) return; //로그인 했을때만
         String username = auth.getName();
         //안읽고 삭제되지않은 알림만 모두 가져오기
         List<Notification> notificationList = notificationRepository.findAllByUsernameAndIsReadAndStatus(username);
