@@ -47,7 +47,7 @@ public class BasicService {
 
     //헤더 페이지 GET
     String getHeader(){
-        return "header :: #header";
+        return "header/header :: #header";
     }
 
     //날짜 가져오는 함수
