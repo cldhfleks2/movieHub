@@ -4,12 +4,12 @@ import com.cldhfleks2.moviehub.member.MemberDetail;
 import com.cldhfleks2.moviehub.notification.Notification;
 import com.cldhfleks2.moviehub.notification.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
-import java.util.List;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -32,9 +32,11 @@ public class GlobalController {
         if(auth == null) return; //로그인 했을때만
         String username = auth.getName();
         //안읽고 삭제되지않은 알림만 모두 가져오기
-        List<Notification> notificationList = notificationRepository.findAllByUsernameAndIsReadAndStatus(username);
-        model.addAttribute("notificationList", notificationList);
-        model.addAttribute("notificationCnt", notificationList.size());
+        //페이지네이션 적용해서 보내주자.
+        Page<Notification> notificationPage = notificationRepository.findAllByUsernameAndIsReadAndStatus(username, PageRequest.of(0, 10));
+
+        model.addAttribute("notificationList", notificationPage.getContent()); //10개만 보여줌
+        model.addAttribute("notificationCnt", notificationPage.getTotalElements());
     }
 
 
