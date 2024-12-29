@@ -15,8 +15,8 @@ public class NotificationController {
 
     //알림 페이지 GET
     @GetMapping("/notification")
-    String getNotification(Model model, Authentication auth) {
-        return notificationService.getNotification(model, auth);
+    String getNotification(Model model, Authentication auth, Integer pageIdx) {
+        return notificationService.getNotification(model, auth, pageIdx);
     }
 
     //알림 모두 읽도록 요청 : 헤더만 새로고침할거임
@@ -24,5 +24,7 @@ public class NotificationController {
     ResponseEntity<String> readAllNotification(Model model, Authentication auth) {
         return notificationService.readAllNotification(model, auth);
     }
+
+
 
 }

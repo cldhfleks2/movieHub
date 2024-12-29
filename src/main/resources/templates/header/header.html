@@ -23,13 +23,13 @@
             <div class="headerUserControls" sec:authorize="isAuthenticated()">
                 <div class="headerNotificationWrapper">
                     <div class="headerNotificationIcon">
-                        <div style="width: 20px; font-size: 25px;">🔔</div>
+                        <a href="/notification" style="width: 20px; font-size: 25px;">🔔</a>
                         <span class="headerNotificationCount" th:text="${notificationCnt}">2</span>
                     </div>
                     <div class="headerNotificationDropdown">
                         <div class="headerNotificationHeader">
-                            <span>알림</span>
-                            <a class="headerReadAll" style="cursor: pointer;text-decoration: none;">모두 읽음 처리</a>
+                            <a href="/notification" style="cursor: pointer;font-size: 20px;text-decoration:none;color: inherit;">알림</a>
+                            <a class="headerReadAll" style="cursor: pointer;text-decoration:none;color:inherit;">모두 읽음 처리</a>
                         </div>
                         <div class="headerNotificationContent">
                             <div class="headerNotificationItem" th:each="notification : ${notificationList}">

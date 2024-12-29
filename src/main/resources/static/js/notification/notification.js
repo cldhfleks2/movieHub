@@ -33,17 +33,25 @@ function readAllNotification() {
 
 // 페이지네이션
 function pagination() {
-    $('.btnPrev').on('click', function() {
-        const currentPage = parseInt($('.pageInfo').text().split('/')[0].trim());
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const pageIdx = $(this).data("pageidx")
+        $.ajax({
+            url: "/notification",
+            method: "get",
+            data: {pageIdx: pageIdx},
+            success: function (data){
+                var data = $.parseHTML(data);
+                var dataHtml = $("<div>").append(data);
+                $("#notificationContainer").replaceWith(dataHtml.find("#notificationContainer"));
 
-        //ajax
-    });
-
-    $('.btnNext').on('click', function() {
-        const currentPage = parseInt($('.pageInfo').text().split('/')[0].trim());
-
-        //ajax
-    });
+                console.log("/notification pagination ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("/notification pagination ajax failed")
+            }
+        });
+    })
 }
 
 // 알림 클릭시 해당 위치로 이동

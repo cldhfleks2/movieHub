@@ -12,7 +12,7 @@
 
 <div th:replace="~{ header/header::header }"></div>
 
-<main class="notificationContainer">
+<main class="notificationContainer" id="notificationContainer">
     <div class="notificationHeader">
         <h1>알림함</h1>
         <div class="notificationControls">
@@ -21,7 +21,7 @@
     </div>
 
     <div class="notificationList">
-        <div th:each="notification : ${notificationList}"
+        <div th:each="notification : ${notificationPage.content}"
              th:class="${notification.isRead == 1 ? 'notificationItem' : 'notificationItem read'}"
              th:data-id="${notification.id}">
             <div class="notificationContent">
@@ -37,16 +37,34 @@
             </div>
         </div>
 
-        <div th:if="${notificationList.isEmpty()}" class="notificationEmpty">
+        <div th:if="${notificationPage.content.isEmpty()}" class="notificationEmpty">
             <p>새로운 알림이 없습니다.</p>
         </div>
     </div>
 
-<!--    <div class="notificationPagination" th:if="${!notificationList.isEmpty()}">-->
-<!--        <button class="btnPrev" th:disabled="${notificationList.first}">이전</button>-->
-<!--        <span class="pageInfo" th:text="${notificationList.number + 1} + ' / ' + ${notifications.totalPages}">1 / 1</span>-->
-<!--        <button class="btnNext" th:disabled="${notificationList.last}">다음</button>-->
-<!--    </div>-->
+
+    <!--    <div class="notificationPagination" th:if="${!notificationList.isEmpty()}">-->
+    <div class="pagination" id="pagination" th:if="${notificationPage.totalPages > 0}">
+        <button class="pageBtn prev" id="prevPage"
+                th:disabled="${notificationPage.first}"
+                th:data-pageidx="${notificationPage.number}">
+            이전
+        </button>
+        <div class="pageNumbers">
+            <th:block th:each="pageNum : ${#numbers.sequence(0, notificationPage.totalPages - 1)}">
+                <button class="pageNum"
+                        th:classappend="${pageNum == notificationPage.number} ? 'active'"
+                        th:data-pageidx="${pageNum + 1}"
+                        th:text="${pageNum + 1}">
+                </button>
+            </th:block>
+        </div>
+        <button class="pageBtn next" id="nextPage"
+                th:disabled="${notificationPage.last}"
+                th:data-pageidx="${notificationPage.number + 2}">
+            다음
+        </button>
+    </div>
 </main>
 
 
