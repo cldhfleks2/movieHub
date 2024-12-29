@@ -181,6 +181,7 @@ body {
 
 .headerNotificationWrapper:hover .headerNotificationDropdown {
     display: block;
+    user-select: none; /*드래그못하게*/
 }
 
 .headerNotificationHeader {
