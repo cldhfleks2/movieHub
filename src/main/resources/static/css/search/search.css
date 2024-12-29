@@ -534,3 +534,31 @@ select {
     font-size: 20px;
     color: red;
 }
+
+
+
+
+
+/* 이미지 마우스 올리면 보이는 게시판 아이콘에 마우스 올리면 메시지 표시 */
+.movieOverlay .btnLink:hover::after,
+.movieOverlay .btnLike:hover::after {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    writing-mode: horizontal-tb;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    color: white;
+}
+
+.movieOverlay .btnLink:hover::after {
+    content: '클릭하여 상세 페이지로 이동';
+}
+
+.movieOverlay .btnLike:hover::after {
+    content: '클릭하여 영화 좋아요';
+}
