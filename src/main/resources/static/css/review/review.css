@@ -6,6 +6,7 @@ body{
     max-width: 1200px;
     margin: 6rem auto 2rem;
     padding: 0 1rem;
+    margin-top: 0;
 }
 
 .reviewContainer {
@@ -638,4 +639,25 @@ textarea.addReviewText:focus {
     .reportCheckboxGroup {
         grid-template-columns: 1fr;
     }
+}
+
+/*페이지 제목*/
+.intro{
+    font-size: 30px;
+    color: #333;
+    position: relative;
+    text-align: center;
+    margin: 20px;
+    margin-bottom: 35px;
+}
+
+.intro::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 450px;
+    width: 230px;
+    height: 5px;
+    background: linear-gradient(90deg, #e50914, #0544ff);
+    border-radius: 2px;
 }
