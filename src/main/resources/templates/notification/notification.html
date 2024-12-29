@@ -20,22 +20,21 @@
         </div>
     </div>
 
-    <div class="notificationList">
+    <div class="notificationList" id="notificationList">
         <div th:each="notification : ${notificationDTOPage.content}"
-             th:class="${notification.isRead == 1 ? 'notificationItem' : 'notificationItem read'}">
-            <a th:href="${notification.URL}">
-                <div class="notificationContent">
-                    <div class="notificationInfo">
-                        <span class="notificationSender" >카테고리</span>
-                        <span class="notificationMessage" th:text="${notification.message}">알림 내용</span>
-                    </div>
-                    <div class="notificationMeta">
+             th:class="${notification.isRead == 1 ? 'notificationItem' : 'notificationItem read'}"
+            th:data-id="${notification.id}">
+            <div class="notificationContent">
+                <div class="notificationInfo" th:data-url="${notification.URL}">
+                    <span class="notificationSender" >카테고리</span>
+                    <span class="notificationMessage" th:text="${notification.message}">알림 내용</span>
+                </div>
+                <div class="notificationMeta">
                         <span class="notificationTime"
                               th:text="${#temporals.format(notification.updateDate, 'yyyy-MM-dd HH:mm')}">시간</span>
-                        <button class="btnDelete">삭제</button>
-                    </div>
+                    <button class="btnDelete" th:data-notificationid="${notification.id}">삭제</button>
                 </div>
-            </a>
+            </div>
         </div>
 
         <div th:if="${notificationDTOPage.content.isEmpty()}" class="notificationEmpty">

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder(builderMethodName = "create")
 public class NotificationDTO {
+    private Long id;
     private Member receiver; //받는 사람
     private Member sender; //보낸 사람 (댓글작성자, 좋아요 누른사람등..)
 

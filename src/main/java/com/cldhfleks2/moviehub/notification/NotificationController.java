@@ -19,12 +19,17 @@ public class NotificationController {
         return notificationService.getNotification(model, auth, pageIdx);
     }
 
-    //알림 모두 읽도록 요청 : 헤더만 새로고침할거임
+    //알림 모두 읽도록 요청
     @PostMapping("/api/notification/readAll")
-    ResponseEntity<String> readAllNotification(Model model, Authentication auth) {
-        return notificationService.readAllNotification(model, auth);
+    ResponseEntity<String> readAllNotification(Authentication auth) {
+        return notificationService.readAllNotification(auth);
     }
 
+    //알림 하나 읽도록 요청
+    @PostMapping("/api/notification/read")
+    ResponseEntity<String> readNotification(Long notificationId, Authentication auth) {
+        return notificationService.readNotification(notificationId, auth);
+    }
 
 
 }

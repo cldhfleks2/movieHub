@@ -34,6 +34,7 @@ public class NotificationService {
         }
 
         return NotificationDTO.create()
+                .id(notification.getId())
                 .receiver(notification.getReceiver())
                 .sender(notification.getSender())
                 .notificationType(notification.getNotificationType())
@@ -74,7 +75,7 @@ public class NotificationService {
     }
 
     //알림 모두 읽도록 요청
-    ResponseEntity<String> readAllNotification(Model model, Authentication auth) {
+    ResponseEntity<String> readAllNotification(Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
@@ -82,6 +83,28 @@ public class NotificationService {
 
         //해당 유저의 모든 알림을 읽음 처리로 업데이트
         notificationRepository.updateNotificationByUsernameAndStatus(username);
+
+        return ResponseEntity.status(HttpStatus.OK.value()).build();
+    }
+
+    //알림 하나 읽도록 요청
+    ResponseEntity<String> readNotification(Long notificationId, Authentication auth) {
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/notification/read", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Optional<Notification> notificationObj = notificationRepository.findById(notificationId);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/notification/read", "알림을 찾을 수 없습니다.", ResponseEntity.class);
+
+        Member member = memberObj.get();
+        Notification notification = notificationObj.get();
+        if(notification.getReceiver().getId() != member.getId()) //본인의 알림이 아닐경우 삭제 불가
+            return ErrorService.send(HttpStatus.FORBIDDEN.value(), "/api/notification/read", "본인의 알림이 아닙니다.", ResponseEntity.class);
+
+        notification.setIsRead(0); //알림을 읽음 처리
+        notificationRepository.save(notification);
 
         return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
