@@ -21,11 +21,9 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content; //내용
     private Long view=0L; //조회수
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PostType postType; //게시판 종류 : 문자열로 저장됨 => "토론 게시판"
-
     @ToString.Exclude
     @ManyToOne
     private Member member; //게시글 작성 유저
