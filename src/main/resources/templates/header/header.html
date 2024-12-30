@@ -24,7 +24,9 @@
                 <div class="headerNotificationWrapper">
                     <div class="headerNotificationIcon">
                         <a href="/notification" style="width: 20px; font-size: 25px;">🔔</a>
-                        <span class="headerNotificationCount" th:text="${notificationCnt}">2</span>
+                        <span class="headerNotificationCount"
+                              th:if="${notificationCnt != 0}"
+                              th:text="${notificationCnt}">알림 갯수</span>
                     </div>
                     <div class="headerNotificationDropdown">
                         <div class="headerNotificationHeader">
