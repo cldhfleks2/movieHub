@@ -24,4 +24,10 @@ public class CommunityService {
         return "community/postDetail";
     }
 
+
+    //게시글 작성 페이지 GET
+    String getPostWrite(Model model, Authentication auth) {
+        return "community/write";
+    }
+
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/community/write.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:replace="~{ header/header::header }"></div>
+
+<div class="postCreateContainer">
+    <h1 class="pageTitle">게시글 작성</h1>
+
+    <form id="postCreateForm">
+        <div class="formGroup">
+            <select id="categorySelect" required>
+                <option value="" disabled selected>카테고리 선택</option>
+                <option value="discussion">토론</option>
+                <option value="review">리뷰</option>
+                <option value="news">소식</option>
+            </select>
+        </div>
+
+        <div class="formGroup">
+            <input type="text" id="postTitle" placeholder="제목을 입력하세요" required>
+        </div>
+
+        <div class="formGroup">
+            <textarea id="postContent" placeholder="내용을 입력하세요" required></textarea>
+        </div>
+
+        <div class="imageUploadSection">
+            <div class="uploadButton">
+                <span class="icon">+</span>
+                <span>이미지 추가</span>
+                <input type="file" id="imageUpload" accept="image/*" multiple>
+            </div>
+            <div id="imagePreview"></div>
+        </div>
+
+        <div class="formActions">
+            <button type="button" class="cancelButton">취소</button>
+            <button type="submit" class="submitButton">등록</button>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{ footer/footer::footer }"></div>
+<script src="/js/global.js"></script>
+<script src="/js/community/write.js"></script>
+</body>
+</html>

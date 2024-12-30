@@ -23,4 +23,9 @@ public class CommunityController {
         return communityService.getPostDetail(model, auth);
     }
 
+    //게시글 작성 페이지 GET
+    @GetMapping("/postWrite")
+    String getPostWrite(Model model, Authentication auth) {
+        return communityService.getPostWrite(model, auth);
+    }
 }
