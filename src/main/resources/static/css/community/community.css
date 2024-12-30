@@ -7,6 +7,7 @@ body {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1.5rem;
+    caret-color: transparent;
 }
 
 .communityHeader {
@@ -279,4 +280,31 @@ body {
 
 .pageDots {
     color: rgba(255, 255, 255, 0.5);
+}
+
+
+
+.statItem {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.statItem .icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.statItem .icon-heart {
+    color: #e50914;
+}
+
+.statItem .icon-view {
+    color: #ffd700;
+}
+
+.statItem .icon-comment {
+    color: #1d9bf0;
 }

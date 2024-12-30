@@ -12,17 +12,15 @@
 
 <div th:replace="~{ header/header::header }"></div>
 
-
 <div class="communityContainer">
     <div class="communityHeader">
         <h2>커뮤니티</h2>
         <div class="headerControls">
             <div class="categoryTabs">
                 <button class="categoryTab active" data-category="all">전체</button>
-                <button class="categoryTab" data-category="discussion">토론</button>
-                <button class="categoryTab" data-category="recommendation">추천</button>
-                <button class="categoryTab" data-category="news">소식</button>
                 <button class="categoryTab" data-category="free">자유</button>
+                <button class="categoryTab" data-category="news">소식</button>
+                <button class="categoryTab" data-category="discussion">토론</button>
             </div>
             <div class="rightControls">
                 <div class="searchBox">
@@ -36,24 +34,16 @@
 
     <div class="filterSection">
         <select class="sortSelect">
-            <option value="latest">최신순</option>
-            <option value="popular">인기순</option>
-            <option value="commented">댓글순</option>
+            <option value="latest" style="color: black">최신순</option>
+            <option value="popular" style="color: black">인기순</option>
+            <option value="commented" style="color: black">댓글순</option>
         </select>
-        <div class="viewToggle">
-            <button class="viewButton active" data-view="card">카드뷰</button>
-            <button class="viewButton" data-view="list">리스트뷰</button>
-        </div>
     </div>
 
-    <div class="postList cardView">
+    <div class="postList">
         <div class="postCard">
             <div class="postHeader">
                 <span class="postCategory">토론</span>
-                <div class="postActions">
-                    <button class="actionButton bookmark"></button>
-                    <button class="actionButton share"></button>
-                </div>
             </div>
             <div class="postContent">
                 <h3 class="postTitle">[오펜하이머] 놀란 감독의 연출의도</h3>
@@ -68,15 +58,15 @@
             </div>
             <div class="postStats">
                 <div class="statItem">
-                    <i class="heartIcon"></i>
+                    <span class="icon icon-heart">♥</span>
                     <span>128</span>
                 </div>
                 <div class="statItem">
-                    <i class="commentIcon"></i>
+                    <span class="icon icon-comment">💬</span>
                     <span>45</span>
                 </div>
                 <div class="statItem">
-                    <i class="viewIcon"></i>
+                    <span class="icon icon-view">👁</span>
                     <span>1.2k</span>
                 </div>
             </div>
