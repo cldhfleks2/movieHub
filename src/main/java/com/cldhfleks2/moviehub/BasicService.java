@@ -39,7 +39,7 @@ public class BasicService {
     private final SeleniumWebDriver seleniumWebDriver;
 
     String test(Model model) throws Exception {
-        return "community/community";
+        return "test";
     }
 
     //헤더 페이지 GET
