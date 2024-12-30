@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -54,6 +56,12 @@ public class MemberController {
     @GetMapping("/mywish")
     String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
         return memberService.getMyWish(model, auth, pageIdx);
+    }
+
+    //유저 프로필 수정 요청
+    @PutMapping("/api/user/profile")
+    ResponseEntity<String> editUserprofile(String nickname, String password, MultipartFile profileImage, Authentication auth)  throws Exception{
+        return memberService.editUserprofile(nickname, password, profileImage, auth);
     }
 
 }
