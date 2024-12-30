@@ -1,39 +1,39 @@
 $(document).ready(function() {
-    initImageUpload();
+    // initImageUpload();
     initFormSubmit();
     initCancelButton();
 });
 
-function initImageUpload() {
-    $(document).on('change', '#imageUpload', function(e) {
-        const files = e.target.files;
-        handleImagePreview(files);
-    });
+// function initImageUpload() {
+//     $(document).on('change', '#imageUpload', function(e) {
+//         const files = e.target.files;
+//         handleImagePreview(files);
+//     });
+//
+//     $(document).on('click', '.removeImage', function() {
+//         $(this).closest('.previewImage').remove();
+//     });
+// }
 
-    $(document).on('click', '.removeImage', function() {
-        $(this).closest('.previewImage').remove();
-    });
-}
-
-function handleImagePreview(files) {
-    Array.from(files).forEach(file => {
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                const previewHtml = `
-                    <div class="previewImage">
-                        <img src="${e.target.result}" alt="Preview">
-                        <button type="button" class="removeImage">×</button>
-                    </div>
-                `;
-                $('#imagePreview').append(previewHtml);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    });
-}
+// function handleImagePreview(files) {
+//     Array.from(files).forEach(file => {
+//         if (file.type.startsWith('image/')) {
+//             const reader = new FileReader();
+//
+//             reader.onload = function(e) {
+//                 const previewHtml = `
+//                     <div class="previewImage">
+//                         <img src="${e.target.result}" alt="Preview">
+//                         <button type="button" class="removeImage">×</button>
+//                     </div>
+//                 `;
+//                 $('#imagePreview').append(previewHtml);
+//             };
+//
+//             reader.readAsDataURL(file);
+//         }
+//     });
+// }
 
 function initFormSubmit() {
     $('#postCreateForm').on('submit', function(e) {
@@ -46,6 +46,8 @@ function initFormSubmit() {
         };
 
         // TODO: API 연동 로직 추가
+
+
         console.log('Form submitted:', formData);
     });
 }

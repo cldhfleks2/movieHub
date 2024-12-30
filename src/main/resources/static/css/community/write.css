@@ -1,12 +1,14 @@
 .postCreateContainer {
-    max-width: 900px;
+    max-width: 1300px;
     margin: 2rem auto;
     padding: 2rem 1.5rem;
     background-color: rgba(20, 20, 20, 0.95);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     color: #fff;
+    caret-color: transparent;
 }
+
 
 .pageTitle {
     font-size: 2rem;
@@ -24,7 +26,7 @@
     padding: 0.8rem;
     background-color: rgba(32, 32, 32, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 4px;
+    border-radius: 15px;
     color: #fff;
     font-size: 1rem;
 }
@@ -34,9 +36,10 @@
     padding: 1rem;
     background-color: rgba(32, 32, 32, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 4px;
+    border-radius: 15px;
     color: #fff;
     font-size: 1.2rem;
+    caret-color: white;
 }
 
 #postContent {
@@ -45,11 +48,12 @@
     padding: 1rem;
     background-color: rgba(32, 32, 32, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 4px;
+    border-radius: 15px;
     color: #fff;
     font-size: 1.1rem;
     resize: vertical;
     line-height: 1.6;
+    caret-color: white;
 }
 
 .imageUploadSection {
