@@ -3,6 +3,7 @@ package com.cldhfleks2.moviehub;
 import com.cldhfleks2.moviehub.api.KOBISRequestService;
 import com.cldhfleks2.moviehub.bookmark.BookMark;
 import com.cldhfleks2.moviehub.bookmark.BookMarkRepository;
+import com.cldhfleks2.moviehub.config.SeleniumWebDriver;
 import com.cldhfleks2.moviehub.like.MovieLike;
 import com.cldhfleks2.moviehub.like.MovieLikeRepository;
 import com.cldhfleks2.moviehub.movie.*;
@@ -10,7 +11,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,13 +36,10 @@ public class BasicService {
     private final KOBISRequestService kobisRequestService;
     private final MovieLikeRepository movieLikeRepository;
     private final BookMarkRepository bookMarkRepository;
-
-    @Value("${kobis.key}")
-    private String kobiskey;
+    private final SeleniumWebDriver seleniumWebDriver;
 
     String test(Model model) throws Exception {
-
-        return "test";
+        return "community/community";
     }
 
     //헤더 페이지 GET
@@ -116,23 +113,19 @@ public class BasicService {
     //메인 페이지 GET
     String getMain(Model model) throws Exception{
         //1. 전체 일일 박스 오피스 DTO
-        HttpResponse<String> totalTodayBoxOfficeResponse = kobisRequestService.getTotalTodayBoxOfficeResponse();
-        List<MovieDTO> totalTodayBoxOfficeMovie = movieService.getMovieDTOAsBoxOffice(totalTodayBoxOfficeResponse, "dailyBoxOfficeList");
+        List<MovieDTO> totalTodayBoxOfficeMovie = movieService.getTotalTodayBoxOfficeMovie();
         model.addAttribute("totalTodayBoxOfficeMovie", totalTodayBoxOfficeMovie);
 
         //2. 전체 주간 박스오피스
-        HttpResponse<String> totalWeeklyBoxOfficeResponse = kobisRequestService.getTotalWeeklyBoxOfficeResponse();
-        List<MovieDTO> totalWeeklyBoxOfficeMovie = movieService.getMovieDTOAsBoxOffice(totalWeeklyBoxOfficeResponse, "weeklyBoxOfficeList");
+        List<MovieDTO> totalWeeklyBoxOfficeMovie = movieService.getTotalWeeklyBoxOfficeMovie();
         model.addAttribute("totalWeeklyBoxOfficeMovie", totalWeeklyBoxOfficeMovie);
 
         //3. 주간 한국 박스오피스
-        HttpResponse<String> koreaWeeklyBoxOfficeResponse = kobisRequestService.getKoreaWeeklyBoxOfficeResponse();
-        List<MovieDTO> koreaWeeklyBoxOfficeMovie = movieService.getMovieDTOAsBoxOffice(koreaWeeklyBoxOfficeResponse, "weeklyBoxOfficeList");
+        List<MovieDTO> koreaWeeklyBoxOfficeMovie = movieService.getKoreaWeeklyBoxOfficeMovie();
         model.addAttribute("koreaWeeklyBoxOfficeMovie", koreaWeeklyBoxOfficeMovie);
 
         //4. 주간 외국 박스오피스
-        HttpResponse<String> foreignWeeklyBoxOffice = kobisRequestService.getForeignWeeklyBoxOfficeResponse();
-        List<MovieDTO> foreignWeeklyBoxOfficeMovie = movieService.getMovieDTOAsBoxOffice(foreignWeeklyBoxOffice, "weeklyBoxOfficeList");
+        List<MovieDTO> foreignWeeklyBoxOfficeMovie = movieService.getForeignWeeklyBoxOfficeMovie();
         model.addAttribute("foreignWeeklyBoxOfficeMovie", foreignWeeklyBoxOfficeMovie);
 
         return "main/main";
@@ -280,5 +273,12 @@ public class BasicService {
         return ResponseEntity.status(HttpStatus.OK).body(movieCd);
     }
 
+    //차트 페이지 GET
+    String getChart(Model model, Authentication auth)  throws Exception{
+        List<MovieDTO> movieDTOList = movieService.getMovieRankList();
+
+        model.addAttribute("movieDTOList", movieDTOList);
+        return "chart/chart";
+    }
 
 }

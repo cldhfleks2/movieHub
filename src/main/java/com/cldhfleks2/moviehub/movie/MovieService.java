@@ -19,7 +19,9 @@ import com.cldhfleks2.moviehub.movie.nation.MovieNation;
 import com.cldhfleks2.moviehub.movie.nation.MovieNationRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,11 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final KOBISRequestService kobisRequestService;
     private final TMDBRequestService tmdbRequestService;
+    @Getter @Setter private List<MovieDTO> movieRankList = null;
+    @Getter @Setter private List<MovieDTO> totalTodayBoxOfficeMovie = null;
+    @Getter @Setter private List<MovieDTO> totalWeeklyBoxOfficeMovie = null;
+    @Getter @Setter private List<MovieDTO> koreaWeeklyBoxOfficeMovie = null;
+    @Getter @Setter private List<MovieDTO> foreignWeeklyBoxOfficeMovie = null;
 
     //날짜 가져오는 함수 : KOBIS에서 하루이전 통계만 잡히므로 하루 이전 날짜로 계산
     private String getCurrentDay() {
@@ -92,7 +99,7 @@ public class MovieService {
         List<MovieDirector> directorList = movieDirectorRepository.findByMovieIdAndStatus(movieId);
         List<MovieActor> actorList = movieActorRepository.findByMovieIdAndStatus(movieId);
 
-        MovieDTO movieDTO = MovieDTO.builder()
+        MovieDTO movieDTO = MovieDTO.create()
                 .movieCd(movie.getMovieCd())
                 .movieNm(movie.getMovieNm())
                 .movieNmEn(movie.getMovieNmEn())
@@ -118,7 +125,7 @@ public class MovieService {
 
     //ReturnEntitysDTO(영화관련묶음엔티티) => MovieDTO
     public MovieDTO convertToMovieDTO(ReturnEntitysDTO returnEntitysDTO) {
-        MovieDTO movieDTO = MovieDTO.builder()
+        MovieDTO movieDTO = MovieDTO.create()
                 .movieCd(returnEntitysDTO.getMovie().getMovieCd())
                 .movieNm(returnEntitysDTO.getMovie().getMovieNm())
                 .movieNmEn(returnEntitysDTO.getMovie().getMovieNmEn())
@@ -474,7 +481,7 @@ public class MovieService {
             Movie movie = movieObj.get();
             Long movieId = movie.getId();
             //3. 사용할 필드만 DTO에 담는다.
-            MovieDTO.MovieDTOBuilder movieDTOBuilder = MovieDTO.builder();
+            MovieDTO.MovieDTOBuilder movieDTOBuilder = MovieDTO.create();
             movieDTOBuilder.movieCd(movie.getMovieCd());
             movieDTOBuilder.movieNm(movie.getMovieNm());
             movieDTOBuilder.showTm(movie.getShowTm());
@@ -592,7 +599,7 @@ public class MovieService {
                 Long movieId = movie.getId();
                 String posterURL = movie.getPosterURL();
 //                List<MovieGenre> genreList = movieGenreRepository.findByMovieIdAndStatus(movieId); //장르 제외
-                MovieDTO movieDTO = MovieDTO.builder()
+                MovieDTO movieDTO = MovieDTO.create()
                         .movieNm(movieNm)
                         .openDt(openDt)
                         .posterURL(posterURL)
@@ -624,7 +631,7 @@ public class MovieService {
 
                 //나중에 영화검색결과에 필요한 엔티티가있으면 추가할것...
 
-                MovieDTO movieDTO = MovieDTO.builder()
+                MovieDTO movieDTO = MovieDTO.create()
                         .movieNm(movieNm)
                         .openDt(openDt)
                         .posterURL(posterURL)
@@ -788,7 +795,7 @@ public class MovieService {
                         rating = String.format("%.1f", convertedRating);
                     }
 
-                    MovieDTO movieDTO = MovieDTO.builder()
+                    MovieDTO movieDTO = MovieDTO.create()
                             .movieNm(movieNm)
                             .openDt(openStartDt)
                             .posterURL(posterURL)
@@ -834,9 +841,6 @@ public class MovieService {
         List<MovieDTO> movieDTOList = getMovieDTOAsSearchPeopleId(peopleId, limit); //검색 결과 제한
         return movieDTOList;
     }
-
-
-
 
 
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@Builder(builderMethodName = "create")
 public class MovieDTO {
     //메인 페이지 에서 사용
     private String movieCd; // 영화 고유 코드  예) "20200142"
@@ -33,5 +33,10 @@ public class MovieDTO {
     //검색에서 사용
     private String rating;
 
+    //char페이지에서 사용
+    private Long rank;
+    private String age;
+    private String releaseDate;
+    private String ticketRate;
 }
 

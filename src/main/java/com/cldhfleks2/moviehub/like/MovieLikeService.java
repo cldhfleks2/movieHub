@@ -64,7 +64,9 @@ public class MovieLikeService {
         model.addAttribute("totalLikeCnt", totalLikeCnt);
 
         //movieCd값 전달을 위해 MovieDTO선언
-        MovieDTO movieDetail = MovieDTO.builder().movieCd(movieCd).build();
+        MovieDTO movieDetail = MovieDTO.create()
+                .movieCd(movieCd)
+                .build();
         model.addAttribute("movieDetail", movieDetail);
 
         return "detail/detail";

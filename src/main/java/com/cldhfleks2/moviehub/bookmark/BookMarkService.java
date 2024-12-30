@@ -54,7 +54,7 @@ public class BookMarkService {
         model.addAttribute("bookmarkStatus", bookmarkStatus);
 
         //movieCd값을 사용해야 하므로 모델로 전달
-        MovieDTO movieDetail = MovieDTO.builder().movieCd(movieCd).build();
+        MovieDTO movieDetail = MovieDTO.create().movieCd(movieCd).build();
         model.addAttribute("movieDetail", movieDetail);
 
         return "detail/detail";
