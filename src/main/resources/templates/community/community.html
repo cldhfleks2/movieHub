@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/community/community.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{ header/header::header }"></div>
+
+
+<div class="communityContainer">
+    <div class="communityHeader">
+        <h2>커뮤니티</h2>
+        <div class="headerControls">
+            <div class="categoryTabs">
+                <button class="categoryTab active" data-category="all">전체</button>
+                <button class="categoryTab" data-category="discussion">토론</button>
+                <button class="categoryTab" data-category="recommendation">추천</button>
+                <button class="categoryTab" data-category="news">소식</button>
+                <button class="categoryTab" data-category="free">자유</button>
+            </div>
+            <div class="rightControls">
+                <div class="searchBox">
+                    <input type="text" placeholder="게시글 검색...">
+                    <i class="searchIcon"></i>
+                </div>
+                <button class="writeButton">글쓰기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="filterSection">
+        <select class="sortSelect">
+            <option value="latest">최신순</option>
+            <option value="popular">인기순</option>
+            <option value="commented">댓글순</option>
+        </select>
+        <div class="viewToggle">
+            <button class="viewButton active" data-view="card">카드뷰</button>
+            <button class="viewButton" data-view="list">리스트뷰</button>
+        </div>
+    </div>
+
+    <div class="postList cardView">
+        <div class="postCard">
+            <div class="postHeader">
+                <span class="postCategory">토론</span>
+                <div class="postActions">
+                    <button class="actionButton bookmark"></button>
+                    <button class="actionButton share"></button>
+                </div>
+            </div>
+            <div class="postContent">
+                <h3 class="postTitle">[오펜하이머] 놀란 감독의 연출의도</h3>
+                <p class="postExcerpt">영화에서 보여주는 시간의 흐름과 역사적 맥락을 분석해보았습니다. 특히 인상적이었던 장면은...</p>
+                <div class="postMeta">
+                    <div class="authorInfo">
+                        <img src="/images/profile-placeholder.jpg" alt="프로필" class="authorAvatar">
+                        <span class="authorName">MovieLover</span>
+                    </div>
+                    <span class="postDate">2024.12.30</span>
+                </div>
+            </div>
+            <div class="postStats">
+                <div class="statItem">
+                    <i class="heartIcon"></i>
+                    <span>128</span>
+                </div>
+                <div class="statItem">
+                    <i class="commentIcon"></i>
+                    <span>45</span>
+                </div>
+                <div class="statItem">
+                    <i class="viewIcon"></i>
+                    <span>1.2k</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <button class="pageButton prev" disabled>이전</button>
+        <div class="pageNumbers">
+            <button class="pageNumber active">1</button>
+            <button class="pageNumber">2</button>
+            <button class="pageNumber">3</button>
+            <span class="pageDots">...</span>
+            <button class="pageNumber">12</button>
+        </div>
+        <button class="pageButton next">다음</button>
+    </div>
+</div>
+
+<div th:replace="~{ footer/footer::footer }"></div>
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
+<script src="/js/global.js"></script>
+<script src="/js/community/community.js"></script>
+</body>
+</html>
