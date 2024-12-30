@@ -13,10 +13,15 @@ public class CommunityService {
     String getCommunity(Model model, Authentication auth) {
 
 
-
-
-
         return "community/community";
+    }
+
+
+    //게시글 상세 페이지 GET
+    String getPostDetail(Model model, Authentication auth) {
+
+
+        return "community/postDetail";
     }
 
 }

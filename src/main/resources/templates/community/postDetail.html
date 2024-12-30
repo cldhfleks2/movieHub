@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/community/postDetail.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:replace="~{ header/header::header }"></div>
+
+<div class="postDetailContainer">
+    <div class="postHeader">
+        <div class="categoryBadge">토론</div>
+        <h1 class="postTitle">[오펜하이머] 놀란 감독의 연출의도</h1>
+        <div class="postInfo">
+            <div class="authorInfo">
+                <img  src="/image/blank.png" alt="프로필" class="authorAvatar">
+                <span class="authorName">MovieLover</span>
+            </div>
+            <div class="postStats">
+                <span >2024.12.30 15:30</span>
+                <span class="statDivider">•</span>
+                <span class="viewCount">조회 <span >1.2k</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="postContent" >
+        <p>영화에서 보여주는 시간의 흐름과 역사적 맥락을 분석해보았습니다...</p>
+    </div>
+
+    <div class="postActions">
+        <div class="leftActions">
+            <!-- 좋아요 버튼 -->
+            <button class="actionButton likeButton">
+                <span class="icon">♥</span>
+                <span class="postLikeCount">128</span>
+            </button>
+        </div>
+        <div class="rightActions">
+            <!-- 공유 버튼 -->
+            <button class="actionButton shareButton">
+                <span class="icon">↗</span>
+                <span>공유</span>
+            </button>
+
+            <!-- 수정 버튼 -->
+            <button class="actionButton editButton">
+                <span class="icon">✎</span>
+                <span>수정</span>
+            </button>
+            <!-- 삭제 버튼 -->
+            <button class="actionButton deleteButton">
+                <span class="icon">×</span>
+                <span>삭제</span>
+            </button>
+            <!--            <th:block th:if="${isAuthor}">-->
+            <!--                <button class="actionButton editButton">수정</button>-->
+            <!--                <button class="actionButton deleteButton">삭제</button>-->
+            <!--            </th:block>-->
+        </div>
+    </div>
+
+    <div class="reviewSection">
+        <h3>댓글 <span>45</span></h3>
+        <div class="reviewForm">
+            <img src="/image/blank.png" alt="프로필" class="revieworAvatar">
+            <div class="reviewInputWrapper">
+                <textarea placeholder="댓글을 입력하세요" rows="3"></textarea>
+                <button class="submitReview">등록</button>
+            </div>
+        </div>
+
+        <div class="reviewList">
+            <div class="reviewItem">
+                <div class="reviewHeader">
+                    <div class="revieworInfo">
+                        <img src="/image/blank.png" alt="프로필" class="revieworAvatar">
+                        <span class="revieworName">CinemaFan</span>
+                    </div>
+                    <span class="reviewDate">2024.12.30 16:45</span>
+                </div>
+                <p class="reviewText">정말 좋은 분석이네요. 저도 비슷한 생각을 했었습니다.</p>
+                <div class="reviewActions">
+                    <button class="replyButton">답글</button>
+                    <button class="likeButton">
+                        <span class="icon">♥</span>
+                        <span class="reviewLikeCount">12</span>
+                    </button>
+                    <button class="editButton">
+                        <span class="icon">✎</span>
+                        <span>수정</span>
+                    </button>
+                    <button class="deleteButton">
+                        <span class="icon">×</span>
+                        <span>삭제</span>
+                    </button>
+                    <!--                    <th:block>-->
+                    <!--                        <button class="editButton">수정</button>-->
+                    <!--                        <button class="deleteButton">삭제</button>-->
+                    <!--                    </th:block>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{ footer/footer::footer }"></div>
+<script src="/js/global.js"></script>
+<script src="/js/community/postDetail.js"></script>
+</body>
+</html>

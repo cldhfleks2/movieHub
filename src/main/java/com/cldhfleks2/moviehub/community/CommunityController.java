@@ -17,4 +17,10 @@ public class CommunityController {
         return communityService.getCommunity(model, auth);
     }
 
+    //게시글 상세 페이지 GET
+    @GetMapping("/postDetail/")
+    String getPostDetail(Model model, Authentication auth) {
+        return communityService.getPostDetail(model, auth);
+    }
+
 }
