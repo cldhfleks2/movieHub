@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/chart/chart.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{ header/header::header }"></div>
+
+<div class="rankingContainer">
+    <h1 class="rankingTitle">실시간 CGV 예매 순위</h1>
+
+    <div class="movieSlider">
+        <button class="sliderArrow prevArrow">&lt;</button>
+        <div class="movieWrapper">
+            <div class="movieGrid">
+
+                <div class="movieCard" th:each="movie : ${movieDTOList}">
+                    <div class="posterContainer">
+                        <img src="/image/blank.png" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
+                        <span class="rank" th:text="${movie.rank}">1</span>
+                    </div>
+                    <div class="movieInfo">
+                        <div class="movieTitle">
+                            <span th:text="${movie.movieNm}">영화 제목</span>
+                        </div>
+                        <div class="movieMeta">
+                            <span class="watchGrade" th:text="${movie.age}">12세이상관람가</span>
+                            <span class="releaseDate" th:text="${movie.releaseDate}">2024.12.04</span>
+                        </div>
+                        <div class="reservationRate">
+                            <span>예매율 </span>
+                            <span th:text="${movie.ticketRate}">35.5%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <button class="sliderArrow nextArrow">&gt;</button>
+    </div>
+</div>
+
+<div th:replace="~{ footer/footer::footer }"></div>
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
+<script src="/js/global.js"></script>
+<script src="/js/chart/chart.js"></script>
+</body>
+</html>
