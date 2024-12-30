@@ -50,5 +50,10 @@ public class BasicController {
         return basicService.validateMovieByMovieNm(movieNm, openDt, model);
     }
 
+    //차트 페이지 GET
+    @GetMapping("/chart")
+    String getChart(Model model, Authentication auth)  throws Exception{
+        return basicService.getChart(model, auth);
+    }
 
 }
