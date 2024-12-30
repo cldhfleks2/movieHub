@@ -1,10 +1,14 @@
 package com.cldhfleks2.moviehub.community;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,15 +21,22 @@ public class CommunityController {
         return communityService.getCommunity(model, auth);
     }
 
-    //게시글 상세 페이지 GET
-    @GetMapping("/postDetail/")
-    String getPostDetail(Model model, Authentication auth) {
-        return communityService.getPostDetail(model, auth);
+    //게시글 상세 페이지 GET : 방문시 view +1
+    @GetMapping("/postDetail/{postId}")
+    String getPostDetail(@PathVariable Long postId, Model model, Authentication auth) {
+        return communityService.getPostDetail(postId, model, auth);
     }
 
     //게시글 작성 페이지 GET
     @GetMapping("/postWrite")
-    String getPostWrite(Model model, Authentication auth) {
-        return communityService.getPostWrite(model, auth);
+    String getPostWrite() {
+        return communityService.getPostWrite();
     }
+
+    //게시글 작성 요청
+    @PostMapping("/api/post/write")
+    ResponseEntity<String> writePost(@RequestBody PostDTO postDTO, Authentication auth) {
+        return communityService.writePost(postDTO, auth);
+    }
+
 }

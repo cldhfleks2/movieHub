@@ -13,23 +13,27 @@
 
 <div class="postDetailContainer">
     <div class="postHeader">
-        <div class="categoryBadge">토론</div>
-        <h1 class="postTitle">[오펜하이머] 놀란 감독의 연출의도</h1>
+<!--        2글자만 출력-->
+        <div class="categoryBadge" th:text="${#strings.substring(postDTO.postType.description, 0, 2)}">토론</div>
+        <h1 class="postTitle" th:text="${postDTO.title}">[오펜하이머] 놀란 감독의 연출의도</h1>
         <div class="postInfo">
             <div class="authorInfo">
-                <img  src="/image/blank.png" alt="프로필" class="authorAvatar">
-                <span class="authorName">MovieLover</span>
+                <img th:src="${postDTO.member.profileImage != null ? postDTO.member.profileImage : '/image/profile.png'}" src="/image/blank.png" alt="프로필" class="authorAvatar">
+                <span class="authorName" th:text="${postDTO.member.nickname}">MovieLover</span>
             </div>
             <div class="postStats">
-                <span >2024.12.30 15:30</span>
+                <span th:text="${#temporals.format(postDTO.updateDate, 'yyyy-MM-dd HH:mm:ss')}">2024.12.30 15:30</span>
                 <span class="statDivider">•</span>
-                <span class="viewCount">조회 <span >1.2k</span></span>
+                <span style="padding-right: 15px;">
+                    👁
+                    <span class="viewCount" th:text="${postDTO.view}" style="margin-left: 1px;">1.2k</span>
+                </span>
             </div>
         </div>
     </div>
 
-    <div class="postContent" >
-        <p>영화에서 보여주는 시간의 흐름과 역사적 맥락을 분석해보았습니다...</p>
+    <div class="postContent">
+        <p th:text="${postDTO.content}">영화에서 보여주는 시간의 흐름과 역사적 맥락을 분석해보았습니다...</p>
     </div>
 
     <div class="postActions">
