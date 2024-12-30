@@ -1,8 +1,3 @@
-// 상수 정의
-const VIEWS = {
-    CARD: 'card',
-    LIST: 'list'
-};
 
 // 외부 함수 선언
 const handleCategoryChange = (category) => {
@@ -10,26 +5,6 @@ const handleCategoryChange = (category) => {
     $(`.categoryTab[data-category="${category}"]`).addClass('active');
 
 
-};
-
-const handleViewChange = (view) => {
-    $('.viewButton').removeClass('active');
-    $(`.viewButton[data-view="${view}"]`).addClass('active');
-    $('.postList').removeClass('cardView listView').addClass(`${view}View`);
-};
-
-const handlePostAction = (action, postId) => {
-    switch(action) {
-        case 'bookmark':
-            console.log(`Bookmarking post: ${postId}`);
-            break;
-        case 'share':
-            console.log(`Sharing post: ${postId}`);
-            break;
-        case 'like':
-            console.log(`Liking post: ${postId}`);
-            break;
-    }
 };
 
 const handleWritePost = () => {
@@ -44,16 +19,6 @@ const animatePostCards = () => {
             'opacity': '0'
         });
     });
-};
-
-// 무한 스크롤 핸들러
-const handleInfiniteScroll = () => {
-    const scrollHeight = $(document).height();
-    const scrollPosition = $(window).height() + $(window).scrollTop();
-
-    if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-
-    }
 };
 
 // 디바운스 함수
@@ -76,11 +41,6 @@ $(document).ready(function() {
         handleCategoryChange($(this).data('category'));
     });
 
-    // 뷰 토글 버튼 클릭 이벤트
-    $('.viewButton').on('click', function() {
-        handleViewChange($(this).data('view'));
-    });
-
     // 정렬
     $('.sortSelect').on('change', function() {
 
@@ -92,13 +52,6 @@ $(document).ready(function() {
 
     }, 300));
 
-    // 게시글 액션 버튼 클릭 이벤트
-    $('.actionButton').on('click', function() {
-        const action = $(this).data('action');
-        const postId = $(this).closest('.postCard').data('post-id');
-        handlePostAction(action, postId);
-    });
-
 
     // 글쓰기 버튼 클릭 이벤트
     $('.writeButton').on('click', handleWritePost);
@@ -108,13 +61,6 @@ $(document).ready(function() {
 
     // 초기 게시글 로드 및 애니메이션
     animatePostCards();
-
-    // 반응형 처리
-    $(window).on('resize', debounce(function() {
-        if ($(window).width() < 768) {
-            handleViewChange(VIEWS.LIST);
-        }
-    }, 250));
 });
 
 // 키프레임 애니메이션 정의
