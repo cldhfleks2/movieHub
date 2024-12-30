@@ -48,8 +48,8 @@ public class MemberController {
 
     //유저 프로필 GET
     @GetMapping("/userprofile/{memberId}")
-    String getUserprofile(@PathVariable Long memberId, Model model, Authentication auth) {
-        return memberService.getUserprofile(memberId, model, auth);
+    String getUserprofile(@PathVariable Long memberId, Model model) {
+        return memberService.getUserprofile(memberId, model);
     }
 
     //내가 찜한 리스트 GET

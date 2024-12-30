@@ -100,11 +100,11 @@ public class MemberService {
         return "member/mypage";
     }
 
-    //TODO : 유저 프로필 GET
-    String getUserprofile(Long memberId, Model model, Authentication auth) {
+    //유저 프로필 GET
+    String getUserprofile(Long memberId, Model model) {
         Optional<Member> memberObj = memberRepository.findById(memberId);
         if(!memberObj.isPresent())
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "", "유저 정보를 찾을 수 없습니다.", String.class);
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/userprofile/", "유저 정보를 찾을 수 없습니다.", String.class);
 
         Member member = memberObj.get();
         MemberDTO memberDTO = MemberDTO.create()
