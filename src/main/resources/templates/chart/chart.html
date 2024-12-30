@@ -20,7 +20,7 @@
         <div class="movieWrapper">
             <div class="movieGrid">
 
-                <div class="movieCard" th:each="movie : ${movieDTOList}">
+                <div class="movieCard" th:each="movie : ${movieDTOList}" th:data-moviecd="${movie.movieCd}">
                     <div class="posterContainer">
                         <img src="/image/blank.png" th:src="@{${movie.posterURL}}" alt="영화 포스터" class="moviePoster">
                         <span class="rank" th:text="${movie.rank}">1</span>

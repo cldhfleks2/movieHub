@@ -1,5 +1,6 @@
 $(document).ready(function() {
     sliderSection();
+    gotoDetailPageLink();
 });
 
 //슬라이더 동작
@@ -50,7 +51,13 @@ function sliderSection() {
     });
 }
 
-
+function gotoDetailPageLink(){
+    $(document).on("click", ".movieCard", function (){
+        const movieCd = $(this).data("moviecd");
+        console.log("/detail/" + movieCd);
+        window.location.href="/detail/" + movieCd;
+    });
+}
 
 
 

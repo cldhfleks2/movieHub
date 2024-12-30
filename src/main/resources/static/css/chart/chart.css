@@ -69,6 +69,7 @@ body {
     flex: 0 0 calc(24% - 1.2rem);
     position: relative;
     transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
 .movieCard:hover {
