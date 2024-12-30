@@ -59,7 +59,7 @@ public class MemberController {
     }
 
     //유저 프로필 수정 요청
-    @PutMapping("/api/user/profile")
+    @PutMapping("/api/user/profile/edit")
     ResponseEntity<String> editUserprofile(String nickname, String password, MultipartFile profileImage, Authentication auth)  throws Exception{
         return memberService.editUserprofile(nickname, password, profileImage, auth);
     }

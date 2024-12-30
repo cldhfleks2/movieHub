@@ -222,17 +222,22 @@ function submitForm() {
     }
 
     $.ajax({
-        url: '/api/user/profile',
+        url: '/api/user/profile/edit',
         method: 'PUT',
         data: formData,
         processData: false,
         contentType: false,
-        success: function() {
-            alert('프로필이 성공적으로 업데이트되었습니다.');
-            location.reload();
+        success: function (response, textStatus, xhr){
+            if (xhr.status === 200) {
+                alert('프로필이 성공적으로 업데이트되었습니다.');
+                location.reload();
+            }
+            console.log("/api/user/profile/edit ajax success")
         },
-        error: function(xhr) {
+        error: function (xhr){
             alert('프로필 업데이트에 실패했습니다. 다시 시도해주세요.');
+            console.log(xhr.responseText);
+            console.log("/api/user/profile/edit ajax failed")
         }
     });
 }
