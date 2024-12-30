@@ -13,7 +13,6 @@ import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -126,8 +125,6 @@ public class TMDBRequestService {
         HttpResponse<String> response = sendRequest(URL);
         return response;
     }
-
-
 
     //영화 포스터URL를 가져오는 함수
     //1차 : 셀레니움 웹 크롤링

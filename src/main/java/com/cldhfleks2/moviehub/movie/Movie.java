@@ -35,16 +35,10 @@ public class Movie {
     private String showTm; // 영화 상영 시간     예) "106" 단위 분
     private String typeNm; // 영화 유형         예) "장편"
 
-    //"https://www.moviechart.co.kr/info/movieinfo/trailer/movieCd값"에서 이미지가져오기
+    //1차 : 셀레니움 웹 크롤링
+    //2차 : TMDB에서 영화 한글 명으로 검색
+    //3차 : TMDB에서 영화 영문 명으로 검색
     private String posterURL;
-
-
-
-//    private String salesShare; // 매출 점유율 : 일별박스오피스 애매해서 사용 X
-//    private String audiCnt; // 해당일의 관객 수 : DailyStats로 이전
-//    private String movieNmOg; // 영화 이름 원문  예) "" 공백일때가 많음.
-//    private String prdtStatNm; // 제작 상태     예) "개봉" 보통 다 개봉이겠지..
-//    private String showTypeNm; // 상영 형태명   예) "디지털" 잘 안쓸듯
 
     //아래는 기본 필드들
     @Id
