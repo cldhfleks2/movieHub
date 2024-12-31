@@ -86,7 +86,7 @@ public class ExcuteTask {
         log.info("전체 일일 박스오피스 목록의 응답을 DB에 저장 중... ...");
         HttpResponse<String> totalTodayBoxOfficeResponse = kobisRequestService.getTotalTodayBoxOfficeResponse();
         if(response == null)
-            log.error("전체 일일 박스오피스 요청 실패!!!!");
+            log.error("전체 일일 박스오피스 DB 저장 실패!!!!");
         else{
             movieService.saveTodayBoxOfficeOnDB(totalTodayBoxOfficeResponse);
             log.info("전체 일일 박스오피스 데이터를 DB 저장 성공");
@@ -96,7 +96,7 @@ public class ExcuteTask {
         log.info("전체 주간 박스오피스 10개 (월~일) 목록의 응답을 DB에 저장 중... ...");
         HttpResponse<String> totalWeeklyBoxOfficeResponse = kobisRequestService.getTotalWeeklyBoxOfficeResponse();
         if(response == null)
-            log.error("전체 주간 박스오피스 요청 실패!!!!");
+            log.error("전체 주간 박스오피스 DB 저장 실패!!!!");
         else{
             movieService.saveWeeklyBoxOfficeOnDB(totalWeeklyBoxOfficeResponse);
             log.info("전체 주간 박스오피스 데이터를 DB 저장 성공");
@@ -106,7 +106,7 @@ public class ExcuteTask {
         log.info("주간 한국 박스오피스 10개 (월~일) 목록의 응답을 DB에 저장 중... ...");
         HttpResponse<String> koreaWeeklyBoxOfficeResponse = kobisRequestService.getKoreaWeeklyBoxOfficeResponse();
         if(response == null)
-            log.error("주간 한국 박스오피스 요청 실패!!!!");
+            log.error("주간 한국 박스오피스 DB 저장 실패!!!!");
         else{
             movieService.saveWeeklyBoxOfficeOnDB(koreaWeeklyBoxOfficeResponse);
             log.info("주간 한국 박스오피스 데이터를 DB 저장 성공");
@@ -116,7 +116,7 @@ public class ExcuteTask {
         log.info("주간 외국 박스오피스 10개 (월~일) 목록의 응답을 DB에 저장 중... ...");
         HttpResponse<String> foreignWeeklyBoxOfficeResponse = kobisRequestService.getForeignWeeklyBoxOfficeResponse();
         if(response == null)
-            log.error("주간 외국 박스오피스 요청 실패!!!!");
+            log.error("주간 외국 박스오피스 DB 저장 실패!!!!");
         else{
             movieService.saveWeeklyBoxOfficeOnDB(foreignWeeklyBoxOfficeResponse);
             log.info("주간 외국 박스오피스 데이터를 DB 저장 성공");
