@@ -67,4 +67,11 @@ public class CommunityController {
         return communityService.getPostDetailOnReviewList(postId, model, auth, redirectAttributes);
     }
 
+    //댓글 수정 요청
+    @PatchMapping("/api/post/review/edit/{reviewId}")
+    ResponseEntity<String> editReview(@PathVariable Long reviewId, String content, Authentication auth) {
+        return communityService.editReview(reviewId, content, auth);
+    }
+
+
 }

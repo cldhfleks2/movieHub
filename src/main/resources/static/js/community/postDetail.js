@@ -86,7 +86,7 @@ function reviewListReload(postId){
     })
 }
 
-//댓글 작성 : 처음작성할때는 parentId = null전달
+//댓글 작성 : 처음작성할때는 parentId = null 전달
 function reviewSubmit() {
     $(document).on('click', '.submitReview', function() {
         const $textarea = $('.reviewInputWrapper textarea');
@@ -122,7 +122,7 @@ function reviewSubmit() {
     });
 }
 
-//TODO : 댓글에 답글 기능 : parentId를 전달해야해
+//댓글 답글 작성 : parentId를 전달
 function reviewReply() {
     let activeReplyForm = null; // 현재 활성화된 답글 폼을 추적
 
@@ -220,42 +220,97 @@ function reviewLike() {
 }
 
 // TODO 댓글 수정 모드 및 수정 처리 : 싹다 고쳐라.
-//reviewId : data("review-id") 가져옴
-//reviewId던지고, 수정할 내용만 던지는 Patch요청으로 하자
-
-//이건 form
-// content: content,
-// parentId: parentId,
-// postId: postId
+//reviewId던지고, 수정할 내용만 보내는 Patch요청으로 하자
 function reviewEdit() {
-    $(document).on('click', '.reviewActions .editButton', function(e) {
-        const $review = $(e.currentTarget).closest('.reviewItem');
-        const $reviewText = $review.find('.reviewText');
+    let activeEditForm = null; // 현재 활성화된 수정 폼을 추적
+
+    // 수정 버튼 클릭 이벤트
+    $(document).on('click', '.reviewActions .editButton', function (e) {
+        const $button = $(e.currentTarget);
+        const $review = $button.closest('.reviewItem'); // 클릭된 댓글 요소만 선택
+        const $reviewAction = $button.closest(".reviewActions");
+        const $reviewText = $review.children('.reviewText:first'); //가장 가까운 리뷰 내용만 선택(안하면 전체 리뷰 내용이 숨겨짐)
         const currentText = $reviewText.text();
+        const reviewId = $button.data('review-id');
+        const postId = $(".postDetailContainer").data("postid");
 
-        const $editArea = $('<div class="reviewEditArea">')
-            .append(`<textarea rows="3">${currentText}</textarea>`)
-            .append('<div class="editActions">' +
-                '<button class="saveEdit">저장</button>' +
-                '<button class="cancelEdit">취소</button>' +
-                '</div>');
+        // 이미 활성화된 수정 폼이 있으면 제거
+        if (activeEditForm) {
+            activeEditForm.remove();
+            activeEditForm = null;
+        }
 
-        $reviewText.hide().after($editArea);
+        // 기존 댓글 숨기기
+        $(".reviewText").show(); //취소 버튼을 누르고 왔을때를위해 모든 뷰를 살려줌
+        $reviewText.hide(); //현재것만 숨김
+        // 기존 버튼들 숨기기
+        $(".reviewActions").show();
+        $reviewAction.hide(); //마찬가지
+
+        // 수정 폼 생성
+        const editForm = createEditForm(currentText, reviewId, postId);
+        const location = $review.children('.reviewActions:first'); // 가장 가까운 reviewActions를 선택
+        location.after(editForm); // reviewActions 바로 뒤에 수정 폼 삽입
+        activeEditForm = editForm;
+
+        // 텍스트 영역에 포커스
+        editForm.find('textarea').focus();
     });
 
-    $(document).on('click', '.cancelEdit', function(e) {
-        const $review = $(e.currentTarget).closest('.reviewItem');
-        $review.find('.reviewText').show();
-        $review.find('.reviewEditArea').remove();
+    // 수정 폼 생성 함수
+    function createEditForm(currentText, reviewId, postId) {
+        return $(`
+            <div class="reviewEditArea" data-review-id="${reviewId}">
+                <div class="reviewInputWrapper">
+                    <textarea class="editTextarea" rows="3">${currentText}</textarea>
+                    <div class="editActions">
+                        <button class="saveEdit replySubmit">저장</button>
+                        <button class="cancelEdit replyCancel">취소</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+
+    // 수정 취소 동작
+    $(document).on('click', '.cancelEdit', function () {
+        const $formWrapper = $(this).closest('.reviewEditArea');
+        const reviewId = $formWrapper.data('review-id');
+        $formWrapper.remove(); // 수정 폼 제거
+        $(`#reviewItem-${reviewId} .reviewText`).show(); // 원본 댓글 다시 표시
+        $(`#reviewItem-${reviewId} .reviewActions`).show(); // 기존 버튼들 다시 표시
+        activeEditForm = null;
     });
 
-    $(document).on('click', '.saveEdit', function(e) {
+    // 수정 저장 버튼 클릭 이벤트
+    $(document).on('click', '.saveEdit', function (e) {
         const $review = $(e.currentTarget).closest('.reviewItem');
-        const newText = $review.find('.reviewEditArea textarea').val().trim();
+        const content = $review.find('.editTextarea').val().trim();
+        const reviewId = $review.find('.editButton').data('review-id');
+        const postId = $(".postDetailContainer").data("postid"); // postId 추출
 
-        if (newText) {
-            $review.find('.reviewText').text(newText).show();
-            $review.find('.reviewEditArea').remove();
+        if (content) {
+            // PATCH 요청으로 댓글 수정
+            $.ajax({
+                url: `/api/post/review/edit/${reviewId}`,
+                method: 'PATCH',
+                data: {content: content},
+                success: function (response, textStatus, xhr) {
+                    if (xhr.status === 200) {
+                        activeEditForm = null;
+                        reviewListReload(postId) // 성공적으로 수정되면 댓글 리스트 새로고침
+                    }else{
+                        alert("알 수 없는 성공")
+                    }
+                    console.log("/api/post/review/edit/ ajax success")
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    console.log("/api/post/review/edit/ ajax failed")
+                }
+            });
+        } else {
+            alert('내용을 입력해주세요.');
         }
     });
 }

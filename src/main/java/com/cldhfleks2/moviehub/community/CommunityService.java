@@ -64,7 +64,7 @@ public class CommunityService {
         return "community/community";
     }
 
-    // DTO 변환 헬퍼 메소드
+    //댓글 리스트에 전달할 DTO를 만드는 함수
     PostReviewDTO convertToPostReviewDTO(PostReview review, List<PostReview> allReviews, Long currentUserId) {
         if (review == null) return null;
 
@@ -324,11 +324,30 @@ public class CommunityService {
         //댓글 총 갯수 던져줌
         model.addAttribute("postReviewCnt", allReviews.size());
 
+        //댓글리스갱신을위해 DTO로 postId를 전달
+        PostDTO postDTO = PostDTO.create().postId(postId).build();
+        model.addAttribute("postDTO", postDTO);
 
         return "community/postDetail :: #reviewsSection"; //댓글 리스트만
     }
 
+    //댓글 수정 요청
+    ResponseEntity<String> editReview(Long reviewId, String content, Authentication auth) {
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/post/review/edit/", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
+        Optional<PostReview> postReviewObj = postReviewRepository.findById(reviewId);
+        if(!postReviewObj.isPresent())
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/post/review/edit/", "댓글을 찾을 수 없습니다.", ResponseEntity.class);
+
+        PostReview postReview = postReviewObj.get();
+        postReview.setContent(content); //댓글 내용만 수정
+        postReviewRepository.save(postReview); //댓글 수정
+
+        return ResponseEntity.ok().build();
+    }
 
 
 
