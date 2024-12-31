@@ -14,19 +14,23 @@
 <div class="postDetailContainer">
     <div class="postHeader">
 <!--        2글자만 출력-->
-        <div class="categoryBadge" th:text="${#strings.substring(postDTO.postType.description, 0, 2)}">토론</div>
-        <h1 class="postTitle" th:text="${postDTO.title}">[오펜하이머] 놀란 감독의 연출의도</h1>
+        <div class="postCategory" th:text="${postDTO.postType.description}"
+             th:classappend="${postDTO.postType.name == 'NEWS' ? ' NEWS' :
+                          (postDTO.postType.name == 'FREE' ? ' FREE' : ' DISCUSSION')}">
+            타입
+        </div>
+        <h1 class="postTitle" th:text="${postDTO.title}">글 제목</h1>
         <div class="postInfo">
             <div class="authorInfo">
                 <img th:src="${postDTO.member.profileImage != null ? postDTO.member.profileImage : '/image/profile.png'}" src="/image/blank.png" alt="프로필" class="authorAvatar">
-                <span class="authorName" th:text="${postDTO.member.nickname}">MovieLover</span>
+                <span class="authorName" th:text="${postDTO.member.nickname}">작성자 닉네임</span>
             </div>
             <div class="postStats">
-                <span th:text="${#temporals.format(postDTO.updateDate, 'yyyy-MM-dd HH:mm:ss')}">2024.12.30 15:30</span>
+                <span th:text="${#temporals.format(postDTO.updateDate, 'yyyy-MM-dd HH:mm:ss')}">작성 날짜 yyyy-mm-dd hh:mm:ss</span>
                 <span class="statDivider">•</span>
                 <span style="padding-right: 15px;">
                     👁
-                    <span class="viewCount" th:text="${postDTO.view}" style="margin-left: 1px;">1.2k</span>
+                    <span class="viewCount" th:text="${postDTO.view}" style="margin-left: 1px;">조회수 숫자</span>
                 </span>
             </div>
         </div>
@@ -42,7 +46,7 @@
                 <!-- 좋아요 버튼 -->
                 <button class="actionButton likeButton">
                     <span class="icon">♥</span>
-                    <span class="postLikeCount">128</span>
+                    <span class="postLikeCount">좋아요 수 숫자</span>
                 </button>
             </th:block>
         </div>
