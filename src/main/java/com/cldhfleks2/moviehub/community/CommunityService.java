@@ -43,10 +43,17 @@ public class CommunityService {
     //커뮤니티 페이지 GET TODO: 댓글갯수, 게시글 좋아요 갯수도 보여줘함.
     String getCommunity(Integer pageIdx, Model model, Authentication auth) {
         if(pageIdx == null) pageIdx = 1; //기본 1페이지 보여줌
-        
+
         Page<Post> postPage = postRepository.findAllAndStatus(PageRequest.of(pageIdx-1, 10)); //status=1인 살아있는 게시글만 다 가져옴
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post : postPage.getContent()) {
+            Long postId = post.getId();
+            //게시글 좋아요 갯수
+            List<PostLike> postLikeList = postLikeRepository.findAllByPostIdAndStatus(postId);
+            Long likeCount = (long) postLikeList.size();
+            //댓글 총 갯수
+            List<PostReview> postReviewList = postReviewRepository.findAllByPostIdAndStatus(postId);
+            Long reviewCount = (long) postReviewList.size();
             PostDTO postDTO = PostDTO.create()
                     .postType(post.getPostType())
                     .title(post.getTitle())
@@ -55,10 +62,8 @@ public class CommunityService {
                     .member(post.getMember())
                     .updateDate(post.getUpdateDate())
                     .postId(post.getId())
-                    .likeCount(0L)
-//                  .likeCount(0L) //TODO : 게시글 좋아요 갯수를 보내야함
-                    .reviewCount(0L)
-//                  .reviewCount() //TODO: 댓글 갯수를 보내줘라.
+                    .likeCount(likeCount)
+                    .reviewCount(reviewCount)
                     .build();
             postDTOList.add(postDTO);
         }
@@ -145,7 +150,7 @@ public class CommunityService {
         model.addAttribute("postDTO", postDTO);
 
         //댓글 뷰
-        List<PostReview> allReviews = postReviewRepository.findAllByPostId(postId);
+        List<PostReview> allReviews = postReviewRepository.findAllByPostIdAndStatus(postId);
         // 부모 댓글만 필터링 (depth = 0)
         List<PostReviewDTO> parentReviews = allReviews.stream()
                 .filter(review -> review.getParent() == null)
@@ -368,7 +373,7 @@ public class CommunityService {
         }
 
         // 댓글 처리 로직 수정
-        List<PostReview> allReviews = postReviewRepository.findAllByPostId(postId);
+        List<PostReview> allReviews = postReviewRepository.findAllByPostIdAndStatus(postId);
         Member member = memberObj.get();
         // 부모 댓글만 필터링 (parent가 null인 경우)
         List<PostReviewDTO> parentReviews = allReviews.stream()
