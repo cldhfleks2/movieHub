@@ -1,7 +1,7 @@
 // 문서 로드 완료시 실행
 $(document).ready(function() {
     initialize();
-    clickTolocate()
+    clickToLocate()
     readNotification()
     readAllNotification()
     pagination();
@@ -13,7 +13,7 @@ function initialize(){
 }
 
 //알림 클릭시 해당 알림이 생겨난 페이지로 이동
-function clickTolocate(){
+function clickToLocate(){
     $(document).on("click", ".notificationInfo", function (){
         window.location.href = $(this).data("url");
     })

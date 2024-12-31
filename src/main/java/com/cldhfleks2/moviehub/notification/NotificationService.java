@@ -28,10 +28,12 @@ public class NotificationService {
     public NotificationDTO getNotificationDTO(Notification notification) {
         String URL = "#"; //DTO에 추가된 사항
         if(notification.getNotificationType() == NotificationType.LIKE_RECEIVED && //영화 리뷰 게시판에 좋아요 한경우
-            notification.getTargetType() == NotificationTargetType.REVIEW
-        ){
+            notification.getTargetType() == NotificationTargetType.REVIEW){
             URL = "/movieReview"; //영화 리뷰 게시판으로 이동
+        }else if(notification.getNotificationType() == NotificationType.COMMENT_ADDED && notification.getTargetType() ==NotificationTargetType.COMMUNITY){
+            URL = "/postDetail/" + notification.getTargetId(); //게시물로 이동
         }
+
 
         return NotificationDTO.create()
                 .id(notification.getId())
