@@ -331,11 +331,11 @@ function reviewLike() {
                 }else{
                     alert("알 수 없는 성공")
                 }
-                console.log(" ajax success")
+                console.log("/api/post/review/like ajax success")
             },
             error: function (xhr){
                 console.log(xhr.responseText);
-                console.log(" ajax failed")
+                console.log("/api/post/review/like ajax failed")
             }
         })
 

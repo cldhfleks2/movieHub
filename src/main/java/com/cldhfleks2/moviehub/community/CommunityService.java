@@ -1,6 +1,8 @@
 package com.cldhfleks2.moviehub.community;
 
 import com.cldhfleks2.moviehub.error.ErrorService;
+import com.cldhfleks2.moviehub.like.PostReviewLike;
+import com.cldhfleks2.moviehub.like.PostReviewLikeRepository;
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.notification.Notification;
@@ -31,6 +33,7 @@ public class CommunityService {
     private final MemberRepository memberRepository;
     private final PostReviewRepository postReviewRepository;
     private final NotificationRepository notificationRepository;
+    private final PostReviewLikeRepository postReviewLikeRepository;
 
     private static final int REVIEW_MAX_DEPTH = 1;
 
@@ -68,7 +71,8 @@ public class CommunityService {
         return "community/community";
     }
 
-    //댓글 리스트에 전달할 DTO를 만드는 함수
+    //댓글 리스트에 전달할 DTO를 만드는 함수 : 재귀적으로 동작
+    //현재댓글, 전체댓글로 재귀적으로 동작
     PostReviewDTO convertToPostReviewDTO(PostReview review, List<PostReview> allReviews, Long currentUserId) {
         if (review == null) return null;
 
@@ -78,13 +82,17 @@ public class CommunityService {
                 .map(r -> convertToPostReviewDTO(r, allReviews, currentUserId))
                 .collect(Collectors.toList());
 
+        //해당 댓글의 모든 좋아요를 가져온다.
+        List<PostReviewLike> allLikes = postReviewLikeRepository.findAllByReviewId(review.getId());
+        Long likeCount = (long) allLikes.size();
+
         return PostReviewDTO.create()
                 .id(review.getId())
                 .content(review.getContent())
                 .parentId(review.getParent() != null ? review.getParent().getId() : null)
                 .member(review.getMember())
                 .updateDate(review.getUpdateDate())
-                .likeCount(0L) // TODO: 좋아요 개수 구현
+                .likeCount(likeCount)
                 .depth(review.getDepth())
                 .children(children)
                 .isAuthor(review.getMember().getId().equals(currentUserId))
@@ -135,6 +143,8 @@ public class CommunityService {
 
         //댓글 총 갯수 던져줌
         model.addAttribute("postReviewCnt", allReviews.size());
+
+
 
         return "community/postDetail";
     }
