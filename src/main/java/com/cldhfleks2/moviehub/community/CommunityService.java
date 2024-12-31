@@ -3,6 +3,10 @@ package com.cldhfleks2.moviehub.community;
 import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
+import com.cldhfleks2.moviehub.notification.Notification;
+import com.cldhfleks2.moviehub.notification.NotificationRepository;
+import com.cldhfleks2.moviehub.notification.NotificationTargetType;
+import com.cldhfleks2.moviehub.notification.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,6 +30,7 @@ public class CommunityService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final PostReviewRepository postReviewRepository;
+    private final NotificationRepository notificationRepository;
 
     private static final int REVIEW_MAX_DEPTH = 1;
 
@@ -267,7 +272,7 @@ public class CommunityService {
         postReview.setPost(post);
         postReview.setMember(member);
 
-        //만약에 답글인경우면 : js에서 parentId값을 보낸경우 : 댓글저장 안함
+        //답글인 경우
         if(postReviewRequestDTO.getParentId() != null){
             Optional<PostReview> parentObj = postReviewRepository.findById(postReviewRequestDTO.getParentId());
             if(!parentObj.isPresent())
@@ -283,6 +288,20 @@ public class CommunityService {
             //부모 댓글의 depth 확인 : 답글이 가능한 상태인지 확인
             if(parent.getDepth() >= REVIEW_MAX_DEPTH) //최대 depth인 댓글에 답글을 달 수 없음
                 return ErrorService.send(HttpStatus.BAD_REQUEST.value(), "/api/post/review/add", "답글에 답글을 달 수 없습니다.", ResponseEntity.class);
+
+            //부모 댓글 작성 유저에게 알림 보냄
+            Member parentMember = parent.getMember();
+            String nickname = member.getNickname();
+            String message = nickname + "님이 댓글에 답글을 달았습니다.";
+            Notification notification = Notification.create()
+                    .receiver(parentMember)
+                    .sender(member)
+                    .notificationType(NotificationType.COMMENT_ADDED)
+                    .targetType(NotificationTargetType.COMMUNITY)
+                    .targetId(postId)
+                    .message(message) //메시지
+                    .build();
+            notificationRepository.save(notification); //새로운 알림 생성
 
             postReview.setParent(parent); //부모 댓글정보를 setter
             postReview.setDepth(parent.getDepth() + 1); //깊이 + 1
