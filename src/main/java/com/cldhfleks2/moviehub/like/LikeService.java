@@ -11,6 +11,10 @@ import com.cldhfleks2.moviehub.member.MemberService;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
+import com.cldhfleks2.moviehub.notification.Notification;
+import com.cldhfleks2.moviehub.notification.NotificationRepository;
+import com.cldhfleks2.moviehub.notification.NotificationTargetType;
+import com.cldhfleks2.moviehub.notification.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +37,7 @@ public class LikeService {
     private final PostReviewLikeRepository postReviewLikeRepository;
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
+    private final NotificationRepository notificationRepository;
 
     //영화 상세 페이지에서 좋아요 버튼 눌렀을때 detail페이지도 전송
     @Transactional
@@ -120,8 +125,8 @@ public class LikeService {
 
         Member member = memberObj.get();
         PostReview postReview = postReviewObj.get();
-        if(postReview.getMember().getId() == member.getId())
-            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/post/review/like", "본인 댓글은 좋아요를 할 수 없습니다.", ResponseEntity.class);
+        if(postReview.getMember().getId() == member.getId()) //본인 댓글일때
+            return ErrorService.send(HttpStatus.BAD_REQUEST.value(), "/api/post/review/like", "본인 댓글은 좋아요를 할 수 없습니다.", ResponseEntity.class);
 
         Optional<PostReviewLike> postReviewLikeObj = postReviewLikeRepository.findByReviewIdAndMemberId(reviewId, member.getId());
         if(postReviewLikeObj.isPresent()){ //기존에 좋아요 요청이 있었을때는 : status toggle
@@ -139,6 +144,17 @@ public class LikeService {
         }
 
         //알림 보내기
+        String nickname = member.getNickname();
+        String message = nickname + "님이 댓글에 좋아요를 눌렀습니다.";
+        Notification notification = Notification.create()
+                .receiver(postReview.getMember())
+                .sender(member)
+                .notificationType(NotificationType.LIKE_RECEIVED)
+                .targetType(NotificationTargetType.COMMUNITY_REVIEW)
+                .targetId(postReview.getPost().getId())
+                .message(message)
+                .build();
+        notificationRepository.save(notification); //save
 
         return ResponseEntity.ok().build();
     }
@@ -157,6 +173,9 @@ public class LikeService {
 
         Member member = memberObj.get();
         Post post = postObj.get();
+        if(post.getMember().getId() == member.getId())
+            return ErrorService.send(HttpStatus.BAD_REQUEST.value(), "/api/post/like", "본인 게시글은 좋아요 할 수 없습니다.", ResponseEntity.class);
+
         Optional<PostLike> postLikeObj = postLikeRepository.findByPostIdAndMemberId(postId, member.getId());
         if(postLikeObj.isPresent()){
             PostLike postLike = postLikeObj.get();
@@ -173,6 +192,17 @@ public class LikeService {
         }
 
         //알림 보내기
+        String nickname = member.getNickname();
+        String message = nickname + "님이 게시글에 좋아요를 눌렀습니다.";
+        Notification notification = Notification.create()
+                .receiver(post.getMember())
+                .sender(member)
+                .notificationType(NotificationType.LIKE_RECEIVED)
+                .targetType(NotificationTargetType.COMMUNITY_POST)
+                .targetId(post.getId())
+                .message(message)
+                .build();
+        notificationRepository.save(notification); //save
 
         return ResponseEntity.ok().build();
     }

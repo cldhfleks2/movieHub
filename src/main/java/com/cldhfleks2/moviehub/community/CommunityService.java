@@ -340,7 +340,7 @@ public class CommunityService {
                     .receiver(parentMember)
                     .sender(member)
                     .notificationType(NotificationType.COMMENT_ADDED)
-                    .targetType(NotificationTargetType.COMMUNITY)
+                    .targetType(NotificationTargetType.COMMUNITY_REVIEW)
                     .targetId(postId)
                     .message(message) //메시지
                     .build();
