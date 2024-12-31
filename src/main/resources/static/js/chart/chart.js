@@ -9,7 +9,7 @@ function sliderSection() {
     const $movieGrid = $('.movieGrid');
     const $movies = $('.movieCard');
     const totalMovies = $movies.length;
-    const visibleMovies = 5;
+    const visibleMovies = 2;
     const movieWidth = $movies.first().outerWidth(true);
     const maxPosition = Math.max(0, totalMovies - visibleMovies);
 
