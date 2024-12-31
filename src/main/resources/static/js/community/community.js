@@ -7,9 +7,7 @@ const handleCategoryChange = (category) => {
 
 };
 
-const handleWritePost = () => {
-    window.location.href = '/community/write';
-};
+
 
 // 애니메이션 효과
 const animatePostCards = () => {
@@ -54,10 +52,9 @@ $(document).ready(function() {
 
 
     // 글쓰기 버튼 클릭 이벤트
-    $('.writeButton').on('click', handleWritePost);
-
-    // 무한 스크롤 이벤트
-    $(window).on('scroll', debounce(handleInfiniteScroll, 100));
+    $('.writeButton').on('click', function (){
+        window.location.href = '/postWrite';
+    });
 
     // 초기 게시글 로드 및 애니메이션
     animatePostCards();
