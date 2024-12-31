@@ -4,6 +4,9 @@ import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -12,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,9 +25,36 @@ public class CommunityService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
 
-    //커뮤니티 페이지 GET
-    String getCommunity(Model model, Authentication auth) {
+    //커뮤니티 페이지 GET TODO: 댓글갯수, 게시글 좋아요 갯수도 보여줘함.
+    String getCommunity(Integer pageIdx, Model model, Authentication auth) {
+        if(pageIdx == null) pageIdx = 1; //기본 1페이지 보여줌
+        
+        Page<Post> postPage = postRepository.findAllAndStatus(PageRequest.of(pageIdx-1, 10)); //status=1인 살아있는 게시글만 다 가져옴
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for(Post post : postPage.getContent()) {
+            PostDTO postDTO = PostDTO.create()
+                    .postType(post.getPostType())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .view(post.getView())
+                    .member(post.getMember())
+                    .updateDate(post.getUpdateDate())
+                    .postId(post.getId())
+                    .likeCount(0L)
+//                  .likeCount(0L) //TODO : 게시글 좋아요 갯수를 보내야함
+                    .reviewCount(0L)
+//                  .reviewCount() //TODO: 댓글 갯수를 보내줘라.
+                    .build();
+            postDTOList.add(postDTO);
+        }
 
+        Page<PostDTO> postDTOPage = new PageImpl<>(
+                postDTOList,
+                postPage.getPageable(),
+                postPage.getTotalElements()
+        );
+
+        model.addAttribute("postDTOPage", postDTOPage);
 
         return "community/community";
     }

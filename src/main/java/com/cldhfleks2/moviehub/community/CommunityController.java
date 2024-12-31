@@ -15,8 +15,8 @@ public class CommunityController {
 
     //커뮤니티 페이지 GET
     @GetMapping("/community")
-    String getCommunity(Model model, Authentication auth) {
-        return communityService.getCommunity(model, auth);
+    String getCommunity(Integer pageIdx, Model model, Authentication auth) {
+        return communityService.getCommunity(pageIdx, model, auth);
     }
 
     //게시글 상세 페이지 GET : 방문시 view +1

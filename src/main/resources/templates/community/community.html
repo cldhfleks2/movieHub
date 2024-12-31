@@ -41,48 +41,66 @@
     </div>
 
     <div class="postList">
-        <div class="postCard">
+
+        <div class="postCard" th:each="post : ${postDTOPage}">
             <div class="postHeader">
-                <span class="postCategory">토론</span>
+                <span class="postCategory" th:text="${#strings.substring(post.postType.description, 0, 2)}"
+                      th:classappend="${post.postType.name == 'NEWS' ? ' NEWS' :
+                          (post.postType.name == 'FREE' ? ' FREE' : ' DISCUSSION')}">
+                    타입
+                </span>
             </div>
-            <div class="postContent">
-                <h3 class="postTitle">[오펜하이머] 놀란 감독의 연출의도</h3>
-                <p class="postExcerpt">영화에서 보여주는 시간의 흐름과 역사적 맥락을 분석해보았습니다. 특히 인상적이었던 장면은...</p>
+            <a class="postContent" th:href="@{/postDetail/{postId}(postId=${post.postId})}">
+                <h3 class="postTitle" th:text="${post.title}">글 제목</h3>
+                <p class="postExcerpt" th:text="${post.content}">글 내용</p>
                 <div class="postMeta">
                     <div class="authorInfo">
-                        <img src="/images/profile-placeholder.jpg" alt="프로필" class="authorAvatar">
-                        <span class="authorName">MovieLover</span>
+                        <img th:src="${post.member.profileImage != null ? post.member.profileImage : '/image/profile.png'}"
+                             src="/image/blank.png" alt="프로필" class="authorAvatar">
+                        <span class="authorName" th:text="${post.member.nickname}">MovieLover</span>
                     </div>
-                    <span class="postDate">2024.12.30</span>
+                    <span class="postDate" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}"
+                    >작성날짜 yyyy-mm-dd</span>
                 </div>
-            </div>
+            </a>
             <div class="postStats">
                 <div class="statItem">
                     <span class="icon icon-heart">♥</span>
-                    <span>128</span>
+                    <span th:text="${post.likeCount}">128</span>
                 </div>
                 <div class="statItem">
                     <span class="icon icon-comment">💬</span>
-                    <span>45</span>
+                    <span th:text="${post.reviewCount}">45</span>
                 </div>
                 <div class="statItem">
                     <span class="icon icon-view">👁</span>
-                    <span>1.2k</span>
+                    <span th:text="${post.view}">30</span>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <div class="pagination">
-        <button class="pageButton prev" disabled>이전</button>
+    <div class="pagination" id="pagination" th:if="${postDTOPage.totalPages > 0}">
+        <button class="pageButton prev" id="prevPage"
+                th:disabled="${postDTOPage.first}"
+                th:data-pageidx="${postDTOPage.number}">
+            이전
+        </button>
         <div class="pageNumbers">
-            <button class="pageNumber active">1</button>
-            <button class="pageNumber">2</button>
-            <button class="pageNumber">3</button>
-            <span class="pageDots">...</span>
-            <button class="pageNumber">12</button>
+            <th:block th:each="pageNum : ${#numbers.sequence(0, postDTOPage.totalPages - 1)}">
+                <button class="pageNumber"
+                        th:classappend="${pageNum == postDTOPage.number} ? 'active'"
+                        th:data-pageidx="${pageNum + 1}"
+                        th:text="${pageNum + 1}">
+                </button>
+            </th:block>
         </div>
-        <button class="pageButton next">다음</button>
+        <button class="pageButton next" id="nextPage"
+                th:disabled="${postDTOPage.last}"
+                th:data-pageidx="${postDTOPage.number + 2}">
+            다음
+        </button>
     </div>
 </div>
 
