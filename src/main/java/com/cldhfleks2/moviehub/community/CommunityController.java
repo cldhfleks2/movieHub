@@ -46,5 +46,11 @@ public class CommunityController {
         return communityService.getPostEdit(postId, model, auth, redirectAttributes);
     }
 
+    //게시글 수정 요청
+    @PostMapping("/api/post/edit")
+    ResponseEntity<String> editPost(@RequestBody PostDTO postDTO, Authentication auth) {
+        return communityService.editPost(postDTO, auth);
+    }
+
 
 }

@@ -41,18 +41,17 @@ public class CommunityService {
         Member member = memberObj.get();
 
         Post post = postObj.get();
-        post.setView(post.getView() + 1);  //게시글 방문시 조회수 +1
         PostDTO postDTO = PostDTO.create()
                 .postType(post.getPostType())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .view(post.getView())
+                .view(post.getView() + 1)  //게시글 방문시 조회수 +1
                 .member(post.getMember())
                 .updateDate(post.getUpdateDate())
                 .postId(postId)
                 .isAuthor(member.getId() == post.getMember().getId()) //글 작성자 본인인지 bool 전달
                 .build();
-        postRepository.save(post); //조회수 수정
+        postRepository.incrementView(postId); //view + 1 수정
 
         model.addAttribute("postDTO", postDTO);
 
@@ -85,7 +84,6 @@ public class CommunityService {
         return ResponseEntity.ok().build();
     }
 
-
     //게시글 수정 페이지 GET : 본인만 가능
     String getPostEdit(Long postId, Model model, Authentication auth, RedirectAttributes redirectAttributes) {
         Optional<Post> postObj = postRepository.findById(postId);
@@ -117,11 +115,37 @@ public class CommunityService {
                 .postType(post.getPostType())
                 .title(post.getTitle())
                 .content(post.getContent())
+                .postId(postId)
                 .build();
 
         model.addAttribute("postDTO", postDTO);
 
         return "community/edit";
+    }
+
+    //게시글 수정 요청
+    ResponseEntity<String> editPost(PostDTO postDTO, Authentication auth) {
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/post/edit", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Optional<Post> postObj = postRepository.findById(postDTO.getPostId());
+        if(!postObj.isPresent()) //게시글 존재 여부 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/post/edit", "게시글 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Member member = memberObj.get();
+        Post post = postObj.get();
+
+        if(member.getId() != post.getMember().getId())
+            return ErrorService.send(HttpStatus.FORBIDDEN.value(), "/api/post/edit", "게시글 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        post.setTitle(postDTO.getTitle());
+        post.setContent(postDTO.getContent());
+        post.setPostType(postDTO.getPostType());
+        postRepository.save(post); //게시글 수정
+
+        return ResponseEntity.ok().build();
     }
 
 

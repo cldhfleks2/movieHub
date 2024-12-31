@@ -28,12 +28,12 @@
         </div>
 
         <div class="formGroup">
-            <textarea id="postContent" placeholder="내용을 입력하세요" th:value="${postDTO.content}" required></textarea>
+            <textarea id="postContent" placeholder="내용을 입력하세요" th:text="${postDTO.content}" required></textarea>
         </div>
 
         <div class="formActions">
             <button type="button" class="cancelButton">취소</button>
-            <button type="submit" class="submitButton">수정</button>
+            <button type="submit" class="submitButton" th:data-postid="${postDTO.postId}">수정</button>
         </div>
     </form>
 </div>
