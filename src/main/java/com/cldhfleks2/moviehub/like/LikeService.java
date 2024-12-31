@@ -1,5 +1,7 @@
 package com.cldhfleks2.moviehub.like;
 
+import com.cldhfleks2.moviehub.community.Post;
+import com.cldhfleks2.moviehub.community.PostRepository;
 import com.cldhfleks2.moviehub.community.PostReview;
 import com.cldhfleks2.moviehub.community.PostReviewRepository;
 import com.cldhfleks2.moviehub.error.ErrorService;
@@ -29,7 +31,8 @@ public class LikeService {
     private final MemberService memberService;
     private final PostReviewRepository postReviewRepository;
     private final PostReviewLikeRepository postReviewLikeRepository;
-
+    private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
 
     //영화 상세 페이지에서 좋아요 버튼 눌렀을때 detail페이지도 전송
     @Transactional
@@ -103,7 +106,7 @@ public class LikeService {
             return null;
     }
 
-    //댓글 좋아요 요청
+    //댓글 좋아요 요청 : save or status toggle
     @Transactional
     ResponseEntity<String> likePostReview(Long reviewId, Authentication auth){
         String username = auth.getName();
@@ -135,10 +138,44 @@ public class LikeService {
             postReviewLikeRepository.save(postReviewLike); //DB 저장
         }
 
+        //알림 보내기
+
         return ResponseEntity.ok().build();
     }
 
+    //게시글 좋아요 요청 : save or status toggle
+    @Transactional
+    ResponseEntity<String> likePost(Long postId, Authentication auth){
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/post/like", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
+        Optional<Post> postObj = postRepository.findById(postId);
+        if(!postObj.isPresent()) //게시글 존재 여부 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/post/like", "게시글 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Member member = memberObj.get();
+        Post post = postObj.get();
+        Optional<PostLike> postLikeObj = postLikeRepository.findByPostIdAndMemberId(postId, member.getId());
+        if(postLikeObj.isPresent()){
+            PostLike postLike = postLikeObj.get();
+            int status = postLike.getStatus();
+            status = (status + 1) % 2; //상태 toggle
+            postLike.setStatus(status);
+            postLikeRepository.save(postLike); //update
+        }else{
+            PostLike postLike = PostLike.create()
+                    .post(post)
+                    .sender(member)
+                    .build();
+            postLikeRepository.save(postLike); //save
+        }
+
+        //알림 보내기
+
+        return ResponseEntity.ok().build();
+    }
 
 
 

@@ -25,10 +25,19 @@ public class LikeController {
         return likeService.removeLike(movieCd, pageIdx, model, render, auth);
     }
 
-    //댓글 좋아요 요청
+    //댓글 좋아요 요청 : save or status toggle
     @PostMapping("/api/post/review/like")
     ResponseEntity<String> likePostReview(Long reviewId, Authentication auth){
         return likeService.likePostReview(reviewId, auth);
     }
+
+    //게시글 좋아요 요청 : save or status toggle
+    @PostMapping("/api/post/like")
+    ResponseEntity<String> likePost(Long postId, Authentication auth){
+        return likeService.likePost(postId, auth);
+    }
+
+
+
 
 }
