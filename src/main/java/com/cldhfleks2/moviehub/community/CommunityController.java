@@ -21,8 +21,8 @@ public class CommunityController {
 
     //게시글 상세 페이지 GET : 방문시 view +1
     @GetMapping("/postDetail/{postId}")
-    String getPostDetail(@PathVariable Long postId, Model model, Authentication auth) {
-        return communityService.getPostDetail(postId, model, auth);
+    String getPostDetail(@PathVariable Long postId, Model model, Authentication auth, RedirectAttributes redirectAttributes) {
+        return communityService.getPostDetail(postId, model, auth, redirectAttributes);
     }
 
     //게시글 작성 페이지 GET

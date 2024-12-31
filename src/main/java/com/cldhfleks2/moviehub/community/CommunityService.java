@@ -29,18 +29,22 @@ public class CommunityService {
 
     //게시글 상세 페이지 GET : 방문시 view +1
     @Transactional
-    String getPostDetail(Long postId, Model model, Authentication auth) {
+    String getPostDetail(Long postId, Model model, Authentication auth, RedirectAttributes redirectAttributes) {
         Optional<Post> postObj = postRepository.findById(postId);
         if(!postObj.isPresent()) //게시글 존재 여부 체크
             return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/postDetail/", "게시글 정보를 찾을 수 없습니다.", String.class);
-
+        
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
             return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/postDetail/", "유저 정보를 찾을 수 없습니다.", String.class);
+        
         Member member = memberObj.get();
-
         Post post = postObj.get();
+        if(post.getStatus() == 0){ //게시물이 삭제된 상태이면
+            redirectAttributes.addFlashAttribute("alertMessage", "삭제된 게시물 입니다.");
+            return "redirect:/community";
+        }
         PostDTO postDTO = PostDTO.create()
                 .postType(post.getPostType())
                 .title(post.getTitle())
