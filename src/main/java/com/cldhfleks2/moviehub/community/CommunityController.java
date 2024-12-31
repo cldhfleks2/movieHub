@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -52,5 +49,9 @@ public class CommunityController {
         return communityService.editPost(postDTO, auth);
     }
 
-
+    //게시글 삭제 요청
+    @DeleteMapping("/api/post/delete")
+    ResponseEntity<String> deletePost(Long postId, Authentication auth, RedirectAttributes redirectAttributes){
+        return communityService.deletePost(postId, auth, redirectAttributes);
+    }
 }

@@ -5,7 +5,34 @@ $(document).ready(function() {
     sharePost();
     reviewEdit();
     reviewTextareaAdjust();
+    postDelete();
 });
+
+//게시글 삭제 요청
+function postDelete(){
+    $(document).on("click", ".actionButton.deleteButton", function () {
+        const postId = $(this).data("postid")
+
+        $.ajax({
+            url: "/api/post/delete",
+            method: "delete",
+            data: {postId: postId},
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 204) { //정상 삭제일 경우
+                    alert("게시글이 삭제 되었습니다.")
+                    window.location.href = `/community`; //삭제 완료시 커뮤니티 게시판으로
+                }else{
+                    alert("알 수 없는 성공")
+                }
+                console.log("/api/post/delete ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("/api/post/delete ajax failed")
+            }
+        })
+    })
+}
 
 // 게시글 좋아요 처리
 function postLike() {

@@ -55,8 +55,7 @@ public class CommunityService {
 
         model.addAttribute("postDTO", postDTO);
 
-
-        //댓글 정보도 보냄
+        //댓글 정보도 보내야함~
 
         return "community/postDetail";
     }
@@ -138,7 +137,7 @@ public class CommunityService {
         Post post = postObj.get();
 
         if(member.getId() != post.getMember().getId())
-            return ErrorService.send(HttpStatus.FORBIDDEN.value(), "/api/post/edit", "게시글 정보를 찾을 수 없습니다.", ResponseEntity.class);
+            return ErrorService.send(HttpStatus.FORBIDDEN.value(), "/api/post/edit", "본인 게시물이 아니면 수정할 수 없습니다.", ResponseEntity.class);
 
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
@@ -148,5 +147,26 @@ public class CommunityService {
         return ResponseEntity.ok().build();
     }
 
+    //게시글 삭제 요청
+    ResponseEntity<String> deletePost(Long postId, Authentication auth, RedirectAttributes redirectAttributes){
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/post/delete", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Optional<Post> postObj = postRepository.findById(postId);
+        if(!postObj.isPresent()) //게시글 존재 여부 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/post/delete", "게시글 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Member member = memberObj.get();
+        Post post = postObj.get();
+
+        if(member.getId() != post.getMember().getId())
+            return ErrorService.send(HttpStatus.FORBIDDEN.value(), "/api/post/edit", "본인 게시물이 아니면 삭제할 수 없습니다.", ResponseEntity.class);
+
+        postRepository.delete(post); //게시물 삭제 요청
+
+        return ResponseEntity.noContent().build();
+    }
 
 }
