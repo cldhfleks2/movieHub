@@ -81,11 +81,10 @@ public class ExcuteTask {
 
     //2. response를 이용해서 영화 정보를 DB에 저장하는 함수
     private void saveDBCommonAPIrequest() throws Exception{
-        HttpResponse response = null;
         //1. movieService의 saveTodayBoxOfficeOnDB 사용
         log.info("전체 일일 박스오피스 목록의 응답을 DB에 저장 중... ...");
         HttpResponse<String> totalTodayBoxOfficeResponse = kobisRequestService.getTotalTodayBoxOfficeResponse();
-        if(response == null)
+        if(totalTodayBoxOfficeResponse == null)
             log.error("전체 일일 박스오피스 DB 저장 실패!!!!");
         else{
             movieService.saveTodayBoxOfficeOnDB(totalTodayBoxOfficeResponse);
@@ -95,7 +94,7 @@ public class ExcuteTask {
         //2. movieService의 saveWeeklyBoxOfficeOnDB 사용
         log.info("전체 주간 박스오피스 10개 (월~일) 목록의 응답을 DB에 저장 중... ...");
         HttpResponse<String> totalWeeklyBoxOfficeResponse = kobisRequestService.getTotalWeeklyBoxOfficeResponse();
-        if(response == null)
+        if(totalWeeklyBoxOfficeResponse == null)
             log.error("전체 주간 박스오피스 DB 저장 실패!!!!");
         else{
             movieService.saveWeeklyBoxOfficeOnDB(totalWeeklyBoxOfficeResponse);
@@ -105,7 +104,7 @@ public class ExcuteTask {
         //3. movieService의 saveWeeklyBoxOfficeOnDB
         log.info("주간 한국 박스오피스 10개 (월~일) 목록의 응답을 DB에 저장 중... ...");
         HttpResponse<String> koreaWeeklyBoxOfficeResponse = kobisRequestService.getKoreaWeeklyBoxOfficeResponse();
-        if(response == null)
+        if(koreaWeeklyBoxOfficeResponse == null)
             log.error("주간 한국 박스오피스 DB 저장 실패!!!!");
         else{
             movieService.saveWeeklyBoxOfficeOnDB(koreaWeeklyBoxOfficeResponse);
@@ -115,7 +114,7 @@ public class ExcuteTask {
         //4. movieService의 saveWeeklyBoxOfficeOnDB
         log.info("주간 외국 박스오피스 10개 (월~일) 목록의 응답을 DB에 저장 중... ...");
         HttpResponse<String> foreignWeeklyBoxOfficeResponse = kobisRequestService.getForeignWeeklyBoxOfficeResponse();
-        if(response == null)
+        if(foreignWeeklyBoxOfficeResponse == null)
             log.error("주간 외국 박스오피스 DB 저장 실패!!!!");
         else{
             movieService.saveWeeklyBoxOfficeOnDB(foreignWeeklyBoxOfficeResponse);

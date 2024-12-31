@@ -259,6 +259,7 @@ public class MovieService {
     }
 
     //박스오피스 목록을 DB에 저장 : 실제 JsonNode를 탐색하여 저장
+    //이미 저장된 movie인경우 저장안함
     //saveTodayBoxOfficeOnDB, saveWeeklyBoxOfficeOnDB 에서 사용
     @Transactional
     public void saveEntityAsBoxOffice(JsonNode boxOfficeList, String currentDay) throws Exception {
