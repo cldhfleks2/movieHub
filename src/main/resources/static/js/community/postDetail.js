@@ -7,6 +7,7 @@ $(document).ready(function() {
     reviewLike();
     reviewEdit();
     postDelete();
+    reviewDelete();
 });
 
 // 공유 기능
@@ -26,7 +27,6 @@ function reviewTextareaAdjust() {
         this.style.height = this.scrollHeight + 'px';
     });
 }
-
 
 //게시글 삭제 요청
 function postDelete(){
@@ -54,20 +54,9 @@ function postDelete(){
     })
 }
 
-// TODO 게시글 좋아요 처리
-function postLike() {
-    $(document).on('click', '.postActions .likeButton', function() {
-        const $likeButton = $(this);
-        $likeButton.toggleClass('active');
-
-        const currentLikes = parseInt($likeButton.find('span').text());
-        const newLikes = $likeButton.hasClass('active') ? currentLikes + 1 : currentLikes - 1;
-        $likeButton.find('span').text(newLikes);
-    });
-}
-
 //리뷰 리스트를 부분 새로고침하는 함수
-function reviewListReload(postId){
+function reviewListReload(){
+    const postId = $(".postDetailContainer").data("postid");
     $.ajax({
         url: "/api/post/review/list/" + postId,
         method: "get",
@@ -108,7 +97,7 @@ function reviewSubmit() {
                 if (xhr.status === 201) { //정상 성공시 201 created
                     alert("댓글을 작성하였습니다.") //불편하면 지워도 돼
                     $textarea.val(''); //입력 내용 지움
-                    reviewListReload(postId)
+                    reviewListReload()
                 }else{
                     alert("알 수 없는 성공")
                 }
@@ -191,7 +180,7 @@ function reviewReply() {
                     data: JSON.stringify(postReviewRequestDTO),
                     success: function() {
                         // 성공적으로 답글이 저장되면 리뷰 리스트 새로고침
-                        reviewListReload(postId)
+                        reviewListReload()
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
@@ -204,23 +193,7 @@ function reviewReply() {
     }
 }
 
-
-
-
-// TODO 댓글 좋아요 처리
-function reviewLike() {
-    $(document).on('click', '.reviewActions .likeButton', function(e) {
-        const $button = $(e.currentTarget);
-        $button.toggleClass('active');
-
-        const $count = $button.find('span');
-        const currentLikes = parseInt($count.text());
-        $count.text($button.hasClass('active') ? currentLikes + 1 : currentLikes - 1);
-    });
-}
-
-// TODO 댓글 수정 모드 및 수정 처리 : 싹다 고쳐라.
-//reviewId던지고, 수정할 내용만 보내는 Patch요청으로 하자
+//댓글 수정 : reviewId던지고, 수정할 내용만 보내는 Patch요청으로 하자
 function reviewEdit() {
     let activeEditForm = null; // 현재 활성화된 수정 폼을 추적
 
@@ -287,7 +260,6 @@ function reviewEdit() {
         const $review = $(e.currentTarget).closest('.reviewItem');
         const content = $review.find('.editTextarea').val().trim();
         const reviewId = $review.find('.editButton').data('review-id');
-        const postId = $(".postDetailContainer").data("postid"); // postId 추출
 
         if (content) {
             // PATCH 요청으로 댓글 수정
@@ -298,7 +270,7 @@ function reviewEdit() {
                 success: function (response, textStatus, xhr) {
                     if (xhr.status === 200) {
                         activeEditForm = null;
-                        reviewListReload(postId) // 성공적으로 수정되면 댓글 리스트 새로고침
+                        reviewListReload() // 성공적으로 수정되면 댓글 리스트 새로고침
                     }else{
                         alert("알 수 없는 성공")
                     }
@@ -314,3 +286,58 @@ function reviewEdit() {
         }
     });
 }
+
+//댓글 삭제 : 답글이 달린 댓글 삭제시 답글까지 전부 삭제
+function reviewDelete(){
+    $(document).on('click', '.deleteButton', function () {
+        const $formWrapper = $(".reviewEditArea");
+        const reviewId = $(this).data('review-id');
+        $formWrapper.remove(); // 모든 댓글 수정 폼 제거
+
+        $.ajax({
+            url: "/api/post/review/delete/" + reviewId,
+            method: "delete",
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 204) { //정상 삭제일 경우
+                    alert("댓글을 삭제 하였습니다.")
+                    reviewListReload() // 성공적으로 삭제 되면 댓글 리스트 새로고침
+                }else{
+                    alert("알 수 없는 성공")
+                }
+                console.log("/api/post/review/delete/ ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("/api/post/review/delete/ ajax failed")
+            }
+        })
+
+    });
+}
+
+
+
+// TODO 댓글 좋아요 처리
+function reviewLike() {
+    $(document).on('click', '.reviewActions .likeButton', function(e) {
+        const $button = $(e.currentTarget);
+        $button.toggleClass('active');
+
+        const $count = $button.find('span');
+        const currentLikes = parseInt($count.text());
+        $count.text($button.hasClass('active') ? currentLikes + 1 : currentLikes - 1);
+    });
+}
+
+// TODO 게시글 좋아요 처리
+function postLike() {
+    $(document).on('click', '.postActions .likeButton', function() {
+        const $likeButton = $(this);
+        $likeButton.toggleClass('active');
+
+        const currentLikes = parseInt($likeButton.find('span').text());
+        const newLikes = $likeButton.hasClass('active') ? currentLikes + 1 : currentLikes - 1;
+        $likeButton.find('span').text(newLikes);
+    });
+}
+

@@ -73,5 +73,13 @@ public class CommunityController {
         return communityService.editReview(reviewId, content, auth);
     }
 
+    //댓글 삭제 요청
+    @DeleteMapping("/api/post/review/delete/{reviewId}")
+    ResponseEntity<String> deleteReview(@PathVariable Long reviewId, Authentication auth){
+        return communityService.deleteReview(reviewId, auth);
+    }
+
+
+
 
 }

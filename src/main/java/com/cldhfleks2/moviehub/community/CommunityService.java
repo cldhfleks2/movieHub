@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -249,6 +248,7 @@ public class CommunityService {
     }
 
     //댓글 작성 요청 : 댓글/답글 전부 처리
+    @Transactional
     ResponseEntity<String> writeReview(PostReviewRequestDTO postReviewRequestDTO, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -294,7 +294,7 @@ public class CommunityService {
     }
 
     //댓글 리스트만 GET : 게시물 상세 페이지의
-    String getPostDetailOnReviewList(@PathVariable Long postId, Model model, Authentication auth, RedirectAttributes redirectAttributes) {
+    String getPostDetailOnReviewList(Long postId, Model model, Authentication auth, RedirectAttributes redirectAttributes) {
         Optional<Post> postObj = postRepository.findById(postId);
         if(!postObj.isPresent()) //게시글 존재 여부 체크
             return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/postDetail/", "게시글 정보를 찾을 수 없습니다.", String.class);
@@ -332,6 +332,7 @@ public class CommunityService {
     }
 
     //댓글 수정 요청
+    @Transactional
     ResponseEntity<String> editReview(Long reviewId, String content, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -349,7 +350,33 @@ public class CommunityService {
         return ResponseEntity.ok().build();
     }
 
+    //재귀적으로 댓글과 그에 달린 답글들을 함께 삭제하는 메소드
+    @Transactional
+    void deleteReviewByRecur(PostReview parent) {
+        //답글을 찾음
+        List<PostReview> children = postReviewRepository.findAllByParent(parent);
+        for(PostReview child : children){ //자식을 탐험하면서 함께 삭제
+            deleteReviewByRecur(child);
+        }
+        postReviewRepository.delete(parent); //부모 삭제
+    }
 
+    //댓글 삭제 요청
+    ResponseEntity<String> deleteReview(Long reviewId, Authentication auth){
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/post/review/edit/", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Optional<PostReview> postReviewObj = postReviewRepository.findById(reviewId);
+        if(!postReviewObj.isPresent())
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/post/review/edit/", "댓글을 찾을 수 없습니다.", ResponseEntity.class);
+
+        PostReview postReview = postReviewObj.get();
+        deleteReviewByRecur(postReview); //재귀적으로 댓글과 그에 달린 답글도 함께 삭제
+
+        return ResponseEntity.noContent().build();
+    }
 
 
 
