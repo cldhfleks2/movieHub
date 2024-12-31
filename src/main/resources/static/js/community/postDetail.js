@@ -342,17 +342,50 @@ function reviewLike() {
     });
 }
 
+//페이지 전체 새로고침
+function pageReload(){
+    const postId = $(".postDetailContainer").data("postid");
+    $.ajax({
+        url: "/postDetail/" + postId,
+        method: "get",
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#postDetailContainer").replaceWith(dataHtml.find("#postDetailContainer"));
 
+            console.log("/postDetail/ ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("/postDetail/ ajax failed")
+        }
+
+    })
+}
 
 //게시글 좋아요
 function postLike() {
     $(document).on('click', '.postActions .likeButton', function() {
-        const $likeButton = $(this);
-        $likeButton.toggleClass('active');
+        const postId = $(this).data("postid")
 
-        const currentLikes = parseInt($likeButton.find('span').text());
-        const newLikes = $likeButton.hasClass('active') ? currentLikes + 1 : currentLikes - 1;
-        $likeButton.find('span').text(newLikes);
+        $.ajax({
+            url: "/api/post/like",
+            method: "post",
+            data: {postId: postId},
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 200) {
+                    alert("좋아요를 보냈습니다.")
+                    pageReload();
+                }else{
+                    alert("알 수 없는 성공")
+                }
+                console.log("/api/post/like ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("/api/post/like ajax failed")
+            }
+        })
     });
 }
 

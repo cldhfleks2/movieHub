@@ -11,7 +11,7 @@
 <body>
 <div th:replace="~{ header/header::header }"></div>
 
-<div class="postDetailContainer" th:data-postid="${postDTO.postId}">
+<div class="postDetailContainer" id="postDetailContainer" th:data-postid="${postDTO.postId}">
     <div class="postHeader">
 <!--        2글자만 출력-->
         <div class="postCategory" th:text="${postDTO.postType.description}"
@@ -40,13 +40,14 @@
 <!--        <p >영화에서 보여주는 시간의 흐름과 역사적 맥락을 분석해보았습니다...</p>-->
     </div>
 
+<!--    게시글 버튼들-->
     <div class="postActions">
         <div class="leftActions">
             <th:block th:if="${postDTO.isAuthor}"> <!-- 본인일때만 가능한 기능-->
                 <!-- 좋아요 버튼 -->
-                <button class="actionButton likeButton">
-                    <span class="icon">♥</span>
-                    <span class="postLikeCount">좋아요 수 숫자</span>
+                <button class="actionButton likeButton" th:data-postid="${postDTO.postId}">
+                    <span class="icon" th:classappend="${isLiked ? 'active' : ''}">♥</span>
+                    <span class="postLikeCount" th:text="${postLikeCount}">좋아요 수 숫자</span>
                 </button>
             </th:block>
         </div>
