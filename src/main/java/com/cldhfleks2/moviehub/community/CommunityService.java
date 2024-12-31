@@ -1,6 +1,8 @@
 package com.cldhfleks2.moviehub.community;
 
 import com.cldhfleks2.moviehub.error.ErrorService;
+import com.cldhfleks2.moviehub.like.PostLike;
+import com.cldhfleks2.moviehub.like.PostLikeRepository;
 import com.cldhfleks2.moviehub.like.PostReviewLike;
 import com.cldhfleks2.moviehub.like.PostReviewLikeRepository;
 import com.cldhfleks2.moviehub.member.Member;
@@ -34,6 +36,7 @@ public class CommunityService {
     private final PostReviewRepository postReviewRepository;
     private final NotificationRepository notificationRepository;
     private final PostReviewLikeRepository postReviewLikeRepository;
+    private final PostLikeRepository postLikeRepository;
 
     private static final int REVIEW_MAX_DEPTH = 1;
 
@@ -83,11 +86,11 @@ public class CommunityService {
                 .collect(Collectors.toList());
 
         //해당 댓글의 모든 좋아요를 가져온다.
-        List<PostReviewLike> allLikes = postReviewLikeRepository.findAllByReviewId(review.getId());
+        List<PostReviewLike> allLikes = postReviewLikeRepository.findAllByReviewIdAndStatus(review.getId());
         Long likeCount = (long) allLikes.size();
 
         //현재 댓글을 내가 좋아요했는지 확인
-        Optional<PostReviewLike> postReviewLikeObj = postReviewLikeRepository.findByReviewIdAndMemberId(review.getId(), currentUserId);
+        Optional<PostReviewLike> postReviewLikeObj = postReviewLikeRepository.findByReviewIdAndMemberIdAndStatus(review.getId(), currentUserId);
         Boolean isLiked;
         if(postReviewLikeObj.isPresent()) {
             isLiked = (postReviewLikeObj.get().getStatus() == 1);
@@ -155,7 +158,22 @@ public class CommunityService {
         model.addAttribute("postReviewCnt", allReviews.size());
 
 
+        //본인이 게시물 좋아요 눌렀는지 isLiked보내기
+        Optional<PostLike> postLikeObj = postLikeRepository.findByPostIdAndMemberIdAndStatus(postId, member.getId());
+        Boolean isLiked;
+        if(postLikeObj.isPresent()) {
+            isLiked = (postLikeObj.get().getStatus() == 1);
+        }else{
+            isLiked = false;
+        }
+        model.addAttribute("isLiked", isLiked);
 
+        //게시글 좋아요 갯수 보내기
+        List<PostLike> postLikeList = postLikeRepository.findAllByPostIdAndStatus(postId);
+        int postLikeCount = postLikeList.size();
+        model.addAttribute("postLikeCount", postLikeCount);
+        
+        
         return "community/postDetail";
     }
 
