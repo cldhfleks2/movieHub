@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 수정</title>
+    <title>게시글 수정 페이지</title>
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/community/edit.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -17,18 +17,18 @@
     <form id="postEditForm">
         <div class="formGroup">
             <select id="categorySelect" required>
-                <option value="FREE">자유</option>
-                <option value="NEWS">소식</option>
-                <option value="DISCUSSION">토론</option>
+                <option value="FREE" th:selected="${postDTO.postType.name() == 'FREE'}">자유</option>
+                <option value="NEWS" th:selected="${postDTO.postType.name() == 'NEWS'}">소식</option>
+                <option value="DISCUSSION" th:selected="${postDTO.postType.name() == 'DISCUSSION'}">토론</option>
             </select>
         </div>
 
         <div class="formGroup">
-            <input type="text" id="postTitle" placeholder="제목을 입력하세요" required>
+            <input type="text" id="postTitle" placeholder="제목을 입력하세요" th:value="${postDTO.title}" required>
         </div>
 
         <div class="formGroup">
-            <textarea id="postContent" placeholder="내용을 입력하세요" required></textarea>
+            <textarea id="postContent" placeholder="내용을 입력하세요" th:value="${postDTO.content}" required></textarea>
         </div>
 
         <div class="formActions">

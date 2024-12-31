@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,5 +39,12 @@ public class CommunityController {
     ResponseEntity<String> writePost(@RequestBody PostDTO postDTO, Authentication auth) {
         return communityService.writePost(postDTO, auth);
     }
+
+    //게시글 수정 페이지 GET : 본인만 가능
+    @GetMapping("/postEdit/{postId}")
+    String getPostEdit(@PathVariable Long postId,Model model, Authentication auth, RedirectAttributes redirectAttributes) {
+        return communityService.getPostEdit(postId, model, auth, redirectAttributes);
+    }
+
 
 }
