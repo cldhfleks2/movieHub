@@ -117,8 +117,9 @@ public class SeleniumWebDriver {
                     .replaceAll(".*(age\\d*).*", "$1");
 
             // posterUrl 추출
-            String posterURL = movieItem.findElement(By.tagName("img"))
+            String imgTagSrcURL = movieItem.findElement(By.tagName("img"))
                     .getAttribute("src");
+            String posterURL = imgTagSrcURL.split("source=")[1]; //실제 이미지 주소만 가져옴
 
             // releaseDate 추출
             String releaseDate = movieItem.findElement(By.cssSelector(".movie-txt .movie-launch"))
