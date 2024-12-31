@@ -28,11 +28,9 @@ public class Notification {
     //예) 댓글작성 + 리뷰 게시판 => 리뷰게시판에 댓글작성
     //예) 댓글작성 + 토론 게시판 => 토론게시판에 댓글작성
     //확장성이 좋음
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private NotificationType notificationType; //알림 종류
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private NotificationTargetType targetType; //알림이 발생한 타겟
