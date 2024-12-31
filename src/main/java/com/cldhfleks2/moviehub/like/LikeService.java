@@ -1,5 +1,7 @@
 package com.cldhfleks2.moviehub.like;
 
+import com.cldhfleks2.moviehub.community.PostReview;
+import com.cldhfleks2.moviehub.community.PostReviewRepository;
 import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
@@ -9,6 +11,7 @@ import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +22,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MovieLikeService {
+public class LikeService {
     private final MovieLikeRepository movieLikeRepository;
     private final MemberRepository memberRepository;
     private final MovieRepository movieRepository;
     private final MemberService memberService;
+    private final PostReviewRepository postReviewRepository;
+    private final PostReviewLikeRepository postReviewLikeRepository;
 
 
     //영화 상세 페이지에서 좋아요 버튼 눌렀을때 detail페이지도 전송
@@ -98,7 +103,28 @@ public class MovieLikeService {
             return null;
     }
 
+    //댓글 좋아요 요청
+    @Transactional
+    ResponseEntity<String> likePostReview(Long reviewId, Authentication auth){
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/post/review/like", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
+        Optional<PostReview> postReviewObj = postReviewRepository.findById(reviewId);
+        if(!postReviewObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/post/review/like", "댓글을 찾을 수 없습니다.", ResponseEntity.class);
+
+        Member member = memberObj.get();
+        PostReview postReview = postReviewObj.get();
+        PostReviewLike postReviewLike = PostReviewLike.create()
+                .review(postReview)
+                .sender(member)
+                .build();
+        postReviewLikeRepository.save(postReviewLike); //DB 저장
+        
+        return ResponseEntity.ok().build();
+    }
 
 
 

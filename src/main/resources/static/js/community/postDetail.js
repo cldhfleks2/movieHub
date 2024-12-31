@@ -316,15 +316,29 @@ function reviewDelete(){
 }
 
 
-// TODO 댓글 좋아요 처리
+//댓글 좋아요
 function reviewLike() {
     $(document).on('click', '.reviewActions .likeButton', function(e) {
-        const $button = $(e.currentTarget);
-        $button.toggleClass('active');
+        const reviewId = $(this).data("review-id");
 
-        const $count = $button.find('span');
-        const currentLikes = parseInt($count.text());
-        $count.text($button.hasClass('active') ? currentLikes + 1 : currentLikes - 1);
+        $.ajax({
+            url: "/api/post/review/like",
+            method: "post",
+            data: {reviewId: reviewId},
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 200) {
+                    reviewListReload() // 댓글 리스트 새로고침
+                }else{
+                    alert("알 수 없는 성공")
+                }
+                console.log(" ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log(" ajax failed")
+            }
+        })
+
     });
 }
 
