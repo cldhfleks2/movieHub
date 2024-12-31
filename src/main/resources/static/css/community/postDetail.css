@@ -292,3 +292,11 @@ body {
     color: #e50914;
     font-size: 1.4rem;
 }
+
+
+.listButton .icon {
+    color: #e50914;
+    font-size: 1.4rem;
+    text-decoration: none;
+    outline: none;
+}
