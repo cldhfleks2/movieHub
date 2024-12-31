@@ -51,7 +51,20 @@ public class CommunityController {
 
     //게시글 삭제 요청
     @DeleteMapping("/api/post/delete")
-    ResponseEntity<String> deletePost(Long postId, Authentication auth, RedirectAttributes redirectAttributes){
-        return communityService.deletePost(postId, auth, redirectAttributes);
+    ResponseEntity<String> deletePost(Long postId, Authentication auth){
+        return communityService.deletePost(postId, auth);
     }
+
+    //댓글 작성 요청 : 댓글/답글 전부 처리
+    @PostMapping("/api/post/review/add")
+    ResponseEntity<String> writeReview(@RequestBody PostReviewRequestDTO postReviewRequestDTO, Authentication auth) {
+        return communityService.writeReview(postReviewRequestDTO, auth);
+    }
+
+    //댓글 리스트만 GET : 게시물 상세 페이지의
+    @GetMapping("/api/post/review/list/{postId}")
+    String getPostDetailOnReviewList(@PathVariable Long postId, Model model, Authentication auth, RedirectAttributes redirectAttributes) {
+        return communityService.getPostDetailOnReviewList(postId, model, auth, redirectAttributes);
+    }
+
 }
