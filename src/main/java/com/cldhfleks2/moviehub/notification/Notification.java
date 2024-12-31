@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE notification SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE notification SET status = 0 WHERE id = ?")
 @ToString
 @NoArgsConstructor //기본 생성자 자동생성 : builder를 사용해서 필요함
 public class Notification {

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE movie_genre SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE movie_genre SET status = 0 WHERE id = ?")
 @ToString
 //미공개 영화는 status=0 처리
 public class MovieGenre {

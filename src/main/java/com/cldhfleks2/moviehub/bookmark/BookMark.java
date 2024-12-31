@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE book_mark SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE book_mark SET status = 0 WHERE id = ?")
 @ToString
 public class BookMark {
     @ToString.Exclude

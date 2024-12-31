@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE member SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE member SET status = 0 WHERE id = ?")
 @ToString
 public class Member {
     @Id

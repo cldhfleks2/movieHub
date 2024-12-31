@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE post_review SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE post_review SET status = 0 WHERE id = ?")
 @ToString
 public class PostReview {
     private String content; //리뷰 내용

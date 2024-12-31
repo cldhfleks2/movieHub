@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE movie_daily_stat SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE movie_daily_stat SET status = 0 WHERE id = ?")
 @ToString
 //유일하게 하루마다 값이 바뀌어야하는 엔티티
 public class MovieDailyStat {

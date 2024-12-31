@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE movie SET status = 0, update_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE movie SET status = 0 WHERE id = ?")
 @ToString
 //몇개 필드 빼고는 잘 안바뀌는 엔티티
 public class Movie {
