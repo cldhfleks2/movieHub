@@ -342,7 +342,9 @@ function reviewLike() {
     });
 }
 
-// TODO 게시글 좋아요 처리
+
+
+//게시글 좋아요
 function postLike() {
     $(document).on('click', '.postActions .likeButton', function() {
         const $likeButton = $(this);

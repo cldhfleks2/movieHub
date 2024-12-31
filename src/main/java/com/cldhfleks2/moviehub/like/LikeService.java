@@ -117,12 +117,24 @@ public class LikeService {
 
         Member member = memberObj.get();
         PostReview postReview = postReviewObj.get();
-        PostReviewLike postReviewLike = PostReviewLike.create()
-                .review(postReview)
-                .sender(member)
-                .build();
-        postReviewLikeRepository.save(postReviewLike); //DB 저장
-        
+        if(postReview.getMember().getId() == member.getId())
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/post/review/like", "본인 댓글은 좋아요를 할 수 없습니다.", ResponseEntity.class);
+
+        Optional<PostReviewLike> postReviewLikeObj = postReviewLikeRepository.findByReviewIdAndMemberId(reviewId, member.getId());
+        if(postReviewLikeObj.isPresent()){ //기존에 좋아요 요청이 있었을때는 : status toggle
+            PostReviewLike postReviewLike = postReviewLikeObj.get();
+            int status = postReviewLike.getStatus();
+            status = (status + 1) % 2; //toggle
+            postReviewLike.setStatus(status);
+            postReviewLikeRepository.save(postReviewLike); // update
+        }else{
+            PostReviewLike postReviewLike = PostReviewLike.create()
+                    .review(postReview)
+                    .sender(member)
+                    .build();
+            postReviewLikeRepository.save(postReviewLike); //DB 저장
+        }
+
         return ResponseEntity.ok().build();
     }
 

@@ -120,7 +120,7 @@
                         <button class="replyButton" th:if="${review.depth < 1}"
                                 th:data-parent-id="${review.id}">답글</button>
                         <button class="likeButton" th:data-review-id="${review.id}">
-                            <span class="icon">♥</span>
+                            <span class="icon" th:classappend="${review.isLiked ? 'active' : ''}">♥</span>
                             <span class="reviewLikeCount" th:text="${review.likeCount}">12</span>
                         </button>
                     </th:block>

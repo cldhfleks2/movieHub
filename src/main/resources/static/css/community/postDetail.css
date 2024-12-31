@@ -280,7 +280,6 @@ body {
 }
 
 .likeButton .icon {
-    color: #e50914;
     transition: transform 0.2s ease;
 }
 
@@ -295,11 +294,18 @@ body {
 
 
 .listButton .icon {
+    font-size: 1.4rem;
+    text-decoration: none;
+    outline: none;
+}
+
+.likeButton .icon.active {
     color: #e50914;
     font-size: 1.4rem;
     text-decoration: none;
     outline: none;
 }
+
 
 
 

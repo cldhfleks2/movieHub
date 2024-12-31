@@ -86,6 +86,15 @@ public class CommunityService {
         List<PostReviewLike> allLikes = postReviewLikeRepository.findAllByReviewId(review.getId());
         Long likeCount = (long) allLikes.size();
 
+        //현재 댓글을 내가 좋아요했는지 확인
+        Optional<PostReviewLike> postReviewLikeObj = postReviewLikeRepository.findByReviewIdAndMemberId(review.getId(), currentUserId);
+        Boolean isLiked;
+        if(postReviewLikeObj.isPresent()) {
+            isLiked = (postReviewLikeObj.get().getStatus() == 1);
+        }else{
+            isLiked = false;
+        }
+
         return PostReviewDTO.create()
                 .id(review.getId())
                 .content(review.getContent())
@@ -96,6 +105,7 @@ public class CommunityService {
                 .depth(review.getDepth())
                 .children(children)
                 .isAuthor(review.getMember().getId().equals(currentUserId))
+                .isLiked(isLiked)
                 .build();
     }
 

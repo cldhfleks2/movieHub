@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE post_review_like SET status = 0 WHERE id = ?")
 @ToString
 @NoArgsConstructor
-public class PostReviewLike {
+public class PostReviewLike { //좋아요 상태가 status와 동일
     @ToString.Exclude
     @ManyToOne
     private PostReview review; //댓글

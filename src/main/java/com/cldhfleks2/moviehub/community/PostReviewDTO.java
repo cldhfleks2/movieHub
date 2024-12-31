@@ -24,5 +24,6 @@ public class PostReviewDTO {
     private Long id; //현재 댓글 id
     private int depth; // 댓글 depth : 게시물 상세페이지
     private List<PostReviewDTO> children; // 자식 댓글 리스트 : 게시물 상세페이지
-
+    
+    private Boolean isLiked; //좋아요 한 상태인지
 }
