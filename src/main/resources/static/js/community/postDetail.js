@@ -316,7 +316,6 @@ function reviewDelete(){
 }
 
 
-
 // TODO 댓글 좋아요 처리
 function reviewLike() {
     $(document).on('click', '.reviewActions .likeButton', function(e) {

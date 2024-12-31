@@ -114,13 +114,16 @@
                 </div>
                 <p class="reviewText" th:text="${review.content}">댓글 내용</p>
                 <div class="reviewActions">
-                    <!-- depth가 1 미만일 때만 답글 버튼 표시 -->
-                    <button class="replyButton" th:if="${review.depth < 1}"
-                            th:data-parent-id="${review.id}">답글</button>
-                    <button class="likeButton">
-                        <span class="icon">♥</span>
-                        <span class="reviewLikeCount" th:text="${review.likeCount}">12</span>
-                    </button>
+<!--                    작성자가 아닐때만 답글,좋아요 가능함-->
+                    <th:block th:unless="${review.isAuthor}">
+                        <!-- depth가 1 미만일 때만 답글 버튼 표시 -->
+                        <button class="replyButton" th:if="${review.depth < 1}"
+                                th:data-parent-id="${review.id}">답글</button>
+                        <button class="likeButton" th:data-review-id="${review.id}">
+                            <span class="icon">♥</span>
+                            <span class="reviewLikeCount" th:text="${review.likeCount}">12</span>
+                        </button>
+                    </th:block>
                     <!-- 작성자 본인인 경우에만 수정/삭제 버튼 표시 -->
                     <th:block th:if="${review.isAuthor}">
                         <button class="editButton" th:data-review-id="${review.id}">
