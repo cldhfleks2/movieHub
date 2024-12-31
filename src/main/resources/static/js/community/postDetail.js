@@ -74,7 +74,7 @@ function reviewListReload(postId){
         success: function (data){
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
-            $("#reviewList").replaceWith(dataHtml.find("#reviewList"));
+            $("#reviewsSection").replaceWith(dataHtml.find("#reviewsSection"));
 
             console.log("/api/post/review/list/postId ajax success")
         },
@@ -221,6 +221,7 @@ function reviewLike() {
 
 // TODO 댓글 수정 모드 및 수정 처리 : 싹다 고쳐라.
 //reviewId : data("review-id") 가져옴
+//reviewId던지고, 수정할 내용만 던지는 Patch요청으로 하자
 
 //이건 form
 // content: content,

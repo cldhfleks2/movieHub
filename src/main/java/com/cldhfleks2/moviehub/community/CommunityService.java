@@ -129,6 +129,9 @@ public class CommunityService {
 
         model.addAttribute("postReviewDTOList", parentReviews);
 
+        //댓글 총 갯수 던져줌
+        model.addAttribute("postReviewCnt", allReviews.size());
+
         return "community/postDetail";
     }
 
@@ -318,7 +321,11 @@ public class CommunityService {
 
         model.addAttribute("postReviewDTOList", parentReviews);
 
-        return "community/postDetail :: #reviewList"; //댓글 리스트만
+        //댓글 총 갯수 던져줌
+        model.addAttribute("postReviewCnt", allReviews.size());
+
+
+        return "community/postDetail :: #reviewsSection"; //댓글 리스트만
     }
 
 

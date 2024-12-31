@@ -75,9 +75,10 @@
         </div>
     </div>
 
-    <div class="reviewSection">
-        <h3>댓글
-            <span class="reviewCount">45</span>
+    <div class="reviewSection" id="reviewsSection">
+        <h3>댓글 (
+            <span class="reviewCount" th:text="${postReviewCnt}" style="margin-left: -5px; margin-right: -5px;">45</span>
+            )
         </h3>
         <div class="reviewForm">
 <!--            본인 이미지를 보여줌-->
@@ -88,6 +89,7 @@
             </div>
         </div>
 
+<!--        이부분에 리뷰 객체를 반복-->
         <div class="reviewList" id="reviewList">
             <th:block th:if="${not #lists.isEmpty(postReviewDTOList)}">
                 <th:block th:each="review : ${postReviewDTOList}" th:if="${review != null}">
@@ -96,7 +98,7 @@
             </th:block>
         </div>
 
-        <!-- 댓글 아이템 프래그먼트 정의 -->
+        <!-- 재귀적으로 반복할 하나의 리뷰 객체 -->
         <th:block th:fragment="reviewItemFragment(review)">
             <div th:if="${review != null}" th:id="'reviewItem-' + ${review.id}" class="reviewItem"
                  th:style="${review.depth > 0 ? 'margin-left: ' + (review.depth * 40) + 'px' : ''}">
@@ -140,7 +142,6 @@
                 </div>
             </div>
         </th:block>
-
 
     </div>
 </div>
