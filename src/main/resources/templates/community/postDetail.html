@@ -32,17 +32,19 @@
         </div>
     </div>
 
-    <div class="postContent">
-        <p th:text="${postDTO.content}">영화에서 보여주는 시간의 흐름과 역사적 맥락을 분석해보았습니다...</p>
+    <div class="postContent" th:text="${postDTO.content}">
+<!--        <p >영화에서 보여주는 시간의 흐름과 역사적 맥락을 분석해보았습니다...</p>-->
     </div>
 
     <div class="postActions">
         <div class="leftActions">
-            <!-- 좋아요 버튼 -->
-            <button class="actionButton likeButton">
-                <span class="icon">♥</span>
-                <span class="postLikeCount">128</span>
-            </button>
+            <th:block th:if="${postDTO.isAuthor}"> <!-- 본인일때만 가능한 기능-->
+                <!-- 좋아요 버튼 -->
+                <button class="actionButton likeButton">
+                    <span class="icon">♥</span>
+                    <span class="postLikeCount">128</span>
+                </button>
+            </th:block>
         </div>
         <div class="rightActions">
             <!-- 공유 버튼 -->
@@ -50,21 +52,18 @@
                 <span class="icon">↗</span>
                 <span>공유</span>
             </button>
-
-            <!-- 수정 버튼 -->
-            <button class="actionButton editButton">
-                <span class="icon">✎</span>
-                <span>수정</span>
-            </button>
-            <!-- 삭제 버튼 -->
-            <button class="actionButton deleteButton">
-                <span class="icon">×</span>
-                <span>삭제</span>
-            </button>
-            <!--            <th:block th:if="${isAuthor}">-->
-            <!--                <button class="actionButton editButton">수정</button>-->
-            <!--                <button class="actionButton deleteButton">삭제</button>-->
-            <!--            </th:block>-->
+            <th:block th:if="${postDTO.isAuthor}"> <!-- 본인일때만 가능한 기능-->
+                <!-- 수정 버튼 -->
+                <a class="actionButton editButton" th:href="@{/postEdit/{postId}(postId=${postDTO.postId})}">
+                    <span class="icon">✎</span>
+                    <span>수정</span>
+                </a>
+                <!-- 삭제 버튼 -->
+                <button class="actionButton deleteButton">
+                    <span class="icon">×</span>
+                    <span>삭제</span>
+                </button>
+            </th:block>
         </div>
     </div>
 

@@ -106,6 +106,7 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     background-color: rgb(45 45 45 / 95%);
+    text-decoration: none;
 }
 
 .actionButton:hover {
