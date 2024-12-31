@@ -66,6 +66,7 @@ public class CommunityService {
     }
 
     //게시글 작성 요청
+    @Transactional
     ResponseEntity<String> writePost(PostDTO postDTO, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -84,6 +85,7 @@ public class CommunityService {
     }
 
     //게시글 수정 페이지 GET : 본인만 가능
+    @Transactional
     String getPostEdit(Long postId, Model model, Authentication auth, RedirectAttributes redirectAttributes) {
         Optional<Post> postObj = postRepository.findById(postId);
         if(!postObj.isPresent()){ //게시글 존재 여부 체크
@@ -123,6 +125,7 @@ public class CommunityService {
     }
 
     //게시글 수정 요청
+    @Transactional
     ResponseEntity<String> editPost(PostDTO postDTO, Authentication auth) {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
@@ -148,6 +151,7 @@ public class CommunityService {
     }
 
     //게시글 삭제 요청
+    @Transactional
     ResponseEntity<String> deletePost(Long postId, Authentication auth, RedirectAttributes redirectAttributes){
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
