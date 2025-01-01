@@ -84,18 +84,28 @@ public class MemberService {
     }
 
     //마이페이지 GET
-    String getMyPage(Model model, Authentication auth) {
+    String getMyPage(Model model, Authentication auth, String searchText, Integer pageIdx, String sort, String category) {
+        if(searchText == null) searchText = "";
+        if(pageIdx == null) pageIdx = 1;
+        if(sort == null) sort = "latest";
+        if(category == null) category = "ALL";
+
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "", "유저 정보를 찾을 수 없습니다.", String.class);
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/mypage", "유저 정보를 찾을 수 없습니다.", String.class);
 
+        //개인정보 수정 란
         Member member = memberObj.get();
         MemberDTO memberDTO = MemberDTO.create()
                 .username(member.getUsername())
                 .nickname(member.getNickname())
                 .profileImage(member.getProfileImage()).build();
         model.addAttribute("member", memberDTO);
+
+        //내 게시글 관리
+
+
 
         return "member/mypage";
     }
