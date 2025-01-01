@@ -89,8 +89,6 @@ public class MemberService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-
-
     //마이페이지 GET
     String getMyPage(Model model, Authentication auth, String keyword, Integer pageIdx, String sort, String category) {
         if(keyword == null) keyword = "";
@@ -120,6 +118,7 @@ public class MemberService {
             PostType postType = PostType.valueOf(category.toUpperCase());
             postPage = postRepository.findAllByKeywordAndCategoryAndStatus(keyword, postType, PageRequest.of(pageIdx - 1, pageSize));
         }
+
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post : postPage.getContent()) {
             Long postId = post.getId();
@@ -152,6 +151,10 @@ public class MemberService {
                 postPage.getPageable(),
                 postPage.getTotalElements()
         );
+        if(postPage.getTotalElements() == 0){ //
+            postDTOPage = new PageImpl<>(postDTOList, postPage.getPageable(), 1);
+        }
+
         model.addAttribute("postDTOPage", postDTOPage);
 
 
