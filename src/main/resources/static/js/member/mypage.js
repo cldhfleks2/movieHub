@@ -453,9 +453,29 @@ function reviewEdit() {
 
 // 댓글 뷰 : 댓글 삭제 요청
 function reviewDelete() {
-    $('.reviewCard .deleteButton').on('click', function() {
+    $(document).on("click", ".reviewCard .deleteButton", function () {
         const reviewId = $(this).data('review-id');
+        const $reviewCard = $(this).closest('.reviewCard');
 
+        $.ajax({
+            url: "/api/post/review/delete/" + reviewId,
+            method: "delete",
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 204) { //정상 삭제일 경우
+                    alert("댓글을 삭제 하였습니다.")
+                    $reviewCard.fadeOut(200, function() { //뷰에서 삭제.
+                        $(this).remove();
+                    });
+                }else{
+                    alert("알 수 없는 성공")
+                }
+                console.log("review delete ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("review delete ajax failed")
+            }
+        })
     });
 }
 
