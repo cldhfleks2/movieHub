@@ -2,8 +2,8 @@
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
-    min-height: 640px;
     caret-color: transparent;
+    min-height: 700px;
 }
 
 .notificationHeader {
