@@ -149,11 +149,8 @@ public class MemberService {
         Page<PostDTO> postDTOPage = new PageImpl<>(
                 postDTOList,
                 postPage.getPageable(),
-                postPage.getTotalElements()
+                postPage.getTotalElements() == 0 ? 1 : postPage.getTotalElements() //totalElements가 0이면 totalPages를 최소 1로 설정
         );
-        if(postPage.getTotalElements() == 0){ //postDTOPage.totalPages이 0이되어 페이지 버튼이 사라지는것을 방지
-            postDTOPage = new PageImpl<>(postDTOList, postPage.getPageable(), 1);
-        }
 
         model.addAttribute("postDTOPage", postDTOPage);
 
