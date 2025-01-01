@@ -262,24 +262,20 @@ function submitForm() {
     });
 }
 
-
 function filterAndSearchSection() {
     // 필터 변경 이벤트
-    $('#postTypeFilter, #postSortFilter').on('change', function() {
-        const category = $('#postTypeFilter').val();
-        const sort = $('#postSortFilter').val();
-
+    $(document).on('change', '#categoryTabs, #sortTabs', function() {
+        postListReload();
     });
 
     // 검색 이벤트
-    $('#postSearchBtn').on('click', function() {
-        const keyword = $('#postSearchInput').val().trim();
-
+    $(document).on('input', '#postSearchInput', function() {
+        postListReload();
     });
 
-    $('#postSearchInput').on('keypress', function(e) {
-        const keyword = $('#postSearchInput').val().trim();
-
+    // 검색 버튼
+    $(document).on('click', '#postSearchBtn', function() {
+        postListReload();
     });
 }
 
@@ -299,13 +295,12 @@ function initializePostManagement() {
     });
 }
 
-
-
 //게시물, 페이지번호 뷰를 새로고침하는 코드 : pageIdx와 searchText(자동적용)
 function postListReload(pageIdx = 1){
     const category = $("#categoryTabs").val(); //ALL, FREE, NEWS, DISCUSSION
     const sort = $("#sortTabs").val() //latest, view, like, review
     let keyword = $("#postSearchInput").val();
+    console.log(keyword)
 
     $.ajax({
         url: "/mypage",
@@ -314,8 +309,8 @@ function postListReload(pageIdx = 1){
         success: function (data){
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
-            $("#postSection").replaceWith(dataHtml.find("#postSection"));
-
+            $("#postListContainer").replaceWith(dataHtml.find("#postListContainer"));
+            $("#pagination").replaceWith(dataHtml.find("#pagination"));
             console.log("/mypage page-reload ajax success")
         },
         error: function (xhr){
