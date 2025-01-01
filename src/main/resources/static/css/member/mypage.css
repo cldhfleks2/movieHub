@@ -473,3 +473,18 @@ label {
     background-color: #007bff;
     color: white;
 }
+
+.postCategory.FREE {
+    background-color: rgba(0, 123, 255, 0.2);
+    color: #5aa9ff;
+}
+
+.postCategory.NEWS {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+.postCategory.DISCUSSION {
+    background-color: rgba(229, 9, 20, 0.2);
+    color: #e50914;
+}
