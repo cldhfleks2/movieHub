@@ -12,11 +12,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("UPDATE Post p SET p.view = p.view + 1 WHERE p.id = :postId")
     void incrementView(Long postId);
 
-    //모든 status=1인 post page를 가져오는
+    //keyword, status=1 page검색
     @Query("SELECT p FROM Post p WHERE p.status = 1 AND (p.title LIKE %:keyword% OR p.content LIKE %:keyword%)")
     Page<Post> findAllByKeywordAndStatus(String keyword, Pageable pageable);
 
-    //category가 일치하는 status=1인 post page를 가져옴
+    //keyword, category, status=1 page검색
     @Query("SELECT p FROM Post p WHERE p.status = 1 AND p.postType = :category AND (p.title LIKE %:keyword% OR p.content LIKE %:keyword%)")
     Page<Post> findAllByKeywordAndCategoryAndStatus(String keyword, PostType category, Pageable pageable);
 }
