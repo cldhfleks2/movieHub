@@ -459,7 +459,7 @@ public class CommunityService {
     @Transactional
     void deleteReviewByRecur(PostReview parent) {
         //답글을 찾음
-        List<PostReview> children = postReviewRepository.findAllByParent(parent);
+        List<PostReview> children = postReviewRepository.findAllByParentAndStatus(parent);
         for(PostReview child : children){ //자식을 탐험하면서 함께 삭제
             deleteReviewByRecur(child);
         }
