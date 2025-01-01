@@ -1,8 +1,11 @@
 package com.cldhfleks2.moviehub.member;
 
+import com.cldhfleks2.moviehub.community.*;
 import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.like.MovieLike;
 import com.cldhfleks2.moviehub.like.MovieLikeRepository;
+import com.cldhfleks2.moviehub.like.PostLike;
+import com.cldhfleks2.moviehub.like.PostLikeRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieService;
@@ -33,6 +36,9 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MovieLikeRepository movieLikeRepository;
     private final MovieService movieService;
+    private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final PostReviewRepository postReviewRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -83,9 +89,11 @@ public class MemberService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+
+
     //마이페이지 GET
-    String getMyPage(Model model, Authentication auth, String searchText, Integer pageIdx, String sort, String category) {
-        if(searchText == null) searchText = "";
+    String getMyPage(Model model, Authentication auth, String keyword, Integer pageIdx, String sort, String category) {
+        if(keyword == null) keyword = "";
         if(pageIdx == null) pageIdx = 1;
         if(sort == null) sort = "latest";
         if(category == null) category = "ALL";
@@ -103,8 +111,48 @@ public class MemberService {
                 .profileImage(member.getProfileImage()).build();
         model.addAttribute("member", memberDTO);
 
-        //내 게시글 관리
+        //내 게시글 관리 : 5개씩 보여줌
+        int pageSize = 5;
+        Page<Post> postPage;
+        if(category.equals("ALL"))
+            postPage = postRepository.findAllByKeywordAndStatus(keyword, PageRequest.of(pageIdx - 1, pageSize));
+        else{
+            PostType postType = PostType.valueOf(category.toUpperCase());
+            postPage = postRepository.findAllByKeywordAndCategoryAndStatus(keyword, postType, PageRequest.of(pageIdx - 1, pageSize));
+        }
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for(Post post : postPage.getContent()) {
+            Long postId = post.getId();
+            //게시글 좋아요 갯수
+            List<PostLike> postLikeList = postLikeRepository.findAllByPostIdAndStatus(postId);
+            Long likeCount = (long) postLikeList.size();
+            //댓글 총 갯수
+            List<PostReview> postReviewList = postReviewRepository.findAllByPostIdAndStatus(postId);
+            Long reviewCount = (long) postReviewList.size();
+            PostDTO postDTO = PostDTO.create()
+                    .postType(post.getPostType())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .view(post.getView())
+                    .member(post.getMember())
+                    .updateDate(post.getUpdateDate())
+                    .postId(post.getId())
+                    .likeCount(likeCount)
+                    .reviewCount(reviewCount)
+                    .build();
+            postDTOList.add(postDTO);
+        }
 
+        //정렬
+        postDTOList = CommunityService.sortPostDTOList(postDTOList, sort);
+
+        //페이지로 전달
+        Page<PostDTO> postDTOPage = new PageImpl<>(
+                postDTOList,
+                postPage.getPageable(),
+                postPage.getTotalElements()
+        );
+        model.addAttribute("postDTOPage", postDTOPage);
 
 
         return "member/mypage";
