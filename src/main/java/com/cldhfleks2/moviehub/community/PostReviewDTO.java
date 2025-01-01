@@ -26,4 +26,7 @@ public class PostReviewDTO {
     private List<PostReviewDTO> children; // 자식 댓글 리스트 : 게시물 상세페이지
     
     private Boolean isLiked; //좋아요 한 상태인지
+
+    private PostReview parent; // : 마이페이지
+    private Post post;
 }

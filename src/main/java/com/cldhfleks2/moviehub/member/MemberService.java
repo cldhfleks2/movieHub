@@ -184,6 +184,7 @@ public class MemberService {
                     .content(postReview.getContent())
                     .parent(postReview.getParent()) //부모 댓글
                     .parentId(postReview.getParent() != null ? postReview.getParent().getId() : null)
+                    .post(postReview.getPost())
                     .member(postReview.getMember())
                     .updateDate(postReview.getUpdateDate())
                     .likeCount(likeCount)
@@ -204,7 +205,7 @@ public class MemberService {
         model.addAttribute("postReviewDTOPage", postReviewDTOPage);
 
 
-        return "member/mypage";
+        return "member/mypage :: #reviewSection";
     }
 
 
