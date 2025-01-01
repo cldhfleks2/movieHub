@@ -84,7 +84,7 @@
                     </div>
                 </div>
 
-                <div class="postListContainer">
+                <div class="postListContainer" id="postListContainer">
 
                     <div class="postCard" th:each="post : ${postDTOPage}">
                         <span class="postCategory" th:text="${#strings.substring(post.postType.description, 0, 2)}"
