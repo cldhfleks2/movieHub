@@ -6,7 +6,13 @@ $(document).ready(function() {
     initializeEditMode();
     filterAndSearchSection();
     initializePostManagement();
-    pagination();
+    postPagination();
+
+    reviewSection();
+    reviewFilter();
+    reviewEdit();
+    reviewDelete();
+    reviewPaigination();
 });
 
 function initialize() {
@@ -261,7 +267,7 @@ function submitForm() {
         }
     });
 }
-
+//카테고리선택/검색기능
 function filterAndSearchSection() {
     // 필터 변경 이벤트
     $(document).on('change', '#categoryTabs, #sortTabs', function() {
@@ -278,7 +284,7 @@ function filterAndSearchSection() {
         postListReload();
     });
 }
-
+//TODO 게시글 수정
 function initializePostManagement() {
     // 게시글 수정 버튼 이벤트
     $('.editButton').on('click', function() {
@@ -294,13 +300,11 @@ function initializePostManagement() {
 
     });
 }
-
 //게시물, 페이지번호 뷰를 새로고침하는 코드 : pageIdx와 searchText(자동적용)
 function postListReload(pageIdx = 1){
     const category = $("#categoryTabs").val(); //ALL, FREE, NEWS, DISCUSSION
     const sort = $("#sortTabs").val() //latest, view, like, review
     let keyword = $("#postSearchInput").val();
-    console.log(keyword)
 
     $.ajax({
         url: "/mypage",
@@ -319,10 +323,81 @@ function postListReload(pageIdx = 1){
         }
     });
 }
-//페이지네이션 : 페이지버튼들 동작
-function pagination() {
+//게시글 페이지네이션 : 페이지버튼들 동작
+function postPagination() {
     $(document).on("click", "#prevPage, #nextPage, .pageNumber", function () {
         const pageIdx = $(this).data("pageidx")
         postListReload(pageIdx)
     })
 }
+
+//댓글 뷰 : 댓글 뷰만 가져오는 함수
+function reviewListReload(pageIdx = 1){
+    const sort = $("#reviewSortFilter").val() //latest, like
+    let keyword = $("#reviewSearchInput").val();
+
+    $.ajax({
+        url: "/mypage/review",
+        method: "get",
+        data: { pageIdx: pageIdx, keyword: keyword, sort: sort },
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#reviewListContainer").replaceWith(dataHtml.find("#reviewListContainer"));
+            //페이지네이션 버튼도 replaceWith하도록 추가
+            console.log("/mypage/review page-reload ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("/mypage/review page-reload ajax failed")
+        }
+    });
+}
+
+// 댓글뷰 탭 선택하면 페이지를 가져옴
+function reviewSection() {
+    $(document).on("click", "#reviewTab", function () {
+        reviewListReload();
+    });
+}
+
+//정렬선택/검색함수
+function reviewFilter() {
+    //정렬 선택시
+    $('#reviewSortFilter').on('change', function() {
+        reviewListReload()
+    });
+
+    //검색 버튼 클릭시
+    $('#reviewSearchBtn').on('click', function() {
+        reviewListReload()
+    });
+    //검색어를 입력시
+    $('#reviewSearchInput').on('input', function() {
+        reviewListReload()
+    });
+}
+
+// 댓글 뷰 : 댓글 수정 요청
+function reviewEdit() {
+    $('.reviewCard .editButton').on('click', function() {
+        const reviewId = $(this).data('review-id');
+
+
+    });
+}
+
+// 댓글 뷰 : 댓글 삭제 요청
+function reviewDelete() {
+    $('.reviewCard .deleteButton').on('click', function() {
+        const reviewId = $(this).data('review-id');
+
+    });
+}
+
+// 댓글 뷰 : 페이지네이션
+function reviewPaigination() {
+    
+}
+
+
