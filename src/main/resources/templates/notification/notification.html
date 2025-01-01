@@ -25,7 +25,7 @@
              th:class="${notification.isRead == 1 ? 'notificationItem' : 'notificationItem read'}"
             th:data-id="${notification.id}">
             <div class="notificationContent">
-                <div class="notificationInfo" th:data-url="${notification.URL}">
+                <div class="notificationInfo" th:data-url="${notification.URL}" th:data-notificationid="${notification.id}">
                     <span class="notificationSender" th:text="${notification.targetType.description}" >카테고리</span>
                     <span class="notificationMessage" th:text="${notification.message}">알림 내용</span>
                 </div>
