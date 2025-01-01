@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub.report;
+package com.cldhfleks2.moviehub.report.movie;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

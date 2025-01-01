@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub.report;
+package com.cldhfleks2.moviehub.report.movie;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub.report;
+package com.cldhfleks2.moviehub.report.movie;
 
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.review.MovieReview;
