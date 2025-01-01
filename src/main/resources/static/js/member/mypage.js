@@ -4,8 +4,9 @@ $(document).ready(function() {
     initializeImagePreview();
     initializeFormValidation();
     initializeEditMode();
-    initializePostFilterAndSearch();
+    filterAndSearchSection();
     initializePostManagement();
+    pagination();
 });
 
 //탭을 클릭하면 active를 붙여줌
@@ -258,7 +259,7 @@ function submitForm() {
 }
 
 
-function initializePostFilterAndSearch() {
+function filterAndSearchSection() {
     // 필터 변경 이벤트
     $('#postTypeFilter, #postSortFilter').on('change', function() {
         const category = $('#postTypeFilter').val();
@@ -292,4 +293,38 @@ function initializePostManagement() {
 
 
     });
+}
+
+
+
+//게시물, 페이지번호 뷰를 새로고침하는 코드 : pageIdx와 searchText(자동적용)
+function postListReload(pageIdx = 1){
+    const category = $("#categoryTabs").val(); //ALL, FREE, NEWS, DISCUSSION
+    const sort = $("#sortTabs").val() //latest, view, like, review
+    let keyword = $("#postSearchInput").val();
+
+    $.ajax({
+        url: "/mypage",
+        method: "get",
+        data: { pageIdx: pageIdx, keyword: keyword, category: category, sort: sort },
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#postSection").replaceWith(dataHtml.find("#postSection"));
+            $("#pagination").replaceWith(dataHtml.find("#pagination"));
+
+            console.log("/mypage page-reload ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("/mypage page-reload ajax failed")
+        }
+    });
+}
+//페이지네이션 : 페이지버튼들 동작
+function pagination() {
+    $(document).on("click", "#prevPage, #nextPage, .pageNumber", function () {
+        const pageIdx = $(this).data("pageidx")
+        postListReload(pageIdx)
+    })
 }
