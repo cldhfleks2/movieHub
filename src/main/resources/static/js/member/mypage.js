@@ -1,6 +1,6 @@
 $(document).ready(function() {
     getUserData();
-    initializeTabs();
+    initialize();
     initializeImagePreview();
     initializeFormValidation();
     initializeEditMode();
@@ -9,8 +9,8 @@ $(document).ready(function() {
     pagination();
 });
 
-//탭을 클릭하면 active를 붙여줌
-function initializeTabs() {
+function initialize() {
+    //탭을 클릭하면 active를 붙여줌
     $('.tabButton').on('click', function() {
         const tabId = $(this).data('tab');
 
@@ -27,6 +27,10 @@ function initializeTabs() {
         $(".contentSection").hide();
         $(`#${tabId}Section`).show();
     });
+
+    //마이페이지오면 가장처음으로 개인 정보 수정 뷰 보여줌
+    $("#postSection").hide();
+    $("#reviewSection").hide();
 }
 // 원본 데이터 저장용
 let originalData = {};
@@ -311,7 +315,6 @@ function postListReload(pageIdx = 1){
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
             $("#postSection").replaceWith(dataHtml.find("#postSection"));
-            $("#pagination").replaceWith(dataHtml.find("#pagination"));
 
             console.log("/mypage page-reload ajax success")
         },
