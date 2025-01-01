@@ -127,13 +127,27 @@
 
                 </div>
 
-                <div class="paginationContainer">
-                    <button id="prevPageBtn" class="pageButton prev">이전</button>
+<!--                페이지 네이션 버튼-->
+                <div class="pagination" id="pagination" th:if="${postDTOPage.totalPages > 0}">
+                    <button class="pageButton prev" id="prevPage"
+                            th:disabled="${postDTOPage.first}"
+                            th:data-pageidx="${postDTOPage.number}">
+                        이전
+                    </button>
                     <div class="pageNumbers">
-                        <button class="pageNumber active">1</button>
-                        <button class="pageNumber">2</button>
+                        <th:block th:each="pageNum : ${#numbers.sequence(0, postDTOPage.totalPages - 1)}">
+                            <button class="pageNumber"
+                                    th:classappend="${pageNum == postDTOPage.number} ? 'active'"
+                                    th:data-pageidx="${pageNum + 1}"
+                                    th:text="${pageNum + 1}">
+                            </button>
+                        </th:block>
                     </div>
-                    <button id="nextPageBtn" class="pageButton next">다음</button>
+                    <button class="pageButton next" id="nextPage"
+                            th:disabled="${postDTOPage.last}"
+                            th:data-pageidx="${postDTOPage.number + 2}">
+                        다음
+                    </button>
                 </div>
 
             </section>

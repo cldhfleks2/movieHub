@@ -419,7 +419,7 @@ label {
 }
 
 /* 페이지네이션 스타일 */
-.paginationContainer {
+.pagination {
     display: flex;
     justify-content: center;
     align-items: center;
