@@ -381,10 +381,73 @@ function reviewFilter() {
 
 // 댓글 뷰 : 댓글 수정 요청
 function reviewEdit() {
-    $('.reviewCard .editButton').on('click', function() {
+    $(document).on("click", ".reviewActions .editButton", function () {
         const reviewId = $(this).data('review-id');
+        const reviewCard = $(this).closest('.myReview');
+        const currentContent = reviewCard.find('.reviewContent').text().trim();
 
+        // 이미 수정 중인 상태라면 리턴
+        if (reviewCard.find('.edit-form').length > 0) {
+            return;
+        }
 
+        // 현재 댓글 내용을 숨김
+        reviewCard.find('.reviewContent').hide();
+        reviewCard.find('.reviewActions').hide();
+
+        // 수정 폼 생성
+        const editForm = `
+            <div class="edit-form">
+                <textarea class="edit-textarea" style="width: 100%; min-height: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin: 10px 0;">${currentContent}</textarea>
+                <div class="edit-actions" style="display: flex; gap: 8px; margin-top: 10px;">
+                    <button class="save-button" style="padding: 6px 12px; border: none; border-radius: 4px; background-color: #28a745; color: white; cursor: pointer;">저장</button>
+                    <button class="cancel-button" style="padding: 6px 12px; border: none; border-radius: 4px; background-color: #dc3545; color: white; cursor: pointer;">취소</button>
+                </div>
+            </div>
+        `;
+
+        // 수정 폼 삽입
+        reviewCard.find('.reviewContent').after(editForm);
+
+        // 저장 버튼 클릭 이벤트
+        reviewCard.find('.save-button').on('click', function() {
+            const content = reviewCard.find('.edit-textarea').val().trim();
+
+            if (content === '') {
+                alert('댓글 내용을 입력해주세요.');
+                return;
+            }
+
+            // PATCH 요청으로 댓글 수정
+            $.ajax({
+                url: `/api/post/review/edit/${reviewId}`,
+                method: 'PATCH',
+                data: {content: content},
+                success: function (response, textStatus, xhr) {
+                    if (xhr.status === 200) {
+                        reviewListReload() // 성공적으로 수정되면 댓글 리스트 새로고침
+                    }else{
+                        alert("알 수 없는 성공")
+                    }
+                    // 수정된 내용으로 UI 업데이트
+                    reviewCard.find('.reviewContent').text(content).show();
+                    reviewCard.find('.reviewActions').show();
+                    reviewCard.find('.edit-form').remove();
+                    console.log("review edit ajax success")
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    console.log("review edit ajax failed")
+                }
+            });
+        });
+
+        // 취소 버튼 클릭 이벤트
+        reviewCard.find('.cancel-button').on('click', function() {
+            reviewCard.find('.reviewContent').show();
+            reviewCard.find('.reviewActions').show();
+            reviewCard.find('.edit-form').remove();
+        });
     });
 }
 
