@@ -113,6 +113,9 @@ public class CommunityService {
                 postPage.getPageable(),
                 postPage.getTotalElements()
         );
+        if(postPage.getTotalElements() == 0){ //postDTOPage.totalPages이 0이되어 페이지 버튼이 사라지는것을 방지
+            postDTOPage = new PageImpl<>(postDTOList, postPage.getPageable(), 1);
+        }
 
         model.addAttribute("postDTOPage", postDTOPage);
 
