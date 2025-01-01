@@ -40,10 +40,16 @@ public class MemberController {
         return memberService.register(member);
     }
 
-    //마이페이지 GET
+    //마이페이지 내 게시글 관리 뷰 GET :
     @GetMapping("/mypage")
     String getMyPage(Model model, Authentication auth, String keyword, Integer pageIdx, String sort, String category) {
         return memberService.getMyPage(model, auth, keyword, pageIdx, sort, category);
+    }
+
+    //마이페이지 내 댓글 관리뷰 GET
+    @GetMapping("/mypage/review")
+    String getMyPageReview(Model model, Authentication auth, String keyword, Integer pageIdx, String sort) {
+        return memberService.getMyPageReview(model, auth, keyword, pageIdx, sort);
     }
 
     //유저 프로필 GET

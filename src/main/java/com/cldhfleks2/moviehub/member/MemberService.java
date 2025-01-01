@@ -2,10 +2,7 @@ package com.cldhfleks2.moviehub.member;
 
 import com.cldhfleks2.moviehub.community.*;
 import com.cldhfleks2.moviehub.error.ErrorService;
-import com.cldhfleks2.moviehub.like.MovieLike;
-import com.cldhfleks2.moviehub.like.MovieLikeRepository;
-import com.cldhfleks2.moviehub.like.PostLike;
-import com.cldhfleks2.moviehub.like.PostLikeRepository;
+import com.cldhfleks2.moviehub.like.*;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieService;
@@ -39,6 +36,7 @@ public class MemberService {
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
     private final PostReviewRepository postReviewRepository;
+    private final PostReviewLikeRepository postReviewLikeRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -89,7 +87,7 @@ public class MemberService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    //마이페이지 GET
+    //마이페이지 내 게시글 관리 뷰 GET :
     String getMyPage(Model model, Authentication auth, String keyword, Integer pageIdx, String sort, String category) {
         if(keyword == null) keyword = "";
         if(pageIdx == null) pageIdx = 1;
@@ -154,9 +152,61 @@ public class MemberService {
 
         model.addAttribute("postDTOPage", postDTOPage);
 
+        //에러방지용
+        model.addAttribute("postReviewDTOPage", null);
 
         return "member/mypage";
     }
+
+    //마이페이지 내 댓글 관리뷰 GET
+    String getMyPageReview(Model model, Authentication auth, String keyword, Integer pageIdx, String sort){
+        if(keyword == null) keyword = "";
+        if(pageIdx == null) pageIdx = 1;
+        if(sort == null) sort = "latest";
+
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/mypage/review", "유저 정보를 찾을 수 없습니다.", String.class);
+
+        Member member = memberObj.get();
+        Long memberId = member.getId();
+        int pageSize = 5; //5개씩 보여줄거임
+        Page<PostReview> postReviewPage = postReviewRepository.findAllByKeywordAndStatus(keyword, memberId, PageRequest.of(pageIdx - 1, pageSize));
+        List<PostReviewDTO> postReviewDTOList = new ArrayList<>();
+        for(PostReview postReview : postReviewPage.getContent()) {
+            Long postReviewId = postReview.getId();
+            List<PostReviewLike> postReviewLikeList = postReviewLikeRepository.findAllByReviewIdAndStatus(postReviewId);
+            Long likeCount = (long) postReviewLikeList.size();
+
+            PostReviewDTO postReviewDTO = PostReviewDTO.create()
+                    .id(postReviewId)
+                    .content(postReview.getContent())
+                    .parent(postReview.getParent()) //부모 댓글
+                    .parentId(postReview.getParent() != null ? postReview.getParent().getId() : null)
+                    .member(postReview.getMember())
+                    .updateDate(postReview.getUpdateDate())
+                    .likeCount(likeCount)
+                    .depth(postReview.getDepth()) //isAuthor 제외 isLiked 제외 children 제외함
+                    .build();
+            postReviewDTOList.add(postReviewDTO);
+        }
+
+        //정렬 코드 추가해라
+
+        //페이지로 전달
+        Page<PostReviewDTO> postReviewDTOPage = new PageImpl<>(
+                postReviewDTOList,
+                postReviewPage.getPageable(),
+                postReviewPage.getTotalElements() == 0 ? 1 : postReviewPage.getTotalElements()
+        );
+
+        model.addAttribute("postReviewDTOPage", postReviewDTOPage);
+
+
+        return "member/mypage";
+    }
+
 
     //유저 프로필 GET
     String getUserprofile(Long memberId, Model model) {

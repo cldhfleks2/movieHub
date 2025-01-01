@@ -16,7 +16,7 @@
         <nav class="sideNav">
             <button class="tabButton active" data-tab="profile">개인정보 수정</button>
             <button class="tabButton" data-tab="post">내 게시글 관리</button>
-            <button class="tabButton" data-tab="review">내 리뷰 관리</button>
+            <button class="tabButton" data-tab="review">내 댓글 관리</button>
         </nav>
 
         <div class="contentArea">
@@ -151,7 +151,7 @@
             </section>
 
             <section id="reviewSection" class="contentSection">
-                <h2 class="sectionHeader">내 리뷰 관리</h2>
+                <h2 class="sectionHeader">내 댓글 관리</h2>
                 <div class="reviewFilterSection">
                     <div class="filterControls">
                         <select id="reviewSortFilter" class="filterSelect">
@@ -160,40 +160,40 @@
                         </select>
                     </div>
                     <div class="searchControl">
-                        <input id="reviewSearchInput" class="searchInput" type="text" placeholder="리뷰 검색...">
+                        <input id="reviewSearchInput" class="searchInput" type="text" placeholder="댓글 검색...">
                         <button id="reviewSearchBtn" class="searchButton">검색</button>
                     </div>
                 </div>
 
                 <div class="reviewListContainer">
-                    <div class="reviewCard">
+                    <div class="reviewCard" th:each="review : ${postReviewDTOPage}">
                         <div class="originalPost">
                             <div class="postHeader">
-                                <span class="postCategory">자유</span>
-                                <span class="postDate">2024-01-01</span>
+                                <span class="postCategory" th:text="${#strings.substring(review.post.postType.description, 0, 2)}">자유</span>
+                                <span class="postDate" th:text="${#temporals.format(review.post.updateDate, 'yyyy-MM-dd')}">2024-01-01</span>
                             </div>
-                            <a href="#" class="postTitle">이 댓글이 작성된 원본 게시글의 제목입니다.</a>
-                            <p class="postExcerpt">게시글의 내용 일부가 여기에 표시됩니다...</p>
+                            <a class="postTitle" th:href="@{/postDetail/{postId}(postId=${review.post.id})}" th:text="${review.post.title}">이 댓글이 작성된 원본 게시글의 제목입니다.</a>
+                            <p class="postExcerpt" th:text="${review.post.content}">게시글의 내용 일부가 여기에 표시됩니다...</p>
                         </div>
 
                         <div class="reviewThread">
-                            <div class="parentReview">
+                            <div class="parentReview" th:if="${review.parent != null}">
                                 <div class="reviewHeader">
-                                    <span class="reviewAuthor">원댓글 작성자</span>
-                                    <span class="reviewDate">2024-01-01</span>
+                                    <span class="reviewAuthor" th:text="${review.parent.member.nickname}">원댓글 작성자</span>
+                                    <span class="reviewDate" th:text="${#temporals.format(review.parent.updateDate, 'yyyy-MM-dd HH:mm')}">2024-01-01</span>
                                 </div>
-                                <p class="reviewContent">부모 댓글의 내용이 여기에 표시됩니다.</p>
+                                <p class="reviewContent" th:text="${review.parent.content}">부모 댓글의 내용이 여기에 표시됩니다.</p>
                             </div>
 
                             <div class="myReview">
                                 <div class="reviewHeader">
-                                    <span class="reviewAuthor">내 닉네임</span>
-                                    <span class="reviewDate">2024-01-01</span>
+                                    <span class="reviewAuthor" th:text="${review.member.nickname}">내 닉네임</span>
+                                    <span class="reviewDate" th:text="${#temporals.format(review.updateDate, 'yyyy-MM-dd HH:mm')}">2024-01-01</span>
                                 </div>
-                                <p class="reviewContent">내가 작성한 답글 내용이 여기에 표시됩니다.</p>
+                                <p class="reviewContent" th:text="${review.content}">내가 작성한 답글 내용</p>
                                 <div class="reviewActions">
-                                    <button class="editButton">수정</button>
-                                    <button class="deleteButton">삭제</button>
+                                    <button class="editButton"  th:data-review-id="${review.id}">수정</button>
+                                    <button class="deleteButton"  th:data-review-id="${review.id}">삭제</button>
                                 </div>
                             </div>
                         </div>
