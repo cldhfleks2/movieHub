@@ -35,6 +35,7 @@ function pagination() {
     })
 }
 
+//게시물뷰와 페이지번호뷰를 새로고침하는 코드 : pageIdx와 searchText(자동적용)
 function postListReload(pageIdx = 1){
     const category = $(".categoryTab.active").data("category"); //ALL, FREE, NEWS, DISCUSSION
     const sort = $(".sortSelect").val() //latest, popular, review
@@ -59,6 +60,7 @@ function postListReload(pageIdx = 1){
     });
 }
 
+//검색 기능
 function searchSection() {
     // 검색창에서 엔터 키 눌렀을 때
     $(".searchBox input").on("keydown", function (e) {
