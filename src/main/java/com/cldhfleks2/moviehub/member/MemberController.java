@@ -42,8 +42,8 @@ public class MemberController {
 
     //마이페이지 GET
     @GetMapping("/mypage")
-    String getMyPage(Model model, Authentication auth, String searchText, Integer pageIdx, String sort, String category) {
-        return memberService.getMyPage(model, auth, searchText, pageIdx, sort, category);
+    String getMyPage(Model model, Authentication auth, String keyword, Integer pageIdx, String sort, String category) {
+        return memberService.getMyPage(model, auth, keyword, pageIdx, sort, category);
     }
 
     //유저 프로필 GET

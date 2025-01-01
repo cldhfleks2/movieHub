@@ -261,19 +261,19 @@ function submitForm() {
 function initializePostFilterAndSearch() {
     // 필터 변경 이벤트
     $('#postTypeFilter, #postSortFilter').on('change', function() {
-        const postType = $('#postTypeFilter').val();
-        const sortType = $('#postSortFilter').val();
+        const category = $('#postTypeFilter').val();
+        const sort = $('#postSortFilter').val();
 
     });
 
     // 검색 이벤트
     $('#postSearchBtn').on('click', function() {
-        const searchText = $('#postSearchInput').val().trim();
+        const keyword = $('#postSearchInput').val().trim();
 
     });
 
     $('#postSearchInput').on('keypress', function(e) {
-        const searchText = $('#postSearchInput').val().trim();
+        const keyword = $('#postSearchInput').val().trim();
 
     });
 }
