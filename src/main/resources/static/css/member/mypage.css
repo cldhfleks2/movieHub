@@ -508,9 +508,10 @@ label {
 .reviewCard {
     background-color: white;
     border-radius: 12px;
-    padding: 20px;
+    padding: 15px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding-bottom: 8px;
 }
 
 .reviewCard:hover {
@@ -519,8 +520,8 @@ label {
 }
 
 .originalPost {
-    padding-bottom: 16px;
-    margin-bottom: 16px;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
@@ -553,6 +554,7 @@ label {
     text-decoration: none;
     margin-bottom: 8px;
     transition: color 0.2s;
+    padding: 0px 60px;
 }
 
 .postTitle:hover {
@@ -568,6 +570,7 @@ label {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    padding: 0px 60px;
 }
 
 .reviewThread {
@@ -587,10 +590,10 @@ label {
 
 .parentReview, .myReview {
     position: relative;
-    padding: 16px;
+    padding: 10px;
     background-color: #f8f9fa;
     border-radius: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 5px;
 }
 
 .parentReview::before,
@@ -613,7 +616,6 @@ label {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
 }
 
 .reviewAuthor {

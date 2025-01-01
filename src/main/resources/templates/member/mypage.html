@@ -16,10 +16,10 @@
         <nav class="sideNav">
             <button class="tabButton active" data-tab="profile">개인정보 수정</button>
             <button class="tabButton" data-tab="post">내 게시글 관리</button>
-            <button class="tabButton" data-tab="review">내 댓글 관리</button>
+            <button class="tabButton" id="reviewTab" data-tab="review">내 댓글 관리</button>
         </nav>
-
         <div class="contentArea">
+
             <section id="profileSection" class="contentSection active">
                 <h2 class="sectionHeader">개인정보 수정</h2>
                 <form id="profileForm">
@@ -165,7 +165,7 @@
                     </div>
                 </div>
 
-                <div class="reviewListContainer">
+                <div class="reviewListContainer" id="reviewListContainer">
                     <div class="reviewCard" th:each="review : ${postReviewDTOPage}">
                         <div class="originalPost">
                             <div class="postHeader">
