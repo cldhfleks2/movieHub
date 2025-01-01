@@ -2,6 +2,7 @@ $(document).ready(function() {
     // initImageUpload();
     formValidation();
     initCancelButton();
+    textareaHeightControl();
 });
 
 // function initImageUpload() {
@@ -34,7 +35,6 @@ $(document).ready(function() {
 //         }
 //     });
 // }
-
 
 function formValidation() {
     $('#postCreateForm').on('submit', function(e) {
@@ -93,7 +93,12 @@ function initCancelButton() {
     });
 }
 
-
+function textareaHeightControl() {
+    $('#postContent').on('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+}
 
 
 

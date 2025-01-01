@@ -7,6 +7,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     color: #fff;
     caret-color: transparent;
+    min-height: 698px;
 }
 
 
@@ -51,9 +52,10 @@
     border-radius: 15px;
     color: #fff;
     font-size: 1.1rem;
-    resize: vertical;
     line-height: 1.6;
     caret-color: white;
+    resize: none; /* 수동 리사이즈 비활성화 */
+    overflow: hidden; /* 스크롤바 제거 */
 }
 
 .imageUploadSection {

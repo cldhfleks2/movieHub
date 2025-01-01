@@ -1,6 +1,7 @@
 $(document).ready(function() {
     formSubmit();
     formCancelButton();
+    textareaHeightControl();
 });
 
 function formSubmit() {
@@ -46,3 +47,11 @@ function formCancelButton() {
         }
     });
 }
+
+function textareaHeightControl() {
+    $('#postContent').on('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+}
+
