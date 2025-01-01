@@ -12,7 +12,7 @@ $(document).ready(function() {
     reviewFilter();
     reviewEdit();
     reviewDelete();
-    reviewPaigination();
+    reviewPagination()
 });
 
 function initialize() {
@@ -314,7 +314,7 @@ function postListReload(pageIdx = 1){
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
             $("#postListContainer").replaceWith(dataHtml.find("#postListContainer"));
-            $("#pagination").replaceWith(dataHtml.find("#pagination"));
+            $("#postPagination").replaceWith(dataHtml.find("#postPagination"));
             console.log("/mypage page-reload ajax success")
         },
         error: function (xhr){
@@ -325,7 +325,7 @@ function postListReload(pageIdx = 1){
 }
 //게시글 페이지네이션 : 페이지버튼들 동작
 function postPagination() {
-    $(document).on("click", "#prevPage, #nextPage, .pageNumber", function () {
+    $(document).on("click", "#postPrevPage, #postNextPage, .pageNumber", function () {
         const pageIdx = $(this).data("pageidx")
         postListReload(pageIdx)
     })
@@ -344,6 +344,7 @@ function reviewListReload(pageIdx = 1){
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
             $("#reviewListContainer").replaceWith(dataHtml.find("#reviewListContainer"));
+            $("#reviewPagination").replaceWith(dataHtml.find("#reviewPagination"));
             //페이지네이션 버튼도 replaceWith하도록 추가
             console.log("/mypage/review page-reload ajax success")
         },
@@ -396,8 +397,11 @@ function reviewDelete() {
 }
 
 // 댓글 뷰 : 페이지네이션
-function reviewPaigination() {
-    
+function reviewPagination() {
+    $(document).on("click", "#reviewPrevPage, #reviewNextPage, .pageNumber", function () {
+        const pageIdx = $(this).data("pageidx")
+        reviewListReload(pageIdx)
+    })
 }
 
 

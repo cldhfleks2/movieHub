@@ -85,7 +85,6 @@
                 </div>
 
                 <div class="postListContainer" id="postListContainer">
-
                     <div class="postCard" th:each="post : ${postDTOPage}">
                         <span class="postCategory" th:text="${#strings.substring(post.postType.description, 0, 2)}"
                               th:classappend="${post.postType.name == 'NEWS' ? ' NEWS' :
@@ -126,8 +125,8 @@
                 </div>
 
 <!--                페이지 네이션 버튼-->
-                <div class="pagination" id="pagination" th:if="${postDTOPage.totalPages > 0}">
-                    <button class="pageButton prev" id="prevPage"
+                <div class="pagination" id="postPagination" th:if="${postDTOPage.totalPages > 0}">
+                    <button class="pageButton prev" id="postPrevPage"
                             th:disabled="${postDTOPage.first}"
                             th:data-pageidx="${postDTOPage.number}">
                         이전
@@ -141,7 +140,7 @@
                             </button>
                         </th:block>
                     </div>
-                    <button class="pageButton next" id="nextPage"
+                    <button class="pageButton next" id="postNextPage"
                             th:disabled="${postDTOPage.last}"
                             th:data-pageidx="${postDTOPage.number + 2}">
                         다음
@@ -200,9 +199,30 @@
                     </div>
                 </div>
 
-                <div class="paginationContainer">
-                    <!-- 페이지네이션 부분은 동일 -->
+                <div id="reviewPagination">
+                    <div class="pagination" th:if="${postReviewDTOPage != null and postReviewDTOPage.totalPages > 0}">
+                        <button class="pageButton prev" id="reviewPrevPage"
+                                th:disabled="${postReviewDTOPage.first}"
+                                th:data-pageidx="${postReviewDTOPage.number}">
+                            이전
+                        </button>
+                        <div class="pageNumbers">
+                            <th:block th:each="pageNum : ${#numbers.sequence(0, postReviewDTOPage.totalPages - 1)}">
+                                <button class="pageNumber"
+                                        th:classappend="${pageNum == postReviewDTOPage.number} ? 'active'"
+                                        th:data-pageidx="${pageNum + 1}"
+                                        th:text="${pageNum + 1}">
+                                </button>
+                            </th:block>
+                        </div>
+                        <button class="pageButton next" id="reviewNextPage"
+                                th:disabled="${postReviewDTOPage.last}"
+                                th:data-pageidx="${postReviewDTOPage.number + 2}">
+                            다음
+                        </button>
+                    </div>
                 </div>
+
             </section>
 
         </div>
