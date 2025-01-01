@@ -42,7 +42,7 @@ public class CommunityService {
     private static final int REVIEW_MAX_DEPTH = 1;
 
     //정렬기준에 따라 정렬하는 함수
-    public List<PostDTO> sortPostDTOList(List<PostDTO> postDTOList, String sort) {
+    public static List<PostDTO> sortPostDTOList(List<PostDTO> postDTOList, String sort) {
         switch (sort) {
             case "latest":
                 // 최신순 (updateDate 기준 내림차순)
