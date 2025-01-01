@@ -25,7 +25,7 @@
                 <form id="profileForm">
                     <div class="profileSection">
                         <img id="profilePreview" class="profileImage"
-                             th:src="${member.profileImage != null ? member.profileImage : '/image/profile.png'}" alt="프로필 이미지">
+                             th:src="${member.profileImage != null ? member.profileImage : '/image/profile.png'}" alt="프로필 이미지" disabled>
                         <div class="editOverlay">눌러서 프로필 사진 변경</div>
                         <div class="formGroup">
                             <input type="file" id="profileImage" style="display: none;">
@@ -61,8 +61,64 @@
             </section>
             <!-- 다른 섹션들은 이전과 동일 -->
 
+            <!-- postSection의 내용 -->
             <section id="postSection" class="contentSection" style="display: none">
                 <h2 class="sectionHeader">내 게시글 관리</h2>
+
+                <div class="postFilterSection">
+                    <div class="filterControls">
+                        <select id="postTypeFilter" class="filterSelect">
+                            <option value="ALL">전체 게시글</option>
+                            <option value="FREE">자유 게시글</option>
+                            <option value="NEWS">소식 게시글</option>
+                            <option value="DISCUSSION">토론 게시글</option>
+                        </select>
+                        <select id="postSortFilter" class="filterSelect">
+                            <option value="latest">최신순</option>
+                            <option value="view">조회순</option>
+                            <option value="like">좋아요순</option>
+                            <option value="review">댓글순</option>
+                        </select>
+                    </div>
+                    <div class="searchControl">
+                        <input id="postSearchInput" class="searchInput" type="text" placeholder="게시글 검색...">
+                        <button id="postSearchBtn" class="searchButton">검색</button>
+                    </div>
+                </div>
+
+                <div class="postListContainer">
+
+                    <div class="postCard">
+                        <div class="postType">자유</div>
+                        <div class="postContent">
+                            <h3 class="postTitle">첫 번째 게시글 제목입니다</h3>
+                            <p class="postText">게시글 내용이 여기에 들어갑니다. 최대 2줄까지 표시됩니다.</p>
+                            <div class="postInfo">
+                                <span class="postDate">2024-01-01</span>
+                                <div class="postStats">
+                                    <span class="statItem"><i class="heartIcon">♥</i>128</span>
+                                    <span class="statItem"><i class="commentIcon">💬</i>45</span>
+                                    <span class="statItem"><i class="viewIcon">👁</i>30</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="postActions">
+                            <button class="editButton">수정</button>
+                            <button class="deleteButton">삭제</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="paginationContainer">
+                    <button id="prevPageBtn" class="pageButton prev">이전</button>
+                    <div class="pageNumbers">
+                        <button class="pageNumber active">1</button>
+                        <button class="pageNumber">2</button>
+                    </div>
+                    <button id="nextPageBtn" class="pageButton next">다음</button>
+                </div>
+
             </section>
 
             <section id="reviewSection" class="contentSection" style="display: none">

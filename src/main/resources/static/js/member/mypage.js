@@ -4,6 +4,8 @@ $(document).ready(function() {
     initializeImagePreview();
     initializeFormValidation();
     initializeEditMode();
+    initializePostFilterAndSearch();
+    initializePostManagement();
 });
 
 //탭을 클릭하면 active를 붙여줌
@@ -41,6 +43,7 @@ function initializeEditMode() {
     const $editButton = $('#editButton');
     const $cancelButton = $('<button type="button" class="cancelButton">수정 취소</button>').hide();
     const $inputs = $('#profileForm input').not('#username');
+    const $img = $("#profilePreview");
     const $passwordFields = $('.passwordFields');
     const $editOverlay = $('.editOverlay');
     $editOverlay.hide(); // 처음에는 숨김
@@ -55,10 +58,12 @@ function initializeEditMode() {
             // 수정 모드 활성화
             isEditMode = true;
             $inputs.prop('disabled', false);
+            $img.prop("disabled", false)
             $passwordFields.slideDown();
             $editOverlay.show(); // 수정 모드에서만 표시
             $editButton.text('수정완료');
             $cancelButton.show();
+            $("#nickname").focus()
         } else {
             // 폼 제출
             submitForm();
@@ -69,6 +74,7 @@ function initializeEditMode() {
         // 수정 모드 비활성화 및 원래 데이터로 복원
         isEditMode = false;
         $inputs.prop('disabled', true);
+        $img.prop("disabled", true)
         $passwordFields.slideUp();
         $editOverlay.hide();
         $('.imageUpload').hide();
@@ -185,29 +191,39 @@ function initializeImagePreview() {
 }
 //개인 정보 : 수정 완료
 function submitForm() {
-    const nickname = $('#nickname').val();
-    const password = $('#password').val();
-
-    // Validate nickname
+    const nickname = $('#nickname').val().trim();
+    const password = $('#password').val().trim();
+    const passwordConfirm = $('#passwordConfirm').val().trim();
+    
+    // 닉네임 검증
     if (!validateField('nickname', nickname)) {
         alert('닉네임을 확인해주세요.');
         $('#nickname').focus();
         return;
     }
-
-    // Validate password if it's being changed
-    if (password) {
-        if (!validateField('password', password)) {
-            alert('비밀번호를 확인해주세요.');
-            $('#password').focus();
-            return;
-        }
-
-        if (!validatePasswordConfirm()) {
-            alert('비밀번호가 일치하지 않습니다.');
-            $('#passwordConfirm').focus();
-            return;
-        }
+    // 비밀번호 입력했는가
+    if (password.length === 0) { // 공백이 제거된 비밀번호가 빈 문자열인지 확인
+        alert('비밀번호를 입력해주세요.');
+        $('#password').focus();
+        return;
+    }
+    // 비밀번호 확인 입력 했는가
+    if (passwordConfirm.length === 0) { 
+        alert('비밀번호 확인을 입력해주세요.');
+        $('#passwordConfirm').focus();
+        return;
+    }
+    // 비밀번호 검증 : 4자리이상
+    if (!validateField('password', password)) {
+        alert('비밀번호를 확인해주세요.');
+        $('#password').focus();
+        return;
+    }
+    // 비밀번호 확인 검증 : 서로 같은가
+    if (!validatePasswordConfirm()) {
+        alert('비밀번호가 일치하지 않습니다.');
+        $('#passwordConfirm').focus();
+        return;
     }
 
     const formData = new FormData();
@@ -215,7 +231,6 @@ function submitForm() {
     if (password) {
         formData.append('password', password);
     }
-
     const profileImage = $('#profileImage')[0].files[0];
     if (profileImage) {
         formData.append('profileImage', profileImage);
@@ -239,5 +254,42 @@ function submitForm() {
             console.log(xhr.responseText);
             console.log("/api/user/profile/edit ajax failed")
         }
+    });
+}
+
+
+function initializePostFilterAndSearch() {
+    // 필터 변경 이벤트
+    $('#postTypeFilter, #postSortFilter').on('change', function() {
+        const postType = $('#postTypeFilter').val();
+        const sortType = $('#postSortFilter').val();
+
+    });
+
+    // 검색 이벤트
+    $('#postSearchBtn').on('click', function() {
+        const searchText = $('#postSearchInput').val().trim();
+
+    });
+
+    $('#postSearchInput').on('keypress', function(e) {
+        const searchText = $('#postSearchInput').val().trim();
+
+    });
+}
+
+function initializePostManagement() {
+    // 게시글 수정 버튼 이벤트
+    $('.editButton').on('click', function() {
+        const postId = $(this).closest('.postCard').data('postId');
+
+
+    });
+
+    // 게시글 삭제 버튼 이벤트
+    $('.deleteButton').on('click', function() {
+        const postId = $(this).closest('.postCard').data('postId');
+
+
     });
 }

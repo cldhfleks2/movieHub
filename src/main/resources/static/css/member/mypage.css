@@ -229,3 +229,236 @@ label {
 .sectionHeader {
     caret-color: transparent;text-align: center;margin-bottom: 50px;
 }
+
+
+
+
+/* 게시글 섹션*/
+/* 게시글 섹션 스타일 */
+.postFilterSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.filterControls {
+    display: flex;
+    gap: 10px;
+}
+
+.filterSelect {
+    padding: 8px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.searchControl {
+    display: flex;
+    gap: 8px;
+}
+
+.searchInput {
+    padding: 8px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    width: 200px;
+    font-size: 14px;
+}
+
+.searchButton {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.searchButton:hover {
+    background-color: #0056b3;
+}
+
+/* 게시글 카드 스타일 */
+.postListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.postCard {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.postCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.postType {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 16px;
+    white-space: nowrap;
+}
+
+.postContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.postTitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.postText {
+    font-size: 14px;
+    color: #666;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.postInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.postDate {
+    font-size: 12px;
+    color: #888;
+}
+
+.postStats {
+    display: flex;
+    gap: 12px;
+}
+
+.statItem {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #666;
+}
+
+.heartIcon { color: #e50914; }
+.commentIcon { color: #1d9bf0; }
+.viewIcon { color: #ffd700; }
+
+.postActions {
+    display: flex;
+    gap: 8px;
+    margin-left: 16px;
+}
+
+.editButton,
+.deleteButton {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.editButton {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.deleteButton {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+.editButton:hover {
+    background-color: #bbdefb;
+}
+
+.deleteButton:hover {
+    background-color: #ffcdd2;
+}
+
+/* 페이지네이션 스타일 */
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.pageButton {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pageButton:hover:not(:disabled) {
+    background-color: #e0e0e0;
+}
+
+.pageButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pageNumbers {
+    display: flex;
+    gap: 8px;
+}
+
+.pageNumber {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pageNumber:hover {
+    background-color: #e0e0e0;
+}
+
+.pageNumber.active {
+    background-color: #007bff;
+    color: white;
+}
