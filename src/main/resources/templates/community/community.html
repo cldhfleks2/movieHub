@@ -14,7 +14,7 @@
 
 <div class="communityContainer">
     <div class="communityHeader">
-        <h2>커뮤니티</h2>
+        <h2>영화 커뮤니티</h2>
         <div class="headerControls">
             <div class="categoryTabs">
                 <button class="categoryTab active" data-category="ALL">전체</button>
@@ -26,7 +26,6 @@
                 <div class="searchBox">
                     <input type="text" placeholder="게시글 검색...">
                 </div>
-                <a class="writeButton" href="/postWrite" >글쓰기</a>
             </div>
         </div>
     </div>
@@ -78,6 +77,10 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="bottomControl" style="display: flex;">
+        <a class="writeButton" href="/postWrite" style="margin-left: auto;">글쓰기</a>
     </div>
 
     <div class="pagination" id="pagination" th:if="${postDTOPage.totalPages > 0}">

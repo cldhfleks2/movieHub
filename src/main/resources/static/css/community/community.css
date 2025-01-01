@@ -154,8 +154,14 @@ body {
 }
 
 .postCard:hover {
-    transform: translateY(-4px);
     background-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-10px);
+    transition: transform 0.3s ease;
+}
+
+.pagination button:not([disabled]):hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
 }
 
 .postHeader {
@@ -273,7 +279,7 @@ body {
 
 .pageButton:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
+    /*cursor: not-allowed;*/
 }
 
 .pageNumbers {
@@ -343,12 +349,4 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
-}
-.postCard {
-    opacity: 0;
-    animation: fadeInUp 0.3s ease forwards;
-}
-/* 반복적으로 적용될 수 있도록 규칙을 확장 */
-.postCard:nth-child(n) {
-    animation-delay: calc((n - 1) * 0.1s);
 }
