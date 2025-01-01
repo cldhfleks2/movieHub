@@ -2,6 +2,7 @@ $(document).ready(function() {
     categorySection();
     sortSection();
     pagination();
+    searchSection();
 });
 
 //카테고리 선택기능
@@ -37,13 +38,12 @@ function pagination() {
 function postListReload(pageIdx = 1){
     const category = $(".categoryTab.active").data("category"); //ALL, FREE, NEWS, DISCUSSION
     const sort = $(".sortSelect").val() //latest, popular, review
-    console.log(category);
-    console.log(sort);
+    let keyword = $(".searchBox input").val();
 
     $.ajax({
         url: "/community",
         method: "get",
-        data: { pageIdx: pageIdx, category: category, sort: sort },
+        data: { pageIdx: pageIdx, keyword: keyword, category: category, sort: sort },
         success: function (data){
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
@@ -58,3 +58,15 @@ function postListReload(pageIdx = 1){
         }
     });
 }
+
+function searchSection() {
+    // 검색창에서 엔터 키 눌렀을 때
+    $(".searchBox input").on("keydown", function (e) {
+        postListReload();
+    });
+}
+
+
+
+
+

@@ -71,17 +71,18 @@ public class CommunityService {
     }
 
     //커뮤니티 페이지 GET
-    String getCommunity(Integer pageIdx, String category, String sort, Model model, Authentication auth) {
+    String getCommunity(Integer pageIdx, String keyword, String category, String sort, Model model, Authentication auth) {
         if(pageIdx == null) pageIdx = 1; //기본 1페이지 보여줌
         if(category == null) category = "ALL";
         if(sort == null) sort = "latest";
+        if(keyword == null) keyword = "";
 
         Page<Post> postPage;
         if(category.equals("ALL")) //전체, status=1인 살아있는 게시글만 6개 가져옴
-            postPage = postRepository.findAllAndStatus(PageRequest.of(pageIdx-1, 6));
+            postPage = postRepository.findAllByKeywordAndStatus(keyword, PageRequest.of(pageIdx-1, 6));
         else { //category, status=1인 살아있는 게시글만 6개 가져옴
             PostType postType = PostType.valueOf(category.toUpperCase());
-            postPage = postRepository.findAllByCategoryAndStatus(postType, PageRequest.of(pageIdx - 1, 6));
+            postPage = postRepository.findAllByKeywordAndCategoryAndStatus(keyword, postType, PageRequest.of(pageIdx - 1, 6));
         }
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post : postPage.getContent()) {

@@ -15,8 +15,8 @@ public class CommunityController {
 
     //커뮤니티 페이지 GET : 페이지번호, 카테고리탭, 정렬기준 선택
     @GetMapping("/community")
-    String getCommunity(Integer pageIdx, String category, String sort, Model model, Authentication auth) {
-        return communityService.getCommunity(pageIdx, category, sort, model, auth);
+    String getCommunity(Integer pageIdx, String keyword, String category, String sort, Model model, Authentication auth) {
+        return communityService.getCommunity(pageIdx, keyword, category, sort, model, auth);
     }
 
     //게시글 상세 페이지 GET : 방문시 view +1
