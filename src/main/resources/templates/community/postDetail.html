@@ -11,7 +11,7 @@
 <body>
 <div th:replace="~{ header/header::header }"></div>
 
-<div class="postDetailContainer" id="postDetailContainer" th:data-postid="${postDTO.postId}">
+<div class="postDetailContainer" id="postDetailContainer" th:data-postid="${postDTO.postId}" th:data-isauthor="${postDTO.isAuthor}">
     <div class="postHeader">
 <!--        2글자만 출력-->
         <div class="postCategory" th:text="${postDTO.postType.description}"
@@ -48,6 +48,14 @@
                 <button class="actionButton likeButton" th:data-postid="${postDTO.postId}">
                     <span class="icon" th:classappend="${isLiked ? 'active' : ''}">♥</span>
                     <span class="postLikeCount" th:text="${postLikeCount}">좋아요 수 숫자</span>
+                </button>
+            </th:block>
+<!--            본인 게시글은 신고 불가능~~ -->
+            <th:block th:unless="${postDTO.isAuthor}">
+                <!-- 신고 버튼 -->
+                <button class="actionButton reportButton" th:data-postid="${postDTO.postId}">
+                    <span class="icon">🚨</span>
+                    <span>신고하기</span>
                 </button>
             </th:block>
         </div>
@@ -124,6 +132,11 @@
                             <span class="icon" th:classappend="${review.isLiked ? 'active' : ''}">♥</span>
                             <span class="reviewLikeCount" th:text="${review.likeCount}">12</span>
                         </button>
+                        <!-- 신고 버튼 -->
+                        <button class="actionButton reportButton" th:data-review-id="${review.id}" th:data-postid="${postDTO.postId}">
+                            <span class="icon">🚨</span>
+                            <span>신고하기</span>
+                        </button>
                     </th:block>
                     <!-- 작성자 본인인 경우에만 수정/삭제 버튼 표시 -->
                     <th:block th:if="${review.isAuthor}">
@@ -146,6 +159,65 @@
                 </div>
             </div>
         </th:block>
+
+    </div>
+</div>
+
+
+<!-- 신고 오버레이 : flex로 보여줘야함 -->
+<div class="reportModalOverlay" id="reportModalOverlay" style="display: none;">
+    <div class="reportModalContent">
+        <h2 class="reportModalTitle">신고하기</h2>
+        <form class="reportModalForm" id="reportForm">
+            <input type="hidden" id="reportPostId" name="postId">
+            <input type="hidden" id="reportReviewId" name="reviewId">
+
+            <div class="reportModalSubTitle">신고 사유를 선택해주세요.</div>
+            <div class="reportCheckboxGroup">
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="INAPPROPRIATE" id="reportInappropriate" value="true">
+                    <input type="hidden" name="INAPPROPRIATE" value="false">
+                    <label for="reportInappropriate">부적절하거나 불건전한 내용</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="MISINFORMATION" id="reportMisinformation" value="true">
+                    <input type="hidden" name="MISINFORMATION" value="false">
+                    <label for="reportMisinformation">허위정보 또는 사실 왜곡</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="HATE" id="reportHate" value="true">
+                    <input type="hidden" name="HATE" value="false">
+                    <label for="reportHate">혐오 발언/차별적 내용</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="ABUSIVE" id="reportAbusive" value="true">
+                    <input type="hidden" name="ABUSIVE" value="false">
+                    <label for="reportAbusive">욕설 또는 부적절한 언행</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="COPYRIGHT" id="reportCopyright" value="true">
+                    <input type="hidden" name="COPYRIGHT" value="false">
+                    <label for="reportCopyright">저작권 침해 의심</label>
+                </div>
+                <div class="reportCheckboxItem">
+                    <input type="checkbox" name="SPAM" id="reportSpam" value="true">
+                    <input type="hidden" name="SPAM" value="false">
+                    <label for="reportSpam">광고 또는 스팸성 게시물</label>
+                </div>
+            </div>
+
+            <div class="reportTextareaWrapper">
+                <label for="reportDetail">추가 설명 (선택사항)</label>
+                <textarea name="reportDetail"
+                          id="reportDetail"
+                          placeholder="신고 사유에 대해 자세히 설명해주세요." maxlength="500"></textarea>
+            </div>
+
+            <div class="reportModalActions">
+                <button type="button" class="reportCancelBtn">취소</button>
+                <button type="submit" class="reportSubmitBtn">신고하기</button>
+            </div>
+        </form>
 
     </div>
 </div>

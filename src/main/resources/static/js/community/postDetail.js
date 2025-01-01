@@ -8,6 +8,7 @@ $(document).ready(function() {
     reviewEdit();
     postDelete();
     reviewDelete();
+    reportSection();
 });
 
 // 공유 기능
@@ -315,7 +316,6 @@ function reviewDelete(){
     });
 }
 
-
 //댓글 좋아요
 function reviewLike() {
     $(document).on('click', '.reviewActions .likeButton', function(e) {
@@ -366,26 +366,96 @@ function pageReload(){
 //게시글 좋아요
 function postLike() {
     $(document).on('click', '.postActions .likeButton', function() {
-        const postId = $(this).data("postid")
+        if(!$(".postDetailContainer").data("isauthor")){ //본인 게시글은 좋아요 불가능
+            const postId = $(this).data("postid")
 
-        $.ajax({
-            url: "/api/post/like",
-            method: "post",
-            data: {postId: postId},
-            success: function (response, textStatus, xhr){
-                if (xhr.status === 200) {
-                    alert("좋아요를 보냈습니다.")
-                    pageReload();
-                }else{
-                    alert("알 수 없는 성공")
+            $.ajax({
+                url: "/api/post/like",
+                method: "post",
+                data: {postId: postId},
+                success: function (response, textStatus, xhr){
+                    if (xhr.status === 200) {
+                        alert("좋아요를 보냈습니다.")
+                        pageReload();
+                    }else{
+                        alert("알 수 없는 성공")
+                    }
+                    console.log("/api/post/like ajax success")
+                },
+                error: function (xhr){
+                    console.log(xhr.responseText);
+                    console.log("/api/post/like ajax failed")
                 }
-                console.log("/api/post/like ajax success")
-            },
-            error: function (xhr){
-                console.log(xhr.responseText);
-                console.log("/api/post/like ajax failed")
-            }
-        })
+            })
+        }else{
+            alert("본인 게시글은 좋아요를 할 수 없습니다.")
+        }
     });
+}
+
+let reportType; //현재 무엇에 대한 신고오버레이인가
+
+//신고 오버레이 관리
+function reportSection(){
+    //신고 모달창 보이기 : 게시글 신고
+    $(document).on('click', '.postActions .reportButton', function() {
+        const postId = $(this).data("postid")
+        console.log(postId);
+        $("#reportReviewId").prop("disabled", true); //reviewId값은 전송안할것이기에 disabled
+        reportType = "POST";
+
+        $('#reportPostId').val(postId); //전달할 값을 input-hidden에 추가
+        $('#reportModalOverlay').fadeIn().css('display', 'flex'); //신고 오버레이 보여줌
+    });
+    //신고 모달창 보이기 : 댓글 신고
+    $(document).on('click', '.reviewActions .reportButton', function() {
+        const postId = $(this).data("postid")
+        const reviewId = $(this).data('review-id');
+        $("#reportReviewId").prop("disabled", false); //reviewId값을 보내야 하니 disabled 제거
+        reportType = "REVIEW";
+
+        $('#reportPostId').val(postId);
+        $('#reportReviewId').val(reviewId);
+        $('#reportModalOverlay').fadeIn().css('display', 'flex');
+    });
+
+    //신고 모달창 숨기기
+    $(document).on('click', '.reportCancelBtn', function() {
+        $('#reportModalOverlay').fadeOut();
+    });
+
+    //신고 제출 버튼 클릭시
+    $('.reportSubmitBtn').on('click', function(e) {
+        e.preventDefault(); // 기본 폼 제출 방지
+
+        // 폼 데이터를 직렬화해서 쿼리스트링으로 만듬
+        var formData = $('#reportForm').serialize();
+
+        console.log(formData)
+
+        let url;
+        if(reportType === "POST"){
+            url = "/api/post/report"
+        }else if(reportType === "REVIEW"){
+            url = "/api/post/review/report"
+        }
+
+        // 서버로 폼 제출
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,  // 폼 데이터를 전송
+            success: function() {
+                alert('신고가 완료되었습니다.');
+                $('#reportModalOverlay').fadeOut();
+            },
+            error: function() {
+                // 서버에서 에러가 발생했을 때 처리
+                alert('신고를 처리하는 동안 오류가 발생했습니다. 다시 시도해주세요.');
+                $('#reportModalOverlay').fadeOut();
+            }
+        });
+    });
+
 }
 

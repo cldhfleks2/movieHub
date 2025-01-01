@@ -173,7 +173,7 @@ public class LikeService {
 
         Member member = memberObj.get();
         Post post = postObj.get();
-        if(post.getMember().getId() == member.getId())
+        if(post.getMember().getId() == member.getId()) //본인 게시글 좋아요는 불가능
             return ErrorService.send(HttpStatus.BAD_REQUEST.value(), "/api/post/like", "본인 게시글은 좋아요 할 수 없습니다.", ResponseEntity.class);
 
         Optional<PostLike> postLikeObj = postLikeRepository.findByPostIdAndMemberId(postId, member.getId());
