@@ -19,7 +19,7 @@ public interface PostReviewRepository extends JpaRepository<PostReview, Long> {
     //keyword, memberId로 댓글내용, 부모댓글 작성자 nickname 검색
     @Query("SELECT pr FROM PostReview pr " +
             "WHERE pr.status = 1 " +
-            "AND (pr.parent.member.nickname LIKE %:keyword% OR pr.content LIKE %:keyword%) " +
-            "AND (pr.parent.member.id = :memberId OR pr.member.id = :memberId)")
+            "AND (pr.content LIKE %:keyword%) " +
+            "AND (pr.member.id = :memberId)")
     Page<PostReview> findAllByKeywordAndStatus(String keyword, Long memberId,  Pageable pageable);
 }
