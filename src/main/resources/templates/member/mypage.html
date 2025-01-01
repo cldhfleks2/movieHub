@@ -88,23 +88,40 @@
 
                 <div class="postListContainer">
 
-                    <div class="postCard">
-                        <div class="postType">자유</div>
-                        <div class="postContent">
-                            <h3 class="postTitle">첫 번째 게시글 제목입니다</h3>
-                            <p class="postText">게시글 내용이 여기에 들어갑니다. 최대 2줄까지 표시됩니다.</p>
+                    <div class="postCard" th:each="post : ${postDTOPage}">
+                        <span class="postCategory" th:text="${#strings.substring(post.postType.description, 0, 2)}"
+                              th:classappend="${post.postType.name == 'NEWS' ? ' NEWS' :
+                              (post.postType.name == 'FREE' ? ' FREE' : ' DISCUSSION')}">
+                            타입
+                        </span>
+                        <a class="postContent" th:href="@{/postDetail/{postId}(postId=${post.postId})}">
+                            <h3 class="postTitle" th:text="${post.title}">첫 번째 게시글 제목입니다</h3>
+                            <p class="postText" th:text="${post.content}">게시글 내용이 여기에 들어갑니다. 최대 2줄까지 표시됩니다.</p>
                             <div class="postInfo">
-                                <span class="postDate">2024-01-01</span>
+                                <span class="postDate" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}">yyyy-mm-dd</span>
                                 <div class="postStats">
-                                    <span class="statItem"><i class="heartIcon">♥</i>128</span>
-                                    <span class="statItem"><i class="commentIcon">💬</i>45</span>
-                                    <span class="statItem"><i class="viewIcon">👁</i>30</span>
+                                    <div class="statItem">
+                                        <span class="heartIcon">♥</span>
+                                        <span th:text="${post.likeCount}">128</span>
+                                    </div>
+                                    <div class="statItem">
+                                        <span class="commentIcon">💬</span>
+                                        <span th:text="${post.reviewCount}">45</span>
+                                    </div>
+                                    <div class="statItem">
+                                        <span class="viewIcon">👁</span>
+                                        <span th:text="${post.view}">30</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <div class="postActions">
-                            <button class="editButton">수정</button>
-                            <button class="deleteButton">삭제</button>
+                            <a class="editPost" th:href="@{/postEdit/{postId}(postId=${post.postId})}" style="text-decoration: none;caret-color: transparent; color: inherit">
+                                <span class="editButton">수정</span>
+                            </a>
+                            <button class="deletePost" th:data-postid="${post.postId}">
+                                <span class="deleteButton">삭제</span>
+                            </button>
                         </div>
                     </div>
 
