@@ -1,78 +1,60 @@
-
-// 외부 함수 선언
-const handleCategoryChange = (category) => {
-    $('.categoryTab').removeClass('active');
-    $(`.categoryTab[data-category="${category}"]`).addClass('active');
-
-
-};
-
-
-
-// 애니메이션 효과
-const animatePostCards = () => {
-    $('.postCard').each(function(index) {
-        $(this).css({
-            'animation': `fadeInUp 0.3s ease forwards ${index * 0.1}s`,
-            'opacity': '0'
-        });
-    });
-};
-
-// 디바운스 함수
-const debounce = (func, wait) => {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-};
-
-// 문서 로드 완료 시 실행
 $(document).ready(function() {
-    // 카테고리 탭 클릭 이벤트
-    $('.categoryTab').on('click', function() {
-        handleCategoryChange($(this).data('category'));
-    });
-
-    // 정렬
-    $('.sortSelect').on('change', function() {
-
-    });
-
-    // 검색 입력 이벤트
-    $('.searchBox input').on('input', debounce(function() {
-
-
-    }, 300));
-
-
-    // 글쓰기 버튼 클릭 이벤트
-    $('.writeButton').on('click', function (){
-        window.location.href = '/postWrite';
-    });
-
-    // 초기 게시글 로드 및 애니메이션
-    animatePostCards();
+    categorySection();
+    sortSection();
+    pagination();
 });
 
-// 키프레임 애니메이션 정의
-$('<style>')
-    .prop('type', 'text/css')
-    .html(`
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+//카테고리 선택기능
+function categorySection() {
+    // 카테고리 탭 클릭 이벤트 위임
+    $(document).on('click', '.categoryTab', function () {
+        // 모든 카테고리에서 'active' 클래스 제거
+        $('.categoryTab').removeClass('active');
+
+        // 현재 클릭된 탭에 'active' 클래스 추가
+        $(this).addClass('active');
+
+        //1페이지로 선택한 카테고리 게시글들을 가져옴
+        postListReload();
+    });
+}
+
+function sortSection(){
+    $(document).on('change', '.sortSelect', function () {
+        //1페이지로 정렬기준을 적용해서 게시글들을 가져옴
+        postListReload();
+    });
+}
+
+//페이지네이션 : 페이지버튼들 동작
+function pagination() {
+    $(document).on("click", "#prevPage, #nextPage, .pageNumber", function () {
+        const pageIdx = $(this).data("pageidx")
+        postListReload(pageIdx)
+    })
+}
+
+function postListReload(pageIdx = 1){
+    const category = $(".categoryTab.active").data("category"); //ALL, FREE, NEWS, DISCUSSION
+    const sort = $(".sortSelect").val() //latest, popular, review
+    console.log(category);
+    console.log(sort);
+
+    $.ajax({
+        url: "/community",
+        method: "get",
+        data: { pageIdx: pageIdx, category: category, sort: sort },
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#postList").replaceWith(dataHtml.find("#postList"));
+            $("#pagination").replaceWith(dataHtml.find("#pagination"));
+
+            console.log("/community pagination ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("/community pagination ajax failed")
         }
-    `)
-    .appendTo('head');
+    });
+}

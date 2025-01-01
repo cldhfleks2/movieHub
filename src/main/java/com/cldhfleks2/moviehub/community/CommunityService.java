@@ -24,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,11 +41,48 @@ public class CommunityService {
 
     private static final int REVIEW_MAX_DEPTH = 1;
 
-    //커뮤니티 페이지 GET TODO: 댓글갯수, 게시글 좋아요 갯수도 보여줘함.
-    String getCommunity(Integer pageIdx, Model model, Authentication auth) {
-        if(pageIdx == null) pageIdx = 1; //기본 1페이지 보여줌
+    //정렬기준에 따라 정렬하는 함수
+    public List<PostDTO> sortPostDTOList(List<PostDTO> postDTOList, String sort) {
+        switch (sort) {
+            case "latest":
+                // 최신순 (updateDate 기준 내림차순)
+                postDTOList.sort(Comparator.comparing(PostDTO::getUpdateDate).reversed());
+                break;
 
-        Page<Post> postPage = postRepository.findAllAndStatus(PageRequest.of(pageIdx-1, 10)); //status=1인 살아있는 게시글만 다 가져옴
+            case "view":
+                // 좋아요 많은 순 (likeCount 기준 내림차순)
+                postDTOList.sort(Comparator.comparing(PostDTO::getView).reversed());
+                break;
+
+            case "like":
+                // 좋아요 많은 순 (likeCount 기준 내림차순)
+                postDTOList.sort(Comparator.comparing(PostDTO::getLikeCount).reversed());
+                break;
+
+            case "review":
+                // 댓글 많은 순 (reviewCount 기준 내림차순)
+                postDTOList.sort(Comparator.comparing(PostDTO::getReviewCount).reversed());
+                break;
+
+            default:
+                throw new IllegalArgumentException("정렬 기준을 찾을 수 없음: " + sort);
+        }
+        return postDTOList;
+    }
+
+    //커뮤니티 페이지 GET
+    String getCommunity(Integer pageIdx, String category, String sort, Model model, Authentication auth) {
+        if(pageIdx == null) pageIdx = 1; //기본 1페이지 보여줌
+        if(category == null) category = "ALL";
+        if(sort == null) sort = "latest";
+
+        Page<Post> postPage;
+        if(category.equals("ALL")) //전체, status=1인 살아있는 게시글만 6개 가져옴
+            postPage = postRepository.findAllAndStatus(PageRequest.of(pageIdx-1, 6));
+        else { //category, status=1인 살아있는 게시글만 6개 가져옴
+            PostType postType = PostType.valueOf(category.toUpperCase());
+            postPage = postRepository.findAllByCategoryAndStatus(postType, PageRequest.of(pageIdx - 1, 6));
+        }
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post : postPage.getContent()) {
             Long postId = post.getId();
@@ -67,7 +105,8 @@ public class CommunityService {
                     .build();
             postDTOList.add(postDTO);
         }
-
+        postDTOList = sortPostDTOList(postDTOList, sort); //정렬 적용
+        
         Page<PostDTO> postDTOPage = new PageImpl<>(
                 postDTOList,
                 postPage.getPageable(),

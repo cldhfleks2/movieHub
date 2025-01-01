@@ -17,7 +17,7 @@
         <h2>커뮤니티</h2>
         <div class="headerControls">
             <div class="categoryTabs">
-                <button class="categoryTab active" data-category="all">전체</button>
+                <button class="categoryTab active" data-category="ALL">전체</button>
                 <button class="categoryTab" data-category="FREE">자유</button>
                 <button class="categoryTab" data-category="NEWS">소식</button>
                 <button class="categoryTab" data-category="DISCUSSION">토론</button>
@@ -27,7 +27,7 @@
                     <input type="text" placeholder="게시글 검색...">
                     <i class="searchIcon"></i>
                 </div>
-                <button class="writeButton">글쓰기</button>
+                <a class="writeButton" href="/postWrite" >글쓰기</a>
             </div>
         </div>
     </div>
@@ -35,13 +35,13 @@
     <div class="filterSection">
         <select class="sortSelect">
             <option value="latest" style="color: black">최신순</option>
-            <option value="popular" style="color: black">인기순</option>
-            <option value="commented" style="color: black">댓글순</option>
+            <option value="view" style="color: black">조회순</option>
+            <option value="like" style="color: black">좋아요순</option>
+            <option value="review" style="color: black">댓글순</option>
         </select>
     </div>
 
-    <div class="postList">
-
+    <div class="postList" id="postList">
         <div class="postCard" th:each="post : ${postDTOPage}">
             <div class="postHeader">
                 <span class="postCategory" th:text="${#strings.substring(post.postType.description, 0, 2)}"

@@ -91,6 +91,8 @@ body {
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s ease;
+    text-decoration: none;
+    caret-color: transparent;
 }
 
 .writeButton:hover {
@@ -326,4 +328,26 @@ body {
 
 .statItem .icon-comment {
     color: #1d9bf0;
+}
+
+
+
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.postCard {
+    opacity: 0;
+    animation: fadeInUp 0.3s ease forwards;
+}
+/* 반복적으로 적용될 수 있도록 규칙을 확장 */
+.postCard:nth-child(n) {
+    animation-delay: calc((n - 1) * 0.1s);
 }
