@@ -309,7 +309,7 @@ body{
     margin-top: 2rem;
 }
 
-.pageButton {
+.pageBtn {
     padding: 0.5rem 1rem;
     border: 1px solid #ddd;
     background-color: white;
@@ -322,7 +322,7 @@ body{
     gap: 0.5rem;
 }
 
-.pageNumber {
+.pageNum {
     width: 2rem;
     height: 2rem;
     display: flex;
@@ -334,7 +334,7 @@ body{
     border-radius: 4px;
 }
 
-.pageNumber.active {
+.pageNum.active {
     background-color: #e50914;
     color: white;
     border-color: #e50914;

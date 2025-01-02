@@ -66,22 +66,24 @@
     </div>
 
     <!-- 페이지네이션 -->
-    <div class="pagination" id="wishlistPagination" th:if="${movieDTOPage.totalPages > 0}">
-        <button class="pageButton" id="prevPage" th:disabled="${movieDTOPage.first}" th:onclick="'location.href=\'/mywish?pageIdx=' + ${movieDTOPage.number} + '\''">
+    <div class="pagination" id="wishlistPagination" th:if="${movieDTOPage != null and movieDTOPage.totalPages > 0}">
+        <button class="pageBtn prev" id="prevPage"
+                th:disabled="${movieDTOPage.first}"
+                th:data-pageidx="${movieDTOPage.number}">
             이전
         </button>
-
         <div class="pageNumbers">
             <th:block th:each="pageNum : ${#numbers.sequence(0, movieDTOPage.totalPages - 1)}">
-                <button class="pageNumber"
+                <button class="pageNum"
                         th:classappend="${pageNum == movieDTOPage.number} ? 'active'"
-                        th:onclick="'location.href=\'/mywish?pageIdx=' + ${pageNum + 1} + '\''"
+                        th:data-pageidx="${pageNum + 1}"
                         th:text="${pageNum + 1}">
                 </button>
             </th:block>
         </div>
-
-        <button class="pageButton" id="nextPage" th:disabled="${movieDTOPage.last}" th:onclick="'location.href=\'/mywish?pageIdx=' + ${movieDTOPage.number + 2} + '\''">
+        <button class="pageBtn next" id="nextPage"
+                th:disabled="${movieDTOPage.last}"
+                th:data-pageidx="${movieDTOPage.number + 2}">
             다음
         </button>
     </div>

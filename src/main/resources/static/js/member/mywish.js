@@ -15,20 +15,10 @@ function sortSection(){
 
 //페이지네이션 뷰
 function pagination(){
-    $('#prevPage, #nextPage').click(function() {
-        const $activeButton = $('.pageNumber.active');
-        let $targetButton;
-
-        if ($(this).attr('id') === 'prevPage') {
-            $targetButton = $activeButton.prev('.pageNumber');
-        } else {
-            $targetButton = $activeButton.next('.pageNumber');
-        }
-
-        if ($targetButton.length) {
-            $targetButton.click();
-        }
-    });
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const pageIdx = $(this).data("pageidx")
+        pageReload(pageIdx);
+    })
 }
 
 //사용 X 목록 정렬뷰
