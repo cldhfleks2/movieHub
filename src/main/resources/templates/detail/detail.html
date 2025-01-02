@@ -13,7 +13,7 @@
 <div th:replace="~{ header/header::header }"></div>
 
 <main class="mainContent">
-    <div class="movieInfo">
+    <div class="movieInfo" id="movieInfo" th:data-moviecd="${movieDetail.movieCd}">
         <img th:src="@{${movieDetail.posterURL}}" src="/image/blank.png" alt="영화 포스터" class="moviePoster">
         <div class="movieDetails">
             <h1 th:text="${movieDetail.movieNm != null ? movieDetail.movieNm : movieDetail.movieNmEn}">영화 제목</h1>

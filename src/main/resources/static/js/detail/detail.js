@@ -1,12 +1,9 @@
 $(document).ready(function (){
     A();
-
     clickActorSearching();
-
-    actionBtns()
-
+    likeBtn();
+    bookmarkBtn();
     gotoReviewPage();
-
     reportBtn();
 })
 
@@ -55,9 +52,28 @@ function clickActorSearching(){
     });
 }
 
+//페이지 새로고침하는 함수
+function movieInfoReload(){
+    const movieCd = $(this).data("moviecd")
+    $.ajax({
+        url: "/detail/" + movieCd,
+        method: "get",
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#movieInfo").replaceWith(dataHtml.find("#movieInfo"));
+
+            console.log("movieInfo reload ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("movieInfo reload ajax failed")
+        }
+    })
+}
+
 //좋아요 버튼 동작
-function actionBtns(){
-    //좋아요 버튼
+function likeBtn(){
     $(document).on("click", ".actionBtn.likeBtn", function (){
         const movieCd = $(this).data("moviecd");
 
@@ -65,21 +81,24 @@ function actionBtns(){
             url: "/api/movieDetail/like",
             method: "post",
             data: {movieCd: movieCd},
-            success: function (data){
-                //좋아요 부분 새로고침
-                var data = $.parseHTML(data);
-                var dataHtml = $("<div>").append(data);
-                $("#likeBtn").replaceWith(dataHtml.find("#likeBtn"));
-
-                console.log("/api/movieDetail/like ajax success")
+            success: function (response, textStatus, xhr){
+                console.log("add like ajax success")
+                if (xhr.status === 200) {
+                    movieInfoReload(); //좋아요 요청 성공시 페이지를 새로 고침
+                }else{
+                    alert("알 수 없는 성공")
+                }
             },
-            error: function () {
-                console.log("/api/movieDetail/like ajax failed")
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("add like ajax failed")
             }
         })
     });
+}
 
-    //찜하기 버튼
+//찜하기 버튼 동작
+function bookmarkBtn(){
     $(document).on("click", ".actionBtn.bookmarkBtn", function (){
         const movieCd = $(this).data("moviecd");
 
@@ -87,21 +106,21 @@ function actionBtns(){
             url: "/api/movieDetail/bookmark",
             method: "post",
             data: {movieCd: movieCd},
-            success: function (data){
-                //좋아요 부분 새로고침
-                var data = $.parseHTML(data);
-                var dataHtml = $("<div>").append(data);
-                $("#bookmarkBtn").replaceWith(dataHtml.find("#bookmarkBtn"));
-
-                console.log("/api/movieDetail/bookmark ajax success")
+            success: function (response, textStatus, xhr){
+                console.log("add bookmark ajax success")
+                if (xhr.status === 200) {
+                    movieInfoReload(); //북마크 요청 성공시 페이지를 새로 고침
+                }else{
+                    alert("알 수 없는 성공")
+                }
             },
-            error: function () {
-                console.log("/api/movieDetail/bookmark ajax failed")
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("add bookmark ajax failed")
             }
         })
     });
 }
-
 //리뷰 작성 버튼 동작 : 리뷰 페이지로 이동
 function gotoReviewPage(){
     $(document).on("click", ".linkBtn", function (){
