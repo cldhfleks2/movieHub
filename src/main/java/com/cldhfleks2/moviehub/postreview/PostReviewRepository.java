@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub.community;
+package com.cldhfleks2.moviehub.postreview;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

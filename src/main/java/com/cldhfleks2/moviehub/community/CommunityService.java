@@ -1,16 +1,20 @@
 package com.cldhfleks2.moviehub.community;
 
 import com.cldhfleks2.moviehub.error.ErrorService;
-import com.cldhfleks2.moviehub.like.PostLike;
-import com.cldhfleks2.moviehub.like.PostLikeRepository;
-import com.cldhfleks2.moviehub.like.PostReviewLike;
-import com.cldhfleks2.moviehub.like.PostReviewLikeRepository;
+import com.cldhfleks2.moviehub.like.post.PostLike;
+import com.cldhfleks2.moviehub.like.post.PostLikeRepository;
+import com.cldhfleks2.moviehub.like.postreview.PostReviewLike;
+import com.cldhfleks2.moviehub.like.postreview.PostReviewLikeRepository;
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.notification.Notification;
 import com.cldhfleks2.moviehub.notification.NotificationRepository;
 import com.cldhfleks2.moviehub.notification.NotificationTargetType;
 import com.cldhfleks2.moviehub.notification.NotificationType;
+import com.cldhfleks2.moviehub.postreview.PostReview;
+import com.cldhfleks2.moviehub.postreview.PostReviewDTO;
+import com.cldhfleks2.moviehub.postreview.PostReviewRepository;
+import com.cldhfleks2.moviehub.postreview.PostReviewRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

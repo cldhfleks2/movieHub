@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub.like;
+package com.cldhfleks2.moviehub.like.movie;
 
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.movie.Movie;

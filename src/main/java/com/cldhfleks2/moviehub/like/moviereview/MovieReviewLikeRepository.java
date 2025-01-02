@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub.review;
+package com.cldhfleks2.moviehub.like.moviereview;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,6 +1,8 @@
-package com.cldhfleks2.moviehub.review;
+package com.cldhfleks2.moviehub.moviereview;
 
 import com.cldhfleks2.moviehub.error.ErrorService;
+import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLike;
+import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLikeRepository;
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.Movie;

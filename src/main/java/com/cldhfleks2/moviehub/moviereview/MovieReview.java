@@ -1,9 +1,11 @@
-package com.cldhfleks2.moviehub.like;
+package com.cldhfleks2.moviehub.moviereview;
 
-import com.cldhfleks2.moviehub.community.Post;
 import com.cldhfleks2.moviehub.member.Member;
+import com.cldhfleks2.moviehub.movie.Movie;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,23 +15,20 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE post_like SET status = 0 WHERE id = ?")
+@SQLDelete(sql = "UPDATE movie_review SET status = 0 WHERE id = ?")
 @ToString
-@NoArgsConstructor
-public class PostLike {
-    @ToString.Exclude
-    @ManyToOne
-    private Post post; //댓글
+public class MovieReview {
+    @Column(columnDefinition = "TEXT")
+    private String content;
+    private Double ratingValue;
 
     @ToString.Exclude
     @ManyToOne
-    private Member sender; //좋아요 누른 사람
+    private Member member; //작성 유저
 
-    @Builder(builderMethodName = "create")
-    public PostLike(Post post, Member sender) {
-        this.post = post;
-        this.sender = sender;
-    }
+    @ToString.Exclude
+    @ManyToOne
+    private Movie movie; //영화 아이디
 
     //아래는 기본 필드들
     @Id

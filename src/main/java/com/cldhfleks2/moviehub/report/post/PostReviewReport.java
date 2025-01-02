@@ -1,7 +1,7 @@
 package com.cldhfleks2.moviehub.report.post;
 
-import com.cldhfleks2.moviehub.community.PostReview;
 import com.cldhfleks2.moviehub.member.Member;
+import com.cldhfleks2.moviehub.postreview.PostReview;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

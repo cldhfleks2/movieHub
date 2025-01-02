@@ -1,4 +1,4 @@
-package com.cldhfleks2.moviehub.review;
+package com.cldhfleks2.moviehub.moviereview;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

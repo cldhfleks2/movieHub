@@ -1,5 +1,6 @@
 package com.cldhfleks2.moviehub.community;
 
+import com.cldhfleks2.moviehub.postreview.PostReviewRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

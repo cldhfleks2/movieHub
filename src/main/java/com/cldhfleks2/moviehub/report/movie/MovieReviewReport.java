@@ -1,7 +1,7 @@
 package com.cldhfleks2.moviehub.report.movie;
 
 import com.cldhfleks2.moviehub.member.Member;
-import com.cldhfleks2.moviehub.review.MovieReview;
+import com.cldhfleks2.moviehub.moviereview.MovieReview;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
