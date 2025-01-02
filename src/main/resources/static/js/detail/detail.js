@@ -121,6 +121,7 @@ function bookmarkBtn(){
         })
     });
 }
+
 //리뷰 작성 버튼 동작 : 리뷰 페이지로 이동
 function gotoReviewPage(){
     $(document).on("click", ".linkBtn", function (){
