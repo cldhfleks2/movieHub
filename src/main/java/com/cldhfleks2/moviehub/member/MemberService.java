@@ -2,14 +2,11 @@ package com.cldhfleks2.moviehub.member;
 
 import com.cldhfleks2.moviehub.community.*;
 import com.cldhfleks2.moviehub.error.ErrorService;
-import com.cldhfleks2.moviehub.like.movie.MovieLike;
 import com.cldhfleks2.moviehub.like.movie.MovieLikeRepository;
 import com.cldhfleks2.moviehub.like.post.PostLike;
 import com.cldhfleks2.moviehub.like.post.PostLikeRepository;
 import com.cldhfleks2.moviehub.like.postreview.PostReviewLike;
 import com.cldhfleks2.moviehub.like.postreview.PostReviewLikeRepository;
-import com.cldhfleks2.moviehub.movie.Movie;
-import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
 import com.cldhfleks2.moviehub.movie.MovieService;
 import com.cldhfleks2.moviehub.postreview.PostReview;
@@ -273,39 +270,6 @@ public class MemberService {
 
 
         return "member/userprofile";
-    }
-
-    //내가 찜한 리스트 GET
-    public String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
-        if(pageIdx == null) pageIdx = 1;
-
-        String username = auth.getName();
-        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
-        if(!memberObj.isPresent()) //유저 정보 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/mywish", "유저 정보를 찾을 수 없습니다.", String.class);
-
-        //좋아요한 전체 영화 객체를 가져오기
-        Page<MovieLike> movieLikePage = movieLikeRepository.findAllByUsernameAndStatus(username, PageRequest.of(pageIdx - 1, 8));
-        List<Movie> movieList = new ArrayList<>();
-        for (MovieLike movieLike : movieLikePage)  movieList.add(movieLike.getMovie());
-
-        //movieDTO만들기
-        List<MovieDTO> movieDTOList = new ArrayList<>();
-        for(Movie movie : movieList) {
-            MovieDTO movieDTO = movieService.getMovieDTO(movie);
-            movieDTOList.add(movieDTO);
-        }
-
-        //페이지로 전달
-        Page<MovieDTO> movieDTOPage = new PageImpl<>(
-                movieDTOList,
-                movieLikePage.getPageable(),
-                movieLikePage.getTotalElements()
-        );
-
-        model.addAttribute("movieDTOPage", movieDTOPage);
-
-        return "member/mywish";
     }
 
     //유저 프로필 수정 요청

@@ -58,13 +58,6 @@ public class MemberController {
         return memberService.getUserprofile(memberId, model);
     }
 
-    //내가 찜한 리스트 GET
-    @GetMapping("/mywish")
-    String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
-        return memberService.getMyWish(model, auth, pageIdx);
-    }
-
-
     //유저 프로필 수정 요청
     @PutMapping("/api/user/profile/edit")
     ResponseEntity<String> editUserprofile(String nickname, String password, MultipartFile profileImage, Authentication auth)  throws Exception{
