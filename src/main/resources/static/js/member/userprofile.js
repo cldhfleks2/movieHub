@@ -1,7 +1,8 @@
 $(document).ready(function() {
     initialize();
     tabs();
-    pagination();
+    postLink();
+    postPagination();
 });
 
 function initialize() {
@@ -25,8 +26,16 @@ function tabs() {
     });
 }
 
-//페이지 네이션
-function pagination(){
+//게시글 뷰 : 클릭시 페이지 이동
+function postLink(){
+    $(document).on("click", ".postItem", function () {
+        const postId = $(this).data("post-id")
+        window.location.href = `/postDetail/` + postId; //완료시 수정한 게시글 상세 페이지로
+    });
+}
+
+//게시글 뷰 : 페이지 네이션
+function postPagination(){
 
 }
 

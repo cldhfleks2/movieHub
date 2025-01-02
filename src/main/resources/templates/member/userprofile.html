@@ -41,39 +41,45 @@
     <section id="postSection" class="contentSection active">
         <div class="tableLayout">
             <div class="tableHeader">
-                <div class="thPostType">게시판 종류</div>
+                <div class="thPostCategory">게시판 종류</div>
                 <div class="thPostTitle">제목</div>
                 <div class="thPostContent">내용</div>
                 <div class="thPostPostStats">통계</div>
                 <div class="thPostDate">작성일</div>
             </div>
             <div class="tableBody">
-                <div class="postItem">
-                    <div class="tdPostType">
-                        <div>소식</div>
+
+                <div class="postItem" th:each="post : ${postDTOPage}" th:data-post-id="${post.postId}">
+                    <div class="tdPostCategory">
+                        <div th:text="${post.postType.description}"
+                             th:classappend="${post.postType.name == 'NEWS' ? ' NEWS' :
+                          (post.postType.name == 'FREE' ? ' FREE' : ' DISCUSSION')}">
+                            소식
+                        </div>
                     </div>
                     <div class="tdPostTitle">
-                        <h4>게시글 제목</h4>
+                        <h4 th:text="${post.title}">게시글 제목</h4>
                     </div>
                     <div class="tdPostContent">
-                        <p>게시글 내용 미리보기...</p>
+                        <p class="postContent" th:text="${post.content}">게시글 내용 미리보기...</p>
                     </div>
                     <div class="tdPostStats">
                         <div class="postLike">
                             ❤️
-                            <span class="postLikeCount">0</span>
+                            <span class="postLikeCount" th:text="${post.likeCount}">0</span>
                         </div>
                         <div class="postReview">
                             💬
-                            <span class="postReviewCount">0</span>
+                            <span class="postReviewCount" th:text="${post.reviewCount}">0</span>
                         </div>
                         <div class="postView">
                             👁
-                            <span class="postViewCount">0</span>
+                            <span class="postViewCount" th:text="${post.view}">0</span>
                         </div>
                     </div>
-                    <div class="tdPostDate tdDate">2024.12.27</div>
+                    <div class="tdPostDate tdDate" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}">2024.12.27</div>
                 </div>
+
             </div>
         </div>
 <!--        페이지 네이션-->
@@ -91,6 +97,7 @@
                 <div class="thDate">작성일</div>
             </div>
             <div class="tableBody">
+
                 <div class="reviewItem">
                     <div class="tdMovie">
                         <img src="/image/blank.png" alt="영화 포스터" class="moviePoster">
@@ -104,6 +111,7 @@
                     </div>
                     <div class="tdDate">2024.12.27</div>
                 </div>
+
             </div>
         </div>
         <div class="pagination" id="movieReviewPagination">

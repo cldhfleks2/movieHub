@@ -140,29 +140,27 @@
 .postItem{
     grid-template-columns: 0.4fr 1fr 2fr 0.7fr 0.5fr;
     padding: 20px;
+    cursor: pointer;
 }
 
 .postItem:hover, .reviewItem:hover {
     background-color: #3f3f3f;
 }
 
-.tdPostType {
+.postContent {
+    max-width: 476px;
+    max-height: 55px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tdPostCategory {
     display: flex;
     gap: 15px;
     align-items: center;
     text-align: center;
     margin: auto;
-}
-
-.postThumbnail {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-.postInfo {
-    flex: 1;
 }
 
 .tdPostTitle {

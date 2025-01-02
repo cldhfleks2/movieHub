@@ -208,7 +208,6 @@ public class MemberService {
         return "member/mypage :: #reviewSection";
     }
 
-
     //유저 프로필 GET
     String getUserprofile(Long memberId, Model model) {
         Optional<Member> memberObj = memberRepository.findById(memberId);
@@ -223,6 +222,45 @@ public class MemberService {
                 .build();
 
         model.addAttribute("memberDTO", memberDTO);
+        
+        //게시글 목록
+        int pageSize = 10;
+        Page<Post> postPage = postRepository.findAllByMemberIdAndStatus(memberId, PageRequest.of(0, pageSize));
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for(Post post : postPage.getContent()) {
+            Long postId = post.getId();
+            //게시글 좋아요 갯수
+            List<PostLike> postLikeList = postLikeRepository.findAllByPostIdAndStatus(postId);
+            Long likeCount = (long) postLikeList.size();
+            //댓글 총 갯수
+            List<PostReview> postReviewList = postReviewRepository.findAllByPostIdAndStatus(postId);
+            Long reviewCount = (long) postReviewList.size();
+
+            PostDTO postDTO = PostDTO.create()
+                    .postId(postId)
+                    .postType(post.getPostType())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .likeCount(likeCount)
+                    .reviewCount(reviewCount)
+                    .view(post.getView())
+                    .updateDate(post.getUpdateDate())
+                    .build();
+            postDTOList.add(postDTO);
+        }
+        //페이지로 전달
+        Page<PostDTO> postDTOPage = new PageImpl<>(
+                postDTOList,
+                postPage.getPageable(),
+                postPage.getTotalElements() == 0 ? 1 : postPage.getTotalElements() //totalElements가 0이면 totalPages를 최소 1로 설정
+        );
+        model.addAttribute("postDTOPage", postDTOPage);
+
+
+        //영화 리뷰 목록
+
+
+
 
         return "member/userprofile";
     }
