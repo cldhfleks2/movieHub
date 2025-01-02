@@ -8,9 +8,7 @@ import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
 import com.cldhfleks2.moviehub.movie.MovieService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,41 +27,29 @@ public class BookMarkService {
     private final MemberRepository memberRepository;
     private final MovieRepository movieRepository;
     private final MovieService movieService;
-    
-    //정렬 함수 작성
-    public List<MovieDTO> sortMovieDTOList(List<MovieDTO> movieDTOList, String sort) {
-        if(movieDTOList == null || movieDTOList.isEmpty()) //유효한지
-            return movieDTOList;
-
-        switch (sort) {
-            case "latest":
-                // 최신순 (bookmarkUpdateDate 내림차순)
-                movieDTOList.sort(Comparator.comparing(MovieDTO::getBookmarkUpdateDate).reversed());
-                break;
-
-            case "title":
-                // 제목순 (movieNm 오름차순)
-                movieDTOList.sort(Comparator.comparing(MovieDTO::getMovieNm));
-                break;
-
-            default:
-                throw new IllegalArgumentException("정렬 기준을 찾을 수 없음: " + sort);
-        }
-        return movieDTOList;
-    }
 
     //내가 찜한 영화 리스트 GET
     public String getMyWish(Model model, Authentication auth, Integer pageIdx, String sort) throws Exception{
         if(pageIdx == null) pageIdx = 1;
-        if(sort == null) sort = "latest";
+        if(sort == null) sort = "latest"; //sort : title,latest
 
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
             return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/mywish", "유저 정보를 찾을 수 없습니다.", String.class);
 
-        //찜한 전체 영화 가져오기
-        Page<BookMark> bookMarkPage = bookMarkRepository.findAllByUsernameAndStatus(username, PageRequest.of(pageIdx - 1, 8));
+        //찜한 전체 영화 가져오기 : 정렬하여 가져오기
+        Sort sortOrder;
+        if(sort.equals("title"))
+            sortOrder = Sort.by(Sort.Order.asc("movie.movieNm"));
+        else if(sort.equals("latest"))
+            sortOrder = Sort.by(Sort.Order.desc("updateDate"));
+        else
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/mywish", "정렬 기준이 잘못 되었습니다.", String.class);
+        int pageSize = 4; //한페이지에 4개씩 보여줄것
+
+        Pageable pageable = PageRequest.of(pageIdx - 1, pageSize, sortOrder);
+        Page<BookMark> bookMarkPage = bookMarkRepository.findAllByUsernameAndStatus(username, pageable);
 
         //movieDTO만들기
         List<MovieDTO> movieDTOList = new ArrayList<>();
@@ -74,8 +59,6 @@ public class BookMarkService {
             movieDTO.setBookmarkUpdateDate(bookMark.getUpdateDate());
             movieDTOList.add(movieDTO);
         }
-        //정렬하기
-        movieDTOList = sortMovieDTOList(movieDTOList, sort);
 
         //페이지로 전달
         Page<MovieDTO> movieDTOPage = new PageImpl<>(
