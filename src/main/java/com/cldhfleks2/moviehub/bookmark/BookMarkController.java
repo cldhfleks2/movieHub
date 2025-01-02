@@ -20,9 +20,11 @@ public class BookMarkController {
     }
 
     //찜한 영화 추가 요청 : 영화 상세 페이지에서 찜하기 버튼 눌렀을때
-    @PostMapping("/api/movieDetail/bookmark")
+    @PostMapping("/api/bookmark/add")
     ResponseEntity<String> addBookmark(String movieCd, Authentication auth) {
         return bookMarkService.addBookmark(movieCd, auth);
     }
+
+    //찜한 영화 삭제 요청
 
 }

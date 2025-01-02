@@ -71,11 +71,11 @@ public class BookMarkService {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/movieDetail/bookmark", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/bookmark/add", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
         Optional<Movie> movieObj = movieRepository.findByMovieCdAndStatus(movieCd);
         if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movieDetail/bookmark", "영화 정보를 찾을 수 없습니다.", ResponseEntity.class);
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/bookmark/add", "영화 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
         Member member = memberObj.get();
         Movie movie = movieObj.get();

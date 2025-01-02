@@ -103,7 +103,7 @@ function bookmarkBtn(){
         const movieCd = $(this).data("moviecd");
 
         $.ajax({
-            url: "/api/movieDetail/bookmark",
+            url: "/api/bookmark/add",
             method: "post",
             data: {movieCd: movieCd},
             success: function (response, textStatus, xhr){
