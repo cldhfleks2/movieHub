@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -62,6 +59,12 @@ public class MemberController {
     @GetMapping("/mywish")
     String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
         return memberService.getMyWish(model, auth, pageIdx);
+    }
+
+    //찜한 영화 삭제 요청 : mywish페이지를 전달할 것인지 check
+    @DeleteMapping("/api/remove/movielike")
+    String remove(String movieCd, Integer pageIdx, Model model, Boolean render, Authentication auth) throws Exception{
+        return memberService.removeLike(movieCd, pageIdx, model, render, auth);
     }
 
     //유저 프로필 수정 요청

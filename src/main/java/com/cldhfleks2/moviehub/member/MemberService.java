@@ -273,61 +273,6 @@ public class MemberService {
         return "member/userprofile";
     }
 
-    //유저 프로필 수정 요청
-    @Transactional
-    ResponseEntity<String> editUserprofile(String nickname, String password, MultipartFile profileImage, Authentication auth) throws Exception{
-        String username = auth.getName();
-        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
-        if(!memberObj.isPresent()) //유저 정보 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/user/profile", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
-
-        String uploadDir = System.getProperty("user.dir") + fileDir;
-
-        //저장할 파일이름과 확장명을 구함
-        String uuid = UUID.randomUUID().toString();
-        String ext = profileImage.getOriginalFilename().substring(profileImage.getOriginalFilename().lastIndexOf("."));
-        //실제 저장할 위치에 폴더가 없으면 생성
-        File dir = new File(uploadDir);
-        if(!dir.exists()){
-            dir.mkdir();
-        }
-        
-        //프로젝트 로컬에 실제 파일 저장
-        String fileName = uuid + ext; //새로 생성된 파일이름
-        String filePath = uploadDir + fileName; //실제 파일이 저장될 경로
-        profileImage.transferTo(new File(filePath));
-
-        //DB에 저장될 파일 경로
-        String filePathOnDB = fileDirOnDb + fileName; // /image/ + uuid + ext
-
-        //비밀번호 암호화
-        String passwordEncoded = passwordEncoder.encode(password);
-        //DB member 수정
-        Member member = memberObj.get();
-        member.setNickname(nickname);
-        member.setPassword(passwordEncoded);
-        member.setProfileImage(filePathOnDB);
-        memberRepository.save(member); //수정
-
-        //다른 페이지에서 바로 사용가능하게 auth 업데이트 진행
-        MemberDetail ordinaryMemberDetail = (MemberDetail) auth.getPrincipal();
-        String role = ordinaryMemberDetail.getRole();
-        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-        MemberDetail memberDetail = new MemberDetail(username, passwordEncoded, authorities);
-        memberDetail.setUsername(username);
-        memberDetail.setNickname(nickname);
-        memberDetail.setRole(role);
-        memberDetail.setProfileImage(filePathOnDB); //프로필 이미지 변경
-
-        //새로운 auth 생성
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(memberDetail, null, authorities);
-        
-        //auth 업데이트
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
     //내가 찜한 리스트 GET
     public String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
         if(pageIdx == null) pageIdx = 1;
@@ -359,6 +304,88 @@ public class MemberService {
         model.addAttribute("movieDTOPage", movieDTOPage);
 
         return "member/mywish";
+    }
+
+    //찜한 영화 삭제 요청 : mywish페이지를 전달할 것인지 check
+    @Transactional
+    String removeLike(String movieCd, Integer pageIdx, Model model, Boolean render, Authentication auth) throws Exception {
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "유저 정보를 찾을 수 없습니다.", String.class);
+
+        Optional<Movie> movieObj = movieRepository.findByMovieCdAndStatus(movieCd);
+        if(!movieObj.isPresent()) //영화 존재 여부 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/remove/movielike", "영화 정보를 찾을 수 없습니다.", String.class);
+
+        //찜한리스트에서 삭제
+        Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsernameAndMovieCd(username, movieCd);
+        if(!movieObj.isPresent()) //영화 존재 여부 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "좋아요 내역을 찾을 수 없습니다.", String.class);
+        MovieLike movieLike = movieLikeObj.get();
+        movieLikeRepository.delete(movieLike); //해당 좋아요 내역 삭제
+
+        //화면을 렌더링 할것인지..
+        if(render)
+            return memberService.getMyWish(model, auth, pageIdx);
+        else
+            return null;
+    }
+
+
+    //유저 프로필 수정 요청
+    @Transactional
+    ResponseEntity<String> editUserprofile(String nickname, String password, MultipartFile profileImage, Authentication auth) throws Exception{
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/user/profile", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        String uploadDir = System.getProperty("user.dir") + fileDir;
+
+        //저장할 파일이름과 확장명을 구함
+        String uuid = UUID.randomUUID().toString();
+        String ext = profileImage.getOriginalFilename().substring(profileImage.getOriginalFilename().lastIndexOf("."));
+        //실제 저장할 위치에 폴더가 없으면 생성
+        File dir = new File(uploadDir);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+
+        //프로젝트 로컬에 실제 파일 저장
+        String fileName = uuid + ext; //새로 생성된 파일이름
+        String filePath = uploadDir + fileName; //실제 파일이 저장될 경로
+        profileImage.transferTo(new File(filePath));
+
+        //DB에 저장될 파일 경로
+        String filePathOnDB = fileDirOnDb + fileName; // /image/ + uuid + ext
+
+        //비밀번호 암호화
+        String passwordEncoded = passwordEncoder.encode(password);
+        //DB member 수정
+        Member member = memberObj.get();
+        member.setNickname(nickname);
+        member.setPassword(passwordEncoded);
+        member.setProfileImage(filePathOnDB);
+        memberRepository.save(member); //수정
+
+        //다른 페이지에서 바로 사용가능하게 auth 업데이트 진행
+        MemberDetail ordinaryMemberDetail = (MemberDetail) auth.getPrincipal();
+        String role = ordinaryMemberDetail.getRole();
+        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+        MemberDetail memberDetail = new MemberDetail(username, passwordEncoded, authorities);
+        memberDetail.setUsername(username);
+        memberDetail.setNickname(nickname);
+        memberDetail.setRole(role);
+        memberDetail.setProfileImage(filePathOnDB); //프로필 이미지 변경
+
+        //새로운 auth 생성
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(memberDetail, null, authorities);
+
+        //auth 업데이트
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }
