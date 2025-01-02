@@ -54,7 +54,7 @@ function clickActorSearching(){
 
 //페이지 새로고침하는 함수
 function movieInfoReload(){
-    const movieCd = $(this).data("moviecd")
+    const movieCd = $("#movieInfo").data("moviecd")
     $.ajax({
         url: "/detail/" + movieCd,
         method: "get",
