@@ -216,13 +216,14 @@ public class MemberService {
     }
 
     //유저 프로필 GET
-    String getUserprofile(Long memberId, Model model) {
+    String getUserprofile(Long memberId, Integer pageIdx, Model model) {
         Optional<Member> memberObj = memberRepository.findById(memberId);
         if(!memberObj.isPresent())
             return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/userprofile/", "유저 정보를 찾을 수 없습니다.", String.class);
 
         Member member = memberObj.get();
         MemberDTO memberDTO = MemberDTO.create()
+                .id(memberId)
                 .username(member.getUsername())
                 .nickname(member.getNickname())
                 .profileImage(member.getProfileImage())

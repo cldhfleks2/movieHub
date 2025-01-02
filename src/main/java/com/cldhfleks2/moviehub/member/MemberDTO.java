@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder(builderMethodName = "create")
 public class MemberDTO {
+    private Long id;
     private String username;
     private String nickname;
     private String profileImage;
