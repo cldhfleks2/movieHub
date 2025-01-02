@@ -46,7 +46,7 @@ public class BookMarkService {
             sortOrder = Sort.by(Sort.Order.desc("updateDate"));
         else
             return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/mywish", "정렬 기준이 잘못 되었습니다.", String.class);
-        int pageSize = 4; //한페이지에 4개씩 보여줄것
+        int pageSize = 6; //한페이지에 6개씩 보여줄것
 
         Pageable pageable = PageRequest.of(pageIdx - 1, pageSize, sortOrder);
         Page<BookMark> bookMarkPage = bookMarkRepository.findAllByUsernameAndStatus(username, pageable);
