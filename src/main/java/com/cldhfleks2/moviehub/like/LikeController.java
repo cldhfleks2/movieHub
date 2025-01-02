@@ -26,10 +26,10 @@ public class LikeController {
         return likeService.addMovieLike(movieCd, model, auth);
     }
 
-    //영화 좋아요 삭제 요청 : mywish페이지를 전달할 것인지 check
+    //영화 좋아요 삭제 요청
     @DeleteMapping("/api/remove/movielike")
-    String removeMovieLike(String movieCd, Integer pageIdx, Model model, Boolean render, Authentication auth) throws Exception{
-        return likeService.removeMovieLike(movieCd, pageIdx, model, render, auth);
+    ResponseEntity<String> removeMovieLike(String movieCd, Authentication auth) throws Exception{
+        return likeService.removeMovieLike(movieCd, auth);
     }
 
     //댓글 좋아요 요청 : save or status toggle

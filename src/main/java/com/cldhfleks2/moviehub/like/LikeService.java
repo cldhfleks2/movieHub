@@ -163,30 +163,27 @@ public class LikeService {
         return "detail/detail";
     }
 
-    //영화 좋아요 삭제 요청 : mywish페이지를 전달할 것인지 check
+    //영화 좋아요 삭제 요청
     @Transactional
-    String removeMovieLike(String movieCd, Integer pageIdx, Model model, Boolean render, Authentication auth) throws Exception {
+    ResponseEntity<String> removeMovieLike(String movieCd, Authentication auth) throws Exception {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "유저 정보를 찾을 수 없습니다.", String.class);
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
         Optional<Movie> movieObj = movieRepository.findByMovieCdAndStatus(movieCd);
         if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/remove/movielike", "영화 정보를 찾을 수 없습니다.", String.class);
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/remove/movielike", "영화 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
-        //찜한리스트에서 삭제
+        //영화 좋아요 삭제
         Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsernameAndMovieCd(username, movieCd);
         if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "좋아요 내역을 찾을 수 없습니다.", String.class);
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "좋아요 내역을 찾을 수 없습니다.", ResponseEntity.class);
         MovieLike movieLike = movieLikeObj.get();
-        movieLikeRepository.delete(movieLike); //해당 좋아요 내역 삭제
+        movieLikeRepository.delete(movieLike); //좋아요 삭제
 
-        //화면을 렌더링 할것인지..
-        if(render)
-            return memberService.getMyWish(model, auth, pageIdx);
-        else
-            return null;
+        //204 : 정상삭제 응답 보내기
+        return ResponseEntity.noContent().build();
     }
 
     //댓글 좋아요 요청 : save or status toggle
