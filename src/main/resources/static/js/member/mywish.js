@@ -100,7 +100,7 @@ function deleteWishList(){
             method: "delete",
             data: {movieCd: movieCd},
             success: function (response, textStatus, xhr){
-                if (xhr.status === 200) {
+                if (xhr.status === 204) {
                     pageReload(); //북마크 삭제에 성공하면 페이지 새로고침
                 }else{
                     alert("알 수 없는 성공")
