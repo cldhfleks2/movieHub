@@ -186,7 +186,7 @@ public class LikeService {
         return ResponseEntity.noContent().build();
     }
 
-    //댓글 좋아요 요청 : save or status toggle
+    //게시글 댓글 좋아요 요청 : save or status toggle
     @Transactional
     ResponseEntity<String> likePostReview(Long reviewId, Authentication auth){
         String username = auth.getName();
