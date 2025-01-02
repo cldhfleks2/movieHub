@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -23,6 +24,12 @@ public class LikeController {
     @PostMapping("/api/movieDetail/like")
     String addMovieLike(String movieCd, Model model, Authentication auth) {
         return likeService.addMovieLike(movieCd, model, auth);
+    }
+
+    //영화 좋아요 삭제 요청 : mywish페이지를 전달할 것인지 check
+    @DeleteMapping("/api/remove/movielike")
+    String removeMovieLike(String movieCd, Integer pageIdx, Model model, Boolean render, Authentication auth) throws Exception{
+        return likeService.removeMovieLike(movieCd, pageIdx, model, render, auth);
     }
 
     //댓글 좋아요 요청 : save or status toggle

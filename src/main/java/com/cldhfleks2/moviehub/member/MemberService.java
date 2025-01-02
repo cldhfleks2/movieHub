@@ -10,6 +10,7 @@ import com.cldhfleks2.moviehub.like.postreview.PostReviewLike;
 import com.cldhfleks2.moviehub.like.postreview.PostReviewLikeRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
+import com.cldhfleks2.moviehub.movie.MovieRepository;
 import com.cldhfleks2.moviehub.movie.MovieService;
 import com.cldhfleks2.moviehub.postreview.PostReview;
 import com.cldhfleks2.moviehub.postreview.PostReviewDTO;
@@ -45,6 +46,7 @@ public class MemberService {
     private final PostLikeRepository postLikeRepository;
     private final PostReviewRepository postReviewRepository;
     private final PostReviewLikeRepository postReviewLikeRepository;
+    private final MovieRepository movieRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -305,33 +307,6 @@ public class MemberService {
 
         return "member/mywish";
     }
-
-    //찜한 영화 삭제 요청 : mywish페이지를 전달할 것인지 check
-    @Transactional
-    String removeLike(String movieCd, Integer pageIdx, Model model, Boolean render, Authentication auth) throws Exception {
-        String username = auth.getName();
-        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
-        if(!memberObj.isPresent()) //유저 정보 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "유저 정보를 찾을 수 없습니다.", String.class);
-
-        Optional<Movie> movieObj = movieRepository.findByMovieCdAndStatus(movieCd);
-        if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/remove/movielike", "영화 정보를 찾을 수 없습니다.", String.class);
-
-        //찜한리스트에서 삭제
-        Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsernameAndMovieCd(username, movieCd);
-        if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "좋아요 내역을 찾을 수 없습니다.", String.class);
-        MovieLike movieLike = movieLikeObj.get();
-        movieLikeRepository.delete(movieLike); //해당 좋아요 내역 삭제
-
-        //화면을 렌더링 할것인지..
-        if(render)
-            return memberService.getMyWish(model, auth, pageIdx);
-        else
-            return null;
-    }
-
 
     //유저 프로필 수정 요청
     @Transactional
