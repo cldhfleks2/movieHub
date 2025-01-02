@@ -301,7 +301,7 @@ body{
     background-color: #e0e0e0;
 }
 
-.wishlistPagination {
+.pagination {
     display: flex;
     justify-content: center;
     align-items: center;

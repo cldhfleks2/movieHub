@@ -18,12 +18,7 @@
             <select id="sortSelect" class="wishlistSort">
                 <option value="latest">최신순</option>
                 <option value="title">제목순</option>
-<!--                <option value="rating">평점순</option>-->
             </select>
-<!--            <div class="wishlistViewToggle">-->
-<!--                <button id="gridView" class="viewButton active">바둑판</button>-->
-<!--                <button id="listView" class="viewButton">목록</button>-->
-<!--            </div>-->
         </div>
     </div>
 
@@ -71,7 +66,7 @@
     </div>
 
     <!-- 페이지네이션 -->
-    <div class="wishlistPagination" th:if="${movieDTOPage.totalPages > 0}">
+    <div class="pagination" id="wishlistPagination" th:if="${movieDTOPage.totalPages > 0}">
         <button class="pageButton" id="prevPage" th:disabled="${movieDTOPage.first}" th:onclick="'location.href=\'/mywish?pageIdx=' + ${movieDTOPage.number} + '\''">
             이전
         </button>
