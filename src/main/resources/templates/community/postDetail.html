@@ -21,10 +21,10 @@
         </div>
         <h1 class="postTitle" th:text="${postDTO.title}">글 제목</h1>
         <div class="postInfo">
-            <div class="authorInfo">
+            <a class="authorInfo" th:href="@{/userprofile/{memberId}(memberId=${postDTO.member.id})}">
                 <img th:src="${postDTO.member.profileImage != null ? postDTO.member.profileImage : '/image/profile.png'}" src="/image/blank.png" alt="프로필" class="authorAvatar">
                 <span class="authorName" th:text="${postDTO.member.nickname}">작성자 닉네임</span>
-            </div>
+            </a>
             <div class="postStats">
                 <span th:text="${#temporals.format(postDTO.updateDate, 'yyyy-MM-dd HH:mm:ss')}">작성 날짜 yyyy-mm-dd hh:mm:ss</span>
                 <span class="statDivider">•</span>
@@ -112,11 +112,11 @@
             <div th:if="${review != null}" th:id="'reviewItem-' + ${review.id}" class="reviewItem"
                  th:style="${review.depth > 0 ? 'margin-left: ' + (review.depth * 40) + 'px' : ''}">
                 <div class="reviewHeader">
-                    <div class="revieworInfo">
+                    <a class="revieworInfo" th:href="@{/userprofile/{memberId}(memberId=${review.member.id})}">
                         <img class="revieworAvatar" src="/image/blank.png" alt="프로필"
                              th:src="${review.member.profileImage != null ? review.member.profileImage : '/image/profile.png'}">
                         <span class="revieworName" th:text="${review.member.nickname}">댓글 작성자 닉네임</span>
-                    </div>
+                    </a>
                     <span class="reviewDate" th:text="${#temporals.format(review.updateDate, 'yyyy-MM-dd HH:mm')}">
                 댓글 작성시간 yyyy-mm-dd hh:mm
             </span>

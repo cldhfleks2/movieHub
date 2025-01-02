@@ -240,6 +240,7 @@ body {
 .reviewActions {
     display: flex;
     gap: 1rem;
+    align-items: flex-end;
 }
 
 .reviewActions button {
@@ -505,3 +506,16 @@ body {
 }
 
 
+.authorInfo, .revieworInfo{
+    text-decoration: none;
+    caret-color: transparent;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    padding-right: 10px;
+    transition: transform 0.3s ease; /* transform 변화에 0.3초 동안 ease 효과 추가 */
+}
+.authorInfo:hover, .revieworInfo:hover{
+    transform: translateY(-2px);
+    background-color: rgb(98 98 98 / 28%);
+}
