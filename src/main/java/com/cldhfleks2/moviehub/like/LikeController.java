@@ -13,6 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class LikeController {
     private final LikeService likeService;
 
+    //영화 리뷰 좋아요 요청
+    @PostMapping("/api/movieReview/like")
+    ResponseEntity<String> addMovieReviewLike(Long reviewId, Authentication auth) {
+        return likeService.addMovieReviewLike(reviewId, auth);
+    }
+
+    //영화 좋아요 요청
     //영화 상세 페이지에서 좋아요 버튼 눌렀을때 detail페이지도 전송
     @PostMapping("/api/movieDetail/like")
     String addMovieLike(String movieCd, Model model, Authentication auth) {

@@ -25,11 +25,5 @@ public class MovieReviewController {
     ResponseEntity<String> addMovieReview(@RequestBody MovieReviewDTO movieReviewDTO, Model model, Authentication auth) {
         return movieReviewService.addMovieReview(movieReviewDTO, model, auth);
     }
-
-    //리뷰 좋아요 요청
-    @PostMapping("/api/movieReview/like")
-    ResponseEntity<String> addMovieReviewLike(Long reviewId, Authentication auth) {
-        return movieReviewService.addMovieReviewLike(reviewId, auth);
-    }
-
+    
 }

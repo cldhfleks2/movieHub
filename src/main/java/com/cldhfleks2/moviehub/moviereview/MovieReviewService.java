@@ -7,10 +7,7 @@ import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
-import com.cldhfleks2.moviehub.notification.Notification;
 import com.cldhfleks2.moviehub.notification.NotificationRepository;
-import com.cldhfleks2.moviehub.notification.NotificationTargetType;
-import com.cldhfleks2.moviehub.notification.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -180,71 +177,6 @@ public class MovieReviewService {
         movieReview.setContent(movieReviewDTO.getContent());
         movieReview.setRatingValue(movieReviewDTO.getRatingValue());
         movieReviewRepository.save(movieReview); //리뷰 저장
-
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    //리뷰 좋아요 요청
-    @Transactional
-    ResponseEntity<String> addMovieReviewLike(Long reviewId, Authentication auth) {
-        String username = auth.getName();
-        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
-        if(!memberObj.isPresent()) //유저 정보 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/movieReview/like", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
-
-        Optional<MovieReview> movieReviewObj = movieReviewRepository.findById(reviewId);
-        if(!movieReviewObj.isPresent()) //리뷰 정보 체크
-            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movieReview/like", "영화 리뷰를 찾을 수 없습니다.", ResponseEntity.class);
-
-        //리뷰 작성자는 좋아요 요청 불가
-        Long currentUserId = memberObj.get().getId();
-        Long movieReviewAuthorId = movieReviewObj.get().getMember().getId();
-        if(currentUserId == movieReviewAuthorId) 
-            return ErrorService.send(HttpStatus.FORBIDDEN.value(), "/api/movieReview/like", "본인의 리뷰는 좋아요를 요청할 수 없습니다.", ResponseEntity.class);
-
-        //이미 좋아요를 누른상태인지
-        Optional<MovieReviewLike> movieReviewLikeObj = movieReviewLikeRepository.findByUsernameAndMovieReviewId(username, reviewId);
-        boolean pushNotification = false; //알림을 보낼건지
-        if(!movieReviewLikeObj.isPresent()){ //처음 누를때
-            Member member = memberObj.get();
-            MovieReview movieReview = movieReviewObj.get();
-            MovieReviewLike movieReviewLike = new MovieReviewLike();
-            movieReviewLike.setMember(member);
-            movieReviewLike.setMovieReview(movieReview);
-            movieReviewLikeRepository.save(movieReviewLike); //리뷰 좋아요 저장
-            pushNotification = true;
-        }else{
-            MovieReviewLike movieReviewLike = movieReviewLikeObj.get();
-            int status = movieReviewLike.getStatus();
-            status = (status + 1) % 2; //상태 toggle
-            movieReviewLike.setStatus(status);
-            movieReviewLikeRepository.save(movieReviewLike); //상태를 바꿔서 저장
-            pushNotification = (status == 1);
-        }
-
-        //알림 보내는 로직 : 회원인 유저에게만 보냄
-        if(pushNotification){
-            MovieReview movieReview = movieReviewObj.get();
-            Long receiverId = movieReview.getMember().getId();
-            Optional<Member> receiverObj = memberRepository.findByIdAndStatus(receiverId); //회원인 유저만 가져옴
-            if(receiverObj.isPresent()){ //보낼 사람이 존재할때만 ㅇㅇ
-                Member receiver = receiverObj.get();
-                Member sender = memberObj.get();
-                String nickname = sender.getNickname();
-                String message = nickname + "님이 리뷰에 좋아요를 눌렀습니다.";
-                Notification notification = Notification.create()
-                        .receiver(receiver)
-                        .sender(sender)
-                        .notificationType(NotificationType.LIKE_RECEIVED)
-                        .targetType(NotificationTargetType.REVIEW)
-                        .targetId(reviewId) //이 리뷰에서 이벤트가 일어남
-                        .message(message)
-                        .build();
-                notificationRepository.save(notification); //DB 저장
-            }
-        }
-
-
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
