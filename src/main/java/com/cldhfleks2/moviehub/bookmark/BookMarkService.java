@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,26 @@ public class BookMarkService {
     private final MovieService movieService;
     
     //정렬 함수 작성
+    public List<MovieDTO> sortMovieDTOList(List<MovieDTO> movieDTOList, String sort) {
+        if(movieDTOList == null || movieDTOList.isEmpty()) //유효한지
+            return movieDTOList;
+
+        switch (sort) {
+            case "latest":
+                // 최신순 (bookmarkUpdateDate 내림차순)
+                movieDTOList.sort(Comparator.comparing(MovieDTO::getBookmarkUpdateDate).reversed());
+                break;
+
+            case "title":
+                // 제목순 (movieNm 오름차순)
+                movieDTOList.sort(Comparator.comparing(MovieDTO::getMovieNm));
+                break;
+
+            default:
+                throw new IllegalArgumentException("정렬 기준을 찾을 수 없음: " + sort);
+        }
+        return movieDTOList;
+    }
 
     //내가 찜한 영화 리스트 GET
     public String getMyWish(Model model, Authentication auth, Integer pageIdx, String sort) throws Exception{
@@ -53,7 +74,8 @@ public class BookMarkService {
             movieDTO.setBookmarkUpdateDate(bookMark.getUpdateDate());
             movieDTOList.add(movieDTO);
         }
-        //정렬하고
+        //정렬하기
+        movieDTOList = sortMovieDTOList(movieDTOList, sort);
 
         //페이지로 전달
         Page<MovieDTO> movieDTOPage = new PageImpl<>(

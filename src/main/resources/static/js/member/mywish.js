@@ -49,7 +49,7 @@ function viewStyle(){
 
 //찜한목록 뷰, 페이지네이션 뷰 새로 고침
 function pageReload(pageIdx = 1){
-    const sort = $("#sortSelect").val();// 정렬 기준 : 'relevance', 'date'
+    const sort = $("#sortSelect").val();// 정렬 기준 : 'latest', 'title'
 
     $.ajax({
         url: "/mywish",
