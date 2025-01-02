@@ -150,16 +150,16 @@ public class LikeService {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/movielike/delete", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
         Optional<Movie> movieObj = movieRepository.findByMovieCdAndStatus(movieCd);
         if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/remove/movielike", "영화 정보를 찾을 수 없습니다.", ResponseEntity.class);
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movielike/delete", "영화 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
         //영화 좋아요 삭제
         Optional<MovieLike> movieLikeObj = movieLikeRepository.findByUsernameAndMovieCd(username, movieCd);
         if(!movieObj.isPresent()) //영화 존재 여부 체크
-            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/remove/movielike", "좋아요 내역을 찾을 수 없습니다.", ResponseEntity.class);
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/movielike/delete", "좋아요 내역을 찾을 수 없습니다.", ResponseEntity.class);
         MovieLike movieLike = movieLikeObj.get();
         movieLikeRepository.delete(movieLike); //좋아요 삭제
 

@@ -25,7 +25,7 @@ public class LikeController {
     }
 
     //영화 좋아요 삭제 요청
-    @DeleteMapping("/api/remove/movielike")
+    @DeleteMapping("/api/movielike/delete")
     ResponseEntity<String> deleteMovieLike(String movieCd, Authentication auth) throws Exception{
         return likeService.deleteMovieLike(movieCd, auth);
     }
