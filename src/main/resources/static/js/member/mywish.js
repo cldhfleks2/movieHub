@@ -5,6 +5,7 @@ $(document).ready(function() {
     pagination();
 });
 
+//정렬 선택 기능
 function sortSection(){
     //정렬기준을 선택하면 정렬하도록 지시
     $('#sortSelect').on('change', function() {
@@ -12,6 +13,7 @@ function sortSection(){
     });
 }
 
+//페이지네이션 뷰
 function pagination(){
     $('#prevPage, #nextPage').click(function() {
         const $activeButton = $('.pageNumber.active');
@@ -29,6 +31,7 @@ function pagination(){
     });
 }
 
+//사용 X 목록 정렬뷰
 function viewStyle(){
     // View toggle functionality
     $('#gridView').click(function() {
@@ -44,6 +47,7 @@ function viewStyle(){
     });
 }
 
+//찜한목록 뷰, 페이지네이션 뷰 새로 고침
 function pageReload(pageIdx = 1){
     const sort = $("#sortSelect").val();// 정렬 기준 : 'relevance', 'date'
 
@@ -66,6 +70,7 @@ function pageReload(pageIdx = 1){
     })
 }
 
+//찜하기 취소 버튼
 function deleteWishList(){
     //마우스를 올려야 버튼을 보여줌
     $(document).on('mouseenter', '.movieCard', function() {
@@ -89,7 +94,7 @@ function deleteWishList(){
         // showNotification($overlay, message); //주석처리함
         const movieCd = $(this).data("moviecd");
 
-        //서버로 삭제 요청을 보내고 페이지를 다시 가져옴
+        //서버로 삭제 요청을 보내고 페이지 새로고침
         $.ajax({
             url: "/api/bookmark/delete",
             method: "delete",
