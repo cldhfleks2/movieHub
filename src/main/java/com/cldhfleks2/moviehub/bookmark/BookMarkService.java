@@ -29,28 +29,31 @@ public class BookMarkService {
     private final MemberRepository memberRepository;
     private final MovieRepository movieRepository;
     private final MovieService movieService;
+    
+    //정렬 함수 작성
 
     //내가 찜한 영화 리스트 GET
-    public String getMyWish(Model model, Authentication auth, Integer pageIdx) throws Exception{
+    public String getMyWish(Model model, Authentication auth, Integer pageIdx, String sort) throws Exception{
         if(pageIdx == null) pageIdx = 1;
+        if(sort == null) sort = "latest";
 
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
             return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/mywish", "유저 정보를 찾을 수 없습니다.", String.class);
 
-        //좋아요한 전체 영화 객체를 가져오기
+        //찜한 전체 영화 가져오기
         Page<BookMark> bookMarkPage = bookMarkRepository.findAllByUsernameAndStatus(username, PageRequest.of(pageIdx - 1, 8));
-        List<Movie> movieList = new ArrayList<>();
-        for (BookMark bookMark : bookMarkPage)
-            movieList.add(bookMark.getMovie());
 
         //movieDTO만들기
         List<MovieDTO> movieDTOList = new ArrayList<>();
-        for(Movie movie : movieList) {
+        for (BookMark bookMark : bookMarkPage){
+            Movie movie = bookMark.getMovie();
             MovieDTO movieDTO = movieService.getMovieDTO(movie);
+            movieDTO.setBookmarkUpdateDate(bookMark.getUpdateDate());
             movieDTOList.add(movieDTO);
         }
+        //정렬하고
 
         //페이지로 전달
         Page<MovieDTO> movieDTOPage = new PageImpl<>(
@@ -96,6 +99,30 @@ public class BookMarkService {
         return ResponseEntity.ok().build();
     }
 
+    //찜한 영화 삭제 요청
+    @Transactional
+    ResponseEntity<String> deleteBookmark(String movieCd, Authentication auth){
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/bookmark/delete", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
 
+        Optional<Movie> movieObj = movieRepository.findByMovieCdAndStatus(movieCd);
+        if(!movieObj.isPresent()) //영화 존재 여부 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/bookmark/delete", "영화 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Optional<BookMark> bookMarkObj = bookMarkRepository.findByUsernameAndMovieCd(username, movieCd);
+        if(!bookMarkObj.isPresent())
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/bookmark/delete", "찜한 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        BookMark bookmark = bookMarkObj.get();
+        int status = bookmark.getStatus();
+        status = (status - 1) % 2;
+        bookmark.setStatus(status);
+        bookMarkRepository.save(bookmark); //update
+
+        //204 : 정상삭제 응답 보내기
+        return ResponseEntity.noContent().build();
+    }
 
 }

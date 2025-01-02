@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -38,5 +39,8 @@ public class MovieDTO {
     private String age;
     private String releaseDate;
     private String ticketRate;
+
+    //mywish페이지에서사용
+    private LocalDateTime bookmarkUpdateDate;
 }
 
