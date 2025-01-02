@@ -73,23 +73,25 @@ function deleteWishList(){
         console.log(pageIdx);
         const render = true;
 
+        //TODO 이거 고쳐라 : 성공하면 페이지를 추가 ajax요청하도록
         //서버로 삭제 요청을 보내고 페이지를 다시 가져옴
-        $.ajax({
-            url: "/api/remove/movielike",
-            method: "delete",
-            data: {movieCd: movieCd, pageIdx: pageIdx, render: render},
-            success: function (data){
-                var data = $.parseHTML(data);
-                var dataHtml = $("<div>").append(data);
-                $("#wishlistContainer").replaceWith(dataHtml.find("#wishlistContainer"));
-
-                console.log("/api/remove/movielike ajax success")
-            },
-            error: function (xhr){
-                console.log(xhr.responseText);
-                console.log("/api/remove/movielike ajax failed")
-            }
-        })
+        //
+        // $.ajax({
+        //     url: "/api/remove/movielike",
+        //     method: "delete",
+        //     data: {movieCd: movieCd, pageIdx: pageIdx},
+        //     success: function (data){
+        //         var data = $.parseHTML(data);
+        //         var dataHtml = $("<div>").append(data);
+        //         $("#wishlistContainer").replaceWith(dataHtml.find("#wishlistContainer"));
+        //
+        //         console.log("/api/remove/movielike ajax success")
+        //     },
+        //     error: function (xhr){
+        //         console.log(xhr.responseText);
+        //         console.log("/api/remove/movielike ajax failed")
+        //     }
+        // })
 
 
         // setTimeout(() => $buttons.show(), 1300); //주석처리함
