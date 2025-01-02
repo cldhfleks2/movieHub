@@ -217,6 +217,7 @@ public class MemberService {
 
     //유저 프로필 GET
     String getUserprofile(Long memberId, Integer pageIdx, Model model) {
+        if(pageIdx == null) pageIdx = 1;
         Optional<Member> memberObj = memberRepository.findById(memberId);
         if(!memberObj.isPresent())
             return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/userprofile/", "유저 정보를 찾을 수 없습니다.", String.class);
@@ -233,7 +234,7 @@ public class MemberService {
         
         //게시글 목록
         int pageSize = 10;
-        Page<Post> postPage = postRepository.findAllByMemberIdAndStatus(memberId, PageRequest.of(0, pageSize));
+        Page<Post> postPage = postRepository.findAllByMemberIdAndStatus(memberId, PageRequest.of(pageIdx-1, pageSize));
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post : postPage.getContent()) {
             Long postId = post.getId();
