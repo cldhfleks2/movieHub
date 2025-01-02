@@ -54,8 +54,8 @@ public class MemberController {
 
     //유저 프로필 GET
     @GetMapping("/userprofile/{memberId}")
-    String getUserprofile(@PathVariable Long memberId, Model model) {
-        return memberService.getUserprofile(memberId, model);
+    String getUserprofile(@PathVariable Long memberId, Integer pageIdx, Model model) {
+        return memberService.getUserprofile(memberId, pageIdx, model);
     }
 
     //유저 프로필 수정 요청

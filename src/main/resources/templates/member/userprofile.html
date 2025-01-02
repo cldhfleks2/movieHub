@@ -38,7 +38,7 @@
         <button class="tabButton" data-tab="movieReview">영화 리뷰</button>
     </div>
 
-    <section id="postSection" class="contentSection active">
+    <section id="postSection" class="contentSection active" th:data-member-id="${memberDTO.id}">
         <div class="tableLayout">
             <div class="tableHeader">
                 <div class="thPostCategory">게시판 종류</div>
@@ -47,8 +47,7 @@
                 <div class="thPostPostStats">통계</div>
                 <div class="thPostDate">작성일</div>
             </div>
-            <div class="tableBody">
-
+            <div class="tableBody" id="postList">
                 <div class="postItem" th:each="post : ${postDTOPage}" th:data-post-id="${post.postId}">
                     <div class="tdPostCategory">
                         <div th:text="${post.postType.description}"
@@ -83,8 +82,26 @@
             </div>
         </div>
 <!--        페이지 네이션-->
-        <div class="pagination" id="postPagination">
-
+        <div class="pagination" id="postPagination" th:if="${postDTOPage.totalPages > 0}">
+            <button class="pageBtn prev" id="prevPage"
+                    th:disabled="${postDTOPage.first}"
+                    th:data-pageidx="${postDTOPage.number}">
+                이전
+            </button>
+            <div class="pageNumbers">
+                <th:block th:each="pageNum : ${#numbers.sequence(0, postDTOPage.totalPages - 1)}">
+                    <button class="pageNum"
+                            th:classappend="${pageNum == postDTOPage.number} ? 'active'"
+                            th:data-pageidx="${pageNum + 1}"
+                            th:text="${pageNum + 1}">
+                    </button>
+                </th:block>
+            </div>
+            <button class="pageBtn next" id="nextPage"
+                    th:disabled="${postDTOPage.last}"
+                    th:data-pageidx="${postDTOPage.number + 2}">
+                다음
+            </button>
         </div>
     </section>
 

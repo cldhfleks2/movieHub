@@ -56,10 +56,9 @@ function postPageReload(pageIdx = 1){
 
 //게시글 뷰 : 페이지 네이션
 function postPagination(){
-
     $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
         const pageIdx = $(this).data("pageidx")
-
+        postPageReload(pageIdx);
     })
 }
 
