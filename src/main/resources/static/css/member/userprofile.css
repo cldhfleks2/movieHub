@@ -254,7 +254,13 @@
     transition: all 0.3s ease;
 }
 
-.pageBtn:hover, .pageNum:hover {
+.pageBtn:disabled {
+    background: #2b2b2b00;
+    border-color: #2b2b2b;
+    color: #adb5bd8a;
+}
+
+.pageBtn:hover:not(:disabled), .pageNum:hover:not(:disabled) {
     background: rgba(229, 9, 20, 0.8);
 }
 
