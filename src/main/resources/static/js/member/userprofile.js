@@ -34,8 +34,32 @@ function postLink(){
     });
 }
 
+function postPageReload(pageIdx = 1){
+    const memberId = $("#postSection").data("member-id");
+    $.ajax({
+        url: "/userprofile/" + memberId,
+        method: "get",
+        data: {pageIdx: pageIdx},
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#postList").replaceWith(dataHtml.find("#postList"));
+            $("#postPagination").replaceWith(dataHtml.find("#postPagination"));
+            console.log("page reload ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("page reload ajax failed")
+        }
+    });
+}
+
 //게시글 뷰 : 페이지 네이션
 function postPagination(){
 
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const pageIdx = $(this).data("pageidx")
+
+    })
 }
 
