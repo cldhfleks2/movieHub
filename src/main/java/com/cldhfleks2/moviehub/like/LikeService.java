@@ -146,7 +146,7 @@ public class LikeService {
 
     //영화 좋아요 삭제 요청
     @Transactional
-    ResponseEntity<String> removeMovieLike(String movieCd, Authentication auth) throws Exception {
+    ResponseEntity<String> deleteMovieLike(String movieCd, Authentication auth) throws Exception {
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
