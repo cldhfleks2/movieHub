@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -20,10 +19,9 @@ public class LikeController {
     }
 
     //영화 좋아요 요청
-    //영화 상세 페이지에서 좋아요 버튼 눌렀을때 detail페이지도 전송
     @PostMapping("/api/movieDetail/like")
-    String addMovieLike(String movieCd, Model model, Authentication auth) {
-        return likeService.addMovieLike(movieCd, model, auth);
+    ResponseEntity<String> addMovieLike(String movieCd, Authentication auth) {
+        return likeService.addMovieLike(movieCd, auth);
     }
 
     //영화 좋아요 삭제 요청
