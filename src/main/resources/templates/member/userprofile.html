@@ -23,8 +23,8 @@
                     <div>게시글</div>
                 </div>
                 <div class="statItem">
-                    <div class="statNumber">리뷰 갯수</div>
-                    <div>리뷰</div>
+                    <div class="statNumber">영화 리뷰 갯수</div>
+                    <div>영화 리뷰</div>
                 </div>
                 <button class="messageButton">
                     <i class="fas fa-envelope"></i> 메시지 보내기
@@ -34,58 +34,42 @@
     </div>
 
     <div class="contentTabs">
-        <button class="tabButton active" data-tab="posts">게시글</button>
-        <button class="tabButton" data-tab="reviews">리뷰</button>
+        <button class="tabButton active" data-tab="post">게시글</button>
+        <button class="tabButton" data-tab="movieReview">영화 리뷰</button>
     </div>
 
-    <section id="postsSection" class="contentSection active">
+    <section id="postSection" class="contentSection active">
         <div class="tableLayout">
             <div class="tableHeader">
                 <div class="thTitle">제목</div>
-                <div class="thDate">작성일</div>
                 <div class="thStats">통계</div>
+                <div class="thDate">작성일</div>
             </div>
             <div class="tableBody">
                 <div class="postItem">
                     <div class="tdTitle">
-                        <img src="/image/default-post.png" alt="게시글 썸네일" class="postThumbnail">
+                        <img src="/image/blank.png" alt="게시글 썸네일" class="postThumbnail">
                         <div class="postInfo">
                             <h3 class="postTitle">게시글 제목</h3>
-                            <p class="postDescription">게시글 내용 미리보기...</p>
+                            <p class="postContent">게시글 내용 미리보기...</p>
                         </div>
                     </div>
-                    <div class="tdDate">2024.12.27</div>
                     <div class="tdStats">
-                        <span class="likeCount">❤️ 0</span>
-                        <span class="commentCount">💬 0</span>
+                        <span class="postLikeCount">❤️ 0</span>
+                        <span class="postReviewCount">💬 0</span>
+                        <span class="postViewCount">👁</span>
                     </div>
+                    <div class="tdDate">2024.12.27</div>
                 </div>
             </div>
         </div>
-<!--        <div class="pagination" id="pagination" th:if="${movieReviewDTOPage.totalPages > 0}">-->
-<!--            <button class="pageBtn prev" id="prevPage"-->
-<!--                    th:disabled="${movieReviewDTOPage.first}"-->
-<!--                    th:data-pageidx="${movieReviewDTOPage.number}">-->
-<!--                이전-->
-<!--            </button>-->
-<!--            <div class="pageNumbers">-->
-<!--                <th:block th:each="pageNum : ${#numbers.sequence(0, movieReviewDTOPage.totalPages - 1)}">-->
-<!--                    <button class="pageNum"-->
-<!--                            th:classappend="${pageNum == movieReviewDTOPage.number} ? 'active'"-->
-<!--                            th:data-pageidx="${pageNum + 1}"-->
-<!--                            th:text="${pageNum + 1}">-->
-<!--                    </button>-->
-<!--                </th:block>-->
-<!--            </div>-->
-<!--            <button class="pageBtn next" id="nextPage"-->
-<!--                    th:disabled="${movieReviewDTOPage.last}"-->
-<!--                    th:data-pageidx="${movieReviewDTOPage.number + 2}">-->
-<!--                다음-->
-<!--            </button>-->
-<!--        </div>-->
+<!--        페이지 네이션-->
+        <div class="pagination" id="postPagination">
+
+        </div>
     </section>
 
-    <section id="reviewsSection" class="contentSection" style="display: none;">
+    <section id="movieReviewSection" class="contentSection">
         <div class="tableLayout">
             <div class="tableHeader">
                 <div class="thMovie">영화</div>
@@ -96,10 +80,12 @@
             <div class="tableBody">
                 <div class="reviewItem">
                     <div class="tdMovie">
-                        <img src="/image/default-product.png" alt="영화 포스터" class="moviePoster">
-                        <span class="movieTitle">영화 제목</span>
+                        <img src="/image/blank.png" alt="영화 포스터" class="moviePoster">
+                        <div class="titleLayer">
+                            <span class="movieTitle">영화 제목</span>
+                        </div>
                     </div>
-                    <div class="tdReview">리뷰 내용...</div>
+                    <div class="tdContent">리뷰 내용...</div>
                     <div class="tdRating">
                         <div class="rating">★★★★★</div>
                     </div>
@@ -107,8 +93,8 @@
                 </div>
             </div>
         </div>
-        <div class="pagination" id="reviewsPagination">
-            <!-- 페이지네이션 내용 -->
+        <div class="pagination" id="movieReviewPagination">
+
         </div>
     </section>
 </main>

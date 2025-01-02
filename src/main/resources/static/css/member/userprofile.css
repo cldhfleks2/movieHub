@@ -107,7 +107,7 @@
 .tableHeader {
     display: grid;
     grid-template-columns: 3fr 1fr 1fr;
-    padding: 15px 20px;
+    padding: 10px 20px;
     background: #2a2a2a;
     font-weight: bold;
     text-align: center;
@@ -125,7 +125,7 @@
 .postItem, .reviewItem {
     display: grid;
     grid-template-columns: 3fr 1fr 1fr;
-    padding: 20px;
+    padding: 10px;
     border-bottom: 1px solid #333;
     transition: background-color 0.3s;
 }
@@ -138,6 +138,7 @@
     display: flex;
     gap: 15px;
     align-items: center;
+    margin-left: 20px;
 }
 
 .postThumbnail {
@@ -156,7 +157,7 @@
     color: #fff;
 }
 
-.postDescription {
+.postContent {
     color: #808080;
     margin: 0;
     font-size: 0.9em;
@@ -165,22 +166,47 @@
 .tdDate {
     color: #808080;
     align-self: center;
+    text-align: center;
 }
 
 .tdStats {
     display: flex;
     gap: 15px;
     align-self: center;
+    margin: 0 auto;
 }
+
+
 
 /* 리뷰 섹션 특별 스타일 */
-#reviewsSection .tableHeader {
+#movieReviewSection .tableHeader {
     grid-template-columns: 2fr 4fr 1fr 1fr;
 }
 
-#reviewsSection .reviewItem {
+#movieReviewSection .reviewItem {
     grid-template-columns: 2fr 4fr 1fr 1fr;
 }
+
+#movieReviewSection .titleLayer{
+    width: 100%;
+    align-content: center;
+}
+
+#movieReviewSection .tdMovie{
+    display: flex;
+}
+
+#movieReviewSection .tdContent{
+    align-content: center;
+    text-align: center;
+}
+
+#movieReviewSection .tdRating {
+    align-content: center;
+    text-align: center;
+}
+
+
 
 .moviePoster {
     width: 60px;
@@ -201,9 +227,7 @@
 
 
 
-
 /* 페이지네이션 스타일 */
-
 .pagination {
     display: flex;
     justify-content: center;

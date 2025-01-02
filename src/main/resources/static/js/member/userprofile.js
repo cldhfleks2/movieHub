@@ -1,8 +1,14 @@
 $(document).ready(function() {
+    initialize();
     tabs();
     pagination();
 });
 
+function initialize() {
+    $("#movieReviewSection").hide(); //처음 페이지 로딩되면 게시글 목록부터 보여줌
+}
+
+//탭 작동
 function tabs() {
     $('.tabButton').on('click', function() {
         const tabId = $(this).data('tab');
@@ -19,28 +25,8 @@ function tabs() {
     });
 }
 
+//페이지 네이션
 function pagination(){
-    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
-        const pageIdx = $(this).data("pageidx")
-        //const dateSort = $(".dropdownContent.latest .filterBtn.active").text() === "최신순" ? "recent" : "old";
-        //const ratingSort = $(".dropdownContent.rating .filterBtn.active").text() === "별점높은순" ? "high" : "low";
-        $.ajax({
-            url: "",
-            method: "",
-            //data: {pageIdx: pageIdx, dateSort: dateSort, ratingSort: ratingSort},
-            data: {pageIdx: pageIdx},
-            success: function (data){
-                var data = $.parseHTML(data);
-                var dataHtml = $("<div>").append(data);
-                $("#전체뷰").replaceWith(dataHtml.find("#전체뷰"));
 
-                console.log(" pagination ajax success")
-            },
-            error: function (xhr){
-                console.log(xhr.responseText);
-                console.log(" pagination ajax failed")
-            }
-        });
-    })
 }
 
