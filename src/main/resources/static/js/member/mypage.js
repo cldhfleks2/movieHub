@@ -75,6 +75,9 @@ function initializeEditMode() {
             $editButton.text('수정완료');
             $cancelButton.show();
             $("#nickname").focus()
+
+            // 편집 모드 활성화 시, 프로필 이미지 업로드 가능하도록 설정
+            $('#profileImage').data('editable', true); // 편집 가능 상태로 설정
         } else {
             // 폼 제출
             submitForm();
@@ -101,6 +104,8 @@ function initializeEditMode() {
 
         // 에러 메시지 초기화
         $('.errorMessage').removeClass('show');
+        // 편집 모드 해제 시, 프로필 이미지 업로드 비활성화
+        $('#profileImage').data('editable', false); // 편집 불가능 상태로 설정
     });
 }
 //개인 정보 : 비밀번호 검증
@@ -177,7 +182,8 @@ function validatePasswordConfirm() {
 function initializeImagePreview() {
     // 프로필 이미지를 클릭하면 파일 선택창 열기
     $('#profilePreview').on('click', function() {
-        if (!$('#profileImage').prop('disabled')) {
+        // 편집 모드인 경우에만 파일 선택창 열기
+        if ($('#profileImage').data('editable') === true) {
             $('#profileImage').click();
         }
     });
@@ -195,7 +201,8 @@ function initializeImagePreview() {
 
     // 편집 모드에서만 오버레이 클릭 가능
     $('.editOverlay').on('click', function() {
-        if (!$('#profileImage').prop('disabled')) {
+        // 편집 모드일 때만 파일 업로드가 가능
+        if ($('#profileImage').data('editable') === true) {
             $('#profileImage').click();
         }
     });
