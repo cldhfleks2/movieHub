@@ -26,9 +26,10 @@ function displayContainer(){
     })
 }
 
+//검색한 영화의 상세 정보
 function movieEditBtn(){
     // 수정하기 버튼 클릭 이벤트
-    $('.editBtn').on('click', function(e) {
+    $(document).on("click", ".editBtn", function (e) {
         e.stopPropagation();  // 카드 클릭 이벤트 전파 방지
         $('#movieContainer').addClass('editing');
 
@@ -54,6 +55,7 @@ function movieEditBtn(){
     });
 }
 
+//영화 검색 
 function movieSearchSection() {
     $(document).on('input', '#movieContainer .searchInput', function () {
         const keyword = $(this).val();
