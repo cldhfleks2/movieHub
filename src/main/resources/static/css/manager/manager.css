@@ -360,6 +360,40 @@ a:hover {
     padding: 10px;
     background: white;
     border-radius: 6px;
+    transition: opacity 0.3s ease-in-out;
+}
+.listContainer {
+    max-height: 150px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.listContainer.expanded {
+    max-height: 1000px;
+}
+
+.listItem.hidden {
+    display: none;
+}
+
+.listItem.visible {
+    display: flex;
+}
+
+.toggleBtn {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.toggleBtn:hover {
+    background: #e9ecef;
 }
 
 .listItem input {
@@ -513,11 +547,3 @@ a:hover {
     background: #357abd;
 }
 
-/* movieContent가 표시될 때 searchResultSection 숨김 처리를 위한 스타일 */
-.container.editing .searchResultSection {
-    display: none;
-}
-
-.container:not(.editing) .movieContent {
-    display: none;
-}

@@ -151,29 +151,32 @@
                         <button class="addBtn" data-type="audit">+ 등급 추가</button>
                     </div>
                 </div>
+
                 <div style="display: flex; gap: 1rem;">
                     <!-- 감독 정보 -->
-                    <div class="infoCard" style="width: 50%">
+                    <div class="infoCard directorCard" style="width: 50%">
                         <h3>감독</h3>
-                        <div class="listContainer" id="directorList">
-                            <div class="listItem" th:each="director : ${movie.directorList}">
-                                <input type="text" class="directorNm" th:value="${director.peopleNm}" placeholder="감독 이름">
-                                <input type="text" class="directorNmEn" th:value="${director.peopleNmEn}" placeholder="감독 영문 이름">
+                        <div id="directorList" class="listContainer collapsed">
+                            <div class="listItem" th:each="director, iterStat : ${movie.directorList}" th:classappend="${iterStat.index >= 2 ? 'hidden' : ''}">
+                                <input class="directorNm" type="text" th:value="${director.peopleNm}" placeholder="감독 이름">
+                                <input class="directorNmEn" type="text" th:value="${director.peopleNmEn}" placeholder="감독 영문 이름">
                                 <button class="removeBtn">&times;</button>
                             </div>
                         </div>
+                        <button class="toggleBtn">더보기</button>
                         <button class="addBtn" data-type="director">+ 감독 추가</button>
                     </div>
                     <!-- 배우 정보 -->
-                    <div class="infoCard" style="width: 50%">
+                    <div class="infoCard actorCard" style="width: 50%">
                         <h3>출연 배우</h3>
-                        <div class="listContainer" id="actorList">
-                            <div class="listItem" th:each="actor : ${movie.actorList}">
-                                <input type="text" class="actorNm" th:value="${actor.peopleNm}" placeholder="배우 이름">
-                                <input type="text" class="actorNmEn" th:value="${actor.peopleNmEn}" placeholder="배우 영문 이름">
+                        <div id="actorList" class="listContainer collapsed">
+                            <div class="listItem" th:each="actor, iterStat : ${movie.actorList}" th:classappend="${iterStat.index >= 2 ? 'hidden' : ''}">
+                                <input class="actorNm" type="text" th:value="${actor.peopleNm}" placeholder="배우 이름">
+                                <input class="actorNmEn" type="text" th:value="${actor.peopleNmEn}" placeholder="배우 영문 이름">
                                 <button class="removeBtn">&times;</button>
                             </div>
                         </div>
+                        <button class="toggleBtn">더보기</button>
                         <button class="addBtn" data-type="actor">+ 배우 추가</button>
                     </div>
                 </div>

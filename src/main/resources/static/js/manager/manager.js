@@ -6,6 +6,7 @@ $(document).ready(function (){
     movieItemSection();
     movieActionSection();
     movieEditBtn();
+    initializeCollapsible();
 })
 
 function clickMenuBar(){
@@ -31,7 +32,6 @@ function movieEditBtn(){
     // 수정하기 버튼 클릭 이벤트
     $(document).on("click", ".editBtn", function (e) {
         e.stopPropagation();  // 카드 클릭 이벤트 전파 방지
-        $('#movieContainer').addClass('editing');
 
         // AJAX: 영화 상세 정보 조회
         const movieId = $(this).data("movie-id")
@@ -123,20 +123,20 @@ function movieItemSection() {
         `       ));
                 break;
             case 'director':
-                $('#directorList').append($('<div>')
+                $('#directorList').prepend($('<div>')
                     .addClass('listItem')
                     .html(`
-                    <input type="text" class="directorNm" placeholder="감독 이름" value="${director.peopleNm || ''}">
-                    <input type="text" class="directorNmEn" placeholder="감독 영문 이름" value="${director.peopleNmEn || ''}">
+                    <input type="text" class="directorNm" placeholder="감독 이름">
+                    <input type="text" class="directorNmEn" placeholder="감독 영문 이름">
                     <button class="removeBtn">&times;</button>
         `       ));
                 break;
             case 'actor':
-                $('#actorList').append($('<div>')
+                $('#actorList').prepend($('<div>')
                     .addClass('listItem')
                     .html(`
-                    <input type="text" class="actorNm" placeholder="배우 이름" value="${actor.peopleNm || ''}">
-                    <input type="text" class="actorNmEn" placeholder="배우 영문 이름" value="${actor.peopleNmEn || ''}">
+                    <input type="text" class="actorNm" placeholder="배우 이름">
+                    <input type="text" class="actorNmEn" placeholder="배우 영문 이름">
                     <button class="removeBtn">&times;</button>
         `       ));
                 break;
@@ -211,3 +211,52 @@ function clearMovieData() {
     $('#actorList').empty();
 }
 
+function initializeCollapsible() {
+    // Initializing the toggle buttons for pre-existing elements
+    updateToggleButtons();
+
+    // Delegate the click event for dynamically created toggle buttons
+    $(document).on('click', '.toggleBtn', function() {
+        const listContainer = $(this).prev('.listContainer');
+        const isExpanded = listContainer.hasClass('expanded');
+
+        if (isExpanded) {
+            collapseList(listContainer, $(this));
+        } else {
+            expandList(listContainer, $(this));
+        }
+    });
+}
+
+function updateToggleButtons() {
+    $('.toggleBtn').each(function() {
+        updateToggleButton($(this));
+    });
+}
+
+function expandList(listContainer, toggleBtn) {
+    listContainer.addClass('expanded');
+    listContainer.find('.listItem.hidden').addClass('visible').removeClass('hidden');
+    toggleBtn.text('접기');
+}
+
+function collapseList(listContainer, toggleBtn) {
+    listContainer.removeClass('expanded');
+    listContainer.find('.listItem').each(function(index) {
+        if (index >= 2) {
+            $(this).addClass('hidden').removeClass('visible');
+        }
+    });
+    toggleBtn.text('더보기');
+}
+
+function updateToggleButton(toggleBtn) {
+    const listContainer = toggleBtn.prev('.listContainer');
+    const itemCount = listContainer.find('.listItem').length;
+
+    if (itemCount <= 2) {
+        toggleBtn.hide();
+    } else {
+        toggleBtn.show();
+    }
+}
