@@ -291,22 +291,6 @@ function filterAndSearchSection() {
         postListReload();
     });
 }
-//TODO 게시글 수정
-function initializePostManagement() {
-    // 게시글 수정 버튼 이벤트
-    $('.editButton').on('click', function() {
-        const postId = $(this).closest('.postCard').data('postId');
-
-
-    });
-
-    // 게시글 삭제 버튼 이벤트
-    $('.deleteButton').on('click', function() {
-        const postId = $(this).closest('.postCard').data('postId');
-
-
-    });
-}
 //게시물, 페이지번호 뷰를 새로고침하는 코드 : pageIdx와 searchText(자동적용)
 function postListReload(pageIdx = 1){
     const category = $("#categoryTabs").val(); //ALL, FREE, NEWS, DISCUSSION
