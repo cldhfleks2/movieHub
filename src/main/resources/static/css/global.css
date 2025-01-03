@@ -291,9 +291,15 @@ body {
     border-bottom: 1px solid #3a3a3a;
 }
 
-.headerProfileEmail {
+.headerProfileNickname {
     color: #ffffff;
-    font-size: 0.9rem;
+    font-size: 1rem;
+}
+
+.headerProfileUsername{
+    color: #b2b2b2;
+    font-size: 0.8rem;
+    font-style: italic;
 }
 
 .headerProfileActions {
