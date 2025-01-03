@@ -12,7 +12,7 @@ public class ManagerController {
     private final ManagerService managerService;
 
     //관리자 페이지 GET
-    @GetMapping("/manager")
+    @GetMapping("/manager/movie")
     String getManager(Authentication auth, Model model) {
         return managerService.getManager(auth, model);
     }
