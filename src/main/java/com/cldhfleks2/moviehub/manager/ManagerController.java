@@ -17,4 +17,16 @@ public class ManagerController {
         return managerService.getManager(auth, model);
     }
 
+    //영화 검색 결과 뷰 GET
+    @GetMapping("/api/manager/search/movie")
+    String searchMovie(Model model, Integer pageIdx, String keyword){
+        return managerService.searchMovie(model, pageIdx, keyword);
+    }
+
+    //영화 상세 정보 뷰 GET
+    @GetMapping("/api/manager/get/movie")
+    String getMovieDTO(Model model, Long movieId){
+        return managerService.getMovieDTO(model, movieId);
+    }
+
 }
