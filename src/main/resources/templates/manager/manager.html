@@ -41,20 +41,22 @@
             검색결과: <span th:if="${searchMovieList}" th:text="${#lists.size(searchMovieList)}">0</span>개
         </div>
         <div class="movieGrid">
-            <div class="movieCard" th:if="${searchMovieList}" th:each="searchMovie : ${searchMovieList}">
-                <div class="movieCardContent">
-                    <img class="cardPoster" th:src="${searchMovie.posterURL}" alt="영화 포스터">
-                    <div class="cardInfo">
-                        <h3 class="movieTitle" th:text="${searchMovie.movieNm}">영화제목</h3>
-                        <p class="movieEnTitle" th:text="${searchMovie.movieNmEn}">영화 영문제목</p>
-                        <div class="movieMeta">
-                            <span class="openDate" th:text="${searchMovie.openDt}">개봉일</span>
-                            <span class="runTime" th:text="|${searchMovie.showTm}분|">상영시간</span>
+            <th:block th:if="${searchMovieList}">
+                <div class="movieCard"  th:each="searchMovie : ${searchMovieList.content}">
+                    <div class="movieCardContent">
+                        <img class="cardPoster" th:src="${searchMovie.posterURL}" alt="영화 포스터">
+                        <div class="cardInfo">
+                            <h3 class="movieTitle" th:text="${searchMovie.movieNm}">영화제목</h3>
+                            <p class="movieEnTitle" th:text="${searchMovie.movieNmEn}">영화 영문제목</p>
+                            <div class="movieMeta">
+                                <span class="openDate" th:text="${searchMovie.openDt}">개봉일</span>
+                                <span class="runTime" th:text="|${searchMovie.showTm}분|">상영시간</span>
+                            </div>
+                            <button class="editBtn" th:data-movie-id="${searchMovie.id}">수정하기</button>
                         </div>
-                        <button class="editBtn" th:data-movie-id="${searchMovie.movieId}">수정하기</button>
                     </div>
                 </div>
-            </div>
+            </th:block>
         </div>
     </div>
 

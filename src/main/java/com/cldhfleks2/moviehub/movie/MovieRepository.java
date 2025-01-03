@@ -20,6 +20,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     // movieNm으로 Movie 객체를 검색
     //status=1 인 것만 가져온다.
-    @Query("SELECT m FROM Movie m WHERE m.movieNm = :movieNm AND m.status = 1")
+    @Query("SELECT m FROM Movie m WHERE LOWER(m.movieNm) LIKE LOWER(CONCAT('%', :movieNm, '%')) AND m.status = 1")
     Page<Movie> findByMovieNmAndStatus(String movieNm, Pageable pageable);
 }
