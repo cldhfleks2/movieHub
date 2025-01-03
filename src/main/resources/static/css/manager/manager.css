@@ -547,3 +547,6 @@ a:hover {
     background: #357abd;
 }
 
+.infoItem input::placeholder{
+    opacity: 0.3;
+}
