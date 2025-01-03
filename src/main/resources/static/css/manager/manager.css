@@ -1,0 +1,301 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+}
+
+.adminSideBar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.adminSideBar .siteLogo {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    height: 80px;
+    padding-top: 30px;
+}
+
+.adminSideBar .adminLogoutBtn,
+.adminSideBar .adminMainpageBtn{
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.adminSideBar .adminMainpageBtn{
+    background-color: #376eff;
+}
+
+.adminSideBar .navMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 30px;
+
+}
+
+.adminSideBar .navMenu .menuItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+.adminSideBar .navMenu .menuItem:hover,
+.adminSideBar .navMenu .menuItem.active {
+    background-color: #34495e;
+}
+
+.adminMainContent {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.adminMainContent .contentHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.adminMainContent .contentHeader .pageTitle {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.adminMainContent .searchBar {
+    display: flex;
+    width: 300px;
+}
+
+.adminMainContent .searchBar input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.adminMainContent .searchBar .searchBtn {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.reportTable {
+    width: 100%;
+    background-color: white;
+    border-collapse: collapse;
+}
+
+.reportTable th, .reportTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.reportTable .checkboxCol {
+    width: 50px;
+    text-align: center;
+}
+
+.paginationSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.paginationSection .pageNumbers {
+    display: flex;
+    gap: 10px;
+    font-size: larger;
+}
+
+.acceptBtn, .rejectBtn {
+
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    float: right;
+    margin-top: 20px;
+}
+
+.acceptBtn {
+    background-color: #3498db;
+}
+.rejectBtn {
+    background-color: #e74c3c;
+}
+
+reportTable th.col {
+    width: 10%; /* 리뷰 제목, 리뷰 작성자의 기본 비율 설정 */
+}
+
+.reportTable th.col:nth-child(4) {
+    width: 60%; /* 신고 내용은 더 넓게 설정 */
+}
+
+a {
+    text-decoration: none; /* 링크의 기본 밑줄 없애기 */
+    color: inherit; /* 텍스트 색상 변경 없애기 */
+}
+
+a:hover {
+    text-decoration: none;
+    color: inherit; /* 호버시 텍스트 색상 변경 없애기 */
+    background: none; /* 호버시 배경색 없애기 */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.report-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 1200px;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.report-table thead {
+    background-color: #f8f9fa;
+}
+
+.report-table th, .report-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.report-table th {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+
+.report-attributes {
+    display: flex;
+    flex-direction: column;
+}
+
+.report-attributes label {
+    display: flex;
+    align-items: center;
+    margin: 1px 0;
+}
+
+.report-attributes input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.accept-btn, .reject-btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.accept-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.reject-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.status-active {
+    color: green;
+    font-weight: bold;
+}
+
+.status-inactive {
+    color: red;
+    font-weight: bold;
+}
+
+
+
+
+
+
+.report-table th:nth-child(1), .report-table td:nth-child(1) {
+    width: 3.5%; /* 체크박스 */
+}
+.report-table th:nth-child(2), .report-table td:nth-child(2) {
+    width: 15%; /* 이미지 */
+}
+.report-table th:nth-child(3), .report-table td:nth-child(3) {
+    width: 15%;/* 제목 */
+}
+
+.report-table th:nth-child(4), .report-table td:nth-child(4) {
+    width: 25%;/* 내용 */
+}
+
+.report-table th:nth-child(5), .report-table td:nth-child(5) {
+    width: 15%;/* 신고속성 */
+}
+
+.report-table th:nth-child(6), .report-table td:nth-child(6) {
+    width: 26.5%;/* 상세내용 */
+}
+
+.report-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;  /* 중요: 이 속성 추가 */
+    border-spacing: 0;
+}
+
+.report-table tr,
+.report-table td {
+    height: 50px;  /* 명시적 높이 지정 */
+    min-height: 50px;
+}
+
+.report-table th {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bolder;
+}
