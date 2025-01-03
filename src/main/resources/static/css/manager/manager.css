@@ -418,7 +418,6 @@ a:hover {
 
 .searchResultSection {
     margin: 20px 0 30px;
-    display: none;  /* 초기에는 숨김 상태 */
 }
 
 .resultCount {
