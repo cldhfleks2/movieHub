@@ -36,7 +36,7 @@ function movieEditBtn(){
         // AJAX: 영화 상세 정보 조회
         const movieId = $(this).data("movie-id")
         $.ajax({
-            url: "/api/manager/get/movie",
+            url: "/api/manager/movie/get",
             method: "get",
             data: {movieId: movieId},
             success: function (data){
@@ -65,7 +65,7 @@ function movieSearchSection() {
         const keyword = $(this).val();
 
         $.ajax({
-            url: "/api/manager/search/movie",
+            url: "/api/manager/movie/search",
             method: "get",
             data: {keyword: keyword},
             success: function (data){
@@ -154,7 +154,7 @@ function movieItemSection() {
 
 function movieActionSection() {
     $(document).on('click', '.saveBtn', function () {
-        const movieData = {
+        const movieDTO = {
             movieCd: $('.movieCd').val(),
             movieNm: $('.movieNm').val(),
             movieNmEn: $('.movieNmEn').val(),
@@ -186,7 +186,8 @@ function movieActionSection() {
             }).get(),
         };
 
-        // AJAX: 영화 데이터 저장
+        // 영화 정보 수정 요청
+        
 
     });
 
