@@ -100,18 +100,21 @@ public class MovieService {
         List<MovieActor> actorList = movieActorRepository.findByMovieIdAndStatus(movieId);
 
         MovieDTO movieDTO = MovieDTO.create()
-                .movieCd(movie.getMovieCd())
-                .movieNm(movie.getMovieNm())
-                .movieNmEn(movie.getMovieNmEn())
+                .movieCd(movie.getMovieCd() != null ? movie.getMovieCd() : "")
+                .movieNm(movie.getMovieNm() != null ? movie.getMovieNm() : "")
+                .movieNmEn(movie.getMovieNmEn() != null ? movie.getMovieNmEn() : "")
                 .genreList(genreList)
                 .auditList(auditList)
-                .showTm(movie.getShowTm())
-                .openDt(movie.getOpenDt())
-                .audiAcc(movie.getAudiAcc())
-                .audiCnt(movieDailyStat.getAudiCnt())
-                .posterURL(movie.getPosterURL())
-                .directorList(directorList)
-                .actorList(actorList)
+                .showTm(movie.getShowTm() != null ? movie.getShowTm() : "")
+                .openDt(movie.getOpenDt() != null ? movie.getOpenDt() : "")
+                .audiAcc(movie.getAudiAcc() != null ? movie.getAudiAcc() : "")
+                .audiCnt(movieDailyStat.getAudiCnt() != null ? movieDailyStat.getAudiCnt() : "")
+                .posterURL(movie.getPosterURL() != null ? movie.getPosterURL() : "")
+                .directorList(directorList)  // List는 제외
+                .actorList(actorList)  // List는 제외
+                .prdtYear(movie.getPrdtYear() != null ? movie.getPrdtYear() : "")
+                .typeNm(movie.getTypeNm() != null ? movie.getTypeNm() : "")
+                .salesAcc(movie.getSalesAcc() != null ? movie.getSalesAcc() : "")
                 .build();
 
         return movieDTO;

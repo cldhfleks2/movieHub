@@ -45,5 +45,8 @@ public class MovieDTO {
 
     //관리자페이지
     private Long movieId;
+    private String prdtYear;
+    private String typeNm;
+    private String salesAcc;
 }
 
