@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE movie_daily_stat SET status = 0 WHERE id = ?")
 @ToString
 //유일하게 하루마다 값이 바뀌어야하는 엔티티
 public class MovieDailyStat {
@@ -24,7 +22,6 @@ public class MovieDailyStat {
     private String audiCnt; // 해당 일 관객 수 예) "1438"        //박스 오피스 목록에 들은 영화만이 가지는값
     private String scrnCnt; // 스크린 수      예) "1176" 잘안쓸거같긴해
     private String showCnt; // 상영 횟수      예) "3698" 잘안쓸거같긴해
-
 
     //아래는 기본 필드들
     @Id

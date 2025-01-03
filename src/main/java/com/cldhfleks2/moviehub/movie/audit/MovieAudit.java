@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -14,8 +13,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-//오류나면 테이블이름이 제대로 작성된건지 확인하자
-@SQLDelete(sql = "UPDATE movie_audit SET status = 0 WHERE id = ?")
 @ToString
 public class MovieAudit {
     //영화상세정보

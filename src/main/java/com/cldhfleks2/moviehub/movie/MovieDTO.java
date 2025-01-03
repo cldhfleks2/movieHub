@@ -7,6 +7,7 @@ import com.cldhfleks2.moviehub.movie.genre.MovieGenre;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder(builderMethodName = "create")
+@ToString
 public class MovieDTO {
     //메인 페이지 에서 사용
     private String movieCd; // 영화 고유 코드  예) "20200142"

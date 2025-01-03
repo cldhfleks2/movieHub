@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -14,8 +13,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-//JPA의 delete메소드 실행시 soft삭제를위해 status=0, update_date를 현재시간으로 설정
-@SQLDelete(sql = "UPDATE movie_director SET status = 0 WHERE id = ?")
 @ToString
 public class MovieDirector {
     //영화상세정보
