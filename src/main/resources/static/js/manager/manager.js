@@ -44,6 +44,10 @@ function movieEditBtn(){
                 var dataHtml = $("<div>").append(data);
                 $("#movieContent").replaceWith(dataHtml.find("#movieContent"));
 
+                $('html, body').animate({
+                    scrollTop: $('#movieContent').offset().top
+                }, 500);  // 500ms 동안 부드럽게 스크롤 이동
+
                 console.log("get-movieDTO ajax success")
             },
             error: function (xhr){
