@@ -2,13 +2,13 @@ package com.cldhfleks2.moviehub.member;
 
 import com.cldhfleks2.moviehub.community.*;
 import com.cldhfleks2.moviehub.error.ErrorService;
-import com.cldhfleks2.moviehub.like.movie.MovieLikeRepository;
 import com.cldhfleks2.moviehub.like.post.PostLike;
 import com.cldhfleks2.moviehub.like.post.PostLikeRepository;
 import com.cldhfleks2.moviehub.like.postreview.PostReviewLike;
 import com.cldhfleks2.moviehub.like.postreview.PostReviewLikeRepository;
-import com.cldhfleks2.moviehub.movie.MovieRepository;
-import com.cldhfleks2.moviehub.movie.MovieService;
+import com.cldhfleks2.moviehub.moviereview.MovieReview;
+import com.cldhfleks2.moviehub.moviereview.MovieReviewDTO;
+import com.cldhfleks2.moviehub.moviereview.MovieReviewRepository;
 import com.cldhfleks2.moviehub.postreview.PostReview;
 import com.cldhfleks2.moviehub.postreview.PostReviewDTO;
 import com.cldhfleks2.moviehub.postreview.PostReviewRepository;
@@ -38,13 +38,11 @@ import java.util.*;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MovieLikeRepository movieLikeRepository;
-    private final MovieService movieService;
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
     private final PostReviewRepository postReviewRepository;
     private final PostReviewLikeRepository postReviewLikeRepository;
-    private final MovieRepository movieRepository;
+    private final MovieReviewRepository movieReviewRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -234,8 +232,8 @@ public class MemberService {
         model.addAttribute("memberDTO", memberDTO);
         
         //게시글 목록
-        int pageSize = 10;
-        Page<Post> postPage = postRepository.findAllByMemberIdAndStatus(memberId, PageRequest.of(pageIdx-1, pageSize));
+        int postPageSize = 10;
+        Page<Post> postPage = postRepository.findAllByMemberIdAndStatus(memberId, PageRequest.of(pageIdx-1, postPageSize));
         List<PostDTO> postDTOList = new ArrayList<>();
         for(Post post : postPage.getContent()) {
             Long postId = post.getId();
@@ -272,10 +270,31 @@ public class MemberService {
         model.addAttribute("postCount", postCount);
 
 
-        //영화 리뷰 목록
+        //영화 리뷰 목록 : 10개씩
+        int reviewPageSize = 10;
+        Page<MovieReview> movieReviewPage = movieReviewRepository.findAllByMemberIdAndStatus(memberId, PageRequest.of(pageIdx-1, reviewPageSize));
+        List<MovieReviewDTO> movieReviewDTOList = new ArrayList<>();
+        for(MovieReview movieReview : movieReviewPage.getContent()) {
+            MovieReviewDTO movieReviewDTO = MovieReviewDTO.builder()
+                    .moviePosterURL(movieReview.getMovie().getPosterURL())
+                    .movieNm(movieReview.getMovie().getMovieNm())
+                    .content(movieReview.getContent())
+                    .ratingValue(movieReview.getRatingValue())
+                    .reviewUpdateDate(movieReview.getUpdateDate())
+                    .build();
+            movieReviewDTOList.add(movieReviewDTO);
+        }
+        Page<MovieReviewDTO> movieReviewDTOPage = new PageImpl<>(
+                movieReviewDTOList,
+                movieReviewPage.getPageable(),
+                movieReviewPage.getTotalElements() == 0 ? 1 : movieReviewPage.getTotalElements()
+        );
+        model.addAttribute("movieReviewDTOPage", movieReviewDTOPage);
 
-
-
+        //전체 영화리뷰 갯수
+        List<MovieReview> movieReviewList = movieReviewRepository.findAllByMemberIdAndStatus(memberId, Pageable.unpaged()).getContent();
+        Long movieReviewCount = (long) movieReviewList.size();
+        model.addAttribute("movieReviewCount", movieReviewCount);
 
         return "member/userprofile";
     }

@@ -23,7 +23,7 @@
                     <div>게시글</div>
                 </div>
                 <div class="statItem">
-                    <div class="statNumber">영화 리뷰 갯수</div>
+                    <div class="statNumber" th:text="${movieReviewCount}">영화 리뷰 갯수</div>
                     <div>영화 리뷰</div>
                 </div>
                 <button class="messageButton">
@@ -115,18 +115,23 @@
             </div>
             <div class="tableBody">
 
-                <div class="reviewItem">
+                <div class="reviewItem" th:each="review : ${movieReviewDTOPage}">
                     <div class="tdMovie">
-                        <img src="/image/blank.png" alt="영화 포스터" class="moviePoster">
+                        <img th:src="${review.moviePosterURL != null ? review.moviePosterURL : '/image/profile.png'}"
+                             src="/image/blank.png" alt="영화 포스터" class="moviePoster">
                         <div class="titleLayer">
-                            <h4 class="movieTitle">영화 제목</h4>
+                            <h4 class="movieTitle" th:text="${review.movieNm}">영화 제목</h4>
                         </div>
                     </div>
-                    <div class="tdContent">리뷰 내용...</div>
-                    <div class="tdRating">
-                        <div class="rating">★★★★★</div>
+                    <div class="tdContent">
+                        <p class="reviewContent" th:text="${review.content}">리뷰 내용...</p>
                     </div>
-                    <div class="tdDate">2024.12.27</div>
+                    <div class="tdRating">
+                        <!-- 별을 채우기 위한 동적 텍스트 표시 -->
+                        <span class="rating" th:text="${#strings.repeat('★', review.ratingValue)}">★★★★★</span>
+                        <span class="rating" th:text="${#strings.repeat('ㅤ', 5 - review.ratingValue)}">빈문자 5개</span>
+                    </div>
+                    <div class="tdDate" th:text="${#temporals.format(review.reviewUpdateDate, 'yyyy-MM-dd')}">2024.12.27</div>
                 </div>
 
             </div>
