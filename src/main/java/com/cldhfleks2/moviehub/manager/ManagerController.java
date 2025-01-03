@@ -1,17 +1,21 @@
 package com.cldhfleks2.moviehub.manager;
 
+import com.cldhfleks2.moviehub.movie.MovieDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequiredArgsConstructor
 public class ManagerController {
     private final ManagerService managerService;
 
-    //관리자 페이지 GET
+    //영화 관리자 페이지 GET
     @GetMapping("/manager/movie")
     String getManager(Authentication auth, Model model) {
         return managerService.getManager(auth, model);
@@ -29,6 +33,10 @@ public class ManagerController {
         return managerService.getMovieDTO(model, movieId);
     }
 
-
+    //영화 정보 수정 요청
+    @PatchMapping("/api/manager/movie/edit")
+    ResponseEntity<String> editMovie(@RequestBody MovieDTO movieDTO){
+        return managerService.editMovie(movieDTO);
+    }
 
 }
