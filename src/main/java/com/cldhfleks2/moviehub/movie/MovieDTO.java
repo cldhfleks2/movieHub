@@ -42,5 +42,8 @@ public class MovieDTO {
 
     //mywish페이지에서사용
     private LocalDateTime bookmarkUpdateDate;
+
+    //관리자페이지
+    private Long movieId;
 }
 
