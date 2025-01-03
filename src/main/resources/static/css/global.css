@@ -343,3 +343,10 @@ body {
     padding: 0;
     flex: 1;
 }
+
+.headerManagerIcon{
+    font-size: 28px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}

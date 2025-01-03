@@ -21,6 +21,12 @@
 
             <!-- 로그인 해야 보이는 메뉴 -->
             <div class="headerUserControls" sec:authorize="isAuthenticated()">
+<!--                신고 처리 기능-->
+                <div class="headerManagerWrapper">
+                    <a class="headerManagerIcon" href="/manager" sec:authorize="hasAuthority('ROLE_ADMIN')">🚨</a>
+                </div>
+
+<!--                알림-->
                 <div class="headerNotificationWrapper">
                     <div class="headerNotificationIcon">
                         <a href="/notification" style="width: 20px; font-size: 25px;">🔔</a>
