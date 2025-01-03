@@ -1,7 +1,10 @@
 package com.cldhfleks2.moviehub.movie;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
@@ -14,4 +17,9 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     //status=1 인 것만 가져온다.
     @Query("SELECT m FROM Movie m WHERE m.movieCd = :movieCd AND m.status = 1")
     Optional<Movie> findByMovieCdAndStatus(String movieCd);
+
+    // movieNm으로 Movie 객체를 검색
+    //status=1 인 것만 가져온다.
+    @Query("SELECT m FROM Movie m WHERE m.movieNm = :movieNm AND m.status = 1")
+    Page<Movie> findByMovieNmAndStatus(String movieNm, Pageable pageable);
 }
