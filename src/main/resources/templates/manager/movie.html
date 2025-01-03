@@ -84,6 +84,7 @@
                 <div class="infoCard">
                     <h3>기본 정보</h3>
                     <div class="infoGrid">
+                        <input class="movieId" type="hidden" th:value="${movie.movieId}">
                         <div class="infoItem">
                             <label>영화 제목</label>
                             <input class="movieNm" type="text" th:value="${movie.movieNm}" placeholder="예) 하얼빈">
@@ -133,7 +134,8 @@
                         <h3>장르</h3>
                         <div class="tagContainer" id="genreList">
                             <div class="tag" th:each="genre : ${movie.genreList}">
-                                <input type="text" th:value="${genre.genreNm}" placeholder="장르">
+                                <input class="genreNm" type="text" th:value="${genre.genreNm}" placeholder="장르">
+                                <input class="genreId" type="hidden" th:value="${genre.id}" placeholder="장르">
                                 <button class="removeBtn">&times;</button>
                             </div>
                         </div>
@@ -144,7 +146,8 @@
                         <h3>관람등급</h3>
                         <div class="tagContainer" id="auditList">
                             <div class="tag" th:each="audit : ${movie.auditList}">
-                                <input type="text" th:value="${audit.watchGradeNm}" placeholder="관람등급">
+                                <input class="auditNm" type="text" th:value="${audit.watchGradeNm}" placeholder="관람등급">
+                                <input class="auditId" type="hidden" th:value="${audit.id}" placeholder="관람등급">
                                 <button class="removeBtn">&times;</button>
                             </div>
                         </div>
@@ -160,6 +163,7 @@
                             <div class="listItem" th:each="director, iterStat : ${movie.directorList}" th:classappend="${iterStat.index >= 2 ? 'hidden' : ''}">
                                 <input class="directorNm" type="text" th:value="${director.peopleNm}" placeholder="감독 이름">
                                 <input class="directorNmEn" type="text" th:value="${director.peopleNmEn}" placeholder="감독 영문 이름">
+                                <input class="directorId" type="hidden" th:value="${director.id}" placeholder="감독 영문 이름">
                                 <button class="removeBtn">&times;</button>
                             </div>
                         </div>
@@ -173,6 +177,7 @@
                             <div class="listItem" th:each="actor, iterStat : ${movie.actorList}" th:classappend="${iterStat.index >= 2 ? 'hidden' : ''}">
                                 <input class="actorNm" type="text" th:value="${actor.peopleNm}" placeholder="배우 이름">
                                 <input class="actorNmEn" type="text" th:value="${actor.peopleNmEn}" placeholder="배우 영문 이름">
+                                <input class="actorId" type="hidden" th:value="${actor.id}" placeholder="배우 영문 이름">
                                 <button class="removeBtn">&times;</button>
                             </div>
                         </div>

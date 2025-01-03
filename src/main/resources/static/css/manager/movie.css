@@ -330,6 +330,7 @@ a:hover {
     border: none;
     outline: none;
     font-size: 14px;
+    caret-color: black;
 }
 
 .tag .removeBtn {

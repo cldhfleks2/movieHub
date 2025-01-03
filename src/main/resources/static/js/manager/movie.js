@@ -114,7 +114,7 @@ function movieItemSection() {
                 $('#genreList').append($('<div>')
                     .addClass('tag')
                     .html(`
-                    <input type="text" value="${value}" placeholder="장르">
+                    <input class="genreNm" type="text" placeholder="장르">
                     <button class="removeBtn">&times;</button>
         `       ));
                 break;
@@ -122,7 +122,7 @@ function movieItemSection() {
                 $('#auditList').append($('<div>')
                     .addClass('tag')
                     .html(`
-                    <input type="text" value="${value}" placeholder="관람등급">
+                    <input class="auditNm" type="text" placeholder="관람등급">
                     <button class="removeBtn">&times;</button>
         `       ));
                 break;
@@ -155,6 +155,7 @@ function movieItemSection() {
 function movieActionSection() {
     $(document).on('click', '.saveBtn', function () {
         const movieDTO = {
+            movieId: $('.movieId').val(),
             movieCd: $('.movieCd').val(),
             movieNm: $('.movieNm').val(),
             movieNmEn: $('.movieNmEn').val(),
@@ -167,27 +168,56 @@ function movieActionSection() {
             audiCnt: $('.audiCnt').val(),
             posterURL: $('.moviePoster').attr('src'),
             genreList: $('#genreList .tag').map(function () {
-                return { genreNm: $(this).find('input').val() };
+                return {
+                    genreNm: $(this).find('.genreNm').val(),
+                    id: $(this).find('.genreId').val(),
+                };
             }).get(),
             auditList: $('#auditList .tag').map(function () {
-                return { watchGradeNm: $(this).find('input').val() };
+                return {
+                    watchGradeNm: $(this).find('.auditNm').val(),
+                    id: $(this).find('.auditId').val(),
+                };
             }).get(),
             directorList: $('#directorList .listItem').map(function () {
                 return {
                     peopleNm: $(this).find('.directorNm').val(),
                     peopleNmEn: $(this).find('.directorNmEn').val(),
+                    id: $(this).find('.directorId').val(),
                 };
             }).get(),
             actorList: $('#actorList .listItem').map(function () {
                 return {
                     peopleNm: $(this).find('.actorNm').val(),
                     peopleNmEn: $(this).find('.actorNmEn').val(),
+                    id: $(this).find('.actorId').val(),
                 };
             }).get(),
         };
 
+        console.log(movieDTO)
+
         // 영화 정보 수정 요청
-        
+        $.ajax({
+            url: '/api/manager/movie/edit',
+            type: 'patch',
+            contentType: 'application/json',
+            data: JSON.stringify(movieDTO),
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 204) {
+                    alert('영화 정보가 성공적으로 수정되었습니다.');
+                }else{
+                    alert("알 수 없는 성공")
+                }
+                $('.movieContent').hide();
+                console.log("movie-edit ajax success")
+            },
+            error: function (xhr){
+                alert('영화 정보 수정에 실패했습니다.');
+                console.log(xhr.responseText);
+                console.log("movie-edit ajax failed")
+            }
+        });
 
     });
 
