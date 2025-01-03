@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -264,6 +265,11 @@ public class MemberService {
                 postPage.getTotalElements() == 0 ? 1 : postPage.getTotalElements() //totalElements가 0이면 totalPages를 최소 1로 설정
         );
         model.addAttribute("postDTOPage", postDTOPage);
+
+        //전체 게시글 갯수
+        List<Post> postList = postRepository.findAllByMemberIdAndStatus(memberId, Pageable.unpaged()).getContent();
+        Long postCount = (long) postList.size();
+        model.addAttribute("postCount", postCount);
 
 
         //영화 리뷰 목록

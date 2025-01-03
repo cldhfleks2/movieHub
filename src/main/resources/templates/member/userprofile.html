@@ -19,7 +19,7 @@
             <p class="userId" th:text="'@' + ${memberDTO.username}">@사용자아이디</p>
             <div class="userStats">
                 <div class="statItem">
-                    <div class="statNumber">게시글 갯수</div>
+                    <div class="statNumber" th:text="${postCount}">게시글 갯수</div>
                     <div>게시글</div>
                 </div>
                 <div class="statItem">
