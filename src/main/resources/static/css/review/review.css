@@ -336,7 +336,7 @@ textarea.addReviewText:focus {
     gap: 1rem;
 }
 
-.likeBtn, .reportBtn {
+.likeBtn, .reportBtn, .removeBtn {
     background: none;
     border: none;
     color: white;

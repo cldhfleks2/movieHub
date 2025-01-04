@@ -68,6 +68,7 @@
                                     <span class="likeCount" th:text="${review.likeCount} + ' '">0</span>
                                 </button>
                                 <button class="reportBtn" th:data-reviewid="${review.movieReviewId}">🚨</button>
+                                <button class="removeBtn" th:if="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}">❌</button>
                             </div>
                         </div>
                         <div class="reviewMetaInfo">
