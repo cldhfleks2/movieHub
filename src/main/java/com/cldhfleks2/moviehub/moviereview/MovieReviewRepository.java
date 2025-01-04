@@ -21,4 +21,13 @@ public interface MovieReviewRepository extends JpaRepository<MovieReview, Long> 
 
     @Query("SELECT mr FROM MovieReview mr WHERE mr.member.id = :memberId AND mr.status = 1")
     Page<MovieReview> findAllByMemberIdAndStatus(Long memberId, Pageable pageable);
+
+    @Query("SELECT mr FROM MovieReview mr " +
+            "JOIN mr.movie m " +
+            "WHERE (mr.content LIKE %:keyword% " +
+            "OR m.movieNm LIKE %:keyword% " +
+            "OR m.movieNmEn LIKE %:keyword%) " +
+            "AND mr.status = 1 " + // 상태가 1인, 즉 보이는 리뷰만 조회
+            "AND m.status = 1")   // 상태가 1인, 즉 보이는 영화만 조회
+    Page<MovieReview> searchByContentAndMovieNmAndMovieNmEn(String keyword, Pageable pageable);
 }
