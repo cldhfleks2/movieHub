@@ -38,7 +38,9 @@
     <!-- 검색 결과 섹션 -->
     <div class="searchResultSection" id="searchResultSection">
         <div class="resultCount">
-            검색결과: <span th:if="${searchMovieList}" th:text="${#lists.size(searchMovieList)}">0</span>개
+            검색결과:
+            <span th:if="${searchMovieList}" th:text="${#lists.size(searchMovieList.content)} + '개'">0</span>
+            <span th:unless="${searchMovieList}">0개</span>
         </div>
         <div class="movieGrid">
             <th:block th:if="${searchMovieList}">
