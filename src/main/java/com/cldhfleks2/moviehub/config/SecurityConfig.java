@@ -26,8 +26,9 @@ public class SecurityConfig {
                 authorize.requestMatchers("/css/**", "/js/**", "/image/**", "/static/**").permitAll()
                         .requestMatchers("/", "/main").permitAll()
                         .requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers("/api/manager/**").hasRole("ADMIN") //관리자 기능
+                        .requestMatchers("/manager/**").hasRole("ADMIN") //관리자 기능
 //                        .requestMatchers("/detail/**").permitAll()
-//                        .requestMatchers("/admin/report").hasRole("ADMIN") //아직 개발 안함
                         .anyRequest().authenticated() //그 외 모든건 로그인을 필요로함
         );
 
