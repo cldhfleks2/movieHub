@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,5 +51,6 @@ public class MovieDTO {
     private String prdtYear;
     private String typeNm;
     private String salesAcc;
+    private MultipartFile posterImg;
 }
 
