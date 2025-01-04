@@ -178,4 +178,9 @@ public class ManagerService {
 
         return ResponseEntity.noContent().build();
     }
+
+    //영화 리뷰 관리자 페이지 GET
+    String getMovieReview(Authentication auth, Model model) {
+        return "manager/movieReview";
+    }
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 신고</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/manager/movieReview.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="adminSideBar">
+    <div class="siteLogo">관리자 페이지</div>
+    <button class="adminMainpageBtn" onclick="window.location.href='/main'">메인 페이지로</button>
+    <button class="adminLogoutBtn" onclick="window.location.href='/logout'">로그아웃</button>
+    <hr>
+    <div class="navMenu">
+        <a class="menuItem active" id="movieMenu" href="/manager/movie">
+            <span>🎬</span> 영화 관리
+        </a>
+        <a class="menuItem" id="reviewMenu">
+            <span>💬</span> 영화 리뷰 관리
+        </a>
+    </div>
+</div>
+
+<main class="container" id="movieReviewContainer" >
+
+</main>
+
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
+<script src="/js/manager/movieReview.js"></script>
+</body>
+</html>

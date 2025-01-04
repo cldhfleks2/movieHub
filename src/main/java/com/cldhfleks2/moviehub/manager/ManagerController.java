@@ -43,9 +43,14 @@ public class ManagerController {
 
     //영화 포스터 수정 요청
     @PatchMapping("/api/manager/movie/edit/img")
-    ResponseEntity<String> editMoviePoster(@RequestParam MultipartFile posterImg,
-                                           @RequestParam Long movieId) throws Exception{
+    ResponseEntity<String> editMoviePoster(@RequestParam MultipartFile posterImg, @RequestParam Long movieId) throws Exception{
         return managerService.editMoviePoster(posterImg, movieId);
+    }
+
+    //영화 리뷰 관리자 페이지 GET
+    @GetMapping("/manager/movieReview")
+    String getMovieReview(Authentication auth, Model model) {
+        return managerService.getMovieReview(auth, model);
     }
 
 }
