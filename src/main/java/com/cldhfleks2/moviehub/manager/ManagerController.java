@@ -59,9 +59,9 @@ public class ManagerController {
         return managerService.searchMovieReview(model, pageIdx, keyword);
     }
 
-    //영화 리뷰 관리자 페이지 :
+    //영화 리뷰 관리자 페이지 : 영화 리뷰 상세 검색
     @GetMapping("/api/manager/movieReview/detail")
-    String getMovieReviewDetail(Authentication auth, Model model, Long movieId){
-
+    String getMovieReviewDetail(Model model, Long reviewId){
+        return managerService.getMovieReviewDetail(model, reviewId);
     }
 }

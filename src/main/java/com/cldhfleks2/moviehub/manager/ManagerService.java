@@ -1,6 +1,9 @@
 package com.cldhfleks2.moviehub.manager;
 
 import com.cldhfleks2.moviehub.error.ErrorService;
+import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLike;
+import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLikeRepository;
+import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
 import com.cldhfleks2.moviehub.movie.MovieRepository;
@@ -50,6 +53,8 @@ public class ManagerService {
     private final MovieActorRepository movieActorRepository;
     private final MovieDailyStatRepository movieDailyStatRepository;
     private final MovieReviewRepository movieReviewRepository;
+    private final MemberRepository memberRepository;
+    private final MovieReviewLikeRepository movieReviewLikeRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -205,6 +210,7 @@ public class ManagerService {
                     .ratingValue(movieReview.getRatingValue())
                     .member(movieReview.getMember())
                     .reviewUpdateDate(movieReview.getUpdateDate())
+                    .id(movieReview.getId())
                     .build();
             searchList.add(movieReviewDTO);
         }
@@ -221,5 +227,27 @@ public class ManagerService {
         return "manager/movieReview :: #reviewList";
     }
 
+    //영화 리뷰 관리자 페이지 : 영화 리뷰 상세 검색
+    String getMovieReviewDetail(Model model, Long reviewId){
+        Optional<MovieReview> movieReviewObj = movieReviewRepository.findById(reviewId);
+        if(!movieReviewObj.isPresent())
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/manager/movieReview/detail", "영화 리뷰를 찾을 수 없습니다.", String.class);
+
+        MovieReview movieReview = movieReviewObj.get();
+        //리뷰의 좋아요 갯수를 구함
+        List<MovieReviewLike> movieReviewLikeList = movieReviewLikeRepository.findAllByMovieReviewIdAndStatus(reviewId);
+        int likeCount = movieReviewLikeList.size();
+        MovieReviewDTO movieReviewDTO = MovieReviewDTO.builder()
+                .movie(movieReview.getMovie())
+                .member(movieReview.getMember())
+                .content(movieReview.getContent())
+                .likeCount(likeCount)
+                .ratingValue(movieReview.getRatingValue())
+                .id(reviewId)
+                .build();
+        model.addAttribute("reviewDTO", movieReviewDTO);
+
+        return "manager/movieReview :: #reviewDetailSection";
+    }
 
 }
