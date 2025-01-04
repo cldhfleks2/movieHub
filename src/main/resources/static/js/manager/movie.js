@@ -1,12 +1,27 @@
 $(document).ready(function (){
+    initialize();
     movieSearchSection();
     moviePosterSection();
     movieItemSection();
-    movieActionSection();
+    movieSaveBtn()
     movieEditBtn();
-    initializeCollapsible();
 })
-//검색한 영화의 상세 정보
+
+function initialize(){
+    // 동적으로 생성된 토글 버튼에 대한 클릭 이벤트 위임
+    $(document).on('click', '.toggleBtn', function() {
+        const listContainer = $(this).prev('.listContainer');
+        const isExpanded = listContainer.hasClass('expanded');
+
+        if (isExpanded) {
+            collapseList(listContainer, $(this));
+        } else {
+            expandList(listContainer, $(this));
+        }
+    });
+}
+
+//검색한 영화의 상세 정보 : 영화 상세 정보 뷰로 스크롤바
 function movieEditBtn(){
     // 수정하기 버튼 클릭 이벤트
     $(document).on("click", ".editBtn", function (e) {
@@ -26,6 +41,8 @@ function movieEditBtn(){
                 $('html, body').animate({
                     scrollTop: $('#movieContent').offset().top
                 }, 500);  // 500ms 동안 부드럽게 스크롤 이동
+
+                findToggleBtn(); //더보기 toggle버튼을 붙임
 
                 console.log("get-movieDTO ajax success")
             },
@@ -63,6 +80,7 @@ function movieSearchSection() {
     });
 }
 
+//가장 최근에 적용한 영화 포스터 이미지 타입
 let imageType="url"
 //영화 포스터 선택 창
 function moviePosterSection() {
@@ -90,6 +108,7 @@ function moviePosterSection() {
     });
 }
 
+//각 요소 추가/삭제버튼 동작
 function movieItemSection() {
     $(document).on('click', '.addBtn', function () {
         const type = $(this).data('type');
@@ -130,13 +149,14 @@ function movieItemSection() {
                 break;
         }
     });
-
+    //삭제 동작
     $(document).on('click', '.removeBtn', function () {
         $(this).closest('.tag, .listItem').remove();
     });
 }
 
-function movieActionSection() {
+//영화 저장 버튼 동작
+function movieSaveBtn() {
     $(document).on('click', '.saveBtn', function () {
         const movieDTO = {
             movieId: $('.movieId').val(),
@@ -242,35 +262,43 @@ function movieActionSection() {
     });
 }
 
-function initializeCollapsible() {
-    // Initializing the toggle buttons for pre-existing elements
-    updateToggleButtons();
+//동적으로 생긴 요소에 토글 버튼 설정
+function findToggleBtn(){
+    //1. 감독란 더보기 버튼 활성화 여부
+    const toggleBtnDirector = $(".toggleBtn.director");
+    const listContainerDirector = toggleBtnDirector.prev('.listContainer.director');
+    const itemCountDirector = listContainerDirector.find('.listItem').length;
+    // 아이템 수가 2개 이하일 경우 토글 버튼 숨기기, 그 이상은 보이기
+    if (itemCountDirector <= 2) {
+        toggleBtnDirector.hide();
+    } else {
+        toggleBtnDirector.show();
+    }
 
-    // Delegate the click event for dynamically created toggle buttons
-    $(document).on('click', '.toggleBtn', function() {
-        const listContainer = $(this).prev('.listContainer');
-        const isExpanded = listContainer.hasClass('expanded');
-
-        if (isExpanded) {
-            collapseList(listContainer, $(this));
-        } else {
-            expandList(listContainer, $(this));
-        }
-    });
+    //2. 배우란 더보기 버튼 활성화 여부
+    const toggleBtnActor = $(".toggleBtn.actor");
+    const listContainerActor = toggleBtnActor.prev('.listContainer.actor');
+    const itemCountActor = listContainerActor.find('.listItem').length;
+    // 아이템 수가 2개 이하일 경우 토글 버튼 숨기기, 그 이상은 보이기
+    if (itemCountActor <= 2) {
+        toggleBtnActor.hide();
+    } else {
+        toggleBtnActor.show();
+    }
 }
 
-function updateToggleButtons() {
-    $('.toggleBtn').each(function() {
-        updateToggleButton($(this));
-    });
-}
-
+//펼치기 동작 : 펼치기버튼을 따라 스크롤바
 function expandList(listContainer, toggleBtn) {
     listContainer.addClass('expanded');
     listContainer.find('.listItem.hidden').addClass('visible').removeClass('hidden');
     toggleBtn.text('접기');
+
+    $('html, body').animate({
+        scrollTop: toggleBtn.offset().top
+    }, 500);  // 500ms 동안 부드럽게 스크롤 이동
 }
 
+//접기 동작
 function collapseList(listContainer, toggleBtn) {
     listContainer.removeClass('expanded');
     listContainer.find('.listItem').each(function(index) {
@@ -279,15 +307,4 @@ function collapseList(listContainer, toggleBtn) {
         }
     });
     toggleBtn.text('더보기');
-}
-
-function updateToggleButton(toggleBtn) {
-    const listContainer = toggleBtn.prev('.listContainer');
-    const itemCount = listContainer.find('.listItem').length;
-
-    if (itemCount <= 2) {
-        toggleBtn.hide();
-    } else {
-        toggleBtn.show();
-    }
 }
