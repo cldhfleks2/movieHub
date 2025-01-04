@@ -13,10 +13,16 @@ public interface MovieReviewRepository extends JpaRepository<MovieReview, Long> 
     //searchText와 부분일치하는 MovieReview리스트를 가져오는 쿼리
     //movie.movieNm,  member.nickname중 검색
     @Query("""
-        SELECT mr FROM MovieReview mr JOIN mr.movie movie JOIN mr.member member
-        WHERE (:searchText IS NULL OR :searchText = ''\s
-        OR LOWER(movie.movieNm) LIKE LOWER(CONCAT('%', :searchText, '%'))\s
-        OR LOWER(member.nickname) LIKE LOWER(CONCAT('%', :searchText, '%')))""")
+    SELECT mr FROM MovieReview mr 
+    JOIN mr.movie movie 
+    JOIN mr.member member
+    WHERE mr.status = 1 
+    AND movie.status = 1 
+    AND member.status = 1
+    AND (:searchText IS NULL OR :searchText = '' 
+    OR LOWER(movie.movieNm) LIKE LOWER(CONCAT('%', :searchText, '%')) 
+    OR LOWER(member.nickname) LIKE LOWER(CONCAT('%', :searchText, '%')))
+    """)
     Page<MovieReview> search(String searchText, Pageable pageable);
 
     @Query("SELECT mr FROM MovieReview mr WHERE mr.member.id = :memberId AND mr.status = 1")
