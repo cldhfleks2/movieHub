@@ -14,6 +14,8 @@ function initialize(){
     });
 
     $(".searchInput").focus(); //페이지 로딩되면 검색바에 포커스
+
+    $("#reviewDetailSection").hide(); //리뷰 상세내용 뷰 숨김
 }
 
 //이전 페이지에서 reviewId를 파라미터로 가지고 온 경우
@@ -86,22 +88,26 @@ function clickSearchingReview(){
 
 //reviewId로 리뷰 상세정보를 가져옴
 function searchingReviewDetail(reviewId) {
-    $("#reviewDetailSection").show(); //리뷰 상세내용뷰 숨김
+    $("#reviewDetailSection").show(); //리뷰 상세내용뷰 보여줌
 
     $.ajax({
-        url: `/api/manager/reviews/${reviewId}`,
-        method: 'GET',
-        success: function(data) {
-
-            //replaceWith
+        url: "/api/manager/movieReview/detail",
+        method: 'get',
+        data: {reviewId: reviewId},
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#reviewDetailSection").replaceWith(dataHtml.find("#reviewDetailSection"));
 
             // 스크롤 이동
             $('html, body').animate({
                 scrollTop: $('#reviewDetailSection').offset().top
             }, 500);
+            console.log("get-review-detail ajax success")
         },
-        error: function(xhr) {
-            alert('리뷰 정보를 불러오는 중 오류가 발생했습니다.');
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("get-review-detail ajax failed")
         }
     });
 }
@@ -153,27 +159,3 @@ function deleteReview() {
         });
     });
 }
-
-//리뷰 상세 뷰 새로고침 : 쓸지 안쓸지 몰라
-function reviewDetailReload() {
-    $("#reviewDetailSection").show(); //리뷰 상세내용뷰 숨김
-
-    $.ajax({
-        url: "",
-        method: "",
-        data: {},
-        success: function (data){
-            var data = $.parseHTML(data);
-            var dataHtml = $("<div>").append(data);
-            $("#").replaceWith(dataHtml.find("#"));
-
-            console.log(" ajax success")
-        },
-        error: function (xhr){
-            console.log(xhr.responseText);
-            console.log(" ajax failed")
-        }
-
-    })
-}
-
