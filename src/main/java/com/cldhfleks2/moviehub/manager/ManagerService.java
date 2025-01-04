@@ -208,14 +208,16 @@ public class ManagerService {
                     .build();
             searchList.add(movieReviewDTO);
         }
+
         //페이지로 전달
         Page<MovieReviewDTO> searchPage = new PageImpl<>(
                 searchList,
                 movieReviewPage.getPageable(),
-                movieReviewPage.getTotalElements() == 0 ? 1 : movieReviewPage.getTotalElements()
+                movieReviewPage.getTotalElements()
         );
+
         model.addAttribute("searchPage", searchPage);
 
-        return "manager/movieReview :: #reviewTableBody";
+        return "manager/movieReview :: #reviewList";
     }
 }

@@ -26,11 +26,11 @@
 
 <main class="container" id="movieReviewContainer" >
     <div class="searchSection">
-        <input class="searchInput" type="text" placeholder="리뷰 내용 또는 영화 제목으로 검색">
+        <input class="searchInput" value="" type="text" placeholder="리뷰 내용 또는 영화 제목으로 검색">
         <button class="searchBtn">검색</button>
     </div>
 
-    <div class="reviewList">
+    <div class="reviewList" id="reviewList">
         <table class="reviewTable">
             <thead>
             <tr>
@@ -44,7 +44,7 @@
             </thead>
             <tbody id="reviewTableBody">
 <!--            검색 결과 목록-->
-            <th:block th:if="${searchPage}">
+            <th:block th:if="${searchPage != null}">
                 <tr th:each="review : ${searchPage}">
                     <td th:text="${review.movieNm}">영화 이름</td>
                     <td th:text="${#strings.length(review.content) > 50 ? #strings.substring(review.content, 0, 50) + '...' : review.content}">영화 리뷰 내용</td>
@@ -62,9 +62,33 @@
             </tbody>
         </table>
 
-<!--        페이지네이션-->
+        <!--        페이지네이션-->
+        <div class="pagination" id="pagination">
+            <th:block th:if="${searchPage != null and searchPage.totalPages > 0}">
+                <button class="pageBtn prev" id="prevPage"
+                        th:disabled="${searchPage.first}"
+                        th:data-pageidx="${searchPage.number}">
+                    이전
+                </button>
+                <div class="pageNumbers">
+                    <th:block th:each="pageNum : ${#numbers.sequence(0, searchPage.totalPages - 1)}">
+                        <button class="pageNum"
+                                th:classappend="${pageNum == searchPage.number} ? 'active'"
+                                th:data-pageidx="${pageNum + 1}"
+                                th:text="${pageNum + 1}">
+                        </button>
+                    </th:block>
+                </div>
+                <button class="pageBtn next" id="nextPage"
+                        th:disabled="${searchPage.last}"
+                        th:data-pageidx="${searchPage.number + 2}">
+                    다음
+                </button>
+            </th:block>
+        </div>
 
     </div>
+
     <div id="reviewDetailSection" class="reviewDetailSection">
         <th:block th:if="${reviewDTO}">
             <h3>리뷰 상세 정보</h3>

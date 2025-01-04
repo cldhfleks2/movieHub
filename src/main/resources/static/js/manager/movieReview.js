@@ -5,6 +5,7 @@ $(document).ready(function (){
     clickSearchingReview();
     saveReview()
     deleteReview()
+    pagination();
 })
 
 function initialize(){
@@ -13,8 +14,6 @@ function initialize(){
     });
 
     $(".searchInput").focus(); //페이지 로딩되면 검색바에 포커스
-
-    searchingKeyword(); //전체 내용이 한번 검색되도록함
 }
 
 //이전 페이지에서 reviewId를 파라미터로 가지고 온 경우
@@ -45,19 +44,20 @@ function searchSection() {
     });
 }
 
-//검색어로 리뷰 목록을 가져옴
-function searchingKeyword() {
+//검색어 결과 리뷰 목록을 새로고침
+function searchingKeyword(pageIdx = 1) {
     $("#reviewDetailSection").hide(); //리뷰 상세내용뷰 숨김
     
     const keyword = $('.searchInput').val();
     $.ajax({
         url: '/manager/movieReview/search',
         method: 'GET',
-        data: { keyword: keyword },
+        data: { keyword: keyword, pageIdx: pageIdx },
         success: function (data){
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
             $("#reviewTableBody").replaceWith(dataHtml.find("#reviewTableBody"));
+            $("#pagination").replaceWith(dataHtml.find("#pagination"));
 
             console.log("search-review ajax success")
         },
@@ -66,6 +66,13 @@ function searchingKeyword() {
             console.log("search-review ajax failed")
         }
     });
+}
+
+function pagination(){
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const pageIdx = $(this).data("pageidx")
+        searchingKeyword(pageIdx)
+    })
 }
 
 //리뷰 수정하기 클릭시, 리뷰 상세 뷰를 보여줌
