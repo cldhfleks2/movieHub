@@ -1,6 +1,4 @@
 $(document).ready(function (){
-    clickMenuBar();
-    displayContainer();
     movieSearchSection();
     moviePosterSection();
     movieItemSection();
@@ -8,25 +6,6 @@ $(document).ready(function (){
     movieEditBtn();
     initializeCollapsible();
 })
-
-function clickMenuBar(){
-    $(document).on("click", ".menuItem", function () {
-        $(".menuItem").removeClass("active"); //모든 active제거
-        $(this).addClass("active"); //현재 활성화한것에만 active추가
-    });
-}
-
-function displayContainer(){
-    $(document).on("click", "#movieMenu", function (){
-        $(".container").hide()
-        $("#movieContainer").show()
-    })
-    $(document).on("click", "#reviewMenu", function (){
-        $(".container").hide()
-        $("#postContainer").show()
-    })
-}
-
 //검색한 영화의 상세 정보
 function movieEditBtn(){
     // 수정하기 버튼 클릭 이벤트
