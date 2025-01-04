@@ -90,7 +90,7 @@
     </div>
 
     <div id="reviewDetailSection" class="reviewDetailSection">
-        <th:block th:unless="${reviewDTO}" style="color:red; font-size:30px; text-align: center;"> 영화 리뷰를 찾을 수 없습니다. </th:block>
+        <div th:unless="${reviewDTO}" style="color:red; font-size:30px; text-align: center;"> 영화 리뷰를 찾을 수 없습니다. </div>
         <th:block th:if="${reviewDTO}">
             <h3>리뷰 상세 정보</h3>
             <div class="reviewDetail">
@@ -114,7 +114,7 @@
                                 <span class="ratingStars" th:text="${#strings.repeat('ㅤ', 5 - reviewDTO.ratingValue)}">빈문자 5개</span>
                             </span>
                         <span>좋아요:
-                            <span id="likeCount" th:text="${reviewDTO.likeCount}">0개</span>
+                            <span id="likeCount" th:text="${reviewDTO.likeCount} + '개'">0개</span>
                         </span>
                     </div>
                     <div class="actionButtons">
