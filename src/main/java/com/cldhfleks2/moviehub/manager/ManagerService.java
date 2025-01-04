@@ -52,9 +52,7 @@ public class ManagerService {
     private String fileDirOnDb;
 
     //영화 관리자 페이지 GET
-    String getManager(Authentication authentication, Model model) {
-
-
+    String getManagerMovie(Authentication authentication, Model model) {
         return "manager/movie";
     }
 

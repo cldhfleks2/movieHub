@@ -19,8 +19,8 @@ public class ManagerController {
 
     //영화 관리자 페이지 GET
     @GetMapping("/manager/movie")
-    String getManager(Authentication auth, Model model) {
-        return managerService.getManager(auth, model);
+    String getManagerMovie(Authentication auth, Model model) {
+        return managerService.getManagerMovie(auth, model);
     }
 
     //영화 검색 결과 뷰 GET
