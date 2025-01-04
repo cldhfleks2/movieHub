@@ -50,7 +50,7 @@ function searchingKeyword(pageIdx = 1) {
     
     const keyword = $('.searchInput').val();
     $.ajax({
-        url: '/manager/movieReview/search',
+        url: '/api/manager/movieReview/search',
         method: 'GET',
         data: { keyword: keyword, pageIdx: pageIdx },
         success: function (data){
@@ -68,6 +68,7 @@ function searchingKeyword(pageIdx = 1) {
     });
 }
 
+//페이지 버튼 클릭시 동작
 function pagination(){
     $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
         const pageIdx = $(this).data("pageidx")

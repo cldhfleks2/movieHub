@@ -54,9 +54,10 @@ public class ManagerController {
     }
 
     //영화 리뷰 관리자 페이지 리뷰 검색
-    @GetMapping("/manager/movieReview/search")
+    @GetMapping("/api/manager/movieReview/search")
     String searchMovieReview(Model model, Integer pageIdx, String keyword){
         return managerService.searchMovieReview(model, pageIdx, keyword);
     }
+
 
 }
