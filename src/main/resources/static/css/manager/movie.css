@@ -73,6 +73,8 @@ a:hover {
     cursor: pointer;
     background-color: transparent;
     transition: background-color 0.3s;
+    text-decoration: none;
+    color: inherit;
 }
 
 .adminSideBar .navMenu .menuItem:hover,
