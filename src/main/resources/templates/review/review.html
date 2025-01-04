@@ -55,7 +55,7 @@
                             <h3 class="movieTitle" th:text="${review.movieNm}">영화 제목</h3>
                             <div class="reviewActions">
 <!--                                좋아요 버튼은 본인리뷰가 아닌것에만 보임-->
-                                <button class="likeBtn" th:if="${review.movieReviewId != null}" th:data-reviewid="${review.movieReviewId}">
+                                <button class="likeBtn" th:unless="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}">
                                     <div class="red" th:unless="${review.isLiked}">
                                         <span class="icon">♡</span>
                                         <span class="iconMessage">좋아요</span>

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,5 +26,10 @@ public class MovieReviewController {
     ResponseEntity<String> addMovieReview(@RequestBody MovieReviewDTO movieReviewDTO, Model model, Authentication auth) {
         return movieReviewService.addMovieReview(movieReviewDTO, model, auth);
     }
-    
+
+    //영화 리뷰 삭제 요청
+    @DeleteMapping("/api/movieReview/delete")
+    ResponseEntity<String> deleteMovieReview(Long reviewId, Authentication auth) {
+        return movieReviewService.deleteMovieReview(reviewId, auth);
+    }
 }

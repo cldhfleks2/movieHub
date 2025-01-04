@@ -112,8 +112,6 @@ public class MovieReviewService {
         for (MovieReview movieReview : movieReviewList) {
             //리뷰 총 좋아요 가져오기
             Long movieReviewId = movieReview.getId();
-            Long movieReviewAuthorId = movieReview.getMember().getId();
-            if(currentUserId == movieReviewAuthorId) movieReviewId = null; //본인의 리뷰는 좋아요를 누를수없게. null값 전달
             List<MovieReviewLike> movieReviewLikeList = movieReviewLikeRepository.findAllByMovieReviewIdAndStatus(movieReviewId);
             int likeCount = movieReviewLikeList.size();
             //내가 좋아요를 눌렀는지 상태 가져오기
@@ -138,6 +136,7 @@ public class MovieReviewService {
                     .authorProfileImage(movieReview.getMember().getProfileImage())
                     .authorMemberId(authorMemberId)
                     .isLiked(isLiked) //내가 좋아요를 눌렀는지 보냄
+                    .isAuthor(currentUserId == authorMemberId) //영화 리뷰 작성자인지 보냄
                     .build();
             movieReviewDTOList.add(movieReviewDTO); //전체 DTO 리스트에 추가
         }
@@ -179,6 +178,29 @@ public class MovieReviewService {
         movieReviewRepository.save(movieReview); //리뷰 저장
 
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    //영화 리뷰 삭제 요청
+    @Transactional
+    ResponseEntity<String> deleteMovieReview(Long reviewId, Authentication auth) {
+        Optional<MovieReview> movieReviewObj = movieReviewRepository.findById(reviewId);
+        if(!movieReviewObj.isPresent())
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/movieReview/delete", "영화 리뷰를 찾을 수 없습니다.", ResponseEntity.class);
+
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/movieReview/delete", "유저 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        MovieReview movieReview = movieReviewObj.get();
+        Member member = memberObj.get();
+        
+        if(member.getId() != movieReview.getMember().getId())
+            return ErrorService.send(HttpStatus.NOT_ACCEPTABLE.value(), "/api/movieReview/delete", "본인이 작성한 리뷰가 아닙니다.", ResponseEntity.class);
+
+        movieReviewRepository.delete(movieReview); //삭제 진행
+
+        return ResponseEntity.noContent().build();
     }
 
 }

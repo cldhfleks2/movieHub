@@ -10,6 +10,7 @@ $(document).ready(function() {
 
     reviewLikeBtn();
     reviewReportBtn()
+    reviewRemoveBtn()
 });
 
 let isCometoMovieDetailPage = false;
@@ -407,8 +408,7 @@ function searchSection() {
     });
 }
 
-
-//리뷰 리스트 : 좋아요 버튼 클릭시
+//리뷰 좋아요 버튼
 function reviewLikeBtn() {
     $(document).on('click', '.likeBtn', function() {
         const reviewId = $(this).data('reviewid');
@@ -453,7 +453,7 @@ function reviewLikeBtn() {
     });
 }
 
-
+//리뷰 신고 버튼
 function reviewReportBtn(){
     //신고 모달창 보이기
     $(document).on('click', '.reportBtn', function() {
@@ -492,3 +492,25 @@ function reviewReportBtn(){
     });
 }
 
+//리뷰 삭제 버튼
+function reviewRemoveBtn() {
+    $(document).on("click", ".reviewActions .removeBtn", function () {
+        const reviewId = $(this).data("reviewid")
+
+        $.ajax({
+            url: "/api/movieReview/delete",
+            method: "delete",
+            data: { reviewId: reviewId},
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 200) {
+                    searchingAndReplaceList(); //성공시 페이지 새로고침
+                }
+                console.log("delete-movieReview ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("delete-movieReview ajax failed")
+            }
+        })
+    });
+}

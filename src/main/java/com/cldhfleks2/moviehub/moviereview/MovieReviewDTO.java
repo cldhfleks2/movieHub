@@ -28,6 +28,8 @@ public class MovieReviewDTO {
 
     private Boolean isLiked; //현재 사용자 auth.getName()가 좋아요를 누른 상태인지
 
+    private Boolean isAuthor;
+
     //관리자 페이지에서 사용
     private Long id; //영화 리뷰 아이디
     private Movie movie; //영화 리뷰에 사용된 영화
