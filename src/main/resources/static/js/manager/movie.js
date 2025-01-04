@@ -84,8 +84,10 @@ function movieSearchSection() {
     });
 }
 
+let imageType="url"
+//영화 포스터 선택 창
 function moviePosterSection() {
-
+    //이미지 업로드 버튼
     $(document).on('change', '.fileInput', function (e) {
         const file = e.target.files[0];
         if (file) {
@@ -94,6 +96,8 @@ function moviePosterSection() {
                 $('.moviePoster').attr('src', e.target.result);
             };
             reader.readAsDataURL(file);
+            $('.urlInput').val("") //이미지를 업로드한다면, URL입력창을 지움
+            imageType = "file"
         }
     });
 
@@ -102,6 +106,7 @@ function moviePosterSection() {
         const urlInput = $('.urlInput').val();
         if (urlInput) {
             $('.moviePoster').attr('src', urlInput);
+            imageType = "url"
         }
     });
 }
@@ -166,7 +171,7 @@ function movieActionSection() {
             typeNm: $('.typeNm').val(),
             audiAcc: $('.audiAcc').val(),
             audiCnt: $('.audiCnt').val(),
-            posterURL: $('.moviePoster').attr('src'),
+            posterURL: imageType === "url" ? $('.moviePoster').attr('src') : null,
             genreList: $('#genreList .tag').map(function () {
                 return {
                     genreNm: $(this).find('.genreNm').val(),
@@ -195,8 +200,6 @@ function movieActionSection() {
             }).get(),
         };
 
-        console.log(movieDTO)
-
         // 영화 정보 수정 요청
         $.ajax({
             url: '/api/manager/movie/edit',
@@ -219,6 +222,38 @@ function movieActionSection() {
             }
         });
 
+        // 포스터 이미지 파일이 있을 경우 추가 ajax요청 진행
+        if (imageType === "file") {
+            const formData = new FormData(); //이미지를 보내기위한 폼데이터
+            const posterImgFile = $('.fileInput')[0].files[0];
+            if (posterImgFile) {
+                formData.append("posterImg", posterImgFile);
+            }
+            formData.append("movieId", $('.movieId').val());
+
+            // 영화 이미지 수정 요청
+            $.ajax({
+                url: '/api/manager/movie/edit/img',
+                type: 'patch',
+                processData: false, // FormData 처리 설정
+                contentType: false, // FormData 처리 설정
+                data: formData,
+                success: function (response, textStatus, xhr){
+                    if (xhr.status === 204) {
+                    }else{
+                        alert("영화 포스터 수정에 알 수 없는 성공")
+                    }
+                    $('.movieContent').hide();
+                    console.log("movie-image-edit ajax success")
+                },
+                error: function (xhr){
+                    alert('영화 포스터 수정에 실패했습니다.');
+                    console.log(xhr.responseText);
+                    console.log("movie-image-edit ajax failed")
+                }
+            });
+        }
+
     });
 
     $(document).on('click', '.cancelBtn', function () {
@@ -226,24 +261,6 @@ function movieActionSection() {
             $('.movieContent').hide();
         }
     });
-}
-
-function clearMovieData() {
-    $('.movieCd').val('');
-    $('.movieNm').val('');
-    $('.movieNmEn').val('');
-    $('.openDt').val('');
-    $('.salesAcc').val('');
-    $('.showTm').val('');
-    $('.audiAcc').val('');
-    $('.prdtYear').val('');
-    $('.audiCnt').val('');
-    $('.typeNm').val('');
-    $('.moviePoster').attr('src', '');
-    $('#genreList').empty();
-    $('#auditList').empty();
-    $('#directorList').empty();
-    $('#actorList').empty();
 }
 
 function initializeCollapsible() {

@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,8 +37,15 @@ public class ManagerController {
 
     //영화 정보 수정 요청
     @PatchMapping("/api/manager/movie/edit")
-    ResponseEntity<String> editMovie(@RequestBody MovieDTO movieDTO){
+    ResponseEntity<String> editMovie(@RequestBody MovieDTO movieDTO) {
         return managerService.editMovie(movieDTO);
+    }
+
+    //영화 포스터 수정 요청
+    @PatchMapping("/api/manager/movie/edit/img")
+    ResponseEntity<String> editMoviePoster(@RequestParam MultipartFile posterImg,
+                                           @RequestParam Long movieId) throws Exception{
+        return managerService.editMoviePoster(posterImg, movieId);
     }
 
 }
