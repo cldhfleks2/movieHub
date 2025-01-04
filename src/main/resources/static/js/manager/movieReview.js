@@ -3,14 +3,18 @@ $(document).ready(function (){
     highlightedReview();
     searchSection();
     clickSearchingReview();
+    saveReview()
+    deleteReview()
 })
-
-let currentReviewId = null;
 
 function initialize(){
     $(document).on("input", "#reviewContentEdit", function () {
         autoResizeTextarea();
     });
+
+    $(".searchInput").focus(); //페이지 로딩되면 검색바에 포커스
+
+    searchingKeyword(); //전체 내용이 한번 검색되도록함
 }
 
 //이전 페이지에서 reviewId를 파라미터로 가지고 온 경우
@@ -43,35 +47,43 @@ function searchSection() {
 
 //검색어로 리뷰 목록을 가져옴
 function searchingKeyword() {
+    $("#reviewDetailSection").hide(); //리뷰 상세내용뷰 숨김
+    
     const keyword = $('.searchInput').val();
     $.ajax({
-        url: '/api/manager/reviews/search',
+        url: '/manager/movieReview/search',
         method: 'GET',
         data: { keyword: keyword },
-        success: function(response) {
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#reviewTableBody").replaceWith(dataHtml.find("#reviewTableBody"));
 
-            //replaceWith
+            console.log("search-review ajax success")
         },
-        error: function(xhr) {
-            alert('리뷰 검색 중 오류가 발생했습니다.');
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("search-review ajax failed")
         }
     });
 }
 
-//리뷰를 클릭하면 아래를 호출하게?
+//리뷰 수정하기 클릭시, 리뷰 상세 뷰를 보여줌
 function clickSearchingReview(){
-    $(document).on("click", "", function () {
-        
+    $(document).on("click", ".editBtn", function () {
+        const reviewId = $(this).data("review-id")
+        searchingReviewDetail(reviewId)
     });
 }
 
 //reviewId로 리뷰 상세정보를 가져옴
 function searchingReviewDetail(reviewId) {
+    $("#reviewDetailSection").show(); //리뷰 상세내용뷰 숨김
+
     $.ajax({
         url: `/api/manager/reviews/${reviewId}`,
         method: 'GET',
         success: function(data) {
-            currentReviewId = reviewId;
 
             //replaceWith
 
@@ -86,66 +98,74 @@ function searchingReviewDetail(reviewId) {
     });
 }
 
-
+//리뷰 저장
 function saveReview() {
-    if (!currentReviewId) return;
+    $(document).on("click", ".saveBtn", function () {
+        const reviewId = $(this).data("review-id")
 
-    const updatedContent = $('#reviewContentEdit').val();
-
-    $.ajax({
-        url: `/api/manager/reviews/${currentReviewId}`,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            content: updatedContent
-        }),
-        success: function() {
-            alert('리뷰가 수정되었습니다.');
-            loadReviews();
-            hideReviewDetail();
-        },
-        error: function(xhr) {
-            alert('리뷰 수정 중 오류가 발생했습니다.');
-        }
+        $.ajax({
+            url: `/api/manager/reviews/${reviewId}`,
+            method: 'PUT',
+            data:{ },
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 200) {
+                    alert("")
+                }
+                $("#reviewDetailSection").hide(); //리뷰 상세내용뷰 숨김
+                console.log(" ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log(" ajax failed")
+            }
+        });
     });
 }
 
-function loadReviews() {
-    $.ajax({
-        url: '/api/manager/reviews',
-        method: 'GET',
-        success: function(response) {
-            updateReviewTable(response);
-        },
-        error: function(xhr) {
-            alert('리뷰 목록을 불러오는 중 오류가 발생했습니다.');
-        }
-    });
-}
-
+//리뷰 삭제
 function deleteReview() {
-    if (!currentReviewId || !confirm('정말 이 리뷰를 삭제하시겠습니까?')) return;
+    $(document).on("click", ".deleteBtn", function () {
+        const reviewId = $(this).data("review-id")
 
-    $.ajax({
-        url: `/api/manager/reviews/${currentReviewId}`,
-        method: 'DELETE',
-        success: function() {
-            alert('리뷰가 삭제되었습니다.');
-            loadReviews();
-            hideReviewDetail();
-        },
-        error: function(xhr) {
-            alert('리뷰 삭제 중 오류가 발생했습니다.');
-        }
+        $.ajax({
+            url: `/api/manager/reviews/${reviewId}`,
+            method: 'DELETE',
+            data:{ },
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 200) {
+                    alert("")
+                }
+                $("#reviewDetailSection").hide(); //리뷰 상세내용뷰 숨김
+                console.log(" ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log(" ajax failed")
+            }
+        });
     });
 }
 
-function hideReviewDetail() {
-    $('#reviewDetailSection').hide();
-    currentReviewId = null;
+//리뷰 상세 뷰 새로고침 : 쓸지 안쓸지 몰라
+function reviewDetailReload() {
+    $("#reviewDetailSection").show(); //리뷰 상세내용뷰 숨김
+
+    $.ajax({
+        url: "",
+        method: "",
+        data: {},
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#").replaceWith(dataHtml.find("#"));
+
+            console.log(" ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log(" ajax failed")
+        }
+
+    })
 }
 
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-}

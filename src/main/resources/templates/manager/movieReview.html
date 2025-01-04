@@ -15,10 +15,10 @@
     <button class="adminLogoutBtn" onclick="window.location.href='/logout'">로그아웃</button>
     <hr>
     <div class="navMenu">
-        <a class="menuItem active" id="movieMenu" href="/manager/movie">
+        <a class="menuItem" id="movieMenu" href="/manager/movie">
             <span>🎬</span> 영화 관리
         </a>
-        <a class="menuItem" id="reviewMenu">
+        <a class="menuItem active" id="reviewMenu">
             <span>💬</span> 영화 리뷰 관리
         </a>
     </div>
@@ -44,16 +44,16 @@
             </thead>
             <tbody id="reviewTableBody">
 <!--            검색 결과 목록-->
-            <th:block th:if="${searchList}">
-                <tr th:each="review : ${searchList}">
-                    <td th:text="${review.movieNm}"></td>
-                    <td th:text="${#strings.length(review.content) > 50 ? #strings.substring(review.content, 0, 50) + '...' : review.content}"></td>
-                    <td th:text="${review.authorNickname}"></td>
+            <th:block th:if="${searchPage}">
+                <tr th:each="review : ${searchPage}">
+                    <td th:text="${review.movieNm}">영화 이름</td>
+                    <td th:text="${#strings.length(review.content) > 50 ? #strings.substring(review.content, 0, 50) + '...' : review.content}">영화 리뷰 내용</td>
+                    <td th:text="${review.member.nickname}">작성자 닉네임</td>
                     <td>
                         <span class="ratingStars" th:text="${#strings.repeat('★', review.ratingValue)}">★★★★★</span>
                         <span class="ratingStars" th:text="${#strings.repeat('ㅤ', 5 - review.ratingValue)}">빈문자 5개</span>
                     </td>
-                    <td th:text="${#temporals.format(review.reviewUpdateDate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${#temporals.format(review.reviewUpdateDate, 'yyyy-MM-dd')}">yyyy-mm-dd</td>
                     <td>
                         <button class="editBtn" th:data-review-id="${review.id}">수정하기</button>
                     </td>
@@ -61,12 +61,15 @@
             </th:block>
             </tbody>
         </table>
+
+<!--        페이지네이션-->
+
     </div>
     <div id="reviewDetailSection" class="reviewDetailSection">
-        <h3>리뷰 상세 정보</h3>
-        <div class="reviewDetail">
+        <th:block th:if="${reviewDTO}">
+            <h3>리뷰 상세 정보</h3>
+            <div class="reviewDetail">
 <!--            영화 리뷰 상세정보-->
-            <th:block th:if="${reviewDTO}">
                 <div class="movieInfo">
                     <img class="moviePoster" id="moviePoster" th:src="${reviewDTO.movie.posterURL != null ? reviewDTO.movie.posterURL : '/image/profile.png'}"  alt="영화 포스터">
                 </div>
@@ -94,8 +97,8 @@
                         <button class="deleteBtn" th:data-review-id="${reviewDTO.id}">리뷰 삭제</button>
                     </div>
                 </div>
-            </th:block>
-        </div>
+            </div>
+        </th:block>
     </div>
 
 </main>

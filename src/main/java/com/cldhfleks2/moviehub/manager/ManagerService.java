@@ -15,9 +15,13 @@ import com.cldhfleks2.moviehub.movie.director.MovieDirector;
 import com.cldhfleks2.moviehub.movie.director.MovieDirectorRepository;
 import com.cldhfleks2.moviehub.movie.genre.MovieGenre;
 import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
+import com.cldhfleks2.moviehub.moviereview.MovieReview;
+import com.cldhfleks2.moviehub.moviereview.MovieReviewDTO;
+import com.cldhfleks2.moviehub.moviereview.MovieReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,6 +49,7 @@ public class ManagerService {
     private final MovieDirectorRepository movieDirectorRepository;
     private final MovieActorRepository movieActorRepository;
     private final MovieDailyStatRepository movieDailyStatRepository;
+    private final MovieReviewRepository movieReviewRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -182,5 +188,34 @@ public class ManagerService {
     //영화 리뷰 관리자 페이지 GET
     String getMovieReview(Authentication auth, Model model) {
         return "manager/movieReview";
+    }
+
+    //영화 리뷰 관리자 페이지 리뷰 검색
+    String searchMovieReview(Model model, Integer pageIdx, String keyword){
+        if(pageIdx == null) pageIdx = 1;
+        if(keyword == null) keyword = "";
+
+        int pageSize = 10; //한페이지에 보여줄 갯수
+        Page<MovieReview> movieReviewPage = movieReviewRepository.searchByContentAndMovieNmAndMovieNmEn(keyword, PageRequest.of(pageIdx-1, pageSize));
+        List<MovieReviewDTO> searchList = new ArrayList<>();
+        for (MovieReview movieReview : movieReviewPage.getContent()) {
+            MovieReviewDTO movieReviewDTO = MovieReviewDTO.builder()
+                    .movieNm(movieReview.getMovie().getMovieNm())
+                    .content(movieReview.getContent())
+                    .ratingValue(movieReview.getRatingValue())
+                    .member(movieReview.getMember())
+                    .reviewUpdateDate(movieReview.getUpdateDate())
+                    .build();
+            searchList.add(movieReviewDTO);
+        }
+        //페이지로 전달
+        Page<MovieReviewDTO> searchPage = new PageImpl<>(
+                searchList,
+                movieReviewPage.getPageable(),
+                movieReviewPage.getTotalElements() == 0 ? 1 : movieReviewPage.getTotalElements()
+        );
+        model.addAttribute("searchPage", searchPage);
+
+        return "manager/movieReview :: #reviewTableBody";
     }
 }
