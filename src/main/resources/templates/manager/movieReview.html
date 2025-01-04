@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +25,78 @@
 </div>
 
 <main class="container" id="movieReviewContainer" >
+    <div class="searchSection">
+        <input class="searchInput" type="text" placeholder="리뷰 내용 또는 영화 제목으로 검색">
+        <button class="searchBtn">검색</button>
+    </div>
+
+    <div class="reviewList">
+        <table class="reviewTable">
+            <thead>
+            <tr>
+                <th>영화</th>
+                <th>리뷰 내용</th>
+                <th>작성자</th>
+                <th>별점</th>
+                <th>작성일</th>
+                <th>관리</th>
+            </tr>
+            </thead>
+            <tbody id="reviewTableBody">
+<!--            검색 결과 목록-->
+            <th:block th:if="${searchList}">
+                <tr th:each="review : ${searchList}">
+                    <td th:text="${review.movieNm}"></td>
+                    <td th:text="${#strings.length(review.content) > 50 ? #strings.substring(review.content, 0, 50) + '...' : review.content}"></td>
+                    <td th:text="${review.authorNickname}"></td>
+                    <td>
+                        <span class="ratingStars" th:text="${#strings.repeat('★', review.ratingValue)}">★★★★★</span>
+                        <span class="ratingStars" th:text="${#strings.repeat('ㅤ', 5 - review.ratingValue)}">빈문자 5개</span>
+                    </td>
+                    <td th:text="${#temporals.format(review.reviewUpdateDate, 'yyyy-MM-dd')}"></td>
+                    <td>
+                        <button class="editBtn" th:data-review-id="${review.id}">수정하기</button>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <div id="reviewDetailSection" class="reviewDetailSection">
+        <h3>리뷰 상세 정보</h3>
+        <div class="reviewDetail">
+<!--            영화 리뷰 상세정보-->
+            <th:block th:if="${reviewDTO}">
+                <div class="movieInfo">
+                    <img class="moviePoster" id="moviePoster" th:src="${reviewDTO.movie.posterURL != null ? reviewDTO.movie.posterURL : '/image/profile.png'}"  alt="영화 포스터">
+                </div>
+                <div class="reviewInfo">
+                    <div class="authorInfo">
+                        <img class="authorProfile" id="authorProfile" th:src="${reviewDTO.member.profileImage != null ? reviewDTO.member.profileImage : '/image/profile.png'}" alt="프로필 이미지">
+                        <span id="authorNickname" th:text="${reviewDTO.member.nickname}">닉네임</span>
+                    </div>
+                    <div class="reviewContent">
+                        <textarea id="reviewContentEdit" th:text="${reviewDTO.content}"></textarea>
+                    </div>
+                    <div class="reviewStats">
+                        <span>별점:
+                            <span id="ratingValue"></span>
+                                <!-- 별을 채우기 위한 동적 텍스트 표시 -->
+                                <span class="ratingStars" th:text="${#strings.repeat('★', reviewDTO.ratingValue)}">★★★★★</span>
+                                <span class="ratingStars" th:text="${#strings.repeat('ㅤ', 5 - reviewDTO.ratingValue)}">빈문자 5개</span>
+                            </span>
+                        <span>좋아요:
+                            <span id="likeCount" th:text="${reviewDTO.likeCount}">0개</span>
+                        </span>
+                    </div>
+                    <div class="actionButtons">
+                        <button class="saveBtn" th:data-review-id="${reviewDTO.id}">수정 내용 저장</button>
+                        <button class="deleteBtn" th:data-review-id="${reviewDTO.id}">리뷰 삭제</button>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
 
 </main>
 
