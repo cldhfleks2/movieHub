@@ -68,11 +68,12 @@
                 <img class="moviePoster" src="/image/blank.png" th:if="${movie}" th:src="@{${movie.posterURL}}" alt="영화 포스터">
                 <div class="posterOverlay">
                     <input class="urlInput" type="text" placeholder="포스터 URL 직접 입력">
+                    <button class="updatePosterBtn">적용</button>
                     <label class="fileInputLabel">
-                        파일 업로드
+                        또는 파일 업로드
                         <input class="fileInput" type="file" accept="image/*">
                     </label>
-                    <button class="updatePosterBtn">적용</button>
+
                 </div>
             </div>
         </div>
