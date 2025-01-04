@@ -62,7 +62,7 @@ public class ManagerService {
         return "manager/movie";
     }
 
-    //영화 검색 결과 뷰 GET
+    //영화 관리자 페이지 : 검색 결과 뷰 GET
     String searchMovie(Model model, Integer pageIdx, String keyword){
         if(pageIdx == null) pageIdx = 1;
         if(keyword == null) keyword = "";
@@ -74,7 +74,7 @@ public class ManagerService {
         return "manager/movie :: #searchResultSection";
     }
 
-    //movieContent 뷰 GET
+    //영화 관리자 페이지 : 영화 상세 정보 뷰 GET
     String getMovieDTO(Model model, Long movieId){
         MovieDTO movieDTO = movieService.getMovieDTO(movieId);
         movieDTO.setMovieId(movieId);
@@ -89,7 +89,7 @@ public class ManagerService {
         return currentDate.format(formatter);
     }
 
-    //영화 정보 수정 요청
+    //영화 관리자 페이지 : 영화 정보 수정 요청
     @Transactional
     ResponseEntity<String> editMovie(MovieDTO movieDTO) {
         Long movieId = movieDTO.getMovieId();
@@ -154,7 +154,7 @@ public class ManagerService {
         return ResponseEntity.noContent().build();
     }
 
-    //영화 포스터 수정 요청
+    //영화 관리자 페이지 : 영화 포스터 수정 요청
     @Transactional
     ResponseEntity<String> editMoviePoster(MultipartFile posterImg, Long movieId) throws Exception{
         Optional<Movie> movieObj = movieRepository.findById(movieId);
@@ -220,4 +220,6 @@ public class ManagerService {
 
         return "manager/movieReview :: #reviewList";
     }
+
+
 }

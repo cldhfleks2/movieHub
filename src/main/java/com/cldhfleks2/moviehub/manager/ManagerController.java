@@ -23,25 +23,25 @@ public class ManagerController {
         return managerService.getManagerMovie(auth, model);
     }
 
-    //영화 검색 결과 뷰 GET
+    //영화 관리자 페이지 : 검색 결과 뷰 GET
     @GetMapping("/api/manager/movie/search")
     String searchMovie(Model model, Integer pageIdx, String keyword){
         return managerService.searchMovie(model, pageIdx, keyword);
     }
 
-    //영화 상세 정보 뷰 GET
+    //영화 관리자 페이지 : 영화 상세 정보 뷰 GET
     @GetMapping("/api/manager/movie/get")
     String getMovieDTO(Model model, Long movieId){
         return managerService.getMovieDTO(model, movieId);
     }
 
-    //영화 정보 수정 요청
+    //영화 관리자 페이지 : 영화 정보 수정 요청
     @PatchMapping("/api/manager/movie/edit")
     ResponseEntity<String> editMovie(@RequestBody MovieDTO movieDTO) {
         return managerService.editMovie(movieDTO);
     }
 
-    //영화 포스터 수정 요청
+    //영화 관리자 페이지 : 영화 포스터 수정 요청
     @PatchMapping("/api/manager/movie/edit/img")
     ResponseEntity<String> editMoviePoster(@RequestParam MultipartFile posterImg, @RequestParam Long movieId) throws Exception{
         return managerService.editMoviePoster(posterImg, movieId);
@@ -53,11 +53,15 @@ public class ManagerController {
         return managerService.getMovieReview(auth, model);
     }
 
-    //영화 리뷰 관리자 페이지 리뷰 검색
+    //영화 리뷰 관리자 페이지 : 리뷰 검색
     @GetMapping("/api/manager/movieReview/search")
     String searchMovieReview(Model model, Integer pageIdx, String keyword){
         return managerService.searchMovieReview(model, pageIdx, keyword);
     }
 
+    //영화 리뷰 관리자 페이지 :
+    @GetMapping("/api/manager/movieReview/detail")
+    String getMovieReviewDetail(Authentication auth, Model model, Long movieId){
 
+    }
 }
