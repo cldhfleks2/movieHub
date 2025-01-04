@@ -160,7 +160,7 @@
                     <!-- 감독 정보 -->
                     <div class="infoCard directorCard" style="width: 50%">
                         <h3>감독</h3>
-                        <div id="directorList" class="listContainer collapsed">
+                        <div id="directorList" class="listContainer director collapsed">
                             <div class="listItem" th:each="director, iterStat : ${movie.directorList}" th:classappend="${iterStat.index >= 2 ? 'hidden' : ''}">
                                 <input class="directorNm" type="text" th:value="${director.peopleNm}" placeholder="감독 이름">
                                 <input class="directorNmEn" type="text" th:value="${director.peopleNmEn}" placeholder="감독 영문 이름">
@@ -168,13 +168,13 @@
                                 <button class="removeBtn">&times;</button>
                             </div>
                         </div>
-                        <button class="toggleBtn">더보기</button>
+                        <button class="toggleBtn director">더보기</button>
                         <button class="addBtn" data-type="director">+ 감독 추가</button>
                     </div>
                     <!-- 배우 정보 -->
                     <div class="infoCard actorCard" style="width: 50%">
                         <h3>출연 배우</h3>
-                        <div id="actorList" class="listContainer collapsed">
+                        <div id="actorList" class="listContainer actor collapsed">
                             <div class="listItem" th:each="actor, iterStat : ${movie.actorList}" th:classappend="${iterStat.index >= 2 ? 'hidden' : ''}">
                                 <input class="actorNm" type="text" th:value="${actor.peopleNm}" placeholder="배우 이름">
                                 <input class="actorNmEn" type="text" th:value="${actor.peopleNmEn}" placeholder="배우 영문 이름">
@@ -182,7 +182,7 @@
                                 <button class="removeBtn">&times;</button>
                             </div>
                         </div>
-                        <button class="toggleBtn">더보기</button>
+                        <button class="toggleBtn actor">더보기</button>
                         <button class="addBtn" data-type="actor">+ 배우 추가</button>
                     </div>
                 </div>
