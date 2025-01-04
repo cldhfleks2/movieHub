@@ -90,6 +90,7 @@
     </div>
 
     <div id="reviewDetailSection" class="reviewDetailSection">
+        <th:block th:unless="${reviewDTO}" style="color:red; font-size:30px; text-align: center;"> 영화 리뷰를 찾을 수 없습니다. </th:block>
         <th:block th:if="${reviewDTO}">
             <h3>리뷰 상세 정보</h3>
             <div class="reviewDetail">
