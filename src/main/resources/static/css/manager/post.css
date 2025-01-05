@@ -312,7 +312,7 @@ body {
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    resize: vertical;
+    resize: none;
     font-size: 1em;
     line-height: 1.5;
 }
