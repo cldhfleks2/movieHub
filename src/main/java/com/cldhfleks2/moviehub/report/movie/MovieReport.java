@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 @ToString
 public class MovieReport {
     // 신고 사유별 필드
-    private Boolean POSTER;   // 주요 스포일러 포함
-    private Boolean MOVIENAME;     // 잘못된 정보
-    private Boolean MOVIEPEOPLE; // 무관한 내용/광고성
-    private Boolean HARMFUL;   // 유해하거나 불건전한 내용
-    private Boolean HATE;      // 혐오 발언
+    private Boolean POSTER;   // 영화 포스터가 다릅니다.
+    private Boolean MOVIENAME;     // 영화 제목이 다릅니다.
+    private Boolean MOVIEPEOPLE; // 인물 정보가 잘못 되었습니다.
+    private Boolean HARMFUL;   // 유해하거나 불건전한 내용이 포함되있습니다.
+    private Boolean HATE;      // 불건전한 내용입니다.
 
     @Column(length = 500)
     private String reportDetail; // 추가 설명 (선택사항)
