@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 관리 페이지</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/manager/report.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="adminSideBar">
+    <div class="siteLogo">🛠️ 관리자 페이지</div>
+    <button class="adminMainpageBtn" onclick="window.location.href='/main'">메인 페이지로</button>
+    <button class="adminLogoutBtn" onclick="window.location.href='/logout'">로그아웃</button>
+    <hr>
+    <div class="navMenu">
+        <a class="menuItem" id="movieMenu" href="/manager/movie">
+            <span>🎬</span> 영화 관리
+        </a>
+        <a class="menuItem" id="reviewMenu" href="/manager/movieReview">
+            <span>💬</span> 영화 리뷰 관리
+        </a>
+        <a class="menuItem" id="postMenu" href="/manager/post">
+            <span>📄</span> 게시물/댓글 관리
+        </a>
+        <a class="menuItem active" id="reportMenu">
+            <span>🚨</span> 신고 관리
+        </a>
+    </div>
+</div>
+
+<!-- Main container with tabs -->
+<main class="container" id="reportContainer">
+    <!-- Tab buttons -->
+    <div class="tabContainer">
+        <button class="tabButton active">영화 신고</button>
+        <button class="tabButton">영화 리뷰 신고</button>
+        <button class="tabButton">게시글 신고</button>
+        <button class="tabButton">댓글 신고</button>
+    </div>
+
+    <!-- Movie Reports Tab -->
+    <div class="tabContent active" id="movieReportContent">
+        <table class="reportTable">
+            <thead>
+            <tr>
+                <th>영화 제목</th>
+                <th>신고 사유</th>
+                <th>신고자</th>
+                <th>신고 일자</th>
+                <th>처리 상태</th>
+                <th>상세 보기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${movieReportPage}">
+                <tr th:each="report : ${movieReportPage}">
+                    <td th:text="${report.movie.title}"></td>
+                    <td>
+                        <span th:if="${report.POSTER}" class="reportReason">스포일러 포함</span>
+                        <span th:if="${report.MOVIENAME}" class="reportReason">잘못된 정보</span>
+                        <span th:if="${report.MOVIEPEOPLE}" class="reportReason">무관한 내용/광고성</span>
+                        <span th:if="${report.HARMFUL}" class="reportReason">유해하거나 불건전한 내용</span>
+                        <span th:if="${report.HATE}" class="reportReason">혐오 발언</span>
+                        <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
+                    </td>
+                    <td th:text="${report.member.nickname}"></td>
+                    <td th:text="${#temporals.format(report.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
+                    <td>
+                        <button class="detailBtn" th:data-movie-id="${report.movie.id}">자세히 보기</button>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+
+        <!--        페이지네이션-->
+    </div>
+
+    <!-- Movie Review Reports Tab -->
+    <div class="tabContent" id="movieReviewReportContent">
+        <table class="reportTable">
+            <thead>
+            <tr>
+                <th>리뷰 내용</th>
+                <th>신고 사유</th>
+                <th>신고자</th>
+                <th>신고 일자</th>
+                <th>처리 상태</th>
+                <th>상세 보기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${movieReviewReportPage}">
+                <tr th:each="report : ${movieReviewReportPage}">
+                    <td th:text="${#strings.abbreviate(report.movieReview.content, 30)}"></td>
+                    <td>
+                        <span th:if="${report.SPOILER}" class="reportReason">스포일러 포함</span>
+                        <span th:if="${report.WRONG}" class="reportReason">잘못된 정보</span>
+                        <span th:if="${report.UNRELATED}" class="reportReason">무관한 내용/광고성</span>
+                        <span th:if="${report.HARMFUL}" class="reportReason">유해하거나 불건전한 내용</span>
+                        <span th:if="${report.HATE}" class="reportReason">혐오 발언</span>
+                        <span th:if="${report.COPYRIGHT}" class="reportReason">저작권 침해</span>
+                        <span th:if="${report.SPAM}" class="reportReason">개인정보 노출</span>
+                        <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
+                    </td>
+                    <td th:text="${report.member.nickname}"></td>
+                    <td th:text="${#temporals.format(report.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
+                    <td>
+                        <button class="detailBtn" th:data-review-id="${report.movieReview.id}">자세히 보기</button>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+
+        <!--        페이지네이션-->
+    </div>
+
+    <!-- Post Reports Tab -->
+    <div class="tabContent" id="postReportContent">
+        <table class="reportTable">
+            <thead>
+            <tr>
+                <th>게시글 제목</th>
+                <th>신고 사유</th>
+                <th>신고자</th>
+                <th>신고 일자</th>
+                <th>처리 상태</th>
+                <th>상세 보기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${postReportPage}">
+                <tr th:each="report : ${postReportPage}">
+                    <td th:text="${#strings.abbreviate(report.post.title, 30)}"></td>
+                    <td>
+                        <span th:if="${report.INAPPROPRIATE}" class="reportReason">부적절하거나 불건전한 내용</span>
+                        <span th:if="${report.MISINFORMATION}" class="reportReason">허위정보 또는 사실 왜곡</span>
+                        <span th:if="${report.HATE}" class="reportReason">혐오 발언/차별적 내용</span>
+                        <span th:if="${report.ABUSIVE}" class="reportReason">욕설 또는 부적절한 언행</span>
+                        <span th:if="${report.COPYRIGHT}" class="reportReason">저작권 침해 의심</span>
+                        <span th:if="${report.SPAM}" class="reportReason">광고 또는 스팸성 게시물</span>
+                        <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
+                    </td>
+                    <td th:text="${report.member.nickname}"></td>
+                    <td th:text="${#temporals.format(report.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
+                    <td>
+                        <button class="detailBtn" th:data-post-id="${report.post.id}">자세히 보기</button>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+
+        <!--        페이지네이션-->
+    </div>
+
+    <!-- Post Review Reports Tab -->
+    <div class="tabContent" id="postReviewReportContent">
+        <table class="reportTable">
+            <thead>
+            <tr>
+                <th>댓글 내용</th>
+                <th>신고 사유</th>
+                <th>신고자</th>
+                <th>신고 일자</th>
+                <th>처리 상태</th>
+                <th>상세 보기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${postReviewReportPage}">
+                <tr th:each="report : ${postReviewReportPage}">
+                    <td th:text="${#strings.abbreviate(report.review.content, 30)}"></td>
+                    <td>
+                        <span th:if="${report.INAPPROPRIATE}" class="reportReason">부적절하거나 불건전한 내용</span>
+                        <span th:if="${report.MISINFORMATION}" class="reportReason">허위정보 또는 사실 왜곡</span>
+                        <span th:if="${report.HATE}" class="reportReason">혐오 발언/차별적 내용</span>
+                        <span th:if="${report.ABUSIVE}" class="reportReason">욕설 또는 부적절한 언행</span>
+                        <span th:if="${report.COPYRIGHT}" class="reportReason">저작권 침해 의심</span>
+                        <span th:if="${report.SPAM}" class="reportReason">광고 또는 스팸성 게시물</span>
+                        <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
+                    </td>
+                    <td th:text="${report.member.nickname}"></td>
+                    <td th:text="${#temporals.format(report.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
+                    <td>
+                        <button class="detailBtn" th:data-review-id="${report.review.id}">자세히 보기</button>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+
+<!--        페이지네이션-->
+    </div>
+</main>
+
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
+<script src="/js/manager/report.js"></script>
+</body>
+</html>

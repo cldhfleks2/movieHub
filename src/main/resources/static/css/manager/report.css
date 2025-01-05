@@ -1,0 +1,273 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+a {
+    text-decoration: none; /* 링크의 기본 밑줄 없애기 */
+    color: inherit; /* 텍스트 색상 변경 없애기 */
+}
+
+a:hover {
+    text-decoration: none;
+    color: inherit; /* 호버시 텍스트 색상 변경 없애기 */
+    background: none; /* 호버시 배경색 없애기 */
+}
+
+.adminSideBar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    caret-color: transparent;
+}
+
+.adminSideBar .siteLogo {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    height: 80px;
+    padding-top: 30px;
+}
+
+.adminSideBar .adminLogoutBtn,
+.adminSideBar .adminMainpageBtn{
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.adminSideBar .adminMainpageBtn{
+    background-color: #376eff;
+}
+
+.adminSideBar .navMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 30px;
+
+}
+
+.adminSideBar .navMenu .menuItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.adminSideBar .navMenu .menuItem:hover,
+.adminSideBar .navMenu .menuItem.active {
+    background-color: #34495e;
+}
+
+.adminMainContent {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.adminMainContent .contentHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.adminMainContent .contentHeader .pageTitle {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.adminMainContent .searchBar {
+    display: flex;
+    width: 300px;
+}
+
+.adminMainContent .searchBar input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.adminMainContent .searchBar .searchBtn {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 1400px;
+    margin-left: 15px;
+    caret-color: transparent;
+}
+
+.container {
+    width: 1400px;
+    margin-left: 15px;
+    max-width: 1400px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    min-height: 890px;
+    caret-color: transparent;
+}
+
+
+/* Tab Styles */
+.tabContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tabButton {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tabButton.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Table Styles */
+.reportTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.reportTable th,
+.reportTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.reportTable th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.reportTable tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.detailBtn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.detailBtn:hover {
+    background-color: #218838;
+}
+
+/* Tab Content */
+.tabContent {
+    display: none;
+}
+
+.tabContent.active {
+    display: block;
+}
+
+/* 기존 CSS에 추가 */
+.reportReason {
+    display: inline-block;
+    background-color: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 2px;
+    font-size: 0.9em;
+}
+
+.reportDetail {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+    font-style: italic;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.pageBtn {
+    padding: 5px 10px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.pageBtn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pageBtn:hover:not(.active):not(:disabled) {
+    background-color: #e9ecef;
+}
+
+.pageBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* 테이블 컨텐츠 최대 길이 제한 */
+.reportTable td {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 신고 사유 컬럼은 더 넓게 설정 */
+.reportTable td:nth-child(2) {
+    max-width: 300px;
+    white-space: normal;
+}
