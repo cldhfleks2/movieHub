@@ -18,7 +18,7 @@
         <a class="menuItem" id="movieMenu" href="/manager/movie">
             <span>🎬</span> 영화 관리
         </a>
-        <a class="menuItem" id="reviewMenu" href="/manager/movieReview">>
+        <a class="menuItem" id="reviewMenu" href="/manager/movieReview">
             <span>💬</span> 영화 리뷰 관리
         </a>
         <a class="menuItem active" id="postMenu">
@@ -40,7 +40,7 @@
         </div>
         <div class="searchBar">
             <input type="text" id="searchInput" placeholder="제목 또는 작성자로 검색...">
-            <button class="searchBtn" onclick="searching(1)">검색</button>
+            <button class="searchBtn">검색</button>
         </div>
     </div>
 
@@ -58,7 +58,22 @@
             </tr>
             </thead>
             <tbody id="searchResultBody">
-            <!-- 검색 결과가 여기에 동적으로 추가됨 -->
+
+            <tr class="postRow">
+                <td class="postNumber">1</td>
+                <td class="postType">자유 게시판</td>
+                <td class="postTitle">
+                    <span class="titleText">첫 번째 게시글입니다</span>
+                    <span class="commentCount">[3]</span>
+                </td>
+                <td class="postAuthor">홍길동</td>
+                <td class="postDate">2024-01-05</td>
+                <td class="postView">42</td>
+                <td class="postManage">
+                    <button class="editBtn" th:data-post-id=1>수정 하기</button>
+                </td>
+            </tr>
+
             </tbody>
         </table>
     </div>
@@ -74,40 +89,158 @@
         <button class="pageBtn">다음</button>
     </div>
 
-    <div class="postDetailSection" id="postDetailSection" style="display: none;">
+<!--게시글 상세 정보 (댓글 포함)-->
+    <div class="postDetailSection" id="postDetailSection">
         <h3>게시글 상세 정보</h3>
-        <form id="postDetailForm">
-            <input type="hidden" id="postId">
-            <div class="formGroup">
-                <label for="detailPostType">게시판 종류</label>
-                <select id="detailPostType">
-                    <option value="FREE">자유 게시판</option>
-                    <option value="NEWS">소식 게시판</option>
-                    <option value="DISCUSSION">토론 게시판</option>
-                </select>
+        <div class="detailContainer">
+            <!-- 왼쪽: 작성자 프로필 섹션 -->
+            <div class="authorSection">
+                <div class="profileImage">
+                    <img id="authorProfileImg" src="/image/blank.png" alt="프로필 이미지">
+                </div>
+                <div class="authorInfo">
+                    <div class="authorNickname">
+                        <label>닉네임</label>
+                        <span id="detailAuthorNickname"></span>
+                    </div>
+                    <div class="authorUsername">
+                        <label>아이디</label>
+                        <span id="detailAuthorUsername"></span>
+                    </div>
+                    <div class="postDate">
+                        <label>작성일</label>
+                        <span id="detailDate"></span>
+                    </div>
+                </div>
             </div>
-            <div class="formGroup">
-                <label for="detailTitle">제목</label>
-                <input type="text" id="detailTitle">
+
+            <!-- 오른쪽: 게시글 수정 폼 섹션 -->
+            <div class="editSection">
+                <form id="postDetailForm">
+                    <input type="hidden" id="postId">
+                    <div class="formGroup">
+                        <label for="detailPostType">게시판 종류</label>
+                        <select id="detailPostType">
+                            <option value="FREE">자유 게시판</option>
+                            <option value="NEWS">소식 게시판</option>
+                            <option value="DISCUSSION">토론 게시판</option>
+                        </select>
+                    </div>
+                    <div class="formGroup">
+                        <label for="detailTitle">제목</label>
+                        <input type="text" id="detailTitle">
+                    </div>
+                    <div class="formGroup">
+                        <label for="detailContent">내용</label>
+                        <textarea id="detailContent" rows="15"></textarea>
+                    </div>
+                    <div class="statsGroup">
+                        <div class="statItem">
+                            <label>조회수</label>
+                            <span id="detailViews"></span>
+                        </div>
+                        <div class="statItem">
+                            <label>댓글</label>
+                            <span id="detailComments"></span>
+                        </div>
+                        <div class="statItem">
+                            <label>좋아요</label>
+                            <span id="detailLikes"></span>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="formGroup">
-                <label for="detailContent">내용</label>
-                <textarea id="detailContent" rows="10"></textarea>
+        </div>
+
+        <div class="buttonGroup">
+            <button type="button" class="saveBtn">저장</button>
+            <button type="button" class="deleteBtn">삭제</button>
+            <button type="button" class="cancelBtn">취소</button>
+        </div>
+
+        <!-- 댓글 섹션 추가 -->
+        <div class="reviewSection" id="reviewsSection">
+            <h3>댓글 (
+                <span class="reviewCount" th:if="${postReviewCnt}" th:text="${postReviewCnt}">0</span>
+                <span class="reviewCount" th:unless="${postReviewCnt}">0</span>
+                )
+            </h3>
+
+            <!-- 댓글 작성 폼 -->
+            <div class="reviewForm">
+                <img th:src="${principal.profileImage}" alt="프로필 이미지" class="revieworAvatar">
+                <div class="reviewInputWrapper">
+                    <textarea placeholder="댓글을 입력하세요" rows="3"></textarea>
+<!--                    아직 postId값 안줘서 에러날거니까 주석-->
+<!--                    <button class="submitReview" th:data-post-id="${postId}">등록</button>-->
+                </div>
             </div>
-            <div class="formGroup">
-                <label>작성자: </label>
-                <span id="detailAuthor"></span>
+
+            <!-- 댓글 목록 -->
+            <div class="reviewList" id="reviewList">
+                <th:block th:if="${not #lists.isEmpty(postReviewDTOList)}">
+                    <th:block th:each="review : ${postReviewDTOList}" th:if="${review != null}">
+                        <div th:replace="~{:: reviewItemFragment(${review})}"></div>
+                    </th:block>
+                </th:block>
             </div>
-            <div class="formGroup">
-                <label>작성일: </label>
-                <span id="detailDate"></span>
-            </div>
-            <div class="buttonGroup">
-                <button type="button" class="saveBtn" onclick="savePostChanges()">저장</button>
-                <button type="button" class="deleteBtn" onclick="deletePost()">삭제</button>
-                <button type="button" class="cancelBtn" onclick="hidePostDetail()">취소</button>
-            </div>
-        </form>
+
+            <!-- 댓글 아이템 템플릿 -->
+            <th:block th:fragment="reviewItemFragment(review)">
+                <div th:if="${review != null}"
+                     th:id="'reviewItem-' + ${review.id}"
+                     class="reviewItem"
+                     th:style="${review.depth > 0 ? 'margin-left: ' + (review.depth * 40) + 'px' : ''}">
+
+                    <div class="reviewHeader">
+                        <a class="revieworInfo" th:href="@{/userprofile/{memberId}(memberId=${review.member.id})}">
+                            <img class="revieworAvatar"
+                                 th:src="${review.member.profileImage != null ? review.member.profileImage : '/image/profile.png'}"
+                                 alt="프로필">
+                            <span class="revieworName" th:text="${review.member.nickname}">닉네임</span>
+                        </a>
+                        <span class="reviewDate" th:text="${#temporals.format(review.updateDate, 'yyyy-MM-dd HH:mm')}">
+                        작성시간
+                    </span>
+                    </div>
+
+                    <p class="reviewText" th:text="${review.content}">댓글 내용</p>
+
+                    <div class="reviewActions">
+                        <th:block th:unless="${review.isAuthor}">
+                            <button class="replyButton"
+                                    th:if="${review.depth < 1}"
+                                    th:data-parent-id="${review.id}">
+                                답글
+                            </button>
+                            <button class="likeButton"
+                                    th:data-review-id="${review.id}">
+                                <span class="icon" th:classappend="${review.isLiked ? 'active' : ''}">♥</span>
+                                <span class="reviewLikeCount" th:text="${review.likeCount}">0</span>
+                            </button>
+                        </th:block>
+
+                        <th:block th:if="${review.isAuthor}">
+                            <button class="editButton" th:data-review-id="${review.id}">
+                                <span class="icon">✎</span>
+                                <span>수정</span>
+                            </button>
+                            <button class="deleteButton" th:data-review-id="${review.id}">
+                                <span class="icon">×</span>
+                                <span>삭제</span>
+                            </button>
+                        </th:block>
+                    </div>
+
+                    <!-- 자식 댓글 재귀 표시 -->
+                    <div th:if="${not #lists.isEmpty(review.children)}" class="childReviews">
+                        <th:block th:each="childReview : ${review.children}">
+                            <div th:replace="~{:: reviewItemFragment(${childReview})}"></div>
+                        </th:block>
+                    </div>
+                </div>
+            </th:block>
+        </div>
     </div>
 </main>
 
