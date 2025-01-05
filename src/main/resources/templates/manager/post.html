@@ -166,16 +166,6 @@
                 )
             </h3>
 
-            <!-- 댓글 작성 폼 -->
-            <div class="reviewForm">
-                <img th:src="${principal.profileImage}" alt="프로필 이미지" class="revieworAvatar">
-                <div class="reviewInputWrapper">
-                    <textarea placeholder="댓글을 입력하세요" rows="3"></textarea>
-<!--                    아직 postId값 안줘서 에러날거니까 주석-->
-<!--                    <button class="submitReview" th:data-post-id="${postId}">등록</button>-->
-                </div>
-            </div>
-
             <!-- 댓글 목록 -->
             <div class="reviewList" id="reviewList">
                 <th:block th:if="${not #lists.isEmpty(postReviewDTOList)}">
