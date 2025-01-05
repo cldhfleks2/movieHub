@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -63,5 +60,11 @@ public class ManagerController {
     @GetMapping("/api/manager/movieReview/detail")
     String getMovieReviewDetail(Model model, Long reviewId){
         return managerService.getMovieReviewDetail(model, reviewId);
+    }
+
+    //영화 리뷰 관리자 페이지 : 영화 리뷰 삭제
+    @DeleteMapping("/api/manager/movieReview/delete")
+    ResponseEntity<String> deleteMovieReview(Long reviewId){
+        return managerService.deleteMovieReview(reviewId);
     }
 }

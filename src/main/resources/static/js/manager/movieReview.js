@@ -112,38 +112,38 @@ function searchingReviewDetail(reviewId) {
     });
 }
 
-//리뷰 저장
-function saveReview() {
-    $(document).on("click", ".saveBtn", function () {
-        const reviewId = $(this).data("review-id")
-
-        $.ajax({
-            url: `/api/manager/reviews/${reviewId}`,
-            method: 'PUT',
-            data:{ },
-            success: function (response, textStatus, xhr){
-                if (xhr.status === 200) {
-                    alert("")
-                }
-                $("#reviewDetailSection").hide(); //리뷰 상세내용뷰 숨김
-                console.log(" ajax success")
-            },
-            error: function (xhr){
-                console.log(xhr.responseText);
-                console.log(" ajax failed")
-            }
-        });
-    });
-}
-
 //리뷰 삭제
 function deleteReview() {
     $(document).on("click", ".deleteBtn", function () {
         const reviewId = $(this).data("review-id")
 
         $.ajax({
-            url: `/api/manager/reviews/${reviewId}`,
-            method: 'DELETE',
+            url: "/api/manager/movieReview/delete",
+            method: 'delete',
+            data:{ reviewId: reviewId },
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 204) {
+                    alert("영화 리뷰가 삭제 되었습니다.")
+                }
+                $("#reviewDetailSection").hide(); //리뷰 상세내용뷰 숨김
+                console.log("delete-movieReview ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("delete-movieReview ajax failed")
+            }
+        });
+    });
+}
+
+//리뷰 저장
+function saveReview() {
+    $(document).on("click", ".saveBtn", function () {
+        const reviewId = $(this).data("review-id")
+
+        $.ajax({
+            url: '',
+            method: 'PUT',
             data:{ },
             success: function (response, textStatus, xhr){
                 if (xhr.status === 200) {

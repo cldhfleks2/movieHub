@@ -250,4 +250,16 @@ public class ManagerService {
         return "manager/movieReview :: #reviewDetailSection";
     }
 
+    //영화 리뷰 관리자 페이지 : 영화 리뷰 삭제
+    @Transactional
+    ResponseEntity<String> deleteMovieReview(Long reviewId){
+        Optional<MovieReview> movieReviewObj = movieReviewRepository.findById(reviewId);
+        if(!movieReviewObj.isPresent())
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/manager/movieReview/delete", "영화 리뷰를 찾을 수 없습니다.", ResponseEntity.class);
+
+        movieReviewRepository.deleteById(reviewId); //영화 리뷰 삭제
+        
+        return ResponseEntity.noContent().build();
+    }
+
 }
