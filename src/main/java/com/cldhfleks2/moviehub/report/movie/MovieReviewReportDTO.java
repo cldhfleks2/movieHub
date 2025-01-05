@@ -27,5 +27,5 @@ public class MovieReviewReportDTO {
     private Member member; //신고한 유저
     private MovieReview movieReview; //신고할 리뷰
     private LocalDateTime updateDate;
-    private boolean status;
+    private Boolean status;
 }

@@ -25,5 +25,5 @@ public class MovieReportDTO {
     private Movie movie;
     private Member member;
     private LocalDateTime updateDate;
-    private boolean status;
+    private Boolean status;
 }
