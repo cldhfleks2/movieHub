@@ -1,8 +1,12 @@
 package com.cldhfleks2.moviehub.report.movie;
 
+import com.cldhfleks2.moviehub.member.Member;
+import com.cldhfleks2.moviehub.movie.Movie;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,4 +21,9 @@ public class MovieReportDTO {
     private Boolean HATE;      // 혐오 발언
 
     private String reportDetail;
+
+    private Movie movie;
+    private Member member;
+    private LocalDateTime updateDate;
+    private boolean status;
 }
