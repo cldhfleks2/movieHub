@@ -2,6 +2,7 @@ package com.cldhfleks2.moviehub.manager;
 
 import com.cldhfleks2.moviehub.community.CommunityService;
 import com.cldhfleks2.moviehub.community.Post;
+import com.cldhfleks2.moviehub.community.PostDTO;
 import com.cldhfleks2.moviehub.community.PostRepository;
 import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLike;
@@ -66,6 +67,7 @@ public class ManagerService {
     private final PostReviewRepository postReviewRepository;
     private final MemberRepository memberRepository;
     private final CommunityService communityService;
+    private final PostReviewRepository reviewRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -289,6 +291,42 @@ public class ManagerService {
     //게시글 관리 페이지 GET
     String getPost() {
         return "manager/post";
+    }
+
+    //게시글 관리 페이지 : 게시글 검색
+    String searchPost(Model model, Integer pageIdx, String keyword){
+        if (pageIdx == null) pageIdx = 1;
+        if(keyword == null) keyword = "";
+
+        int pageSize = 10; //10개 가져올거
+        Page<Post> postPage = postRepository.findAllByKeywordAndStatus(keyword, PageRequest.of(pageIdx-1, pageSize));
+        List<PostDTO> searchList = new ArrayList<>();
+        for (Post post : postPage.getContent()) {
+            Long postId = post.getId();
+            List<PostReview> postReviewList = postReviewRepository.findAllByPostIdAndStatus(postId);
+            Long reviewCount = (long) postReviewList.size();
+            PostDTO postDTO =  PostDTO.create()
+                    .postType(post.getPostType())
+                    .title(post.getTitle())
+                    .reviewCount(reviewCount)
+                    .member(post.getMember())
+                    .updateDate(post.getUpdateDate())
+                    .view(post.getView())
+                    .postId(postId)
+                    .build();
+            searchList.add(postDTO);
+        }
+
+        //페이지로 전달
+        Page<PostDTO> postDTOPage = new PageImpl<>(
+                searchList,
+                postPage.getPageable(),
+                postPage.getTotalElements()
+        );
+
+        model.addAttribute("postDTOPage", postDTOPage);
+
+        return "manager/post :: #searchResultBody";
     }
 
     //게시글 관리 페이지 : 게시글 상세 검색

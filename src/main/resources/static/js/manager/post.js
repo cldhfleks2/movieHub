@@ -36,8 +36,24 @@ function hidePostDetail() {
 }
 //게시글 검색해서 결과를 보여주는 함수
 function searching(pageIdx = 1) {
+    const keyword = $("#searchInput").val();
+    $.ajax({
+        url: "/api/manager/post/search",
+        method: "get",
+        data: {pageIdx: pageIdx, keyword: keyword},
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#searchResultBody").replaceWith(dataHtml.find("#searchResultBody"));
 
+            console.log("search-post ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("search-post ajax failed")
+        }
 
+    })
 }
 //검색결과 에서 수정하기 버튼 눌렀을때 게시글 상세를 보여줌
 function editBtn(){
@@ -53,6 +69,11 @@ function editBtn(){
                 var dataHtml = $("<div>").append(data);
                 $("#postDetailSection").replaceWith(dataHtml.find("#postDetailSection"));
                 showPostDetail();
+
+                // 스크롤 이동
+                $('html, body').animate({
+                    scrollTop: $('#postDetailSection').offset().top
+                }, 500);
 
                 console.log("searching-postDetail ajax success")
             },

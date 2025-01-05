@@ -80,6 +80,12 @@ public class ManagerController {
         return managerService.getPost();
     }
 
+    //게시글 관리 페이지 : 게시글 검색
+    @GetMapping("/api/manager/post/search")
+    String searchPost(Model model, Integer pageIdx, String keyword){
+        return managerService.searchPost(model, pageIdx, keyword);
+    }
+
     //게시글 관리 페이지 : 게시글 상세 검색
     @GetMapping("/api/manager/post/detail")
     String searchPostDetail(Model model, Authentication auth, Long postId) {

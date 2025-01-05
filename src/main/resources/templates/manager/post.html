@@ -48,7 +48,6 @@
         <table class="resultTable">
             <thead>
             <tr>
-                <th>번호</th>
                 <th>게시판</th>
                 <th>제목</th>
                 <th>작성자</th>
@@ -59,18 +58,17 @@
             </thead>
             <tbody id="searchResultBody">
 
-            <tr class="postRow">
-                <td class="postNumber">1</td>
-                <td class="postType">자유 게시판</td>
+            <tr class="postRow" th:each="post : ${postDTOPage}">
+                <td class="postType" th:text="${post.postType.description}">자유 게시판</td>
                 <td class="postTitle">
-                    <span class="titleText">첫 번째 게시글입니다</span>
-                    <span class="commentCount">[3]</span>
+                    <span class="titleText" th:text="${post.title}">첫 번째 게시글입니다</span>
+                    <span class="reviewCount" th:text="'[' + ${post.reviewCount} + ']'">[3]</span>
                 </td>
-                <td class="postAuthor">홍길동</td>
-                <td class="postDate">2024-01-05</td>
-                <td class="postView">42</td>
+                <td class="postAuthor" th:text="${post.member.nickname}">홍길동</td>
+                <td class="postDate" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}">2024-01-05</td>
+                <td class="postView" th:text="${post.view}">42</td>
                 <td class="postManage">
-                    <button class="editBtn" th:data-post-id=1>수정 하기</button>
+                    <button class="editBtn" th:data-post-id="${post.postId}">수정 하기</button>
                 </td>
             </tr>
 
@@ -178,7 +176,6 @@
             <!-- 반복될 댓글 내용 -->
             <th:block th:fragment="reviewItemFragment(review)">
                 <div th:if="${review != null}"
-                     th:id="'reviewItem-' + ${review.id}"
                      class="reviewItem"
                      th:style="${review.depth > 0 ? 'margin-left: ' + (review.depth * 40) + 'px' : ''}">
 
