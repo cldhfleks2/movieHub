@@ -180,6 +180,10 @@ a:hover {
     border-bottom: 1px solid #dee2e6;
 }
 
+.reportTable td {
+    padding: 5px;
+}
+
 .reportTable th {
     background-color: #f8f9fa;
     font-weight: bold;
@@ -188,6 +192,101 @@ a:hover {
 .reportTable tbody tr:hover {
     background-color: #f8f9fa;
 }
+
+/* 테이블 컨텐츠 최대 길이 제한 */
+.reportTable td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* 영화 신고 테이블 */
+.reportTable#movieTable th:nth-child(1),
+.reportTable#movieTable td:nth-child(1) {
+    width: 15%;
+    text-align: center;
+}
+.reportTable#movieTable th:nth-child(2),
+.reportTable#movieTable td:nth-child(2) {
+    width: 17%;
+    text-align: center;
+}
+.reportTable#movieTable th:nth-child(3),
+.reportTable#movieTable td:nth-child(3) {
+    width: 30%;
+    text-align: center;
+}
+.reportTable#movieTable th:nth-child(4),
+.reportTable#movieTable td:nth-child(4) {
+    width: 10%;
+    text-align: center;
+}
+.reportTable#movieTable th:nth-child(5),
+.reportTable#movieTable td:nth-child(5) {
+    width: 10%;
+    text-align: center;
+}
+.reportTable#movieTable th:nth-child(6),
+.reportTable#movieTable td:nth-child(6) {
+    width: 8%;
+    text-align: center;
+}
+.reportTable#movieTable th:nth-child(7),
+.reportTable#movieTable td:nth-child(7) {
+    width: 10%;
+    text-align: center;
+}
+
+
+
+.reportTable#movieReviewTable th:nth-child(1),
+.reportTable#movieReviewTable td:nth-child(1) {
+    width: 15%;
+    text-align: center;
+}
+.reportTable#movieReviewTable th:nth-child(2),
+.reportTable#movieReviewTable td:nth-child(2) {
+    width: 17%;
+    text-align: center;
+}
+.reportTable#movieReviewTable th:nth-child(3),
+.reportTable#movieReviewTable td:nth-child(3) {
+    width: 30%;
+    text-align: center;
+}
+.reportTable#movieReviewTable th:nth-child(4),
+.reportTable#movieReviewTable td:nth-child(4) {
+    width: 10%;
+    text-align: center;
+}
+.reportTable#movieReviewTable th:nth-child(5),
+.reportTable#movieReviewTable td:nth-child(5) {
+    width: 10%;
+    text-align: center;
+}
+.reportTable#movieReviewTable th:nth-child(6),
+.reportTable#movieReviewTable td:nth-child(6) {
+    width: 8%;
+    text-align: center;
+}
+.reportTable#movieReviewTable th:nth-child(7),
+.reportTable#movieReviewTable td:nth-child(7) {
+    width: 10%;
+    text-align: center;
+}
+.reportTable#movieReviewTable th:nth-child(8),
+.reportTable#movieReviewTable td:nth-child(8) {
+    width: 10%;
+    text-align: center;
+}
+.reportTable#movieReviewTable th:nth-child(9),
+.reportTable#movieReviewTable td:nth-child(9) {
+    width: 10%;
+    text-align: center;
+}
+
+
 
 .detailBtn {
     background-color: #28a745;
@@ -258,19 +357,6 @@ a:hover {
     opacity: 0.5;
 }
 
-/* 테이블 컨텐츠 최대 길이 제한 */
-.reportTable td {
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* 신고 사유 컬럼은 더 넓게 설정 */
-.reportTable td:nth-child(2) {
-    max-width: 300px;
-    white-space: normal;
-}
 
 
 

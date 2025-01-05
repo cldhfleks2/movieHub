@@ -67,15 +67,15 @@
             <th:block th:if="${movieReportPage}">
                 <tr th:each="report : ${movieReportPage}">
                     <td>
-                        <img th:src="@{${report.movie.posterURL}}" alt="영화 포스터" style="width: 120px;height: 180px;">
+                        <img th:src="@{${report.movie.posterURL}}" alt="영화 포스터" style="width: 150px;height: 210px;">
                     </td>
                     <td th:text="${report.movie.movieNm}">영화 이름</td>
                     <td>
-                        <span th:if="${report.POSTER}" class="reportReason">스포일러 포함</span>
-                        <span th:if="${report.MOVIENAME}" class="reportReason">잘못된 정보</span>
-                        <span th:if="${report.MOVIEPEOPLE}" class="reportReason">무관한 내용/광고성</span>
-                        <span th:if="${report.HARMFUL}" class="reportReason">유해하거나 불건전한 내용</span>
-                        <span th:if="${report.HATE}" class="reportReason">혐오 발언</span>
+                        <span th:if="${report.POSTER}" class="reportReason">영화 포스터가 다름</span>
+                        <span th:if="${report.MOVIENAME}" class="reportReason">영화 제목이 다름</span>
+                        <span th:if="${report.MOVIEPEOPLE}" class="reportReason">인물 정보가 잘못 됨</span>
+                        <span th:if="${report.HARMFUL}" class="reportReason">유해하거나 불건전한 내용이 포함</span>
+                        <span th:if="${report.HATE}" class="reportReason">불건전한 내용</span>
                         <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
                     </td>
                     <td th:text="${report.member.nickname}"></td>
@@ -105,6 +105,9 @@
         <table class="reportTable" id="movieReviewTable">
             <thead>
             <tr>
+                <th>영화 포스터</th>
+                <th>영화 제목</th>
+                <th>작성자 닉네임</th>
                 <th>리뷰 내용</th>
                 <th>신고 사유</th>
                 <th>신고자</th>
