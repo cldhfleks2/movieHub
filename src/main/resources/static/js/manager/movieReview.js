@@ -16,6 +16,8 @@ function initialize(){
     $(".searchInput").focus(); //페이지 로딩되면 검색바에 포커스
 
     $("#reviewDetailSection").hide(); //리뷰 상세내용 뷰 숨김
+
+    searchingKeyword(); //페이지 로딩되면 전체요소 1회 검색
 }
 
 //이전 페이지에서 reviewId를 파라미터로 가지고 온 경우
@@ -126,6 +128,7 @@ function deleteReview() {
                     alert("영화 리뷰가 삭제 되었습니다.")
                 }
                 $("#reviewDetailSection").hide(); //리뷰 상세내용뷰 숨김
+                searchingKeyword(); //검색 결과 뷰 새로고침
                 console.log("delete-movieReview ajax success")
             },
             error: function (xhr){
