@@ -1,8 +1,12 @@
 package com.cldhfleks2.moviehub.report.movie;
 
+import com.cldhfleks2.moviehub.member.Member;
+import com.cldhfleks2.moviehub.moviereview.MovieReview;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,5 +22,10 @@ public class MovieReviewReportDTO {
     private Boolean COPYRIGHT; // 저작권 침해
     private Boolean SPAM;      // 개인정보 노출
 
+    //신고 관리자 페이지에서 사용
     private String reportDetail;
+    private Member member; //신고한 유저
+    private MovieReview movieReview; //신고할 리뷰
+    private LocalDateTime updateDate;
+    private boolean status;
 }
