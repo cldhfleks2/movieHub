@@ -143,21 +143,23 @@ function deleteReview() {
 function saveReview() {
     $(document).on("click", ".saveBtn", function () {
         const reviewId = $(this).data("review-id")
+        const content = $("#reviewContentEdit").val()
 
         $.ajax({
-            url: '',
-            method: 'PUT',
-            data:{ },
+            url: '/api/manager/movieReview/edit',
+            method: 'patch',
+            data:{reviewId: reviewId, content: content },
             success: function (response, textStatus, xhr){
-                if (xhr.status === 200) {
-                    alert("")
+                if (xhr.status === 204) {
+                    alert("영화 리뷰가 수정 되었습니다.")
                 }
                 $("#reviewDetailSection").hide(); //리뷰 상세내용뷰 숨김
-                console.log(" ajax success")
+                searchingKeyword(); //검색 결과 뷰 새로고침
+                console.log("edit-movieReview ajax success")
             },
             error: function (xhr){
                 console.log(xhr.responseText);
-                console.log(" ajax failed")
+                console.log("edit-movieReview ajax failed")
             }
         });
     });

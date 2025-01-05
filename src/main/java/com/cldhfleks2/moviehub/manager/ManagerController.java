@@ -67,4 +67,10 @@ public class ManagerController {
     ResponseEntity<String> deleteMovieReview(Long reviewId){
         return managerService.deleteMovieReview(reviewId);
     }
+
+    //영화 리뷰 관리자 페이지 : 영화 리뷰 수정
+    @PatchMapping("/api/manager/movieReview/edit")
+    ResponseEntity<String> editMovieReview(Long reviewId, String content) {
+        return managerService.editMovieReview(reviewId, content);
+    }
 }

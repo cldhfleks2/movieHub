@@ -262,4 +262,17 @@ public class ManagerService {
         return ResponseEntity.noContent().build();
     }
 
+    //영화 리뷰 관리자 페이지 : 영화 리뷰 수정
+    @Transactional
+    ResponseEntity<String> editMovieReview(Long reviewId, String content) {
+        Optional<MovieReview> movieReviewObj = movieReviewRepository.findById(reviewId);
+        if(!movieReviewObj.isPresent())
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "/api/manager/movieReview/edit", "영화 리뷰를 찾을 수 없습니다.", ResponseEntity.class);
+        MovieReview movieReview = movieReviewObj.get();
+        movieReview.setContent(content); //내용 수정
+        movieReviewRepository.save(movieReview); //수정
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
