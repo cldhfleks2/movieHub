@@ -114,7 +114,7 @@
                 </div>
             </div>
 
-            <!-- 오른쪽: 게시글 수정 폼 섹션 -->
+            <!-- 오른쪽: 게시글 수정 섹션 -->
             <div class="editSection">
                 <form id="postDetailForm">
                     <input type="hidden" id="postId">
@@ -170,12 +170,12 @@
             <div class="reviewList" id="reviewList">
                 <th:block th:if="${not #lists.isEmpty(postReviewDTOList)}">
                     <th:block th:each="review : ${postReviewDTOList}" th:if="${review != null}">
-                        <div th:replace="~{:: reviewItemFragment(${review})}"></div>
+                        <div th:replace="~{:: reviewItemFragment(${review})}"></div> <!--댓글이 여기에 반복됨-->
                     </th:block>
                 </th:block>
             </div>
 
-            <!-- 댓글 아이템 템플릿 -->
+            <!-- 반복될 댓글 내용 -->
             <th:block th:fragment="reviewItemFragment(review)">
                 <div th:if="${review != null}"
                      th:id="'reviewItem-' + ${review.id}"
@@ -197,29 +197,14 @@
                     <p class="reviewText" th:text="${review.content}">댓글 내용</p>
 
                     <div class="reviewActions">
-                        <th:block th:unless="${review.isAuthor}">
-                            <button class="replyButton"
-                                    th:if="${review.depth < 1}"
-                                    th:data-parent-id="${review.id}">
-                                답글
-                            </button>
-                            <button class="likeButton"
-                                    th:data-review-id="${review.id}">
-                                <span class="icon" th:classappend="${review.isLiked ? 'active' : ''}">♥</span>
-                                <span class="reviewLikeCount" th:text="${review.likeCount}">0</span>
-                            </button>
-                        </th:block>
-
-                        <th:block th:if="${review.isAuthor}">
-                            <button class="editButton" th:data-review-id="${review.id}">
-                                <span class="icon">✎</span>
-                                <span>수정</span>
-                            </button>
-                            <button class="deleteButton" th:data-review-id="${review.id}">
-                                <span class="icon">×</span>
-                                <span>삭제</span>
-                            </button>
-                        </th:block>
+                        <button class="editButton" th:data-review-id="${review.id}">
+                            <span class="icon">✎</span>
+                            <span>댓글 수정</span>
+                        </button>
+                        <button class="deleteButton" th:data-review-id="${review.id}">
+                            <span class="icon">×</span>
+                            <span>댓글 삭제</span>
+                        </button>
                     </div>
 
                     <!-- 자식 댓글 재귀 표시 -->
