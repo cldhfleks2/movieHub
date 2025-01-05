@@ -34,15 +34,24 @@
 <main class="container" id="reportContainer">
     <!-- Tab buttons -->
     <div class="tabContainer">
-        <button class="tabButton active">영화 신고</button>
-        <button class="tabButton">영화 리뷰 신고</button>
-        <button class="tabButton">게시글 신고</button>
-        <button class="tabButton">댓글 신고</button>
+        <button class="tabButton active" data-tab="movie">영화 신고</button>
+        <button class="tabButton" data-tab="movieReview">영화 리뷰 신고</button>
+        <button class="tabButton" data-tab="post">게시글 신고</button>
+        <button class="tabButton" data-tab="postReview">댓글 신고</button>
     </div>
 
     <!-- Movie Reports Tab -->
-    <div class="tabContent active" id="movieReportContent">
-        <table class="reportTable">
+    <div class="tabContent active" id="movieContent">
+        <div class="searchContainer">
+            <select class="searchType" id="movieSearchType">
+                <option value="reporter">신고 내용</option>
+                <option value="title">영화 제목</option>
+            </select>
+            <input type="text" class="searchInput" id="movieSearchInput" data-tab="movie" placeholder="검색어를 입력하세요">
+            <button class="searchBtn">검색</button>
+        </div>
+
+        <table class="reportTable" id="movieReportTable">
             <thead>
             <tr>
                 <th>영화 제목</th>
@@ -80,8 +89,16 @@
     </div>
 
     <!-- Movie Review Reports Tab -->
-    <div class="tabContent" id="movieReviewReportContent">
-        <table class="reportTable">
+    <div class="tabContent" id="movieReviewContent">
+        <div class="searchContainer">
+            <select class="searchType" id="movieReviewSearchType">
+                <option value="reporter">신고 내용</option>
+                <option value="content">리뷰 내용</option>
+            </select>
+            <input type="text" class="searchInput" id="movieReviewSearchInput" data-tab="movieReview" placeholder="검색어를 입력하세요">
+            <button class="searchBtn">검색</button>
+        </div>
+        <table class="reportTable" id="movieReviewTable">
             <thead>
             <tr>
                 <th>리뷰 내용</th>
@@ -121,8 +138,16 @@
     </div>
 
     <!-- Post Reports Tab -->
-    <div class="tabContent" id="postReportContent">
-        <table class="reportTable">
+    <div class="tabContent" id="postContent">
+        <div class="searchContainer">
+            <select class="searchType" id="postSearchType">
+                <option value="reporter">신고 내용</option>
+                <option value="title">게시글 제목</option>
+            </select>
+            <input type="text" class="searchInput" id="postSearchInput" data-tab="post" placeholder="검색어를 입력하세요">
+            <button class="searchBtn">검색</button>
+        </div>
+        <table class="reportTable" id="postTable">
             <thead>
             <tr>
                 <th>게시글 제목</th>
@@ -161,8 +186,16 @@
     </div>
 
     <!-- Post Review Reports Tab -->
-    <div class="tabContent" id="postReviewReportContent">
-        <table class="reportTable">
+    <div class="tabContent" id="postReviewContent">
+        <div class="searchContainer">
+            <select class="searchType" id="postReviewSearchType">
+                <option value="reporter">신고 내용</option>
+                <option value="content">댓글 내용</option>
+            </select>
+            <input type="text" class="searchInput" id="postReviewSearchInput" data-tab="postReview" placeholder="검색어를 입력하세요">
+            <button class="searchBtn">검색</button>
+        </div>
+        <table class="reportTable" id="postReviewTable">
             <thead>
             <tr>
                 <th>댓글 내용</th>
