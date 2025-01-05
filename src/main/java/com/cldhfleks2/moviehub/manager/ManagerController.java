@@ -3,6 +3,7 @@ package com.cldhfleks2.moviehub.manager;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -77,6 +78,12 @@ public class ManagerController {
     @GetMapping("/manager/post")
     String getPost() {
         return managerService.getPost();
+    }
+
+    //게시글 관리 페이지 : 게시글 상세 검색
+    @GetMapping("/api/manager/post/detail")
+    String searchPostDetail(Model model, Authentication auth, Long postId) {
+        return managerService.searchPostDetail(model, auth, postId);
     }
 
 }

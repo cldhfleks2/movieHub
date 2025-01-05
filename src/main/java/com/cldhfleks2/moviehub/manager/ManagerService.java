@@ -1,8 +1,12 @@
 package com.cldhfleks2.moviehub.manager;
 
+import com.cldhfleks2.moviehub.community.CommunityService;
+import com.cldhfleks2.moviehub.community.Post;
+import com.cldhfleks2.moviehub.community.PostRepository;
 import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLike;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLikeRepository;
+import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
@@ -21,6 +25,9 @@ import com.cldhfleks2.moviehub.movie.genre.MovieGenreRepository;
 import com.cldhfleks2.moviehub.moviereview.MovieReview;
 import com.cldhfleks2.moviehub.moviereview.MovieReviewDTO;
 import com.cldhfleks2.moviehub.moviereview.MovieReviewRepository;
+import com.cldhfleks2.moviehub.postreview.PostReview;
+import com.cldhfleks2.moviehub.postreview.PostReviewDTO;
+import com.cldhfleks2.moviehub.postreview.PostReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,6 +35,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -40,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,8 +61,11 @@ public class ManagerService {
     private final MovieActorRepository movieActorRepository;
     private final MovieDailyStatRepository movieDailyStatRepository;
     private final MovieReviewRepository movieReviewRepository;
-    private final MemberRepository memberRepository;
     private final MovieReviewLikeRepository movieReviewLikeRepository;
+    private final PostRepository postRepository;
+    private final PostReviewRepository postReviewRepository;
+    private final MemberRepository memberRepository;
+    private final CommunityService communityService;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -277,6 +289,37 @@ public class ManagerService {
     //게시글 관리 페이지 GET
     String getPost() {
         return "manager/post";
+    }
+
+    //게시글 관리 페이지 : 게시글 상세 검색
+    String searchPostDetail(Model model, Authentication auth, Long postId) {
+        Optional<Post> postObj = postRepository.findById(postId);
+        if(!postObj.isPresent()) //게시글 존재 여부 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "", "게시글 정보를 찾을 수 없습니다.", String.class);
+
+        String username = auth.getName();
+        Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
+        if(!memberObj.isPresent()) //유저 정보 체크
+            return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "", "유저 정보를 찾을 수 없습니다.", String.class);
+
+        // 댓글 처리 로직 수정
+        List<PostReview> allReviews = postReviewRepository.findAllByPostIdAndStatus(postId);
+        Member member = memberObj.get();
+        // 부모 댓글만 필터링 (parent가 null인 경우)
+        List<PostReviewDTO> parentReviews = allReviews.stream()
+                .filter(review -> review.getParent() == null)
+                .map(review -> communityService.convertToPostReviewDTO(review, allReviews, member.getId()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("postReviewDTOList", parentReviews);
+
+        //댓글 총 갯수 던져줌
+        model.addAttribute("postReviewCnt", allReviews.size());
+
+
+        model.addAttribute("postId", postId); //게시글 아이디 보내줌
+
+        return "manager/post :: #postDetailSection";
     }
 
 }
