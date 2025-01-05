@@ -128,7 +128,7 @@ public class CommunityService {
 
     //댓글 리스트에 전달할 DTO를 만드는 함수 : 재귀적으로 동작
     //현재댓글, 전체댓글로 재귀적으로 동작
-    PostReviewDTO convertToPostReviewDTO(PostReview review, List<PostReview> allReviews, Long currentUserId) {
+    public PostReviewDTO convertToPostReviewDTO(PostReview review, List<PostReview> allReviews, Long currentUserId) {
         if (review == null) return null;
 
         // 자식 댓글 찾기
