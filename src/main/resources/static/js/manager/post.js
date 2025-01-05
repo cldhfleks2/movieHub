@@ -1,6 +1,5 @@
 $(document).ready(function() {
     initialize();
-    autoResizeTextarea();
     pagination();
     searchingBar();
     editBtn();
@@ -11,12 +10,6 @@ function initialize() {
     searching(); //최소 1회 검색
 
     hidePostDetail();
-}
-// 텍스트 영역의 크기를 동적으로 조정하는 함수
-function autoResizeTextarea() {
-    var $textarea = $('#detailContent');
-    $textarea.height('auto');  // 먼저 높이를 자동으로 리셋
-    $textarea.height($textarea[0].scrollHeight - 20);  // 내용에 맞게 높이 조정
 }
 //검색바 동작
 function searchingBar() {
@@ -37,6 +30,7 @@ function hidePostDetail() {
 
 //게시글 검색해서 결과를 보여주는 함수
 function searching(pageIdx = 1) {
+    hidePostDetail();
     const keyword = $("#searchInput").val();
     $.ajax({
         url: "/api/manager/post/search",
@@ -92,6 +86,10 @@ function pagination() {
     $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
         const pageIdx = $(this).data("pageidx")
         searching(pageIdx)
+        // 스크롤 이동
+        $('html, body').animate({
+            scrollTop: $('#searchInput').offset().top
+        }, 10);
     })
 }
 //게시글 상세뷰에서 수정내용 저장

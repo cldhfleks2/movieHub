@@ -289,7 +289,7 @@ body {
 
 /* 작성자 프로필 섹션 */
 .authorSection {
-    flex: 0 0 200px;
+    flex: 0 0 250px;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
@@ -312,6 +312,7 @@ body {
 
 .authorInfo {
     text-align: left;
+    padding-top: 15px;
 }
 
 .authorInfo div {
@@ -319,10 +320,11 @@ body {
 }
 
 .authorInfo label {
-    display: block;
+    display: flex;
     font-size: 0.9em;
     color: #666;
     margin-bottom: 4px;
+    font-weight: bold;
 }
 
 .authorInfo span {
@@ -664,4 +666,3 @@ body {
     margin-left: 40px;
     border-left: 2px solid #3498db;
 }
-

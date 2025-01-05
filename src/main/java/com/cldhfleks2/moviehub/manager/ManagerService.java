@@ -7,6 +7,8 @@ import com.cldhfleks2.moviehub.community.PostRepository;
 import com.cldhfleks2.moviehub.error.ErrorService;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLike;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLikeRepository;
+import com.cldhfleks2.moviehub.like.post.PostLike;
+import com.cldhfleks2.moviehub.like.post.PostLikeRepository;
 import com.cldhfleks2.moviehub.member.Member;
 import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.Movie;
@@ -68,6 +70,7 @@ public class ManagerService {
     private final MemberRepository memberRepository;
     private final CommunityService communityService;
     private final PostReviewRepository reviewRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Value("${file.dir}")
     private String fileDir;
@@ -334,28 +337,42 @@ public class ManagerService {
         Optional<Post> postObj = postRepository.findById(postId);
         if(!postObj.isPresent()) //게시글 존재 여부 체크
             return ErrorService.send(HttpStatus.NOT_FOUND.value(), "", "게시글 정보를 찾을 수 없습니다.", String.class);
-
         String username = auth.getName();
         Optional<Member> memberObj = memberRepository.findByUsernameAndStatus(username);
         if(!memberObj.isPresent()) //유저 정보 체크
             return ErrorService.send(HttpStatus.UNAUTHORIZED.value(), "", "유저 정보를 찾을 수 없습니다.", String.class);
 
-        // 댓글 처리 로직 수정
+        //게시글 뷰
+        Post post = postObj.get();
+        List<PostReview> postReviewList = postReviewRepository.findAllByPostIdAndStatus(postId);
+        Long reviewCount = (long) postReviewList.size();
+        List<PostLike> postLikeList = postLikeRepository.findAllByPostIdAndStatus(postId);
+        Long likeCount = (long) postLikeList.size();
+        PostDTO postDTO = PostDTO.create()
+                .member(memberObj.get())
+                .updateDate(post.getUpdateDate())
+                .postType(post.getPostType())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .view(post.getView())
+                .reviewCount(reviewCount)
+                .likeCount(likeCount)
+                .build();
+        model.addAttribute("postDTO", postDTO);
+
+        //댓글 뷰
         List<PostReview> allReviews = postReviewRepository.findAllByPostIdAndStatus(postId);
         Member member = memberObj.get();
-        // 부모 댓글만 필터링 (parent가 null인 경우)
-        List<PostReviewDTO> parentReviews = allReviews.stream()
+        List<PostReviewDTO> parentReviews = allReviews.stream()// 부모 댓글만 필터링 (parent가 null인 경우)
                 .filter(review -> review.getParent() == null)
                 .map(review -> communityService.convertToPostReviewDTO(review, allReviews, member.getId()))
                 .collect(Collectors.toList());
 
         model.addAttribute("postReviewDTOList", parentReviews);
-
-        //댓글 총 갯수 던져줌
         model.addAttribute("postReviewCnt", allReviews.size());
 
-
-        model.addAttribute("postId", postId); //게시글 아이디 보내줌
+        //게시글 아이디 보내줌
+        model.addAttribute("postId", postId);
 
         return "manager/post :: #postDetailSection";
     }

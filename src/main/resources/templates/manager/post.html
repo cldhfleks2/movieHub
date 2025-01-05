@@ -104,63 +104,68 @@
     <div class="postDetailSection" id="postDetailSection">
         <h3>게시글 상세 정보</h3>
         <div class="detailContainer">
-            <!-- 왼쪽: 작성자 프로필 섹션 -->
-            <div class="authorSection">
-                <div class="profileImage">
-                    <img id="authorProfileImg" src="/image/blank.png" alt="프로필 이미지">
+            <th:block th:if="${postDTO}">
+                <!-- 왼쪽: 작성자 프로필 섹션 -->
+                <div class="authorSection">
+                    <div class="profileImage">
+                        <img id="authorProfileImg" th:src="${postDTO.member.profileImage != null ? postDTO.member.profileImage : '/image/profile.png'}" alt="프로필 이미지">
+                    </div>
+                    <div class="authorInfo">
+                        <div class="authorNickname">
+                            <label>닉네임:&nbsp;
+                                <span th:text="${postDTO.member.nickname}">닉네임</span>
+                            </label>
+                        </div>
+                        <div class="authorUsername">
+                            <label>아이디:&nbsp;
+                                <span th:text="${postDTO.member.username}">아이디</span>
+                            </label>
+                        </div>
+                        <div class="postDate">
+                            <label>게시글 작성일:&nbsp;
+                                <span th:text="${#temporals.format(postDTO.updateDate, 'yyyy-MM-dd')}">yyyy-mm-dd</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="authorInfo">
-                    <div class="authorNickname">
-                        <label>닉네임</label>
-                        <span id="detailAuthorNickname"></span>
-                    </div>
-                    <div class="authorUsername">
-                        <label>아이디</label>
-                        <span id="detailAuthorUsername"></span>
-                    </div>
-                    <div class="postDate">
-                        <label>작성일</label>
-                        <span id="detailDate"></span>
-                    </div>
-                </div>
-            </div>
 
-            <!-- 오른쪽: 게시글 수정 섹션 -->
-            <div class="editSection">
-                <form id="postDetailForm">
-                    <input type="hidden" id="postId">
-                    <div class="formGroup">
-                        <label for="detailPostType">게시판 종류</label>
-                        <select id="detailPostType">
-                            <option value="FREE">자유 게시판</option>
-                            <option value="NEWS">소식 게시판</option>
-                            <option value="DISCUSSION">토론 게시판</option>
-                        </select>
-                    </div>
-                    <div class="formGroup">
-                        <label for="detailTitle">제목</label>
-                        <input type="text" id="detailTitle">
-                    </div>
-                    <div class="formGroup">
-                        <label for="detailContent">내용</label>
-                        <textarea id="detailContent" rows="15"></textarea>
-                    </div>
-                    <div class="statsGroup">
-                        <div class="statItem">
-                            <label>조회수</label>
-                            <span id="detailViews"></span>
+                <!-- 오른쪽: 게시글 수정 섹션 -->
+                <div class="editSection">
+                    <form id="postDetailForm">
+                        <input type="hidden" id="postId">
+                        <div class="formGroup">
+                            <label for="detailPostType">게시판 종류</label>
+                            <select id="detailPostType" th:value="${postDTO.postType}">
+                                <option value="FREE">자유 게시판</option>
+                                <option value="NEWS">소식 게시판</option>
+                                <option value="DISCUSSION">토론 게시판</option>
+                            </select>
                         </div>
-                        <div class="statItem">
-                            <label>댓글</label>
-                            <span id="detailComments"></span>
+                        <div class="formGroup">
+                            <label for="detailTitle">제목</label>
+                            <input type="text" id="detailTitle" th:value="${postDTO.title}">
                         </div>
-                        <div class="statItem">
-                            <label>좋아요</label>
-                            <span id="detailLikes"></span>
+                        <div class="formGroup">
+                            <label for="detailContent">내용</label>
+                            <textarea id="detailContent" rows="15" th:text="${postDTO.content}"></textarea>
                         </div>
-                    </div>
-                </form>
-            </div>
+                        <div class="statsGroup">
+                            <div class="statItem">
+                                <label>조회수</label>
+                                <span class="val" th:text="${postDTO.view} + '회'">0회</span>
+                            </div>
+                            <div class="statItem">
+                                <label>댓글</label>
+                                <span class="val" th:text="${postDTO.reviewCount} + '개'">0개</span>
+                            </div>
+                            <div class="statItem">
+                                <label>좋아요</label>
+                                <span class="val" th:text="${postDTO.likeCount} + '개'">0개</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </th:block>
         </div>
 
         <div class="buttonGroup">
