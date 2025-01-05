@@ -197,7 +197,6 @@ a:hover {
 .reportTable td {
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 
@@ -247,12 +246,12 @@ a:hover {
 }
 .reportTable#movieReviewTable th:nth-child(2),
 .reportTable#movieReviewTable td:nth-child(2) {
-    width: 17%;
+    width: 15%;
     text-align: center;
 }
 .reportTable#movieReviewTable th:nth-child(3),
 .reportTable#movieReviewTable td:nth-child(3) {
-    width: 30%;
+    width: 8%;
     text-align: center;
 }
 .reportTable#movieReviewTable th:nth-child(4),
@@ -260,9 +259,10 @@ a:hover {
     width: 10%;
     text-align: center;
 }
+
 .reportTable#movieReviewTable th:nth-child(5),
 .reportTable#movieReviewTable td:nth-child(5) {
-    width: 10%;
+    width: 19%;
     text-align: center;
 }
 .reportTable#movieReviewTable th:nth-child(6),
@@ -272,21 +272,27 @@ a:hover {
 }
 .reportTable#movieReviewTable th:nth-child(7),
 .reportTable#movieReviewTable td:nth-child(7) {
-    width: 10%;
+    width: 12%;
     text-align: center;
 }
 .reportTable#movieReviewTable th:nth-child(8),
 .reportTable#movieReviewTable td:nth-child(8) {
-    width: 10%;
+    width: 5%;
     text-align: center;
 }
 .reportTable#movieReviewTable th:nth-child(9),
 .reportTable#movieReviewTable td:nth-child(9) {
-    width: 10%;
+    width: 8%;
     text-align: center;
 }
 
 
+
+
+/*테이블의 모든 열이름은 한줄ㄹ 표시되라..*/
+.reportTable th {
+    white-space: nowrap;
+}
 
 .detailBtn {
     background-color: #28a745;

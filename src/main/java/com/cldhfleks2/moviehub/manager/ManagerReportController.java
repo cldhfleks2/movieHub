@@ -22,4 +22,10 @@ public class ManagerReportController { //신고 관리 페이지 전용 컨트�
         return managerReportService.getReportMovie(model, pageIdx, searchType, keyword);
     }
 
+    //영화 리뷰 신고 뷰 GET
+    @GetMapping("/api/manager/report/movieReview")
+    String getReportMovieReview(Model model, Integer pageIdx, String searchType, String keyword) {
+        return managerReportService.getReportMovieReview(model, pageIdx, searchType, keyword);
+    }
+
 }

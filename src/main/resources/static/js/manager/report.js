@@ -26,6 +26,9 @@ function tabSetting() {
 
         // 선택된 탭의 컨텐츠만 보이기
         $(`#${tabType}Content`).addClass('active');
+
+        //전환된 탭에서 최초1회 검색해서 전체 내용을 보여줌
+        tabContentReload(`${tabType}`)
     });
 }
 
