@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 관리 페이지</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/manager/post.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="adminSideBar">
+    <div class="siteLogo">관리자 페이지</div>
+    <button class="adminMainpageBtn" onclick="window.location.href='/main'">메인 페이지로</button>
+    <button class="adminLogoutBtn" onclick="window.location.href='/logout'">로그아웃</button>
+    <hr>
+    <div class="navMenu">
+        <a class="menuItem" id="movieMenu" href="/manager/movie">
+            <span>🎬</span> 영화 관리
+        </a>
+        <a class="menuItem" id="reviewMenu" href="/manager/movieReview">>
+            <span>💬</span> 영화 리뷰 관리
+        </a>
+        <a class="menuItem active" id="postMenu">
+            <span>💬</span> 게시물 관리
+        </a>
+    </div>
+</div>
+
+<main class="container" id="postContainer">
+    <div class="searchSection">
+        <div class="searchHeader">
+            <h2>게시글 검색</h2>
+            <select class="searchType" id="postTypeSelect">
+                <option value="ALL">전체</option>
+                <option value="FREE">자유 게시판</option>
+                <option value="NEWS">소식 게시판</option>
+                <option value="DISCUSSION">토론 게시판</option>
+            </select>
+        </div>
+        <div class="searchBar">
+            <input type="text" id="searchInput" placeholder="제목 또는 작성자로 검색...">
+            <button class="searchBtn" onclick="searching(1)">검색</button>
+        </div>
+    </div>
+
+    <div class="searchResults">
+        <table class="resultTable">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>게시판</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>조회수</th>
+                <th>관리</th>
+            </tr>
+            </thead>
+            <tbody id="searchResultBody">
+            <!-- 검색 결과가 여기에 동적으로 추가됨 -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination" id="paginationContainer">
+        <!-- 페이지네이션 버튼들이 여기에 동적으로 추가됨 -->
+        <button class="pageBtn">이전</button>
+        <div class="pageNumbers">
+            <button class="pageNum active">1</button>
+            <button class="pageNum">2</button>
+            <button class="pageNum">3</button>
+        </div>
+        <button class="pageBtn">다음</button>
+    </div>
+
+    <div class="postDetailSection" id="postDetailSection" style="display: none;">
+        <h3>게시글 상세 정보</h3>
+        <form id="postDetailForm">
+            <input type="hidden" id="postId">
+            <div class="formGroup">
+                <label for="detailPostType">게시판 종류</label>
+                <select id="detailPostType">
+                    <option value="FREE">자유 게시판</option>
+                    <option value="NEWS">소식 게시판</option>
+                    <option value="DISCUSSION">토론 게시판</option>
+                </select>
+            </div>
+            <div class="formGroup">
+                <label for="detailTitle">제목</label>
+                <input type="text" id="detailTitle">
+            </div>
+            <div class="formGroup">
+                <label for="detailContent">내용</label>
+                <textarea id="detailContent" rows="10"></textarea>
+            </div>
+            <div class="formGroup">
+                <label>작성자: </label>
+                <span id="detailAuthor"></span>
+            </div>
+            <div class="formGroup">
+                <label>작성일: </label>
+                <span id="detailDate"></span>
+            </div>
+            <div class="buttonGroup">
+                <button type="button" class="saveBtn" onclick="savePostChanges()">저장</button>
+                <button type="button" class="deleteBtn" onclick="deletePost()">삭제</button>
+                <button type="button" class="cancelBtn" onclick="hidePostDetail()">취소</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    window.onload = function() {
+        const alertMessage = "[[${alertMessage}]]";
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
+</script>
+<script src="/js/manager/post.js"></script>
+</body>
+</html>
