@@ -2,6 +2,7 @@ package com.cldhfleks2.moviehub.manager;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -14,4 +15,11 @@ public class ManagerReportController { //신고 관리 페이지 전용 컨트�
     String getManagerReport() {
         return managerReportService.getManagerReport();
     }
+    
+    //영화 신고 뷰 GET
+    @GetMapping("/api/manager/report/movie")
+    String getReportMovie(Model model, Integer pageIdx, String searchType, String keyword) {
+        return managerReportService.getReportMovie(model, pageIdx, searchType, keyword);
+    }
+
 }

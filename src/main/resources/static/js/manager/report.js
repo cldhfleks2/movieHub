@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 function initialize(){
     //가장 처음 영화 신고 내역을 보여줌
-
+    tabContentReload("movie")
 }
 
 // 탭 초기화 및 탭 전환 처리
@@ -44,13 +44,14 @@ function tabContentReload(tabType, pageIdx = 1) {
     const keyword = $(`#${tabType}SearchInput`).val();
 
     $.ajax({
-        url: `/manager/report/${tabType}`,
+        url: `/api/manager/report/${tabType}`,
         method: 'GET',
         data: { pageIdx: pageIdx, searchType: searchType, keyword: keyword },
         success: function (data){
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
             $(`#${tabType}Table`).replaceWith(dataHtml.find(`#${tabType}Table`));
+            // v페이지네이션도 새로고침
 
             console.log("searching ajax success")
         },

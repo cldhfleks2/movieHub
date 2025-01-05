@@ -51,9 +51,10 @@
             <button class="searchBtn">검색</button>
         </div>
 
-        <table class="reportTable" id="movieReportTable">
+        <table class="reportTable" id="movieTable">
             <thead>
             <tr>
+                <th>영화 포스터</th>
                 <th>영화 제목</th>
                 <th>신고 사유</th>
                 <th>신고자</th>
@@ -65,7 +66,10 @@
             <tbody>
             <th:block th:if="${movieReportPage}">
                 <tr th:each="report : ${movieReportPage}">
-                    <td th:text="${report.movie.title}"></td>
+                    <td>
+                        <img th:src="@{${report.movie.posterURL}}" alt="영화 포스터" style="width: 120px;height: 180px;">
+                    </td>
+                    <td th:text="${report.movie.movieNm}">영화 이름</td>
                     <td>
                         <span th:if="${report.POSTER}" class="reportReason">스포일러 포함</span>
                         <span th:if="${report.MOVIENAME}" class="reportReason">잘못된 정보</span>
@@ -75,7 +79,7 @@
                         <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
                     </td>
                     <td th:text="${report.member.nickname}"></td>
-                    <td th:text="${#temporals.format(report.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#temporals.format(report.updateDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
                     <td>
                         <button class="detailBtn" th:data-movie-id="${report.movie.id}">자세히 보기</button>
@@ -124,7 +128,7 @@
                         <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
                     </td>
                     <td th:text="${report.member.nickname}"></td>
-                    <td th:text="${#temporals.format(report.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#temporals.format(report.updateDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
                     <td>
                         <button class="detailBtn" th:data-review-id="${report.movieReview.id}">자세히 보기</button>
@@ -172,7 +176,7 @@
                         <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
                     </td>
                     <td th:text="${report.member.nickname}"></td>
-                    <td th:text="${#temporals.format(report.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#temporals.format(report.updateDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
                     <td>
                         <button class="detailBtn" th:data-post-id="${report.post.id}">자세히 보기</button>
@@ -220,7 +224,7 @@
                         <p th:if="${report.reportDetail}" class="reportDetail" th:text="${report.reportDetail}"></p>
                     </td>
                     <td th:text="${report.member.nickname}"></td>
-                    <td th:text="${#temporals.format(report.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#temporals.format(report.updateDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
                     <td>
                         <button class="detailBtn" th:data-review-id="${report.review.id}">자세히 보기</button>
