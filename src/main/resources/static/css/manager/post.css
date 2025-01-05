@@ -196,10 +196,13 @@ body {
     cursor: pointer;
 }
 
+
+/*테이블*/
 .resultTable {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    table-layout: fixed; /* 테이블의 레이아웃을 고정으로 설정 */
 }
 
 .resultTable th,
@@ -213,6 +216,53 @@ body {
     background-color: #f8f9fa;
     font-weight: bold;
 }
+
+/* 게시판종류 */
+.resultTable th:nth-child(1),
+.resultTable td:nth-child(1) {
+    width: 10%;
+    text-align: center;
+}
+
+/* 제목 */
+.resultTable th:nth-child(2),
+.resultTable td:nth-child(2) {
+    width: 54%;
+    text-align: center;
+}
+
+/* 작성자 */
+.resultTable th:nth-child(3),
+.resultTable td:nth-child(3) {
+    width: 10%;
+    text-align: center;
+}
+
+/* 작성일 */
+.resultTable th:nth-child(4),
+.resultTable td:nth-child(4) {
+    width: 10%;
+    text-align: center;
+}
+
+/* 조회수 */
+.resultTable th:nth-child(5),
+.resultTable td:nth-child(5) {
+    width: 6%;
+    text-align: center;
+}
+
+/* 관리 */
+.resultTable th:nth-child(6),
+.resultTable td:nth-child(6) {
+    width: 10%;
+    text-align: center;
+}
+
+
+
+
+
 
 
 /* 게시글 상세 정보 섹션 스타일 */
@@ -390,13 +440,28 @@ body {
     margin-top: 20px;
 }
 
-.pageBtn,
-.pageNum {
+.pageNumbers {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pageBtn, .pageNum {
+    color: black;
     padding: 8px 12px;
     border: 1px solid #ddd;
     background-color: white;
     cursor: pointer;
     border-radius: 4px;
+}
+
+.pageBtn:disabled {
+    opacity: 0.5;
+    background-color: #afafaf;
+}
+
+.pageBtn:hover:not(:disabled),
+.pageNum:hover:not(:disabled){
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .pageNum.active {
@@ -426,7 +491,7 @@ body {
 
 .reviewCount {
     color: #666;
-    font-size: 0.9em;
+    font-size: 1em;
 }
 
 .editBtn,
@@ -508,8 +573,8 @@ body {
 }
 
 .reviewItem {
-    padding: 20px;
-    margin-bottom: 15px;
+    padding: 10px;
+    margin-bottom: 5px;
     border: 1px solid #eee;
     border-radius: 8px;
     transition: background-color 0.2s;
@@ -523,7 +588,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .revieworInfo {
@@ -544,24 +609,23 @@ body {
 }
 
 .reviewText {
-    margin-bottom: 15px;
     line-height: 1.5;
+    margin: 10px;
 }
 
 .reviewActions {
     display: flex;
-    gap: 15px;
     align-items: center;
 }
 
 .reviewActions button {
-    padding: 6px 12px;
+    padding: 3px 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 3px;
     font-size: 0.9em;
     color: #666;
     background-color: transparent;

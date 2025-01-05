@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <div class="searchResults">
+    <div class="searchResults" id="searchResults">
         <table class="resultTable">
             <thead>
             <tr>
@@ -62,7 +62,7 @@
                 <td class="postType" th:text="${post.postType.description}">자유 게시판</td>
                 <td class="postTitle">
                     <span class="titleText" th:text="${post.title}">첫 번째 게시글입니다</span>
-                    <span class="reviewCount" th:text="'[' + ${post.reviewCount} + ']'">[3]</span>
+                    <span class="reviewCount" th:text="'[' + ${post.reviewCount} + ']'" title="댓글 개수">[3]</span>
                 </td>
                 <td class="postAuthor" th:text="${post.member.nickname}">홍길동</td>
                 <td class="postDate" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}">2024-01-05</td>
@@ -74,17 +74,30 @@
 
             </tbody>
         </table>
-    </div>
 
-    <div class="pagination" id="paginationContainer">
-        <!-- 페이지네이션 버튼들이 여기에 동적으로 추가됨 -->
-        <button class="pageBtn">이전</button>
-        <div class="pageNumbers">
-            <button class="pageNum active">1</button>
-            <button class="pageNum">2</button>
-            <button class="pageNum">3</button>
+        <div class="pagination" id="pagination">
+            <th:block th:if="${postDTOPage != null and postDTOPage.totalPages > 0}">
+                <button class="pageBtn prev" id="prevPage"
+                        th:disabled="${postDTOPage.first}"
+                        th:data-pageidx="${postDTOPage.number}">
+                    이전
+                </button>
+                <div class="pageNumbers">
+                    <th:block th:each="pageNum : ${#numbers.sequence(0, postDTOPage.totalPages - 1)}">
+                        <button class="pageNum"
+                                th:classappend="${pageNum == postDTOPage.number} ? 'active'"
+                                th:data-pageidx="${pageNum + 1}"
+                                th:text="${pageNum + 1}">
+                        </button>
+                    </th:block>
+                </div>
+                <button class="pageBtn next" id="nextPage"
+                        th:disabled="${postDTOPage.last}"
+                        th:data-pageidx="${postDTOPage.number + 2}">
+                    다음
+                </button>
+            </th:block>
         </div>
-        <button class="pageBtn">다음</button>
     </div>
 
 <!--게시글 상세 정보 (댓글 포함)-->

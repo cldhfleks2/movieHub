@@ -34,6 +34,7 @@ function showPostDetail() {
 function hidePostDetail() {
     $('#postDetailSection').hide();
 }
+
 //게시글 검색해서 결과를 보여주는 함수
 function searching(pageIdx = 1) {
     const keyword = $("#searchInput").val();
@@ -45,6 +46,7 @@ function searching(pageIdx = 1) {
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
             $("#searchResultBody").replaceWith(dataHtml.find("#searchResultBody"));
+            $("#pagination").replaceWith(dataHtml.find("#pagination"));
 
             console.log("search-post ajax success")
         },
@@ -87,7 +89,10 @@ function editBtn(){
 }
 //게시글 검색결과 페이지네이션
 function pagination() {
-    // 페이지네이션 UI 업데이트
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const pageIdx = $(this).data("pageidx")
+        searching(pageIdx)
+    })
 }
 //게시글 상세뷰에서 수정내용 저장
 function savePostChanges() {

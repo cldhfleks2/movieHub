@@ -326,7 +326,7 @@ public class ManagerService {
 
         model.addAttribute("postDTOPage", postDTOPage);
 
-        return "manager/post :: #searchResultBody";
+        return "manager/post :: #postContainer";
     }
 
     //게시글 관리 페이지 : 게시글 상세 검색
