@@ -3,7 +3,6 @@ package com.cldhfleks2.moviehub.manager;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +15,8 @@ public class ManagerController {
 
     //영화 관리자 페이지 GET
     @GetMapping("/manager/movie")
-    String getManagerMovie(Authentication auth, Model model) {
-        return managerService.getManagerMovie(auth, model);
+    String getManagerMovie() {
+        return managerService.getManagerMovie();
     }
 
     //영화 관리자 페이지 : 검색 결과 뷰 GET
@@ -46,8 +45,8 @@ public class ManagerController {
 
     //영화 리뷰 관리자 페이지 GET
     @GetMapping("/manager/movieReview")
-    String getMovieReview(Authentication auth, Model model) {
-        return managerService.getMovieReview(auth, model);
+    String getMovieReview() {
+        return managerService.getMovieReview();
     }
 
     //영화 리뷰 관리자 페이지 : 리뷰 검색
@@ -73,4 +72,11 @@ public class ManagerController {
     ResponseEntity<String> editMovieReview(Long reviewId, String content) {
         return managerService.editMovieReview(reviewId, content);
     }
+
+    //게시글 관리 페이지 GET
+    @GetMapping("/manager/post")
+    String getPost() {
+        return managerService.getPost();
+    }
+
 }

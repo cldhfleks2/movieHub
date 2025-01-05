@@ -28,7 +28,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -63,7 +62,7 @@ public class ManagerService {
     private String fileDirOnDb;
 
     //영화 관리자 페이지 GET
-    String getManagerMovie(Authentication authentication, Model model) {
+    String getManagerMovie() {
         return "manager/movie";
     }
 
@@ -191,7 +190,7 @@ public class ManagerService {
     }
 
     //영화 리뷰 관리자 페이지 GET
-    String getMovieReview(Authentication auth, Model model) {
+    String getMovieReview() {
         return "manager/movieReview";
     }
 
@@ -273,6 +272,11 @@ public class ManagerService {
         movieReviewRepository.save(movieReview); //수정
 
         return ResponseEntity.noContent().build();
+    }
+
+    //게시글 관리 페이지 GET
+    String getPost() {
+        return "manager/post";
     }
 
 }
