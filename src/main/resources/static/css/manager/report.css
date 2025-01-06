@@ -193,10 +193,10 @@ a:hover {
     background-color: #f8f9fa;
 }
 
-/* 테이블 컨텐츠 최대 길이 제한 */
 .reportTable td {
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
 }
 
 
@@ -285,6 +285,53 @@ a:hover {
     width: 8%;
     text-align: center;
 }
+
+
+
+.reportTable#postTable th:nth-child(1),
+.reportTable#postTable td:nth-child(1) {
+    width: 8%;
+    text-align: center;
+}
+.reportTable#postTable th:nth-child(2),
+.reportTable#postTable td:nth-child(2) {
+    width: 13%;
+    text-align: center;
+}
+.reportTable#postTable th:nth-child(3),
+.reportTable#postTable td:nth-child(3) {
+    width: 32%;
+    text-align: center;
+}
+.reportTable#postTable th:nth-child(4),
+.reportTable#postTable td:nth-child(4) {
+    width: 15%;
+    text-align: center;
+}
+
+.reportTable#postTable th:nth-child(5),
+.reportTable#postTable td:nth-child(5) {
+    width: 10%;
+    text-align: center;
+}
+.reportTable#postTable th:nth-child(6),
+.reportTable#postTable td:nth-child(6) {
+    width: 8%;
+    text-align: center;
+}
+.reportTable#postTable th:nth-child(7),
+.reportTable#postTable td:nth-child(7) {
+    width: 6%;
+    text-align: center;
+}
+.reportTable#postTable th:nth-child(8),
+.reportTable#postTable td:nth-child(8) {
+    width: 8%;
+    text-align: center;
+}
+
+
+
 
 
 
