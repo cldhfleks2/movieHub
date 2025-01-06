@@ -311,17 +311,17 @@
                 <div class="userData">
                     <h3 class="userName" th:text="${member.nickname}">닉네임</h3>
                     <div class="activityStats">
-                        <span class="reviewCount" th:text="'영화 리뷰 ' + ${member.movieReviewCount}">리뷰 15</span>
-                        <span class="postCount" th:text="'게시글 ' + ${member.postCount}">게시글 23</span>
-                        <span class="postReviewCount" th:text="'댓글 ' + ${member.postReviewCount}">게시글 23</span>
+                        <span class="reviewCount" th:text="'영화 리뷰 ' + ${(member.movieReviewCount != null) ? member.movieReviewCount : 0}">리뷰 15</span>
+                        <span class="postCount" th:text="'게시글 ' + ${(member.postCount != null) ? member.postCount : 0}">게시글 23</span>
+                        <span class="postReviewCount" th:text="'댓글 ' + ${(member.postReviewCount != null) ? member.postReviewCount : 0}">댓글 23</span>
                     </div>
                     <div class="activityScore" th:text="'활동점수 ' + ${member.totalScore} + '점'">
                         활동점수 158점
                     </div>
 <!--                    뱃지는 아직안씀..-->
-                    <div class="achievement">
-                        <span class="achievementBadge">영화달인</span>
-                    </div>
+<!--                    <div class="achievement">-->
+<!--                        <span class="achievementBadge">영화달인</span>-->
+<!--                    </div>-->
                 </div>
             </div>
 
