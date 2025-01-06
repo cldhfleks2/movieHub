@@ -77,7 +77,8 @@
                     이전
                 </button>
                 <div class="pageNumbers">
-                    <th:block th:each="pageNum : ${#numbers.sequence(0, searchPage.totalPages - 1)}">
+                    <th:block th:each="pageNum : ${#numbers.sequence(searchPage.number - 5, searchPage.number + 4)}"
+                              th:if="${pageNum >= 0}">
                         <button class="pageNum"
                                 th:classappend="${pageNum == searchPage.number} ? 'active'"
                                 th:data-pageidx="${pageNum + 1}"

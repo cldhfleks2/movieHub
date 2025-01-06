@@ -99,7 +99,8 @@
                     이전
                 </button>
                 <div class="pageNumbers">
-                    <th:block th:each="pageNum : ${#numbers.sequence(0, movieReportPage.totalPages - 1)}">
+                    <th:block th:each="pageNum : ${#numbers.sequence(movieReportPage.number - 5, movieReportPage.number + 4)}"
+                              th:if="${pageNum >= 0}">
                         <button class="pageNum"
                                 th:classappend="${pageNum == movieReportPage.number} ? 'active'"
                                 th:data-pageidx="${pageNum + 1}"
@@ -185,7 +186,8 @@
                     이전
                 </button>
                 <div class="pageNumbers">
-                    <th:block th:each="pageNum : ${#numbers.sequence(0, movieReviewReportPage.totalPages - 1)}">
+                    <th:block th:each="pageNum : ${#numbers.sequence(movieReviewReportPage.number - 5, movieReviewReportPage.number + 4)}"
+                              th:if="${pageNum >= 0}">
                         <button class="pageNum"
                                 th:classappend="${pageNum == movieReviewReportPage.number} ? 'active'"
                                 th:data-pageidx="${pageNum + 1}"
@@ -265,7 +267,8 @@
                     이전
                 </button>
                 <div class="pageNumbers">
-                    <th:block th:each="pageNum : ${#numbers.sequence(0, postReportPage.totalPages - 1)}">
+                    <th:block th:each="pageNum : ${#numbers.sequence(postReportPage.number - 5, postReportPage.number + 4)}"
+                              th:if="${pageNum >= 0}">
                         <button class="pageNum"
                                 th:classappend="${pageNum == postReportPage.number} ? 'active'"
                                 th:data-pageidx="${pageNum + 1}"
@@ -345,7 +348,8 @@
                     이전
                 </button>
                 <div class="pageNumbers">
-                    <th:block th:each="pageNum : ${#numbers.sequence(0, postReviewReportPage.totalPages - 1)}">
+                    <th:block th:each="pageNum : ${#numbers.sequence(postReviewReportPage.number - 5, postReviewReportPage.number + 4)}"
+                              th:if="${pageNum >= 0}">
                         <button class="pageNum"
                                 th:classappend="${pageNum == postReviewReportPage.number} ? 'active'"
                                 th:data-pageidx="${pageNum + 1}"
