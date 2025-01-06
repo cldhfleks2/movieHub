@@ -41,12 +41,9 @@ public interface MovieReviewRepository extends JpaRepository<MovieReview, Long> 
 
     //pageable로 (0,count) 갯수를 받아서 그만큼 MovieReviewLike가 많은 순서대로 가져옴
     @Query("SELECT mr FROM MovieReview mr " +
+            "LEFT JOIN MovieReviewLike mrl ON mrl.movieReview = mr AND mrl.status = 1 " +
             "WHERE mr.status = 1 " +
-            "AND EXISTS (SELECT 1 FROM MovieReviewLike mrl " +
-            "            WHERE mrl.movieReview = mr " +
-            "            AND mrl.status = 1) " +
-            "ORDER BY (SELECT COUNT(mrl) FROM MovieReviewLike mrl " +
-            "          WHERE mrl.movieReview = mr " +
-            "          AND mrl.status = 1) DESC")
+            "GROUP BY mr " +
+            "ORDER BY COUNT(mrl) DESC")
     Page<MovieReview> findTopMovieReviewsByLikeCount(Pageable pageable);
 }
