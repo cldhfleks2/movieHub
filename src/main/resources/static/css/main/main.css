@@ -453,7 +453,9 @@ a {
     cursor: pointer;
 }
 
-
+.mainContent section{
+    margin-bottom: 80px;
+}
 
 
 
