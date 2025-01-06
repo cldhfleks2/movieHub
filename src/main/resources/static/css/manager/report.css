@@ -422,6 +422,8 @@ a:hover {
     font-style: italic;
 }
 
+
+/* 페이지네이션 */
 .pagination {
     display: flex;
     justify-content: center;
@@ -429,30 +431,42 @@ a:hover {
     margin-top: 20px;
 }
 
-.pageBtn {
-    padding: 5px 10px;
-    border: 1px solid #dee2e6;
-    background-color: white;
+.pageBtn, .pageNum {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgb(0 0 0 / 20%);
+    border-radius: 8px;
+    color: black;
     cursor: pointer;
-    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
-.pageBtn.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-}
-
-.pageBtn:hover:not(.active):not(:disabled) {
-    background-color: #e9ecef;
-}
 
 .pageBtn:disabled {
-    cursor: not-allowed;
     opacity: 0.5;
+    background-color: #afafaf;
 }
 
+.pageBtn:hover:not(:disabled),
+.pageNum:hover:not(:disabled){
+    background: rgba(255, 255, 255, 0.1);
+}
 
+.pageNum.active {
+    background: #007bffad;
+    border-color: #007bffad;
+}
+
+.pageNumbers {
+    display: flex;
+    gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .pagination {
+        flex-wrap: wrap;
+    }
+}
 
 
 
