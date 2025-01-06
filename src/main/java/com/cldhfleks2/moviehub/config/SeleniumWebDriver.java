@@ -20,6 +20,7 @@ import java.util.List;
 @Slf4j
 public class SeleniumWebDriver {
 
+    //moviechart페이지 크롤링해서 포스터 가져오기
     public String getMoviePosterURL(String movieCd) {
         WebDriver localDriver = null;
         try {
@@ -60,9 +61,10 @@ public class SeleniumWebDriver {
             WebElement posterElement = new WebDriverWait(localDriver, Duration.ofSeconds(10))
                     .until(ExpectedConditions.presenceOfElementLocated(By.className("poster")));
 
-            String posterUrl = posterElement.findElement(By.tagName("img")).getAttribute("src");
-            log.info("posterUrl: {}", posterUrl);
-            return posterUrl;
+            String imgTagSrcURL = posterElement.findElement(By.tagName("img")).getAttribute("src");
+            String posterURL = imgTagSrcURL.split("source=")[1]; //실제 이미지 주소만 가져옴
+            log.info("posterUrl: {}", posterURL);
+            return posterURL;
 
         } catch (Exception e) {
             log.error("Error getting poster URL for movie {}", movieCd, e);
@@ -74,7 +76,8 @@ public class SeleniumWebDriver {
         }
     }
 
-    public List<MovieDTO> getMovieRank() throws Exception{
+    //moviechart의 rank페이지 크롤링해서 포스터 가져오기
+    public List<MovieDTO> getMovieRank(){
         WebDriver driver = null;
         List<MovieDTO> movieDTOList = new ArrayList<>();
 
