@@ -8,12 +8,11 @@ $(document).ready(function() {
     gotoPostDetail();
     initialSearching();
 });
-
+//초기 설정
 function initialize(){
     //검색페이지에서는 검색 헤더가 안보이게
     $(".headerSearchBtn").hide();
 }
-
 //다른 페이지에서 키워드로 넘어온 경우 페이지 로딩 되자마자 검색 진행
 function initialSearching(){
     // URL에서 initialKeyword 파라미터 확인
@@ -39,7 +38,6 @@ function initialSearching(){
         searchMovieListOrPeopleProfile(decodeURIComponent(peopleNm));
     }
 }
-
 //검색바 카테고리 선택시
 function categorySelectSection() {
     // 카테고리 변경 이벤트
@@ -51,7 +49,6 @@ function categorySelectSection() {
         $('.searchInput').focus();// input 태그로 포커스 이동
     });
 }
-
 //인물검색일때와 아닐때의 뷰 컨트롤하는 함수
 function updateProfileSectionVisibility() {
     const selectedValue = $('.categorySelect').val();
@@ -79,7 +76,6 @@ function updateProfileSectionVisibility() {
         $(".noResultsMovie").hide();
     }
 }
-
 //좋아요 기능 : 아직 서버로 요청을 보내진 않음.. 뷰만 바뀜
 function likeSection(){
     // 버튼 클릭시 문구를 출력하는 코드
@@ -131,7 +127,6 @@ function likeSection(){
         }, 1000);
     }
 }
-
 //정렬 기능 : 관련도순, 개봉일순, 평점순
 function filterSection(){
     // 필터 태그 토글 : 안씀
@@ -211,7 +206,6 @@ function filterSection(){
 function showLoading() {
     $('#loadingOverlay').addClass('active');
 }
-
 //로딩중 뷰를 감춤
 function hideLoading() {
     $('#loadingOverlay').removeClass('active');
@@ -241,8 +235,7 @@ function searchSection(){
         searchPeopleMovieList(peopleId, category);
     })
 }
-
-// 영화이름과 인물 프로필을 검색하는 함수
+//영화이름과 인물 프로필을 검색하는 함수
 function searchMovieListOrPeopleProfile(keyword) {
     const category = $(".categorySelect").val();
     const sortBy = $(".sortSelect").val();
@@ -289,7 +282,6 @@ function searchMovieListOrPeopleProfile(keyword) {
     })
 
 }
-
 //인물 프로필 클릭했을때 참여한 영화 목록을 가져옴
 function searchPeopleMovieList(peopleId, category){
     showLoading();
@@ -324,7 +316,6 @@ function searchPeopleMovieList(peopleId, category){
 
     })
 }
-
 //영화 상세 페이지로 이동 하는 함수
 function gotoPostDetail(){
     $(document).on("click", ".btnLink", function (){
