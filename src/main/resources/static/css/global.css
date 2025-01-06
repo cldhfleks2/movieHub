@@ -90,8 +90,12 @@ body {
     transition: background-color 0.2s;
 }
 
-.headerDropdownItem:hover {
+.headerSearchItem:hover {
     background-color: #3a3a3a;
+}
+
+.headerSearchBtn {
+    font-size: 28px;
 }
 
 /* 유저 메뉴 스타일 */
