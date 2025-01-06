@@ -28,4 +28,9 @@ public class ManagerReportController { //신고 관리 페이지 전용 컨트�
         return managerReportService.getReportMovieReview(model, pageIdx, searchType, keyword);
     }
 
+    //게시글 신고 뷰 GET
+    @GetMapping("/api/manager/report/post")
+    String getReportPost(Model model, Integer pageIdx, String searchType, String keyword) {
+        return managerReportService.getReportPost(model, pageIdx, searchType, keyword);
+    }
 }

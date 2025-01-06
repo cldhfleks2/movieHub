@@ -1,6 +1,9 @@
 package com.cldhfleks2.moviehub.manager;
 
 import com.cldhfleks2.moviehub.report.movie.*;
+import com.cldhfleks2.moviehub.report.post.PostReport;
+import com.cldhfleks2.moviehub.report.post.PostReportDTO;
+import com.cldhfleks2.moviehub.report.post.PostReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +19,7 @@ import java.util.List;
 public class ManagerReportService {
     private final MovieReportRepository movieReportRepository;
     private final MovieReviewReportRepository movieReviewReportRepository;
+    private final PostReportRepository postReportRepository;
 
     //신고 관리 페이지 GET
     String getManagerReport() {
@@ -114,4 +118,52 @@ public class ManagerReportService {
         return "manager/report :: #movieReviewContent";
     }
 
+    //게시글 신고 뷰 GET
+    String getReportPost(Model model, Integer pageIdx, String searchType, String keyword) {
+        if (pageIdx == null) pageIdx = 1;
+        if (searchType == null) searchType = "reporter";
+        if (keyword == null) keyword = "";
+
+        int pageSize = 10;
+        PageRequest pageRequest = PageRequest.of(pageIdx-1, pageSize);
+
+        Page<PostReport> postReportPage;
+        if(searchType.equals("reporter")) //신고 내용
+            postReportPage = postReportRepository.findByReportDetailContaining(keyword, pageRequest);
+        else if(searchType.equals("title")) //게시글 제목
+            postReportPage = postReportRepository.findByPostTitleContaining(keyword, pageRequest);
+        else if(searchType.equals("content")) //게시글 내용
+            postReportPage = postReportRepository.findByPostContentContaining(keyword, pageRequest);
+        else //작성자 닉네임
+            postReportPage = postReportRepository.findByMemberNicknameContaining(keyword, pageRequest);
+
+        List<PostReportDTO> postReportDTOList = new ArrayList<>();
+        for(PostReport postReport : postReportPage.getContent()){
+            PostReportDTO postReportDTO = PostReportDTO.create()
+                    .INAPPROPRIATE(postReport.getINAPPROPRIATE())
+                    .MISINFORMATION(postReport.getMISINFORMATION())
+                    .HATE(postReport.getHATE())
+                    .ABUSIVE(postReport.getABUSIVE())
+                    .COPYRIGHT(postReport.getCOPYRIGHT())
+                    .SPAM(postReport.getSPAM())
+                    .reportDetail(postReport.getReportDetail())
+                    .post(postReport.getPost())
+                    .member(postReport.getMember())
+                    .build();
+            postReportDTOList.add(postReportDTO);
+        }
+
+        //페이지로 전달
+        Page<PostReportDTO> searchPage = new PageImpl<>(
+                postReportDTOList,
+                postReportPage.getPageable(),
+                postReportPage.getTotalElements()
+        );
+
+        model.addAttribute("postReportPage", searchPage);
+
+        return "manager/report :: #postContent";
+    }
+
 }
+
