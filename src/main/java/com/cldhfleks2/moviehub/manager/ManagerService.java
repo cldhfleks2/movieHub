@@ -69,7 +69,6 @@ public class ManagerService {
     private final PostReviewRepository postReviewRepository;
     private final MemberRepository memberRepository;
     private final CommunityService communityService;
-    private final PostReviewRepository reviewRepository;
     private final PostLikeRepository postLikeRepository;
 
     @Value("${file.dir}")
@@ -88,10 +87,10 @@ public class ManagerService {
         if(pageIdx == null) pageIdx = 1;
         if(keyword == null) keyword = "";
 
-        int pageSize = 10;
+        int pageSize = 5;
         Page<Movie> searchMoviePage = movieRepository.findByMovieNmAndStatus(keyword, PageRequest.of(pageIdx-1, pageSize));
 
-        model.addAttribute("searchMovieList", searchMoviePage);
+        model.addAttribute("searchMoviePage", searchMoviePage);
         return "manager/movie :: #searchResultSection";
     }
 

@@ -45,12 +45,12 @@
     <div class="searchResultSection" id="searchResultSection">
         <div class="resultCount">
             검색결과:
-            <span th:if="${searchMovieList}" th:text="${#lists.size(searchMovieList.content)} + '개'">0</span>
-            <span th:unless="${searchMovieList}">0개</span>
+            <span th:if="${searchMoviePage}" th:text="${#lists.size(searchMoviePage.content)} + '개'">0</span>
+            <span th:unless="${searchMoviePage}">0개</span>
         </div>
         <div class="movieGrid">
-            <th:block th:if="${searchMovieList}">
-                <div class="movieCard"  th:each="searchMovie : ${searchMovieList.content}">
+            <th:block th:if="${searchMoviePage}">
+                <div class="movieCard"  th:each="searchMovie : ${searchMoviePage.content}">
                     <div class="movieCardContent">
                         <img class="cardPoster" th:src="${searchMovie.posterURL}" alt="영화 포스터">
                         <div class="cardInfo">
@@ -64,6 +64,30 @@
                         </div>
                     </div>
                 </div>
+            </th:block>
+        </div>
+
+        <div class="pagination" id="pagination">
+            <th:block th:if="${searchMoviePage != null and searchMoviePage.totalPages > 0}">
+                <button class="pageBtn prev" id="prevPage"
+                        th:disabled="${searchMoviePage.first}"
+                        th:data-pageidx="${searchMoviePage.number}">
+                    이전
+                </button>
+                <div class="pageNumbers">
+                    <th:block th:each="pageNum : ${#numbers.sequence(0, searchMoviePage.totalPages - 1)}">
+                        <button class="pageNum"
+                                th:classappend="${pageNum == searchMoviePage.number} ? 'active'"
+                                th:data-pageidx="${pageNum + 1}"
+                                th:text="${pageNum + 1}">
+                        </button>
+                    </th:block>
+                </div>
+                <button class="pageBtn next" id="nextPage"
+                        th:disabled="${searchMoviePage.last}"
+                        th:data-pageidx="${searchMoviePage.number + 2}">
+                    다음
+                </button>
             </th:block>
         </div>
     </div>

@@ -8,18 +8,18 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-    // movieCd로 Movie 객체를 조회하는 쿼리
+    //movieCd로 Movie를 검색
     //status=0 인 것들도 가져온다.
     @Query("SELECT m FROM Movie m WHERE m.movieCd = :movieCd")
     Optional<Movie> findByMovieCd(String movieCd);
 
-    // movieCd로 Movie 객체를 조회하는 쿼리
-    //status=1 인 것만 가져온다.
+    //movieCd로 Movie를 검색
     @Query("SELECT m FROM Movie m WHERE m.movieCd = :movieCd AND m.status = 1")
     Optional<Movie> findByMovieCdAndStatus(String movieCd);
 
-    // movieNm으로 Movie 객체를 검색
-    //status=1 인 것만 가져온다.
-    @Query("SELECT m FROM Movie m WHERE LOWER(m.movieNm) LIKE LOWER(CONCAT('%', :movieNm, '%')) AND m.status = 1")
-    Page<Movie> findByMovieNmAndStatus(String movieNm, Pageable pageable);
+    //keyword로 movieNm을 검색
+    @Query("SELECT m FROM Movie m " +
+            "WHERE m.movieNm LIKE %:keyword% " +
+            "AND m.status = 1")   // 상태가 1인, 즉 보이는 영화만 조회
+    Page<Movie> findByMovieNmAndStatus(String keyword, Pageable pageable);
 }

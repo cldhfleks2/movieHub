@@ -7,6 +7,7 @@ $(document).ready(function (){
     movieEditBtn();
 })
 
+//페이지 초기 설정
 function initialize(){
     // 동적으로 생성된 토글 버튼에 대한 클릭 이벤트 위임
     $(document).on('click', '.toggleBtn', function() {
@@ -19,6 +20,8 @@ function initialize(){
             expandList(listContainer, $(this));
         }
     });
+
+    searching(); //전체 영화 목록을 보여줌
 }
 
 //검색한 영화의 상세 정보 : 영화 상세 정보 뷰로 스크롤바
@@ -55,30 +58,37 @@ function movieEditBtn(){
     });
 }
 
-//영화 검색 
+//검색바 동작
 function movieSearchSection() {
     $(document).on('input', '#movieContainer .searchInput', function () {
-        const keyword = $(this).val();
-
-        $.ajax({
-            url: "/api/manager/movie/search",
-            method: "get",
-            data: {keyword: keyword},
-            success: function (data){
-                var data = $.parseHTML(data);
-                var dataHtml = $("<div>").append(data);
-                $("#searchResultSection").replaceWith(dataHtml.find("#searchResultSection"));
-
-                console.log("search-movie ajax success")
-            },
-            error: function (xhr){
-                console.log(xhr.responseText);
-                console.log("search-movie ajax failed")
-            }
-
-        })
+        searching()
     });
 }
+
+//실제로 영화 검색하는 함수
+function searching(pageIdx = 1){
+    const keyword = $("#movieContainer .searchInput").val();
+
+    $.ajax({
+        url: "/api/manager/movie/search",
+        method: "get",
+        data: {keyword: keyword, pageIdx: pageIdx},
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#searchResultSection").replaceWith(dataHtml.find("#searchResultSection"));
+
+            console.log("search-movie ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("search-movie ajax failed")
+        }
+
+    })
+}
+
+
 
 //가장 최근에 적용한 영화 포스터 이미지 타입
 let imageType="url"
