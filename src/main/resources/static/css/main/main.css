@@ -579,20 +579,20 @@ a {
     gap: 1rem;
 }
 
-.periodBtn {
-    padding: 0.5rem 1rem;
-    border: 1px solid #e50914;
-    background: transparent;
-    color: #e50914;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+/*.periodBtn {*/
+/*    padding: 0.5rem 1rem;*/
+/*    border: 1px solid #e50914;*/
+/*    background: transparent;*/
+/*    color: #e50914;*/
+/*    border-radius: 20px;*/
+/*    cursor: pointer;*/
+/*    transition: all 0.3s ease;*/
+/*}*/
 
-.periodBtn.selected {
-    background: #e50914;
-    color: white;
-}
+/*.periodBtn.selected {*/
+/*    background: #e50914;*/
+/*    color: white;*/
+/*}*/
 
 .activeUsersGrid {
     display: grid;
@@ -605,37 +605,40 @@ a {
     position: relative;
     background: white;
     border-radius: 12px;
-    padding: 1.5rem;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
     transition: transform 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    caret-color: transparent;
+    padding: 2rem;
+    cursor: pointer;
+    /*드래그 못하게 하는 css*/
+    -webkit-user-drag: none;  /* 크롬, 사파리 */
+    -moz-user-drag: none;     /* 파이어폭스 */
+    -ms-user-drag: none;      /* IE */
+    user-select: none;        /* 텍스트 선택 방지 */
 }
 
 .userCard:hover {
-    transform: translateY(-5px);
+    transform: translateY(-14px);
 }
 
 .userCard.first {
     background: linear-gradient(145deg, #fff 0%, #fff2cc 100%); /* 더 진한 금색 */
     border: 2px solid #ffd700;
-    gap: 2rem;
-    padding: 2rem;
 }
 
 .userCard.second {
     background: linear-gradient(145deg, #fff 0%, #e5e5e5 100%); /* 더 진한 은색 */
     border: 2px solid #c0c0c0;
-    gap: 2rem;
-    padding: 2rem;
 }
 
 .userCard.third {
     background: linear-gradient(145deg, #fff 0%, #e5e5e5 100%); /* 더 진한 동색 */
     border: 2px solid #cd7f32;
-    gap: 2rem;
-    padding: 2rem;
 }
 
 
@@ -695,7 +698,12 @@ a {
 }
 
 .userData {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;  /* 위쪽은 userName, 나머지 요소는 아래쪽에 배치 */
     text-align: center;
+    margin-top: auto;
+    height: 140px; /* 고정 높이 */
 }
 
 .firstPlace .userData {
@@ -704,7 +712,7 @@ a {
 
 .userName {
     font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    margin-top: 0;
     color: #333;
 }
 
@@ -717,17 +725,21 @@ a {
     gap: 1rem;
     color: #666;
     font-size: 0.9rem;
-    margin-bottom: 0.5rem;
 }
 
 .activityScore {
     font-weight: bold;
     color: #e50914;
-    margin-bottom: 0.5rem;
 }
 
 .achievement {
     margin-top: 0.5rem;
+}
+
+.activityStats,
+.activityScore,
+.achievement {
+    margin-bottom: 0;
 }
 
 .achievementBadge {
