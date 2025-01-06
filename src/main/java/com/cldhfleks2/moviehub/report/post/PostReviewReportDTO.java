@@ -1,8 +1,12 @@
 package com.cldhfleks2.moviehub.report.post;
 
+import com.cldhfleks2.moviehub.member.Member;
+import com.cldhfleks2.moviehub.postreview.PostReview;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,4 +23,9 @@ public class PostReviewReportDTO {
     private Boolean SPAM;           // 광고 또는 스팸성 게시물
 
     private String reportDetail;
+
+    private PostReview postReview;
+    private Member member;
+    private LocalDateTime updateDate;
+    private Boolean status;
 }
