@@ -471,8 +471,8 @@ a:hover {
 
 .movieGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
     margin-bottom: 30px;
 }
 
@@ -493,16 +493,18 @@ a:hover {
 .movieCardContent {
     position: relative;
     height: 100%;
+    text-align: center;
 }
 
 .cardPoster {
-    width: 100%;
-    height: 200px;
+    width: 260px;
+    height: 390px;
     object-fit: cover;
 }
 
 .cardInfo {
     padding: 15px;
+    text-align: left;
 }
 
 .movieTitle {
