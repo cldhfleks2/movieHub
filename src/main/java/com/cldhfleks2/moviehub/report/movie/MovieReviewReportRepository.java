@@ -19,7 +19,7 @@ public interface MovieReviewReportRepository extends JpaRepository<MovieReviewRe
 
     //리뷰 작성자의 nickname으로 검색
     @Query("SELECT mrr FROM MovieReviewReport mrr " +
-            "JOIN mrr.member m " +
+            "JOIN mrr.movieReview.member m " +
             "WHERE m.nickname LIKE %:keyword% " +
             "AND mrr.status = 1 " +
             "AND m.status = 1")
