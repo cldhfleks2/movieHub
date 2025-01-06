@@ -227,7 +227,7 @@
     <section class="reviewSection">
         <div class="sectionHeader">
             <h2 class="sectionTitle">실시간 인기 리뷰</h2>
-            <a href="#" class="viewMoreLink">더보기 ></a>
+            <a href="/movieReview" class="viewMoreLink">전체 영화 리뷰 보기 ></a>
         </div>
         <div class="reviewGrid">
 
@@ -251,9 +251,35 @@
 
 <!--    인기 커뮤니티 게시글-->
     <section class="communitySection">
-
-
+        <div class="sectionHeader">
+            <h2 class="sectionTitle">실시간 인기 게시글</h2>
+            <a href="/community" class="viewMoreLink">전체 게시글 보기 ></a>
+        </div>
+        <div class="communityGrid">
+            <div class="communityCard" th:each="post : ${popularPostPage.content}">
+                <div class="postHeader">
+                    <span class="postType" th:text="${post.postType.description}">자유 게시판</span>
+                    <span class="postDate" th:text="${#temporals.format(post.updateDate, 'MM/dd HH:mm')}">01/06 14:30</span>
+                </div>
+                <div class="postContent">
+                    <h3 class="postTitle" th:text="${#strings.abbreviate(post.title, 30)}">게시글 제목</h3>
+                    <p class="postText" th:text="${#strings.abbreviate(post.content, 200)}">게시글 내용...</p>
+                </div>
+                <div class="postFooter">
+                    <div class="postAuthor">
+                        <img class="authorImg" th:src="${post.member.profileImage != null ? post.member.profileImage : '/image/profile.png'}" alt="작성자 프로필">
+                        <span class="authorName" th:text="${post.member.nickname}">작성자</span>
+                    </div>
+                    <div class="postStats">
+                        <span class="viewCount">👁️
+                            <span th:text="${post.view}">0</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
+
 </main>
 
 <div th:replace="~{ footer/footer::footer }"></div>

@@ -3,10 +3,14 @@ package com.cldhfleks2.moviehub;
 import com.cldhfleks2.moviehub.api.KOBISRequestService;
 import com.cldhfleks2.moviehub.bookmark.BookMark;
 import com.cldhfleks2.moviehub.bookmark.BookMarkRepository;
+import com.cldhfleks2.moviehub.community.Post;
+import com.cldhfleks2.moviehub.community.PostDTO;
+import com.cldhfleks2.moviehub.community.PostRepository;
 import com.cldhfleks2.moviehub.like.movie.MovieLike;
 import com.cldhfleks2.moviehub.like.movie.MovieLikeRepository;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLike;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLikeRepository;
+import com.cldhfleks2.moviehub.like.post.PostLikeRepository;
 import com.cldhfleks2.moviehub.movie.*;
 import com.cldhfleks2.moviehub.moviereview.MovieReview;
 import com.cldhfleks2.moviehub.moviereview.MovieReviewDTO;
@@ -46,6 +50,8 @@ public class BasicService {
     private final BookMarkRepository bookMarkRepository;
     private final MovieReviewRepository movieReviewRepository;
     private final MovieReviewLikeRepository movieReviewLikeRepository;
+    private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
 
     //헤더 페이지 GET
     String getHeader(){
@@ -133,8 +139,8 @@ public class BasicService {
         List<MovieDTO> foreignWeeklyBoxOfficeMovie = movieService.getForeignWeeklyBoxOfficeMovie();
         model.addAttribute("foreignWeeklyBoxOfficeMovie", foreignWeeklyBoxOfficeMovie);
 
-        //5. 실시간 인기 리뷰 : 10개 가져옴
-        int popularReviewCount = 10;
+        //5. 실시간 인기 리뷰 : 5개 가져옴
+        int popularReviewCount = 5;
         PageRequest pageRequest = PageRequest.of(0, popularReviewCount);
         Page<MovieReview> popularReviewPage =  movieReviewRepository.findTopMovieReviewsByLikeCount(pageRequest);
         //DTO 생성
@@ -158,8 +164,32 @@ public class BasicService {
                 popularReviewPage.getPageable(),
                 popularReviewPage.getTotalElements()
         );
-
         model.addAttribute("popularReviewPage", popularReviewDTOPage);
+        
+        //6. 인기 게시글 : 10개만
+        int popularPostCount = 5;
+        pageRequest = PageRequest.of(0, popularPostCount);
+        Page<Post> popularPostPage = postRepository.findTopPostsByLikeCount(pageRequest);
+        //DTO생성
+        List<PostDTO> popularPostDTOList = new ArrayList<>();
+        for(Post post : popularPostPage.getContent()){
+            PostDTO postDTO = PostDTO.create()
+                    .postType(post.getPostType())
+                    .updateDate(post.getUpdateDate())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .member(post.getMember())
+                    .view(post.getView())
+                    .build();
+            popularPostDTOList.add(postDTO);
+        }
+        //페이지로 전달
+        Page<PostDTO> popularPostDTOPage = new PageImpl<>(
+                popularPostDTOList,
+                popularPostPage.getPageable(),
+                popularPostPage.getTotalElements()
+        );
+        model.addAttribute("popularPostPage", popularPostDTOPage);
 
         return "main/main";
     }

@@ -458,6 +458,87 @@ a {
 }
 
 
+/* 커뮤니티 섹션 스타일 */
+.communityGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
 
+.communityCard {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
 
+.communityCard:hover {
+    transform: translateY(-5px);
+}
+
+.postHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.postType {
+    background-color: #e50914;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.postDate {
+    color: #666;
+    font-size: 14px;
+}
+
+.postTitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.postText {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.postFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.postAuthor {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.authorImg {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.authorName {
+    font-size: 14px;
+    color: #333;
+}
+
+.postStats {
+    font-size: 14px;
+    color: #666;
+}
 
