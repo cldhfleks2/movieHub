@@ -67,7 +67,7 @@ function tabContentReload(tabType, pageIdx = 1) {
 
 //페이지네이션 버튼 동작
 function pagination(){
-    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+    $(document).on("click", ".pageBtn.prev, .pageBtn.next, .pageNum", function () {
         const tabType = $(this).data('tab');
         const pageIdx = $(this).data("pageidx")
 

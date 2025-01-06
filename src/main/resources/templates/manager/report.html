@@ -92,7 +92,7 @@
         <!--        페이지네이션-->
         <div class="pagination" id="moviePagination">
             <th:block th:if="${movieReportPage != null and movieReportPage.totalPages > 0}">
-                <button class="pageBtn prev" id="prevPage"
+                <button class="pageBtn prev"
                         th:disabled="${movieReportPage.first}"
                         th:data-pageidx="${movieReportPage.number}"
                         data-tab="movie" >
@@ -108,7 +108,7 @@
                         </button>
                     </th:block>
                 </div>
-                <button class="pageBtn next" id="nextPage"
+                <button class="pageBtn next"
                         th:disabled="${movieReportPage.last}"
                         th:data-pageidx="${movieReportPage.number + 2}"
                         data-tab="movie" >
@@ -116,6 +116,7 @@
                 </button>
             </th:block>
         </div>
+
     </div>
 
     <!-- Movie Review Reports Tab -->
@@ -175,6 +176,32 @@
         </table>
 
         <!--        페이지네이션-->
+        <div class="pagination" id="moviePagination">
+            <th:block th:if="${movieReviewReportPage != null and movieReviewReportPage.totalPages > 0}">
+                <button class="pageBtn prev"
+                        th:disabled="${movieReviewReportPage.first}"
+                        th:data-pageidx="${movieReviewReportPage.number}"
+                        data-tab="movie" >
+                    이전
+                </button>
+                <div class="pageNumbers">
+                    <th:block th:each="pageNum : ${#numbers.sequence(0, movieReviewReportPage.totalPages - 1)}">
+                        <button class="pageNum"
+                                th:classappend="${pageNum == movieReviewReportPage.number} ? 'active'"
+                                th:data-pageidx="${pageNum + 1}"
+                                th:text="${pageNum + 1}"
+                                data-tab="movie" >
+                        </button>
+                    </th:block>
+                </div>
+                <button class="pageBtn next"
+                        th:disabled="${movieReviewReportPage.last}"
+                        th:data-pageidx="${movieReviewReportPage.number + 2}"
+                        data-tab="movie" >
+                    다음
+                </button>
+            </th:block>
+        </div>
     </div>
 
     <!-- Post Reports Tab -->
