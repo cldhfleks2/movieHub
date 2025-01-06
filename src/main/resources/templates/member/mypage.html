@@ -133,7 +133,7 @@
                     </button>
                     <div class="pageNumbers">
                         <th:block th:each="pageNum : ${#numbers.sequence(postDTOPage.number - 5, postDTOPage.number + 4)}"
-                                  th:if="${pageNum >= 0}">
+                                  th:if="${pageNum >= 0 and pageNum < postDTOPage.totalPages}">
                             <button class="pageNumber"
                                     th:classappend="${pageNum == postDTOPage.number} ? 'active'"
                                     th:data-pageidx="${pageNum + 1}"
@@ -209,7 +209,7 @@
                         </button>
                         <div class="pageNumbers">
                             <th:block th:each="pageNum : ${#numbers.sequence(postReviewDTOPage.number - 5, postReviewDTOPage.number + 4)}"
-                                      th:if="${pageNum >= 0}">
+                                      th:if="${pageNum >= 0 and pageNum < postReviewDTOPage.totalPages}">
                                 <button class="pageNumber"
                                         th:classappend="${pageNum == postReviewDTOPage.number} ? 'active'"
                                         th:data-pageidx="${pageNum + 1}"

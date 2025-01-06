@@ -52,7 +52,7 @@
         </button>
         <div class="pageNumbers">
             <th:block th:each="pageNum : ${#numbers.sequence(notificationDTOPage.number - 5, notificationDTOPage.number + 4)}"
-                      th:if="${pageNum >= 0}">
+                      th:if="${pageNum >= 0 and pageNum < notificationDTOPage.totalPages}">
                 <button class="pageNum"
                         th:classappend="${pageNum == notificationDTOPage.number} ? 'active'"
                         th:data-pageidx="${pageNum + 1}"
