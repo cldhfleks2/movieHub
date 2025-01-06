@@ -90,6 +90,32 @@
         </table>
 
         <!--        페이지네이션-->
+        <div class="pagination" id="moviePagination">
+            <th:block th:if="${movieReportPage != null and movieReportPage.totalPages > 0}">
+                <button class="pageBtn prev" id="prevPage"
+                        th:disabled="${movieReportPage.first}"
+                        th:data-pageidx="${movieReportPage.number}"
+                        data-tab="movie" >
+                    이전
+                </button>
+                <div class="pageNumbers">
+                    <th:block th:each="pageNum : ${#numbers.sequence(0, movieReportPage.totalPages - 1)}">
+                        <button class="pageNum"
+                                th:classappend="${pageNum == movieReportPage.number} ? 'active'"
+                                th:data-pageidx="${pageNum + 1}"
+                                th:text="${pageNum + 1}"
+                                data-tab="movie" >
+                        </button>
+                    </th:block>
+                </div>
+                <button class="pageBtn next" id="nextPage"
+                        th:disabled="${movieReportPage.last}"
+                        th:data-pageidx="${movieReportPage.number + 2}"
+                        data-tab="movie" >
+                    다음
+                </button>
+            </th:block>
+        </div>
     </div>
 
     <!-- Movie Review Reports Tab -->
