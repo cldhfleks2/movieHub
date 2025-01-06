@@ -174,6 +174,7 @@ public class BasicService {
         List<PostDTO> popularPostDTOList = new ArrayList<>();
         for(Post post : popularPostPage.getContent()){
             PostDTO postDTO = PostDTO.create()
+                    .postId(post.getId())
                     .postType(post.getPostType())
                     .updateDate(post.getUpdateDate())
                     .title(post.getTitle())

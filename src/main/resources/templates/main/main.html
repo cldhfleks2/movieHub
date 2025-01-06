@@ -257,7 +257,7 @@
         </div>
         <div class="communityGrid">
 
-            <div class="communityCard" th:each="post : ${popularPostPage.content}">
+            <a class="communityCard" th:each="post : ${popularPostPage.content}" th:href="@{/postDetail/{postId}(postId=${post.postId})}">
                 <div class="postHeader">
                     <span class="postType" th:text="${post.postType.description}"
                           th:classappend="${post.postType.name == 'NEWS' ? ' NEWS' :
@@ -281,7 +281,7 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </a>
 
         </div>
     </section>
