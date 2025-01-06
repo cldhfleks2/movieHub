@@ -3,14 +3,21 @@ package com.cldhfleks2.moviehub;
 import com.cldhfleks2.moviehub.api.KOBISRequestService;
 import com.cldhfleks2.moviehub.bookmark.BookMark;
 import com.cldhfleks2.moviehub.bookmark.BookMarkRepository;
-import com.cldhfleks2.moviehub.config.SeleniumWebDriver;
 import com.cldhfleks2.moviehub.like.movie.MovieLike;
 import com.cldhfleks2.moviehub.like.movie.MovieLikeRepository;
+import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLike;
+import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLikeRepository;
 import com.cldhfleks2.moviehub.movie.*;
+import com.cldhfleks2.moviehub.moviereview.MovieReview;
+import com.cldhfleks2.moviehub.moviereview.MovieReviewDTO;
+import com.cldhfleks2.moviehub.moviereview.MovieReviewRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +44,8 @@ public class BasicService {
     private final KOBISRequestService kobisRequestService;
     private final MovieLikeRepository movieLikeRepository;
     private final BookMarkRepository bookMarkRepository;
-    private final SeleniumWebDriver seleniumWebDriver;
+    private final MovieReviewRepository movieReviewRepository;
+    private final MovieReviewLikeRepository movieReviewLikeRepository;
 
     //헤더 페이지 GET
     String getHeader(){
@@ -123,6 +132,34 @@ public class BasicService {
         //4. 주간 외국 박스오피스
         List<MovieDTO> foreignWeeklyBoxOfficeMovie = movieService.getForeignWeeklyBoxOfficeMovie();
         model.addAttribute("foreignWeeklyBoxOfficeMovie", foreignWeeklyBoxOfficeMovie);
+
+        //5. 실시간 인기 리뷰 : 10개 가져옴
+        int popularReviewCount = 10;
+        PageRequest pageRequest = PageRequest.of(0, popularReviewCount);
+        Page<MovieReview> popularReviewPage =  movieReviewRepository.findTopMovieReviewsByLikeCount(pageRequest);
+        //DTO 생성
+        List<MovieReviewDTO> movieReviewDTOList = new ArrayList<>();
+        for(MovieReview movieReview : popularReviewPage.getContent()){ //보낼것들만 DTO에 담음
+            Long movieReviewId = movieReview.getId();
+            List<MovieReviewLike> movieReviewLikeList = movieReviewLikeRepository.findAllByMovieReviewIdAndStatus(movieReviewId);
+            int likeCount = movieReviewLikeList.size();
+            MovieReviewDTO movieReviewDTO = MovieReviewDTO.builder()
+                    .member(movieReview.getMember())
+                    .reviewUpdateDate(movieReview.getUpdateDate())
+                    .movieNm(movieReview.getMovie().getMovieNm())
+                    .content(movieReview.getContent())
+                    .likeCount(likeCount)
+                    .build();
+            movieReviewDTOList.add(movieReviewDTO);
+        }
+        //페이지로 전달
+        Page<MovieReviewDTO> popularReviewDTOPage = new PageImpl<>(
+                movieReviewDTOList,
+                popularReviewPage.getPageable(),
+                popularReviewPage.getTotalElements()
+        );
+
+        model.addAttribute("popularReviewPage", popularReviewDTOPage);
 
         return "main/main";
     }
