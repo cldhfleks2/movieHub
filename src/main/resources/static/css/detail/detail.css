@@ -263,6 +263,9 @@ select {
     color: #333;
 }
 
+
+
+
 /* Date Selector */
 .dateSelector {
     display: flex;
@@ -571,3 +574,161 @@ select {
         grid-template-columns: 1fr;
     }
 }
+
+
+
+
+/* theater-map-sidebar.css */
+.theaterMapSidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: #1a1a1a;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    color: white;
+}
+
+.theaterMapSidebar.open {
+    right: 0;
+}
+
+.toggleSidebarBtn {
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 80px;
+    background: #e50914;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.toggleSidebarBtn:hover {
+    background: #f6121d;
+}
+
+.toggleIcon {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.open .toggleIcon {
+    transform: rotate(180deg);
+}
+
+.sidebarContent {
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.mapHeader {
+    padding: 20px 0;
+}
+
+.mapHeader h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #e50914;
+}
+
+.currentLocation {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+.kakaoMap {
+    width: 100%;
+    height: 300px;
+    border-radius: 12px;
+    margin: 20px 0;
+    background: #333;
+}
+
+.theaterList {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.theaterList h4 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #e50914;
+}
+
+.nearbyTheaters {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.theaterItem {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.theaterItem:hover {
+    background: rgba(229, 9, 20, 0.2);
+    transform: translateY(-2px);
+}
+
+.theaterName {
+    font-weight: 500;
+}
+
+.theaterDistance {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.showRouteBtn {
+    padding: 8px 16px;
+    background: #e50914;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.showRouteBtn:hover {
+    background: #f6121d;
+    transform: scale(1.05);
+}
+
+/* 스크롤바 스타일링 */
+.theaterList::-webkit-scrollbar {
+    width: 6px;
+}
+
+.theaterList::-webkit-scrollbar-track {
+    background: #333;
+}
+
+.theaterList::-webkit-scrollbar-thumb {
+    background: #e50914;
+    border-radius: 3px;
+}
+
+
+
+
+
+

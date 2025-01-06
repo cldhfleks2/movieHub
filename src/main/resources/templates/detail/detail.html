@@ -154,13 +154,36 @@
     </section>
 </main>
 
-<!--사용할 거면 csㄴ도 생성-->
-<!--<aside class="theaterMap">-->
-<!--    <h3>주변 영화관</h3>-->
-<!--    <div class="mapContainer">-->
-<!--        &lt;!&ndash; 카카오맵이 들어갈 자리 &ndash;&gt;-->
-<!--    </div>-->
-<!--</aside>-->
+<!-- theater-map-sidebar.html -->
+<aside class="theaterMapSidebar" id="theaterMapSidebar">
+    <button class="id-toggleSidebarBtn toggleSidebarBtn" type="button">
+        <span class="toggleIcon">></span>
+    </button>
+
+    <div class="sidebarContent">
+        <div class="mapHeader">
+            <h3>주변 CGV 찾기</h3>
+            <p class="currentLocation">현재 위치: <span th:text="${userLocation} ?: '위치 찾는 중...'"></span></p>
+        </div>
+
+        <div class="id-kakaoMap kakaoMap"></div>
+
+        <div class="theaterList">
+            <h4>주변 영화관</h4>
+            <div class="id-nearbyTheaters nearbyTheaters">
+                <div th:each="theater : ${theaters}" class="theaterItem">
+                    <div class="theaterName" th:text="${theater.name}">CGV 강남</div>
+                    <div class="theaterDistance" th:text="${theater.distance} + 'km'">1.2km</div>
+                    <button class="class-showRouteBtn showRouteBtn"
+                            th:data-lat="${theater.lat}"
+                            th:data-lng="${theater.lng}">
+                        길찾기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
 
 <!-- 신고 오버레이 : flex로 보여줘야함 -->
 <div class="reportModalOverlay" id="movieReviewReportModal" style="display: none;">
