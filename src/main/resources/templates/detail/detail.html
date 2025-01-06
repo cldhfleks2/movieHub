@@ -166,21 +166,11 @@
             <p class="currentLocation">현재 위치: <span th:text="${userLocation} ?: '위치 찾는 중...'"></span></p>
         </div>
 
-        <div class="id-kakaoMap kakaoMap"></div>
+        <div class="id-kakaoMap kakaoMap"> </div>
 
         <div class="theaterList">
             <h4>주변 영화관</h4>
-            <div class="id-nearbyTheaters nearbyTheaters">
-                <div th:each="theater : ${theaters}" class="theaterItem">
-                    <div class="theaterName" th:text="${theater.name}">CGV 강남</div>
-                    <div class="theaterDistance" th:text="${theater.distance} + 'km'">1.2km</div>
-                    <button class="class-showRouteBtn showRouteBtn"
-                            th:data-lat="${theater.lat}"
-                            th:data-lng="${theater.lng}">
-                        길찾기
-                    </button>
-                </div>
-            </div>
+            <div class="id-nearbyTheaters nearbyTheaters" style="margin-top: -20px;"> </div>
         </div>
     </div>
 </aside>

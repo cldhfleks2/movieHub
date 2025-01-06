@@ -186,7 +186,7 @@ function initializeEvents() {
     });
 
     // 길찾기 버튼
-    $(document).on('click', '.class-showRouteBtn', function(e) {
+    $(document).on('click', '.showRouteBtn', function(e) {
         e.stopPropagation();
         const theaterData = $(this).data();
         window.open(`https://map.kakao.com/link/to/${theaterData.name},${theaterData.lat},${theaterData.lng}`);
@@ -298,7 +298,7 @@ function searchNearbyCGV(lat, lng) {
         },
         {
             location: new kakao.maps.LatLng(lat, lng),
-            radius: 5000,
+            radius: 10000,
             sort: kakao.maps.services.SortBy.DISTANCE,
             category_group_code: 'CT1' // 영화관 카테고리
         }
@@ -351,15 +351,26 @@ function addTheaterToList(theater, index) {
             </div>
             <div class="theaterActions">
                 <div class="theaterDistance">${(theater.distance / 1000).toFixed(1)}km</div>
-                <button class="class-showRouteBtn showRouteBtn" 
-                    data-lat="${theater.y}" 
-                    data-lng="${theater.x}"
-                    data-name="${theater.place_name}">
-                    길찾기
-                </button>
+                <div class="theaterRouteBtns">
+                    <button class="showRouteBtn" 
+                        data-lat="${theater.y}" 
+                        data-lng="${theater.x}"
+                        data-name="${theater.place_name}">
+                        길찾기
+                    </button>
+                    <button class="showTimeBtn" data-name="${theater.place_name}">상영표 보기</button>
+                </div>
             </div>
         </div>
     `);
 
     $('.id-nearbyTheaters').append(theaterItem);
+}
+
+function showTimeTable(){
+    $(document).on("click", ".showTimeBtn", function () {
+        const placeName = $(this).data("name");
+
+
+    });
 }
