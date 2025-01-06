@@ -306,6 +306,7 @@ select {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    color: black;
 }
 
 .distance {
@@ -579,17 +580,23 @@ select {
 
 
 /* theater-map-sidebar.css */
+/* theater-map-sidebar.css */
+body {
+    overflow-x: hidden; /* 가로 스크롤바 제거 */
+}
+
 .theaterMapSidebar {
     position: fixed;
     top: 0;
-    right: -400px;
-    width: 400px;
+    right: -450px; /* 더 넓은 사이드바 */
+    width: 450px;
     height: 100vh;
     background: #1a1a1a;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
     transition: right 0.3s ease;
     z-index: 1000;
     color: white;
+    display: flex; /* Flexbox 추가 */
 }
 
 .theaterMapSidebar.open {
@@ -612,6 +619,7 @@ select {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
+    z-index: 1001; /* 버튼이 항상 위에 오도록 */
 }
 
 .toggleSidebarBtn:hover {
@@ -628,44 +636,57 @@ select {
 }
 
 .sidebarContent {
-    height: 100%;
-    padding: 20px;
+    flex: 1;
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* 중요: 내부 스크롤만 허용 */
 }
 
 .mapHeader {
-    padding: 20px 0;
+    padding: 20px;
+    flex-shrink: 0; /* 헤더 크기 고정 */
 }
 
 .mapHeader h3 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-bottom: 10px;
     color: #e50914;
 }
 
 .currentLocation {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #999;
 }
 
 .kakaoMap {
-    width: 100%;
-    height: 300px;
+    width: calc(100% - 40px); /* 패딩 고려 */
+    height: 400px; /* 더 큰 지도 */
+    margin: 0 20px;
     border-radius: 12px;
-    margin: 20px 0;
     background: #333;
+    flex-shrink: 0; /* 지도 크기 고정 */
 }
 
 .theaterList {
     flex: 1;
-    overflow-y: auto;
+    margin: 20px;
+    overflow-y: auto; /* 목록만 스크롤 가능 */
+    overflow-x: hidden;
+    padding-right: 10px; /* 스크롤바 공간 확보 */
 }
 
 .theaterList h4 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
     color: #e50914;
+    position: sticky;
+    top: 0;
+    background: #1a1a1a;
+    padding: 10px 0;
+    z-index: 1;
+    width: 430px;
+    text-align: center;
 }
 
 .nearbyTheaters {
@@ -676,8 +697,8 @@ select {
 
 .theaterItem {
     background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 8px;
+    padding: 20px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -691,11 +712,14 @@ select {
 
 .theaterName {
     font-weight: 500;
+    font-size: 1.1rem;
+    flex: 1;
 }
 
 .theaterDistance {
     color: #999;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    margin: 0 15px;
 }
 
 .showRouteBtn {
@@ -706,6 +730,7 @@ select {
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .showRouteBtn:hover {
@@ -715,19 +740,94 @@ select {
 
 /* 스크롤바 스타일링 */
 .theaterList::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 .theaterList::-webkit-scrollbar-track {
     background: #333;
+    border-radius: 4px;
 }
 
 .theaterList::-webkit-scrollbar-thumb {
     background: #e50914;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
+.theaterList::-webkit-scrollbar-thumb:hover {
+    background: #f6121d;
+}
 
+/* 메인 컨텐츠 조정 */
+.mainContent {
+    padding-right: 0; /* 사이드바와의 겹침 방지 */
+    overflow-x: hidden;
+}
+
+/* 기존 CSS에 추가할 스타일 */
+.loadingText, .noTheaters, .errorText {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+}
+
+.loader {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #e50914;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.theaterItem {
+    cursor: pointer;
+    padding: 15px;
+}
+
+.theaterInfo {
+    flex: 1;
+}
+
+.theaterAddress {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 5px;
+}
+
+.theaterActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.infoWindow {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    color:black;
+}
+
+/* 호버 효과 수정 */
+.theaterItem:hover {
+    background: rgba(229, 9, 20, 0.1);
+    transform: translateY(-2px);
+}
+
+.currentLocation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+}
 
 
 
