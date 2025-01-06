@@ -335,7 +335,33 @@
             </tbody>
         </table>
 
-<!--        페이지네이션-->
+        <!--        페이지네이션-->
+        <div class="pagination" id="postReviewPagination">
+            <th:block th:if="${postReviewReportPage != null and postReviewReportPage.totalPages > 0}">
+                <button class="pageBtn prev"
+                        th:disabled="${postReviewReportPage.first}"
+                        th:data-pageidx="${postReviewReportPage.number}"
+                        data-tab="postReview" >
+                    이전
+                </button>
+                <div class="pageNumbers">
+                    <th:block th:each="pageNum : ${#numbers.sequence(0, postReviewReportPage.totalPages - 1)}">
+                        <button class="pageNum"
+                                th:classappend="${pageNum == postReviewReportPage.number} ? 'active'"
+                                th:data-pageidx="${pageNum + 1}"
+                                th:text="${pageNum + 1}"
+                                data-tab="postReview" >
+                        </button>
+                    </th:block>
+                </div>
+                <button class="pageBtn next"
+                        th:disabled="${postReviewReportPage.last}"
+                        th:data-pageidx="${postReviewReportPage.number + 2}"
+                        data-tab="postReview" >
+                    다음
+                </button>
+            </th:block>
+        </div>
     </div>
 </main>
 
