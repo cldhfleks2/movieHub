@@ -7,6 +7,10 @@ $(document).ready(function() {
     gotoSearchpage();
 });
 
+function initialize(){
+    //메인 페이지에서는 검색 헤더가 안보이게
+}
+
 function initializeSliders() {
     $('.movieSection').each(function() {
         const $section = $(this);
@@ -143,6 +147,8 @@ function gotoSearchpage(){
         if (keyword) {
             // 검색 페이지로 이동하면서 검색어를 쿼리 파라미터로 전달
             window.location.href = `/search?movieNm=${encodeURIComponent(keyword)}`;
+        }else{ //검색어 입력 안하면 그냥 검색 페이지로 이동
+            window.location.href = "/search"
         }
     }
 }
