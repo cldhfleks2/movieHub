@@ -1,9 +1,7 @@
 package com.cldhfleks2.moviehub.manager;
 
 import com.cldhfleks2.moviehub.report.movie.*;
-import com.cldhfleks2.moviehub.report.post.PostReport;
-import com.cldhfleks2.moviehub.report.post.PostReportDTO;
-import com.cldhfleks2.moviehub.report.post.PostReportRepository;
+import com.cldhfleks2.moviehub.report.post.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,6 +18,7 @@ public class ManagerReportService {
     private final MovieReportRepository movieReportRepository;
     private final MovieReviewReportRepository movieReviewReportRepository;
     private final PostReportRepository postReportRepository;
+    private final PostReviewReportRepository postReviewReportRepository;
 
     //신고 관리 페이지 GET
     String getManagerReport() {
@@ -165,6 +164,55 @@ public class ManagerReportService {
         model.addAttribute("postReportPage", searchPage);
 
         return "manager/report :: #postContent";
+    }
+
+    //게시글 댓글 신고 뷰 GET
+    String getReportPostReview(Model model, Integer pageIdx, String searchType, String keyword) {
+        if (pageIdx == null) pageIdx = 1;
+        if (searchType == null) searchType = "reporter";
+        if (keyword == null) keyword = "";
+
+        int pageSize = 10;
+        PageRequest pageRequest = PageRequest.of(pageIdx-1, pageSize);
+
+        Page<PostReviewReport> postReviewReportPage;
+        if(searchType.equals("reporter")) //신고 내용
+            postReviewReportPage = postReviewReportRepository.findByReportDetailContaining(keyword, pageRequest);
+        else if(searchType.equals("title")) //게시글 제목
+            postReviewReportPage = postReviewReportRepository.findByReviewPostTitleContaining(keyword, pageRequest);
+        else if(searchType.equals("content")) //댓글 내용
+            postReviewReportPage = postReviewReportRepository.findByReviewContentContaining(keyword, pageRequest);
+        else //작성자 닉네임
+            postReviewReportPage = postReviewReportRepository.findByReviewMemberNicknameContaining(keyword, pageRequest);
+
+        List<PostReviewReportDTO> postReviewReportDTOList = new ArrayList<>();
+        for(PostReviewReport postReviewReport : postReviewReportPage.getContent()){
+            PostReviewReportDTO postReviewReportDTO = PostReviewReportDTO.create()
+                    .INAPPROPRIATE(postReviewReport.getINAPPROPRIATE())
+                    .MISINFORMATION(postReviewReport.getMISINFORMATION())
+                    .HATE(postReviewReport.getHATE())
+                    .ABUSIVE(postReviewReport.getABUSIVE())
+                    .COPYRIGHT(postReviewReport.getCOPYRIGHT())
+                    .SPAM(postReviewReport.getSPAM())
+                    .reportDetail(postReviewReport.getReportDetail())
+                    .postReview(postReviewReport.getReview())
+                    .member(postReviewReport.getMember())
+                    .updateDate(postReviewReport.getUpdateDate())
+                    .status(postReviewReport.getStatus() == 1)
+                    .build();
+            postReviewReportDTOList.add(postReviewReportDTO);
+        }
+
+        //페이지로 전달
+        Page<PostReviewReportDTO> searchPage = new PageImpl<>(
+                postReviewReportDTOList,
+                postReviewReportPage.getPageable(),
+                postReviewReportPage.getTotalElements()
+        );
+
+        model.addAttribute("postReviewReportPage", searchPage);
+
+        return "manager/report :: #postReviewContent";
     }
 
 }

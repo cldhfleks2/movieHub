@@ -333,6 +333,48 @@ a:hover {
 
 
 
+.reportTable#postReviewTable th:nth-child(1),
+.reportTable#postReviewTable td:nth-child(1) {
+    width: 8%;
+    text-align: center;
+}
+.reportTable#postReviewTable th:nth-child(2),
+.reportTable#postReviewTable td:nth-child(2) {
+    width: 13%;
+    text-align: center;
+}
+.reportTable#postReviewTable th:nth-child(3),
+.reportTable#postReviewTable td:nth-child(3) {
+    width: 27%;
+    text-align: center;
+}
+.reportTable#postReviewTable th:nth-child(4),
+.reportTable#postReviewTable td:nth-child(4) {
+    width: 20%;
+    text-align: center;
+}
+
+.reportTable#postReviewTable th:nth-child(5),
+.reportTable#postReviewTable td:nth-child(5) {
+    width: 10%;
+    text-align: center;
+}
+.reportTable#postReviewTable th:nth-child(6),
+.reportTable#postReviewTable td:nth-child(6) {
+    width: 8%;
+    text-align: center;
+}
+.reportTable#postReviewTable th:nth-child(7),
+.reportTable#postReviewTable td:nth-child(7) {
+    width: 6%;
+    text-align: center;
+}
+.reportTable#postReviewTable th:nth-child(8),
+.reportTable#postReviewTable td:nth-child(8) {
+    width: 8%;
+    text-align: center;
+}
+
 
 
 

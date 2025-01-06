@@ -33,4 +33,10 @@ public class ManagerReportController { //신고 관리 페이지 전용 컨트�
     String getReportPost(Model model, Integer pageIdx, String searchType, String keyword) {
         return managerReportService.getReportPost(model, pageIdx, searchType, keyword);
     }
+
+    //게시글 댓글 신고 뷰 GET
+    @GetMapping("/api/manager/report/postReview")
+    String getReportPostReview(Model model, Integer pageIdx, String searchType, String keyword) {
+        return managerReportService.getReportPostReview(model, pageIdx, searchType, keyword);
+    }
 }
