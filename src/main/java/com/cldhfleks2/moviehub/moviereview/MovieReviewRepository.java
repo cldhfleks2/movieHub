@@ -25,9 +25,11 @@ public interface MovieReviewRepository extends JpaRepository<MovieReview, Long> 
     """)
     Page<MovieReview> search(String searchText, Pageable pageable);
 
+    //memberId와 일치하는 모든 영화리뷰를 가져옴
     @Query("SELECT mr FROM MovieReview mr WHERE mr.member.id = :memberId AND mr.status = 1")
     Page<MovieReview> findAllByMemberIdAndStatus(Long memberId, Pageable pageable);
 
+    //keyword로 영화리뷰의내용, 영화이름을 검색하는 함수
     @Query("SELECT mr FROM MovieReview mr " +
             "JOIN mr.movie m " +
             "WHERE (mr.content LIKE %:keyword% " +
@@ -36,4 +38,15 @@ public interface MovieReviewRepository extends JpaRepository<MovieReview, Long> 
             "AND mr.status = 1 " + // 상태가 1인, 즉 보이는 리뷰만 조회
             "AND m.status = 1")   // 상태가 1인, 즉 보이는 영화만 조회
     Page<MovieReview> searchByContentAndMovieNmAndMovieNmEn(String keyword, Pageable pageable);
+
+    //pageable로 (0,count) 갯수를 받아서 그만큼 MovieReviewLike가 많은 순서대로 가져옴
+    @Query("SELECT mr FROM MovieReview mr " +
+            "WHERE mr.status = 1 " +
+            "AND EXISTS (SELECT 1 FROM MovieReviewLike mrl " +
+            "            WHERE mrl.movieReview = mr " +
+            "            AND mrl.status = 1) " +
+            "ORDER BY (SELECT COUNT(mrl) FROM MovieReviewLike mrl " +
+            "          WHERE mrl.movieReview = mr " +
+            "          AND mrl.status = 1) DESC")
+    Page<MovieReview> findTopMovieReviewsByLikeCount(Pageable pageable);
 }
