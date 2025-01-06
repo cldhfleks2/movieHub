@@ -256,6 +256,32 @@
         </table>
 
         <!--        페이지네이션-->
+        <div class="pagination" id="postPagination">
+            <th:block th:if="${postReportPage != null and postReportPage.totalPages > 0}">
+                <button class="pageBtn prev"
+                        th:disabled="${postReportPage.first}"
+                        th:data-pageidx="${postReportPage.number}"
+                        data-tab="post" >
+                    이전
+                </button>
+                <div class="pageNumbers">
+                    <th:block th:each="pageNum : ${#numbers.sequence(0, postReportPage.totalPages - 1)}">
+                        <button class="pageNum"
+                                th:classappend="${pageNum == postReportPage.number} ? 'active'"
+                                th:data-pageidx="${pageNum + 1}"
+                                th:text="${pageNum + 1}"
+                                data-tab="post" >
+                        </button>
+                    </th:block>
+                </div>
+                <button class="pageBtn next"
+                        th:disabled="${postReportPage.last}"
+                        th:data-pageidx="${postReportPage.number + 2}"
+                        data-tab="post" >
+                    다음
+                </button>
+            </th:block>
+        </div>
     </div>
 
     <!-- Post Review Reports Tab -->
