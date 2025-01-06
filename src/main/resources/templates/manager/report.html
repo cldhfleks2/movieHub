@@ -176,12 +176,12 @@
         </table>
 
         <!--        페이지네이션-->
-        <div class="pagination" id="moviePagination">
+        <div class="pagination" id="movieReviewPagination">
             <th:block th:if="${movieReviewReportPage != null and movieReviewReportPage.totalPages > 0}">
                 <button class="pageBtn prev"
                         th:disabled="${movieReviewReportPage.first}"
                         th:data-pageidx="${movieReviewReportPage.number}"
-                        data-tab="movie" >
+                        data-tab="movieReview" >
                     이전
                 </button>
                 <div class="pageNumbers">
@@ -190,14 +190,14 @@
                                 th:classappend="${pageNum == movieReviewReportPage.number} ? 'active'"
                                 th:data-pageidx="${pageNum + 1}"
                                 th:text="${pageNum + 1}"
-                                data-tab="movie" >
+                                data-tab="movieReview" >
                         </button>
                     </th:block>
                 </div>
                 <button class="pageBtn next"
                         th:disabled="${movieReviewReportPage.last}"
                         th:data-pageidx="${movieReviewReportPage.number + 2}"
-                        data-tab="movie" >
+                        data-tab="movieReview" >
                     다음
                 </button>
             </th:block>
