@@ -12,4 +12,10 @@ public class MemberDTO {
     private String username;
     private String nickname;
     private String profileImage;
+    
+    //메인페이지의 활동량 많은 유저 보여줄때 사용
+    private Integer totalScore;
+    private Integer movieReviewCount; //영화 리뷰 갯수
+    private Integer postCount; //게시글 갯수
+    private Integer postReviewCount; //게시글 댓글 갯수
 }

@@ -286,6 +286,48 @@
         </div>
     </section>
 
+<!--     멤버 활동 랭킹-->
+    <section class="activeUsersSection">
+        <div class="sectionHeader">
+            <h2 class="sectionTitle">이달의 유저 활동 랭킹</h2>
+<!--            기간 설정할건지..?-->
+            <div class="periodSelector">
+                <button class="periodBtn selected" data-period="month">월간</button>
+                <button class="periodBtn" data-period="week">주간</button>
+            </div>
+        </div>
+        <div class="activeUsersGrid">
+            <!-- 순위대로 유저 10명 보여줌 -->
+            <div class="userCard" th:each="member, stat : ${topMembers}"
+                 th:classappend="${stat.index == 0 ? 'first' : (stat.index == 1 ? 'second' : (stat.index == 2 ? 'third' : ''))}">
+            <div class="rankBadge" th:text="${stat.index + 1} + '위'">n순위</div>
+                <div class="userProfile">
+                    <img th:src="${member.profileImage != null ? member.profileImage : '/image/profile.png'}"
+                         alt="프로필 이미지" class="profileImage">
+                    <div class="crownIcon" th:if="${stat.index == 0}">👑</div>
+                    <div class="medalIcon" th:if="${stat.index == 1}">🏅</div> <!-- 은메달 -->
+                    <div class="medalIcon" th:if="${stat.index == 2}">🥉</div> <!-- 동메달 -->
+                </div>
+                <div class="userData">
+                    <h3 class="userName" th:text="${member.nickname}">닉네임</h3>
+                    <div class="activityStats">
+                        <span class="reviewCount" th:text="'영화 리뷰 ' + ${member.movieReviewCount}">리뷰 15</span>
+                        <span class="postCount" th:text="'게시글 ' + ${member.postCount}">게시글 23</span>
+                        <span class="postReviewCount" th:text="'댓글 ' + ${member.postReviewCount}">게시글 23</span>
+                    </div>
+                    <div class="activityScore" th:text="'활동점수 ' + ${member.totalScore} + '점'">
+                        활동점수 158점
+                    </div>
+<!--                    뱃지는 아직안씀..-->
+                    <div class="achievement">
+                        <span class="achievementBadge">영화달인</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
 </main>
 
 <div th:replace="~{ footer/footer::footer }"></div>

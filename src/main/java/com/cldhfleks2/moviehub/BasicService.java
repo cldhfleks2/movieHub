@@ -11,10 +11,15 @@ import com.cldhfleks2.moviehub.like.movie.MovieLikeRepository;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLike;
 import com.cldhfleks2.moviehub.like.moviereview.MovieReviewLikeRepository;
 import com.cldhfleks2.moviehub.like.post.PostLikeRepository;
+import com.cldhfleks2.moviehub.member.Member;
+import com.cldhfleks2.moviehub.member.MemberDTO;
+import com.cldhfleks2.moviehub.member.MemberRepository;
 import com.cldhfleks2.moviehub.movie.*;
 import com.cldhfleks2.moviehub.moviereview.MovieReview;
 import com.cldhfleks2.moviehub.moviereview.MovieReviewDTO;
 import com.cldhfleks2.moviehub.moviereview.MovieReviewRepository;
+import com.cldhfleks2.moviehub.postreview.PostReview;
+import com.cldhfleks2.moviehub.postreview.PostReviewRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -52,6 +58,8 @@ public class BasicService {
     private final MovieReviewLikeRepository movieReviewLikeRepository;
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
+    private final PostReviewRepository postReviewRepository;
+    private final MemberRepository memberRepository;
 
     //헤더 페이지 GET
     String getHeader(){
@@ -192,7 +200,55 @@ public class BasicService {
         );
         model.addAttribute("popularPostPage", popularPostDTOPage);
 
+        //7. 유저 활동 랭킹 : 10명만 보여줌
+        int memberCount = 10;
+        List<Member> memberList = memberRepository.findAll();
+        List<MemberDTO> memberDTOList = calculateMemberScore(memberList);
+        memberDTOList.sort(Comparator.comparing(MemberDTO::getTotalScore).reversed()); //총 점수로 내림차순 정렬
+        List<MemberDTO> topMembers = memberDTOList.subList(0, Math.min(memberCount, memberDTOList.size()));
+
+        model.addAttribute("topMembers", topMembers);
+
         return "main/main";
+    }
+
+    public List<MemberDTO> calculateMemberScore(List<Member> memberList) {
+        List<MemberDTO> memberDTOList = new ArrayList<>();
+        for(Member member : memberList){
+            int totalScore=0;
+            Long memberId = member.getId();
+
+            //영화 리뷰 갯수 구하기
+            Page<MovieReview> movieReviewPage = movieReviewRepository.findAllByMemberIdAndStatus(memberId, Pageable.unpaged());
+            int movieReviewCount = movieReviewPage.getContent().size();
+
+            //게시글 갯수 구하기
+            Page<Post> postPage = postRepository.findAllByMemberIdAndStatus(memberId, Pageable.unpaged());
+            int postCount = postPage.getContent().size();
+
+            //게시글 댓글 갯수 구하기
+            Page<PostReview> postReviewPage = postReviewRepository.findAllByMemberIdAndStatus(memberId, Pageable.unpaged());
+            int postReviewCount = postReviewPage.getContent().size();
+
+            totalScore = movieReviewCount * 10 + //영화리뷰 작성은 10점
+                    postReviewCount * 8 + //게시글 작성은 8점
+                    postCount * 2; //댓글 작성은 2점
+
+            MemberDTO memberDTO = MemberDTO.create()
+                    .id(member.getId())
+                    .username(member.getUsername())
+                    .nickname(member.getNickname())
+                    .profileImage(member.getProfileImage())
+                    .totalScore(totalScore)
+                    .movieReviewCount(movieReviewCount)
+                    .postReviewCount(postReviewCount)
+                    .postReviewCount(postReviewCount)
+                    .build();
+
+            memberDTOList.add(memberDTO);
+        }
+
+        return memberDTOList;
     }
 
     //영화 상세 페이지 GET
