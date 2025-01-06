@@ -1,5 +1,7 @@
 package com.cldhfleks2.moviehub.report.post;
 
+import com.cldhfleks2.moviehub.community.Post;
+import com.cldhfleks2.moviehub.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +20,7 @@ public class PostReportDTO { //신고오버레이를 같은 항목을 사용해�
     private Boolean SPAM;           // 광고 또는 스팸성 게시물
 
     private String reportDetail;
+
+    private Post post;
+    private Member member;
 }
