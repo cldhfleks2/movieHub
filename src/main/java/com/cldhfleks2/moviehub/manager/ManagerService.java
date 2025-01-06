@@ -89,8 +89,9 @@ public class ManagerService {
 
         int pageSize = 5;
         Page<Movie> searchMoviePage = movieRepository.findByMovieNmAndStatus(keyword, PageRequest.of(pageIdx-1, pageSize));
-
         model.addAttribute("searchMoviePage", searchMoviePage);
+
+        model.addAttribute("totalMovieCount", searchMoviePage.getTotalElements());
         return "manager/movie :: #searchResultSection";
     }
 

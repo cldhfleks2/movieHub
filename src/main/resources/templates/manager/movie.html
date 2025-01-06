@@ -45,7 +45,7 @@
     <div class="searchResultSection" id="searchResultSection">
         <div class="resultCount">
             검색결과:
-            <span th:if="${searchMoviePage}" th:text="${#lists.size(searchMoviePage.content)} + '개'">0</span>
+            <span th:if="${searchMoviePage}" th:text="${totalMovieCount} + '개'">0</span>
             <span th:unless="${searchMoviePage}">0개</span>
         </div>
         <div class="movieGrid">

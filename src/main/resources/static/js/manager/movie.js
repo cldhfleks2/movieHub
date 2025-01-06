@@ -5,6 +5,7 @@ $(document).ready(function (){
     movieItemSection();
     movieSaveBtn()
     movieEditBtn();
+    pagination();
 })
 
 //페이지 초기 설정
@@ -21,7 +22,7 @@ function initialize(){
         }
     });
 
-    searching(); //전체 영화 목록을 보여줌
+    searchingKeyword(); //전체 영화 목록을 보여줌
 }
 
 //검색한 영화의 상세 정보 : 영화 상세 정보 뷰로 스크롤바
@@ -61,12 +62,12 @@ function movieEditBtn(){
 //검색바 동작
 function movieSearchSection() {
     $(document).on('input', '#movieContainer .searchInput', function () {
-        searching()
+        searchingKeyword()
     });
 }
 
 //실제로 영화 검색하는 함수
-function searching(pageIdx = 1){
+function searchingKeyword(pageIdx = 1){
     const keyword = $("#movieContainer .searchInput").val();
 
     $.ajax({
@@ -88,7 +89,13 @@ function searching(pageIdx = 1){
     })
 }
 
-
+//페이지 버튼 동작
+function pagination(){
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const pageIdx = $(this).data("pageidx")
+        searchingKeyword(pageIdx)
+    })
+}
 
 //가장 최근에 적용한 영화 포스터 이미지 타입
 let imageType="url"
