@@ -23,4 +23,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     //memberId로 page검색
     @Query("SELECT p FROM Post p WHERE p.member.id = :memberId AND p.status = 1")
     Page<Post> findAllByMemberIdAndStatus(Long memberId, Pageable pageable);
+
+    //pageable로 (0,count) 갯수를 받아서 그만큼 Post를 좋아요 많은 순서대로 가져옴
+    @Query("SELECT p FROM Post p " +
+            "LEFT JOIN PostLike pl ON pl.post = p AND pl.status = 1 " +
+            "WHERE p.status = 1 " +
+            "GROUP BY p " +
+            "ORDER BY COUNT(pl) DESC")
+    Page<Post> findTopPostsByLikeCount(Pageable pageable);
 }
