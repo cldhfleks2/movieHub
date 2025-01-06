@@ -28,7 +28,7 @@ public interface PostReportRepository extends JpaRepository<PostReport, Long> {
 
     //작성자의 nickname로 검색
     @Query("SELECT pr FROM PostReport pr " +
-            "JOIN pr.member m " +
+            "JOIN pr.post.member m " +
             "WHERE m.nickname LIKE %:keyword% " +
             "AND pr.status = 1" +
             "AND m.status = 1")
