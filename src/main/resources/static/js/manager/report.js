@@ -54,7 +54,7 @@ function tabContentReload(tabType, pageIdx = 1) {
             var data = $.parseHTML(data);
             var dataHtml = $("<div>").append(data);
             $(`#${tabType}Table`).replaceWith(dataHtml.find(`#${tabType}Table`));
-            // v페이지네이션도 새로고침
+            $(`#${tabType}Pagination`).replaceWith(dataHtml.find(`#${tabType}Pagination`));
 
             console.log("searching ajax success")
         },
