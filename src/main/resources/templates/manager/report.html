@@ -126,7 +126,7 @@
                     </td>
                     <td th:text="${report.movieReview.movie.movieNm}">영화 제목</td>
                     <td th:text="${report.movieReview.member.nickname}">작성자 닉네임</td>
-                    <td th:text="${#strings.abbreviate(report.movieReview.content, 30)}"></td>
+                    <td th:text="${#strings.abbreviate(report.movieReview.content, 600)}"></td>
                     <td>
                         <span th:if="${report.SPOILER}" class="reportReason">스포일러 포함</span>
                         <span th:if="${report.WRONG}" class="reportReason">잘못된 정보</span>
@@ -181,7 +181,7 @@
                 <tr th:each="report : ${postReportPage}">
                     <td th:text="${report.post.postType.description}">토론 게시판</td>
                     <td th:text="${#strings.abbreviate(report.post.title, 30)}">게시글 제목</td>
-                    <td th:text="${report.post.content}">게시글 내용</td>
+                    <td th:text="${#strings.abbreviate(report.post.content, 600)}">게시글 내용</td>
                     <td>
                         <span th:if="${report.INAPPROPRIATE}" class="reportReason">부적절하거나 불건전한 내용</span>
                         <span th:if="${report.MISINFORMATION}" class="reportReason">허위정보 또는 사실 왜곡</span>
