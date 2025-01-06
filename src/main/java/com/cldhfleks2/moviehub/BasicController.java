@@ -14,12 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class BasicController {
     private final BasicService basicService;
 
-    //test page GET
-    @GetMapping("/test")
-    String test(Model model) throws Exception {
-        return basicService.test(model);
-    }
-
     //헤더 페이지 GET
     @GetMapping("/api/header/get")
     String getHeader(){
@@ -28,7 +22,7 @@ public class BasicController {
 
     //메인 페이지 GET
     @GetMapping({"/", "/main"})
-    String getMain(Model model) throws Exception {
+    String getMain(Model model) {
         return basicService.getMain(model);
     }
 
@@ -52,8 +46,8 @@ public class BasicController {
 
     //차트 페이지 GET
     @GetMapping("/chart")
-    String getChart(Model model, Authentication auth)  throws Exception{
-        return basicService.getChart(model, auth);
+    String getChart(Model model){
+        return basicService.getChart(model);
     }
 
 }

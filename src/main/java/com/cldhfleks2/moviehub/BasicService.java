@@ -38,10 +38,6 @@ public class BasicService {
     private final BookMarkRepository bookMarkRepository;
     private final SeleniumWebDriver seleniumWebDriver;
 
-    String test(Model model) throws Exception {
-        return "test";
-    }
-
     //헤더 페이지 GET
     String getHeader(){
         return "header/header :: #header";
@@ -111,7 +107,7 @@ public class BasicService {
     }
 
     //메인 페이지 GET
-    String getMain(Model model) throws Exception{
+    String getMain(Model model){
         //1. 전체 일일 박스 오피스 DTO
         List<MovieDTO> totalTodayBoxOfficeMovie = movieService.getTotalTodayBoxOfficeMovie();
         model.addAttribute("totalTodayBoxOfficeMovie", totalTodayBoxOfficeMovie);
@@ -274,7 +270,7 @@ public class BasicService {
     }
 
     //차트 페이지 GET
-    String getChart(Model model, Authentication auth)  throws Exception{
+    String getChart(Model model){
         List<MovieDTO> movieDTOList = movieService.getMovieRankList();
 
         model.addAttribute("movieDTOList", movieDTOList);
