@@ -1,17 +1,18 @@
 $(document).ready(function() {
+    initialize();
     updateProfileSectionVisibility(); //처음 보여지는 뷰 설정
     categorySelectSection();
-
     searchSection();
-
     filterSection();
-
     likeSection();
-
     gotoPostDetail();
-
     initialSearching();
 });
+
+function initialize(){
+    //검색페이지에서는 검색 헤더가 안보이게
+    $(".headerSearchBtn").hide();
+}
 
 //다른 페이지에서 키워드로 넘어온 경우 페이지 로딩 되자마자 검색 진행
 function initialSearching(){

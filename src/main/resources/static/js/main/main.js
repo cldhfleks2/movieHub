@@ -1,14 +1,14 @@
 $(document).ready(function() {
-    // 호출
+    initialize();
     addMovieRanks();
-
     initializeSliders();
-
     gotoSearchpage();
 });
 
+//초기 설정
 function initialize(){
     //메인 페이지에서는 검색 헤더가 안보이게
+    $(".headerSearchBtn").hide();
 }
 
 function initializeSliders() {
