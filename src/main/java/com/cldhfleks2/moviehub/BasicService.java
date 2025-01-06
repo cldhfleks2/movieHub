@@ -212,6 +212,7 @@ public class BasicService {
         return "main/main";
     }
 
+    //메인페이지에서 사용할 사용자의 활동점수를 계산하는 함수
     public List<MemberDTO> calculateMemberScore(List<Member> memberList) {
         List<MemberDTO> memberDTOList = new ArrayList<>();
         for(Member member : memberList){
