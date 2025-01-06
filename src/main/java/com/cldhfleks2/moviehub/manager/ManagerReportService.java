@@ -149,6 +149,8 @@ public class ManagerReportService {
                     .reportDetail(postReport.getReportDetail())
                     .post(postReport.getPost())
                     .member(postReport.getMember())
+                    .updateDate(postReport.getUpdateDate())
+                    .status(postReport.getStatus() == 1)
                     .build();
             postReportDTOList.add(postReportDTO);
         }

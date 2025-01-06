@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder(builderMethodName = "create")
@@ -23,4 +25,6 @@ public class PostReportDTO { //신고오버레이를 같은 항목을 사용해�
 
     private Post post;
     private Member member;
+    private LocalDateTime updateDate;
+    private Boolean status;
 }
