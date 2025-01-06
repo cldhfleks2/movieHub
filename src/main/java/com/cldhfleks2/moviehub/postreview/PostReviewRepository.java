@@ -22,4 +22,8 @@ public interface PostReviewRepository extends JpaRepository<PostReview, Long> {
             "AND (pr.content LIKE %:keyword%) " +
             "AND (pr.member.id = :memberId)")
     Page<PostReview> findAllByKeywordAndStatus(String keyword, Long memberId,  Pageable pageable);
+
+    //memberId로 PostReview검색
+    @Query("SELECT pr FROM PostReview pr WHERE pr.member.id = :memberId AND pr.status = 1")
+    Page<PostReview> findAllByMemberIdAndStatus(Long memberId, Pageable pageable);
 }
