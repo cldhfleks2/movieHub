@@ -10,7 +10,7 @@ function initialize(){
     //메인 페이지에서는 검색 헤더가 안보이게
     $(".headerSearchBtn").hide();
 }
-
+//박스오피스 슬라이더 설정
 function initializeSliders() {
     $('.movieSection').each(function() {
         const $section = $(this);
@@ -114,7 +114,7 @@ function initializeSliders() {
         requestAnimationFrame(autoSlide);
     });
 }
-
+//박스오피스의 영화목록에 순위뷰 부여
 function addMovieRanks() {
     $('.movieSection').each(function() {
         const $section = $(this);
@@ -127,7 +127,7 @@ function addMovieRanks() {
         });
     });
 }
-
+//검색바 동작
 function gotoSearchpage(){
     // 검색 버튼 클릭 시
     $('#searchButton').on('click', function() {
