@@ -55,6 +55,7 @@ function gotoDetailPageLink(){
     $(document).on("click", ".movieCard", function (){
         const movieCd = $(this).data("moviecd");
         console.log("/detail/" + movieCd);
+        showLoading();
         window.location.href="/detail/" + movieCd;
     });
 }
