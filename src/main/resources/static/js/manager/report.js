@@ -2,7 +2,7 @@ $(document).ready(function() {
     initialize();
     tabSetting()
     searching();
-
+    pagination();
 });
 
 function initialize(){
@@ -63,4 +63,14 @@ function tabContentReload(tabType, pageIdx = 1) {
             console.log("searching ajax failed")
         }
     });
+}
+
+//페이지네이션 버튼 동작
+function pagination(){
+    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+        const tabType = $(this).data('tab');
+        const pageIdx = $(this).data("pageidx")
+
+        tabContentReload(tabType, pageIdx)
+    })
 }
