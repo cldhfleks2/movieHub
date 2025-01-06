@@ -148,3 +148,58 @@ body {
     max-width: 360px;
     text-wrap: initial;
 }
+
+
+
+/* 로딩 오버레이 스타일 */
+.loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10000; /* 값 높이기 */
+}
+
+/* 로딩 오버레이 활성화 상태 */
+.loadingOverlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 원형 로딩 애니메이션 */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+/* 로딩 애니메이션 키프레임 */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 로딩 텍스트 스타일 */
+.loadingOverlay p {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}

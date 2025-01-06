@@ -46,6 +46,14 @@
     </div>
 </div>
 
+<div class="loadingOverlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p>검색 중입니다...</p>
+    <div class="explain" style="display: none;">
+        <p>작품수에 따라 5~30초정도 소요 됩니다...</p>
+    </div>
+</div>
+
 <div th:replace="~{ footer/footer::footer }"></div>
 <script>
     window.onload = function() {

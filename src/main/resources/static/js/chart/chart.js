@@ -59,6 +59,16 @@ function gotoDetailPageLink(){
     });
 }
 
+//로딩중 뷰를 보여줌
+function showLoading() {
+    $('#loadingOverlay').addClass('active');
+}
+
+//로딩중 뷰를 감춤
+function hideLoading() {
+    $('#loadingOverlay').removeClass('active');
+}
+
 
 
 
