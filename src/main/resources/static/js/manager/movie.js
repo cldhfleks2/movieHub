@@ -31,32 +31,37 @@ function movieEditBtn(){
     $(document).on("click", ".editBtn", function (e) {
         e.stopPropagation();  // 카드 클릭 이벤트 전파 방지
 
-        // AJAX: 영화 상세 정보 조회
+        //영화 상세 정보 조회
         const movieId = $(this).data("movie-id")
-        $.ajax({
-            url: "/api/manager/movie/get",
-            method: "get",
-            data: {movieId: movieId},
-            success: function (data){
-                var data = $.parseHTML(data);
-                var dataHtml = $("<div>").append(data);
-                $("#movieContent").replaceWith(dataHtml.find("#movieContent"));
-
-                $('html, body').animate({
-                    scrollTop: $('#movieContent').offset().top
-                }, 500);  // 500ms 동안 부드럽게 스크롤 이동
-
-                findToggleBtn(); //더보기 toggle버튼을 붙임
-
-                console.log("get-movieDTO ajax success")
-            },
-            error: function (xhr){
-                console.log(xhr.responseText);
-                console.log("get-movieDTO ajax failed")
-            }
-
-        })
+        searchMovieDetail(movieId);
     });
+}
+
+//영화 상세 정보 뷰를 ajax로 가져오는 코드
+function searchMovieDetail(movieId){
+    $.ajax({
+        url: "/api/manager/movie/get",
+        method: "get",
+        data: {movieId: movieId},
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#movieContent").replaceWith(dataHtml.find("#movieContent"));
+
+            $('html, body').animate({
+                scrollTop: $('#movieContent').offset().top
+            }, 500);  // 500ms 동안 부드럽게 스크롤 이동
+
+            findToggleBtn(); //더보기 toggle버튼을 붙임
+
+            console.log("get-movieDTO ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("get-movieDTO ajax failed")
+        }
+
+    })
 }
 
 //검색바 동작
