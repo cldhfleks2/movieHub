@@ -1,10 +1,10 @@
 $(document).ready(function (){
+    peopleSlide();
     clickActorSearching();
     likeBtn();
     bookmarkBtn();
     gotoReviewPage();
     reportBtn();
-    peopleSlide();
 
 //   카카오 맵
     initializeMap();
@@ -158,6 +158,11 @@ function peopleSlide(){
     const totalWidth = slideItemWidth * slideItemCount;
     const slideWidth = slideItemWidth * 5; //슬라이드 이동할 너비
     let currentWidth = 0;
+
+    if(totalWidth < 650){ //아이템이 넘치지 않으면 슬라이드 기능 숨김
+        $('#slidePrevBtn').hide()
+        $('#slideNextBtn').hide()
+    }
 
     // 이전 버튼 클릭
     $('#slidePrevBtn').click(function() {
