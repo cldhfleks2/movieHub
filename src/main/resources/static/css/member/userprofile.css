@@ -145,6 +145,7 @@
 
 .postItem:hover, .reviewItem:hover {
     background-color: #3f3f3f;
+    cursor: pointer;
 }
 
 .postContent {
