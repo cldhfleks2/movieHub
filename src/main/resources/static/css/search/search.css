@@ -364,6 +364,10 @@ select {
     min-width: 0;
 }
 
+.profileCard:hover {
+    cursor: pointer;
+}
+
 .profileImageWrapper:hover {
     transform: scale(1.1);
 }
