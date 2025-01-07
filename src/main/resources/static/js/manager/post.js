@@ -1,5 +1,6 @@
 $(document).ready(function() {
     initialize();
+    initialSearching();
     pagination();
     searchingBar();
     editBtn();
@@ -10,6 +11,17 @@ function initialize() {
     searching(); //최소 1회 검색
 
     hidePostDetail();
+}
+
+//최초 검색 동작 : 신고 관리 페이지에서 자세히 보기 버튼 클릭시
+function initialSearching(){
+    // URL에서 initialKeyword 파라미터 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId  = urlParams.get('postId');
+
+    if (postId) {
+        searchingPostDetail(postId);
+    }
 }
 
 //검색바 동작
