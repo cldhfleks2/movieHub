@@ -1,5 +1,6 @@
 $(document).ready(function (){
     initialize();
+    initialSearching();
     movieSearchSection();
     moviePosterSection();
     movieItemSection();
@@ -23,6 +24,17 @@ function initialize(){
     });
 
     searchingKeyword(); //전체 영화 목록을 보여줌
+}
+
+//최초 검색 동작 : 신고 관리 페이지에서 자세히 보기 버튼 클릭시
+function initialSearching(){
+    // URL에서 initialKeyword 파라미터 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieId  = urlParams.get('movieId');
+
+    if (movieId) {
+        searchMovieDetail(movieId)
+    }
 }
 
 //검색한 영화의 상세 정보 : 영화 상세 정보 뷰로 스크롤바
