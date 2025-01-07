@@ -216,12 +216,13 @@ body {
     overflow-y: auto;
 }
 
-.headerNotificationItem {
+.headerNotificationInfo {
+    cursor: pointer;
     padding: 1rem;
     border-bottom: 1px solid #3a3a3a;
 }
 
-.headerNotificationItem:last-child {
+.headerNotificationInfo:last-child {
     border-bottom: none;
 }
 

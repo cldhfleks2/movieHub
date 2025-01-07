@@ -42,14 +42,16 @@
                             <a class="headerReadAll" style="cursor: pointer;text-decoration:none;color:inherit;">모두 읽음 처리</a>
                         </div>
                         <div class="headerNotificationContent">
-                            <div class="headerNotificationItem" th:each="notification : ${notificationList}">
+                            <div class="headerNotificationInfo"  th:each="notification : ${notificationList}"
+                                                                    th:data-url="${notification.URL}"
+                                                                    th:data-notificationid="${notification.id}">
                                 <div class="headerNotificationText" th:text="${notification.message}">알림 메시지</div>
 <!--                                <div class="headerNotificationTime">방금 전</div>-->
                                 <div class="headerNotificationTime">
                                     <span th:text="${#temporals.format(notification.updateDate, 'yyyy-MM-dd HH:mm:ss')}">시간 출력</span>
                                 </div>
                             </div>
-                            <div class="headerNotificationItem" th:if="${notificationList == null || notificationList.size() == 0}">
+                            <div class="headerNotificationItem" th:if="${notificationList == null || notificationList.getContent() == null || notificationList.getContent().size() == 0}">
                                 <div class="headerNotificationText">새로운 알림이 없습니다.</div>
                             </div>
                         </div>
