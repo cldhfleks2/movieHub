@@ -99,4 +99,10 @@ public class ManagerController {
         return managerService.editPost(postDTO);
     }
 
+    //게시글 관리 페이지 : 게시글 삭제 요청
+    @DeleteMapping("/api/manager/post/delete")
+    ResponseEntity<String> deletePost(Long postId) {
+        return managerService.deletePost(postId);
+    }
+
 }

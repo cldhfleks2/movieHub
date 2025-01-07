@@ -5,6 +5,7 @@ $(document).ready(function() {
     searchingBar();
     editBtn();
     savePostChanges();
+    deletePost();
 });
 
 // 페이지 초기화 시 필요한 설정들
@@ -150,8 +151,27 @@ function savePostChanges() {
 }
 //게시글 상세뷰에서 게시글 삭제
 function deletePost() {
-    if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
-        // AJAX: 게시글 삭제
-    }
+    $(document).on("click", ".deleteBtn", function () {
+        if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+            const postId = $("#postDetailForm #postId").val();
+
+            // AJAX: 게시글 삭제
+            $.ajax({
+                url: "/api/manager/post/delete",
+                method: "delete",
+                data: {postId: postId},
+                success: function (response, textStatus, xhr){
+                    if (xhr.status === 204) {
+                        alert("게시글이 삭제 되었습니다.")
+                    }
+                    console.log("delete-post ajax success")
+                },
+                error: function (xhr){
+                    console.log(xhr.responseText);
+                    console.log("delete-post ajax failed")
+                }
+            })
+        }
+    });
 }
 

@@ -394,4 +394,16 @@ public class ManagerService {
         return ResponseEntity.noContent().build(); //204 전달
     }
 
+    //게시글 관리 페이지 : 게시글 삭제 요청
+    @Transactional
+    ResponseEntity<String> deletePost(Long postId) {
+        Optional<Post> postObj = postRepository.findById(postId);
+        if(!postObj.isPresent()) //게시글 존재 여부 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/manager/post/delete", "게시글 정보를 찾을 수 없습니다.", ResponseEntity.class);
+        Post post = postObj.get();
+        postRepository.delete(post); //soft delete
+
+        return ResponseEntity.noContent().build(); //204 전달
+    }
+
 }
