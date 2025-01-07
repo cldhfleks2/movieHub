@@ -4,6 +4,7 @@ $(document).ready(function() {
     pagination();
     searchingBar();
     editBtn();
+    savePostChanges();
 });
 
 // 페이지 초기화 시 필요한 설정들
@@ -117,6 +118,35 @@ function pagination() {
 //게시글 상세뷰에서 수정내용 저장
 function savePostChanges() {
     // AJAX: 게시글 수정 저장
+    $(document).on("click", ".saveBtn", function () {
+        var formData = new FormData();
+        const postId = $("#postDetailForm #postId").val();
+        const postType = $("#postDetailForm #detailPostType").val();
+        const title = $("#postDetailForm #detailTitle").val();
+        const content = $("#postDetailForm #detailContent").val();
+        formData.append('postId', postId);      // postId
+        formData.append('postType', postType);  // 게시판 종류
+        formData.append('title', title);        // 제목
+        formData.append('content', content);    // 내용
+
+        $.ajax({
+            url: "/api/manager/post/edit",
+            method: "patch",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response, textStatus, xhr){
+                if (xhr.status === 204) {
+                    alert("게시글이 저장 되었습니다.")
+                }
+                console.log("edit-post ajax success")
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                console.log("edit-post ajax failed")
+            }
+        })
+    });
 }
 //게시글 상세뷰에서 게시글 삭제
 function deletePost() {

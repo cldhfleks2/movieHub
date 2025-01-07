@@ -378,4 +378,20 @@ public class ManagerService {
         return "manager/post :: #postDetailSection";
     }
 
+    //게시글 관리 페이지 : 게시글 수정 요청
+    @Transactional
+    ResponseEntity<String> editPost(PostDTO postDTO) {
+        Optional<Post> postObj = postRepository.findById(postDTO.getPostId());
+        if(!postObj.isPresent()) //게시글 존재 여부 체크
+            return ErrorService.send(HttpStatus.NOT_FOUND.value(), "/api/manager/post/edit", "게시글 정보를 찾을 수 없습니다.", ResponseEntity.class);
+
+        Post post = postObj.get();
+        post.setTitle(postDTO.getTitle());
+        post.setContent(postDTO.getContent());
+        post.setPostType(postDTO.getPostType());
+        postRepository.save(post); //update
+        
+        return ResponseEntity.noContent().build(); //204 전달
+    }
+
 }

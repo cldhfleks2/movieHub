@@ -1,5 +1,6 @@
 package com.cldhfleks2.moviehub.manager;
 
+import com.cldhfleks2.moviehub.community.PostDTO;
 import com.cldhfleks2.moviehub.movie.MovieDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -90,6 +91,12 @@ public class ManagerController {
     @GetMapping("/api/manager/post/detail")
     String searchPostDetail(Model model, Authentication auth, Long postId) {
         return managerService.searchPostDetail(model, auth, postId);
+    }
+
+    //게시글 관리 페이지 : 게시글 수정 요청
+    @PatchMapping("/api/manager/post/edit")
+    ResponseEntity<String> editPost(@ModelAttribute PostDTO postDTO) {
+        return managerService.editPost(postDTO);
     }
 
 }
