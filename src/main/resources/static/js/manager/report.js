@@ -3,6 +3,7 @@ $(document).ready(function() {
     tabSetting()
     searching();
     pagination();
+    showDetailBtn();
 });
 
 function initialize(){
@@ -73,4 +74,23 @@ function pagination(){
 
         tabContentReload(tabType, pageIdx)
     })
+}
+
+//자세히 보기 동작
+function showDetailBtn(){
+    $(document).on("click", ".detailBtn", function () {
+        const tabType = $(this).data('tab');
+        if(tabType === "movie"){
+            const movieId = $(this).data("movie-id")
+            window.location.href = `/manager/movie?movieId=${encodeURIComponent(movieId)}`;
+        }else if(tabType === "movieReview"){
+            const movieReviewId = $(this).data("review-id")
+            window.location.href = `/manager/movieReview?movieReviewId=${encodeURIComponent(movieReviewId)}`;
+        }else if(tabType === "post"){
+            const postId = $(this).data("post-id")
+            window.location.href = `/manager/post?postId=${encodeURIComponent(postId)}`;
+        }else if(tabType === "postReview"){
+            //개발 안함
+        }
+    });
 }

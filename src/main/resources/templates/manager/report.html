@@ -82,7 +82,7 @@
                     <td th:text="${#temporals.format(report.updateDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
                     <td>
-                        <button class="detailBtn" th:data-movie-id="${report.movie.id}" style="white-space: nowrap;">자세히 보기</button>
+                        <button class="detailBtn" data-tab="movie" th:data-movie-id="${report.movie.id}" style="white-space: nowrap;">자세히 보기</button>
                     </td>
                 </tr>
             </th:block>
@@ -169,7 +169,7 @@
                     <td th:text="${#temporals.format(report.updateDate, 'yyyy-MM-dd HH:mm')}">신고 일자</td>
                     <td th:text="${report.status ? '처리중' : '처리완료'}">처리 상태</td>
                     <td>
-                        <button class="detailBtn" th:data-review-id="${report.movieReview.id}" style="white-space: nowrap;">자세히 보기</button>
+                        <button class="detailBtn" data-tab="movieReview" th:data-review-id="${report.movieReview.id}" style="white-space: nowrap;">자세히 보기</button>
                     </td>
                 </tr>
             </th:block>
@@ -250,7 +250,7 @@
                     <td th:text="${#temporals.format(report.updateDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
                     <td>
-                        <button class="detailBtn" th:data-post-id="${report.post.id}" style="white-space: nowrap;">자세히 보기</button>
+                        <button class="detailBtn" data-tab="post" th:data-post-id="${report.post.id}" style="white-space: nowrap;">자세히 보기</button>
                     </td>
                 </tr>
             </th:block>
@@ -331,7 +331,7 @@
                     <td th:text="${#temporals.format(report.updateDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${report.status ? '처리중' : '처리완료'}"></td>
                     <td>
-                        <button class="detailBtn" th:data-review-id="${report.postReview.id}" style="white-space: nowrap;">자세히 보기</button>
+                        <button class="detailBtn" data-tab="postReview" th:data-review-id="${report.postReview.id}" style="white-space: nowrap;">자세히 보기</button>
                     </td>
                 </tr>
             </th:block>
