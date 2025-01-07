@@ -86,13 +86,13 @@ body{
 .movieActorList {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem !important;
+    gap: 15px;
 }
 
 .movieActorList p {
     background: rgba(255, 255, 255, 0.1);
-    padding: 0.8rem;
+    padding: 10px;
+    font-size: 16px;
     border-radius: 10px;
     text-align: center;
     transition: all 0.3s ease;
@@ -124,6 +124,7 @@ body{
     padding: 0.3rem 0.6rem;
     border-radius: 4px;
     color: white;
+    z-index:1000;
 }
 
 .movieDirectorList p:hover::after {
@@ -850,3 +851,44 @@ body {
     white-space: nowrap;
 }
 
+
+
+
+/*감독및 배우 슬라이더*/
+.sliderWrap{
+    overflow: hidden; /*인물 슬라이드를 위해 넘치는 요소 숨김*/
+    display: flex;
+    position: relative;
+}
+
+.slider{
+    overflow: hidden;
+    height: 160px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    transition: transform 0.5s ease; /* 부드러운 애니메이션 효과 추가 */
+}
+
+.sliderBtn {
+    font-size: 30px;
+    position: absolute;
+    transform: translateY(40%);
+    background: rgb(229 9 20 / 58%);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 1000;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+.sliderBtn#slidePrevBtn{
+    margin-left: -30px;
+    margin-top: 15px;
+}
+
+.sliderBtn#slideNextBtn{
+    margin-left: 620px;
+    margin-top: -155px;
+}

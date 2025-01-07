@@ -4,6 +4,7 @@ $(document).ready(function (){
     bookmarkBtn();
     gotoReviewPage();
     reportBtn();
+    peopleSlide();
 
 //   카카오 맵
     initializeMap();
@@ -148,6 +149,33 @@ function reportBtn(){
         });
     });
 }
+
+function peopleSlide(){
+    const slide = $(".slider")//슬라이드
+    const slideItems = $(".slider .actorBox");
+    const slideItemWidth = slideItems.eq(0).outerWidth(); //슬라이드 아이템 하나의 너비
+    const slideItemCount = slideItems.length //아이템 갯수
+    const totalWidth = slideItemWidth * slideItemCount;
+    const slideWidth = slideItemWidth * 5; //슬라이드 이동할 너비
+    let currentWidth = 0;
+
+    // 이전 버튼 클릭
+    $('#slidePrevBtn').click(function() {
+        if (currentWidth - slideWidth >= 0) {
+            currentWidth -= slideWidth;
+            slide.css('transform', `translateX(${-currentWidth}px)`);
+        }
+    });
+
+    // 다음 버튼 클릭
+    $('#slideNextBtn').click(function() {
+        if (currentWidth + slideWidth < totalWidth) {
+            currentWidth += slideWidth;
+            slide.css('transform', `translateX(${-currentWidth}px)`);
+        }
+    });
+}
+
 
 
 

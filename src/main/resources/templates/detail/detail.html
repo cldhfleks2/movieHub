@@ -29,10 +29,16 @@
                 <div class="movieDirectorList" style="display: flex; margin-bottom: 15px;">
                     <p class="directorBox" th:each="director : ${movieDetail.directorList}" th:text="${director.peopleNm}" th:data-peoplenm="${director.peopleNm}">홍길동</p>
                 </div>
+
                 <strong>출연:</strong>
-                <div class="movieActorList" style="display: flex; margin-bottom: 15px;">
-                    <p class="actorBox" th:each="actor : ${movieDetail.actorList}" th:text="${actor.peopleNm}" th:data-peoplenm="${actor.peopleNm}">홍길동</p>
+                <button class="sliderBtn" id="slidePrevBtn" type="button"> < </button>
+                <div class="sliderWrap">
+                    <div class="slider movieActorList" style="display: flex; margin-bottom: 10px;">
+                        <p class="actorBox" th:each="actor : ${movieDetail.actorList}" th:text="${actor.peopleNm}" th:data-peoplenm="${actor.peopleNm}">홍길동</p>
+                    </div>
                 </div>
+                <button class="sliderBtn" id="slideNextBtn" type="button"> > </button>
+
                 <strong>개봉일:</strong>
                 <div class="movieOpenDate" style="display: flex">
                     <p th:text="${movieDetail.openDt}"></p>
