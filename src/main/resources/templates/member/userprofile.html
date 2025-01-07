@@ -83,7 +83,7 @@
         </div>
 <!--        페이지 네이션-->
         <div class="pagination" id="postPagination" th:if="${postDTOPage.totalPages > 0}">
-            <button class="pageBtn prev" id="prevPage"
+            <button class="pageBtn prev" id="postPrevPage"
                     th:disabled="${postDTOPage.first}"
                     th:data-pageidx="${postDTOPage.number}">
                 이전
@@ -98,7 +98,7 @@
                     </button>
                 </th:block>
             </div>
-            <button class="pageBtn next" id="nextPage"
+            <button class="pageBtn next" id="postNextPage"
                     th:disabled="${postDTOPage.last}"
                     th:data-pageidx="${postDTOPage.number + 2}">
                 다음
@@ -106,7 +106,7 @@
         </div>
     </section>
 
-    <section id="movieReviewSection" class="contentSection">
+    <section id="movieReviewSection" class="contentSection" th:data-member-id="${memberDTO.id}">
         <div class="tableLayout">
             <div class="tableHeader">
                 <div class="thMovie">영화</div>
@@ -114,7 +114,7 @@
                 <div class="thRating">평점</div>
                 <div class="thDate">작성일</div>
             </div>
-            <div class="tableBody">
+            <div class="tableBody" id="movieReviewList">
 
                 <div class="reviewItem" th:each="review : ${movieReviewDTOPage}">
                     <div class="tdMovie">
@@ -137,8 +137,27 @@
 
             </div>
         </div>
-        <div class="pagination" id="movieReviewPagination">
-
+        <div class="pagination" id="movieReviewPagination" th:if="${movieReviewDTOPage.totalPages > 0}">
+            <button class="pageBtn prev" id="movieReviewPrevPage"
+                    th:disabled="${movieReviewDTOPage.first}"
+                    th:data-pageidx="${movieReviewDTOPage.number}">
+                이전
+            </button>
+            <div class="pageNumbers">
+                <th:block th:each="pageNum : ${#numbers.sequence(movieReviewDTOPage.number - 5, movieReviewDTOPage.number + 4)}"
+                          th:if="${pageNum >= 0 and pageNum < movieReviewDTOPage.totalPages}">
+                    <button class="pageNum"
+                            th:classappend="${pageNum == movieReviewDTOPage.number} ? 'active'"
+                            th:data-pageidx="${pageNum + 1}"
+                            th:text="${pageNum + 1}">
+                    </button>
+                </th:block>
+            </div>
+            <button class="pageBtn next" id="movieReviewNextPage"
+                    th:disabled="${movieReviewDTOPage.last}"
+                    th:data-pageidx="${movieReviewDTOPage.number + 2}">
+                다음
+            </button>
         </div>
     </section>
 </main>

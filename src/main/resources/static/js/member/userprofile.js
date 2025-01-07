@@ -3,8 +3,10 @@ $(document).ready(function() {
     tabs();
     postLink();
     postPagination();
+    movieReviewPagination();
 });
 
+//초기 설정
 function initialize() {
     $("#movieReviewSection").hide(); //처음 페이지 로딩되면 게시글 목록부터 보여줌
 }
@@ -34,6 +36,15 @@ function postLink(){
     });
 }
 
+//게시글 뷰 페이지네이션
+function postPagination(){
+    $(document).on("click", "#postPrevPage, #postNextPage, #postPagination .pageNum", function () {
+        const pageIdx = $(this).data("pageidx")
+        postPageReload(pageIdx);
+    })
+}
+
+//게시글뷰를 새로고침하는 함수
 function postPageReload(pageIdx = 1){
     const memberId = $("#postSection").data("member-id");
     $.ajax({
@@ -45,20 +56,40 @@ function postPageReload(pageIdx = 1){
             var dataHtml = $("<div>").append(data);
             $("#postList").replaceWith(dataHtml.find("#postList"));
             $("#postPagination").replaceWith(dataHtml.find("#postPagination"));
-            console.log("page reload ajax success")
+            console.log("post reload ajax success")
         },
         error: function (xhr){
             console.log(xhr.responseText);
-            console.log("page reload ajax failed")
+            console.log("post reload ajax failed")
         }
     });
 }
 
-//게시글 뷰 : 페이지 네이션
-function postPagination(){
-    $(document).on("click", "#prevPage, #nextPage, .pageNum", function () {
+//영화 리뷰 뷰 페이지네이션
+function movieReviewPagination(){
+    $(document).on("click", "#movieReviewPrevPage, #movieReviewNextPage, #movieReviewPagination .pageNum", function () {
         const pageIdx = $(this).data("pageidx")
         postPageReload(pageIdx);
     })
 }
 
+//영화 리뷰 뷰를 새로고침하는 함수
+function movieReviewPageReload(pageIdx = 1){
+    const memberId = $("#movieReviewSection").data("member-id");
+    $.ajax({
+        url: "/userprofile/" + memberId,
+        method: "get",
+        data: {pageIdx: pageIdx},
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#movieReviewList").replaceWith(dataHtml.find("#movieReviewList"));
+            $("#movieReviewPagination").replaceWith(dataHtml.find("#movieReviewPagination"));
+            console.log("movieReview reload ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("movieReview reload ajax failed")
+        }
+    });
+}
