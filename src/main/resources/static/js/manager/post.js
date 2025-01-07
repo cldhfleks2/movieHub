@@ -11,6 +11,7 @@ function initialize() {
 
     hidePostDetail();
 }
+
 //검색바 동작
 function searchingBar() {
     // 이벤트 리스너 설정
@@ -55,31 +56,35 @@ function searching(pageIdx = 1) {
 function editBtn(){
     $(document).on("click", ".editBtn", function () {
         const postId = $(this).data("post-id");
-
-        $.ajax({
-            url: "/api/manager/post/detail",
-            method: "get",
-            data: {postId: postId},
-            success: function (data){
-                var data = $.parseHTML(data);
-                var dataHtml = $("<div>").append(data);
-                $("#postDetailSection").replaceWith(dataHtml.find("#postDetailSection"));
-                showPostDetail();
-
-                // 스크롤 이동
-                $('html, body').animate({
-                    scrollTop: $('#postDetailSection').offset().top
-                }, 500);
-
-                console.log("searching-postDetail ajax success")
-            },
-            error: function (xhr){
-                console.log(xhr.responseText);
-                console.log("searching-postDetail ajax failed")
-            }
-
-        })
+        searchingPostDetail(postId);
     });
+}
+
+//게시글 상세 정보 뷰를 가져오는 ajax함수
+function searchingPostDetail(postId){
+    $.ajax({
+        url: "/api/manager/post/detail",
+        method: "get",
+        data: {postId: postId},
+        success: function (data){
+            var data = $.parseHTML(data);
+            var dataHtml = $("<div>").append(data);
+            $("#postDetailSection").replaceWith(dataHtml.find("#postDetailSection"));
+            showPostDetail();
+
+            // 스크롤 이동
+            $('html, body').animate({
+                scrollTop: $('#postDetailSection').offset().top
+            }, 500);
+
+            console.log("searching-postDetail ajax success")
+        },
+        error: function (xhr){
+            console.log(xhr.responseText);
+            console.log("searching-postDetail ajax failed")
+        }
+
+    })
 }
 //게시글 검색결과 페이지네이션
 function pagination() {
