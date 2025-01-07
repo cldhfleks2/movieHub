@@ -11,6 +11,12 @@ function initialize() {
     searching(); //최소 1회 검색
 
     hidePostDetail();
+
+    //페이지가 길어지면 그에따라 사이드바 높이도 설정
+    $(document).on("transitionend", ".container", function () {
+        const currentContainerHeight = $(".container").outerHeight();
+        $(".adminSideBar").css("height", `${currentContainerHeight}px`);
+    });
 }
 
 //최초 검색 동작 : 신고 관리 페이지에서 자세히 보기 버튼 클릭시
@@ -95,7 +101,6 @@ function searchingPostDetail(postId){
             console.log(xhr.responseText);
             console.log("searching-postDetail ajax failed")
         }
-
     })
 }
 //게시글 검색결과 페이지네이션

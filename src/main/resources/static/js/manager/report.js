@@ -9,6 +9,12 @@ $(document).ready(function() {
 function initialize(){
     //가장 처음 영화 신고 내역을 보여줌
     tabContentReload("movie")
+
+    //페이지가 길어지면 그에따라 사이드바 높이도 설정
+    $(document).on("transitionend", ".container", function () {
+        const currentContainerHeight = $(".container").outerHeight();
+        $(".adminSideBar").css("height", `${currentContainerHeight}px`);
+    });
 }
 
 // 탭 초기화 및 탭 전환 처리

@@ -20,6 +20,12 @@ function initialize(){
     $("#reviewDetailSection").hide(); //리뷰 상세내용 뷰 숨김
 
     searchingKeyword(); //페이지 로딩되면 전체요소 1회 검색
+
+    //페이지가 길어지면 그에따라 사이드바 높이도 설정
+    $(document).on("transitionend", ".container", function () {
+        const currentContainerHeight = $(".container").outerHeight();
+        $(".adminSideBar").css("height", `${currentContainerHeight}px`);
+    });
 }
 
 //최초 검색 동작 : 신고 관리 페이지에서 자세히 보기 버튼 클릭시
