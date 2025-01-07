@@ -1,5 +1,6 @@
 $(document).ready(function (){
     initialize();
+    initialSearching()
     highlightedReview();
     searchSection();
     clickSearchingReview();
@@ -8,6 +9,7 @@ $(document).ready(function (){
     pagination();
 })
 
+//페이지 초기 설정
 function initialize(){
     $(document).on("input", "#reviewContentEdit", function () {
         autoResizeTextarea();
@@ -20,6 +22,17 @@ function initialize(){
     searchingKeyword(); //페이지 로딩되면 전체요소 1회 검색
 }
 
+//최초 검색 동작 : 신고 관리 페이지에서 자세히 보기 버튼 클릭시
+function initialSearching(){
+    // URL에서 initialKeyword 파라미터 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieReviewId = urlParams.get('movieReviewId');
+
+    if (movieReviewId) {
+        searchingReviewDetail(movieReviewId)
+    }
+}
+
 //이전 페이지에서 reviewId를 파라미터로 가지고 온 경우
 function highlightedReview() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -30,7 +43,7 @@ function highlightedReview() {
     }
 }
 
-// 텍스트 영역의 크기를 동적으로 조정하는 함수
+//텍스트 영역의 크기를 동적으로 조정하는 함수
 function autoResizeTextarea() {
     var $textarea = $('#reviewContentEdit');
     $textarea.height('auto');  // 먼저 높이를 자동으로 리셋
