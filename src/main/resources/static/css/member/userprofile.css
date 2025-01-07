@@ -294,3 +294,11 @@
         flex-wrap: wrap;
     }
 }
+
+.postView{
+    color: #ffd700;
+}
+
+.postViewCount{
+    color: white;
+}

@@ -260,7 +260,7 @@ public class MemberService {
         Page<PostDTO> postDTOPage = new PageImpl<>(
                 postDTOList,
                 postPage.getPageable(),
-                postPage.getTotalElements() == 0 ? 1 : postPage.getTotalElements() //totalElements가 0이면 totalPages를 최소 1로 설정
+                postPage.getTotalElements()
         );
         model.addAttribute("postDTOPage", postDTOPage);
 
@@ -287,7 +287,7 @@ public class MemberService {
         Page<MovieReviewDTO> movieReviewDTOPage = new PageImpl<>(
                 movieReviewDTOList,
                 movieReviewPage.getPageable(),
-                movieReviewPage.getTotalElements() == 0 ? 1 : movieReviewPage.getTotalElements()
+                movieReviewPage.getTotalElements()
         );
         model.addAttribute("movieReviewDTOPage", movieReviewDTOPage);
 
