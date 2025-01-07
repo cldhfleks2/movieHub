@@ -6,6 +6,7 @@ $(document).ready(function() {
     editBtn();
     savePostChanges();
     deletePost();
+    editCancelBtn();
 });
 
 // 페이지 초기화 시 필요한 설정들
@@ -174,4 +175,14 @@ function deletePost() {
         }
     });
 }
+//게시글 수정 취소 버튼
+function editCancelBtn(){
+    $(document).on("click", ".cancelBtn", function () {
+        //검색 섹션으로 화면 이동
+        $('html, body').animate({
+            scrollTop: $('.searchSection').offset().top
+        }, 300);
 
+        hidePostDetail();
+    });
+}
