@@ -136,7 +136,7 @@
                 <!-- 오른쪽: 게시글 수정 섹션 -->
                 <div class="editSection">
                     <form id="postDetailForm">
-                        <input type="hidden" id="postId">
+                        <input type="hidden" id="postId" th:value="${postDTO.postId}">
                         <div class="formGroup">
                             <label for="detailPostType">게시판 종류</label>
                             <select id="detailPostType" th:value="${postDTO.postType}">

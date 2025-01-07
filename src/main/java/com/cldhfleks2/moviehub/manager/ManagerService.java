@@ -351,6 +351,7 @@ public class ManagerService {
         PostDTO postDTO = PostDTO.create()
                 .member(memberObj.get())
                 .updateDate(post.getUpdateDate())
+                .postId(postId)
                 .postType(post.getPostType())
                 .title(post.getTitle())
                 .content(post.getContent())
