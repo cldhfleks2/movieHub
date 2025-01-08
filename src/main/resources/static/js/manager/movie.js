@@ -30,6 +30,8 @@ function initialize(){
         const currentContainerHeight = $(".container").outerHeight();
         $(".adminSideBar").css("height", `${currentContainerHeight}px`);
     });
+
+    $(".actionButtons").hide() //저장/취소 버튼도 가림
 }
 
 //최초 검색 동작 : 신고 관리 페이지에서 자세히 보기 버튼 클릭시
@@ -69,6 +71,8 @@ function searchMovieDetail(movieId){
             $('html, body').animate({
                 scrollTop: $('#movieContent').offset().top
             }, 500);  // 500ms 동안 부드럽게 스크롤 이동
+
+            $(".actionButtons").show() //저장/취소 버튼 표시
 
             findToggleBtn(); //더보기 toggle버튼을 붙임
 
@@ -252,6 +256,7 @@ function movieSaveBtn() {
                     alert("알 수 없는 성공")
                 }
                 $('.movieContent').hide();
+                $(".actionButtons").hide() //저장/취소 버튼도 가림
                 console.log("movie-edit ajax success")
             },
             error: function (xhr){
@@ -283,6 +288,7 @@ function movieSaveBtn() {
                         alert("영화 포스터 수정에 알 수 없는 성공")
                     }
                     $('.movieContent').hide();
+                    $(".actionButtons").hide() //저장/취소 버튼도 가림
                     console.log("movie-image-edit ajax success")
                 },
                 error: function (xhr){
@@ -298,6 +304,12 @@ function movieSaveBtn() {
     $(document).on('click', '.cancelBtn', function () {
         if (confirm('변경사항이 저장되지 않습니다. 취소하시겠습니까?')) {
             $('.movieContent').hide();
+            $(".actionButtons").hide() //저장/취소 버튼도 가림
+
+            //검색 섹션으로 화면 이동
+            $('html, body').animate({
+                scrollTop: $('.searchSection').offset().top
+            }, 300);
         }
     });
 }
