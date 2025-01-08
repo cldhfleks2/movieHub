@@ -139,6 +139,15 @@ function savePostChanges() {
             contentType: false,
             success: function (response, textStatus, xhr){
                 if (xhr.status === 204) {
+                    //검색 섹션으로 화면 이동
+                    $('html, body').animate({
+                        scrollTop: $('.searchSection').offset().top
+                    }, 300);
+                    
+                    hidePostDetail();
+
+                    searching(); //검색결과 리셋
+
                     alert("게시글이 저장 되었습니다.")
                 }
                 console.log("edit-post ajax success")
