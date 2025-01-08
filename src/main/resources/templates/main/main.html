@@ -229,7 +229,7 @@
                 <div class="reviewHeader">
                     <img class="userProfileImg" th:src="${review.member.profileImage != null ? review.member.profileImage : '/image/profile.png'}" alt="사용자 프로필">
                     <span class="userName" th:text="${review.member.nickname}">사용자 닉네임</span>
-                    <span class="reviewDate" th:text="${review.reviewUpdateDate}">업데이트 시간</span>
+                    <span class="reviewDate" th:text="${#temporals.format(review.reviewUpdateDate, 'MM/dd HH:mm')}">MM/dd HH:mm</span>
                 </div>
                 <div class="reviewContent">
                     <div class="movieTitle" th:text="${#strings.abbreviate(review.movieNm, 30)}">리뷰 영화 제목</div>
