@@ -242,7 +242,7 @@ public class BasicService {
                     .profileImage(member.getProfileImage())
                     .totalScore(totalScore)
                     .movieReviewCount(movieReviewCount)
-                    .postReviewCount(postReviewCount)
+                    .postCount(postCount)
                     .postReviewCount(postReviewCount)
                     .build();
 
