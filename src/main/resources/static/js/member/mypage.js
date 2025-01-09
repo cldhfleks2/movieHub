@@ -320,6 +320,7 @@ function postPagination() {
         postListReload(pageIdx)
     })
 }
+//게시글 삭제
 
 //댓글 뷰 : 댓글 뷰만 가져오는 함수
 function reviewListReload(pageIdx = 1){
@@ -345,7 +346,7 @@ function reviewListReload(pageIdx = 1){
     });
 }
 
-// 댓글뷰 탭 선택하면 페이지를 가져옴
+//댓글뷰 탭 선택하면 페이지를 가져옴
 function reviewSection() {
     $(document).on("click", "#reviewTab", function () {
         reviewListReload();
@@ -369,7 +370,7 @@ function reviewFilter() {
     });
 }
 
-// 댓글 뷰 : 댓글 수정 요청
+//댓글 뷰 : 댓글 수정 요청
 function reviewEdit() {
     $(document).on("click", ".reviewActions .editButton", function () {
         const reviewId = $(this).data('review-id');
@@ -441,7 +442,7 @@ function reviewEdit() {
     });
 }
 
-// 댓글 뷰 : 댓글 삭제 요청
+//댓글 뷰 : 댓글 삭제 요청
 function reviewDelete() {
     $(document).on("click", ".reviewCard .deleteButton", function () {
         const reviewId = $(this).data('review-id');
@@ -469,7 +470,7 @@ function reviewDelete() {
     });
 }
 
-// 댓글 뷰 : 페이지네이션
+//댓글 뷰 : 페이지네이션
 function reviewPagination() {
     $(document).on("click", "#reviewPrevPage, #reviewNextPage, .pageNumber", function () {
         const pageIdx = $(this).data("pageidx")
