@@ -56,23 +56,23 @@
                             <div class="reviewActions">
 <!--                                좋아요 버튼은 본인리뷰가 아닌것에만 보임-->
                                 <button class="likeBtn" th:unless="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}">
-                                    <div class="red" th:unless="${review.isLiked}">
+                                    <div class="red" th:unless="${review.isLiked}"  title="리뷰 좋아요 누르기">
                                         <span class="icon">♡</span>
                                         <span class="iconMessage">좋아요</span>
                                     </div>
-                                    <div class="red" th:if="${review.isLiked}">
+                                    <div class="red" th:if="${review.isLiked}" title="리뷰 좋아요 취소하기">
                                         <span class="icon">♥</span>
                                         <span class="iconMessage">좋아요 취소</span>
                                     </div>
                                     &nbsp;
-                                    <span class="likeCount" th:text="${review.likeCount} + ' '">0</span>
+                                    <span class="likeCount" th:text="${review.likeCount} + ' '" title="리뷰 좋아요 갯수">0</span>
                                 </button>
-                                <button class="reportBtn" th:unless="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}">🚨</button>
-                                <button class="removeBtn" th:if="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}">❌</button>
+                                <button class="reportBtn" th:unless="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}"  title="리뷰 신고하기">🚨</button>
+                                <button class="removeBtn" th:if="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}" title="리뷰 삭제하기">❌</button>
                             </div>
                         </div>
                         <div class="reviewMetaInfo">
-                            <a th:href="@{'/userprofile/' + ${review.authorMemberId}}" class="userInfo" style="cursor: pointer; text-decoration: none; color: inherit;">
+                            <a th:href="@{'/userprofile/' + ${review.authorMemberId}}" class="userInfo" style="cursor: pointer; text-decoration: none; color: inherit;" title="클릭시 유저 프로필로 이동">
                                 <img class="userProfile" th:src="@{${review.authorProfileImage}}" src="/image/blank.png" alt="프로필">
                                 <span class="userNickName" th:text="${review.authorNickname}">사용자 닉네임</span>
                             </a>
