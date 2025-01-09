@@ -68,6 +68,10 @@
                                     <span class="likeCount" th:text="${review.likeCount} + ' '" title="리뷰 좋아요 갯수">0</span>
                                 </button>
                                 <button class="reportBtn" th:unless="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}"  title="리뷰 신고하기">🚨</button>
+                                <div th:if="${review.isAuthor}" style="margin-top: auto; font-size: 20px; cursor: pointer" title="본인 리뷰는 좋아요 불가">
+                                    <span class="icon">♡</span>
+                                    <span class="likeCount" th:text="${review.likeCount} + ' '" title="리뷰 좋아요 갯수">0</span>
+                                </div>
                                 <button class="removeBtn" th:if="${review.isAuthor}" th:data-reviewid="${review.movieReviewId}" title="리뷰 삭제하기">❌</button>
                             </div>
                         </div>
