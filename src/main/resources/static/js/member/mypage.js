@@ -5,7 +5,6 @@ $(document).ready(function() {
     initializeFormValidation();
     initializeEditMode();
     filterAndSearchSection();
-    initializePostManagement();
     postPagination();
 
     reviewSection();
@@ -316,7 +315,7 @@ function postListReload(pageIdx = 1){
 }
 //게시글 페이지네이션 : 페이지버튼들 동작
 function postPagination() {
-    $(document).on("click", "#postPrevPage, #postNextPage, .pageNumber", function () {
+    $(document).on("click", "#postPrevPage, #postNextPage, #postPagination .pageNumber", function () {
         const pageIdx = $(this).data("pageidx")
         postListReload(pageIdx)
     })
