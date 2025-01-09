@@ -13,7 +13,8 @@
 
         <!-- 우측 유저 메뉴 -->
         <div class="headerUserMenu">
-            <a href="/search" class="headerSearchBtn">🔍</a>
+<!--            로그인해야 보임-->
+            <a href="/search" class="headerSearchBtn" sec:authorize="isAuthenticated()">🔍</a>
 
             <!-- 비로그인시 보이는 메뉴 -->
             <div class="headerAuthButtons" sec:authorize="isAnonymous()">
