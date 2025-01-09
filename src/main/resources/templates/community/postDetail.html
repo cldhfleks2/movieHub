@@ -43,7 +43,7 @@
 <!--    게시글 버튼들-->
     <div class="postActions">
         <div class="leftActions">
-            <th:block th:if="${postDTO.isAuthor}"> <!-- 본인일때만 가능한 기능-->
+            <th:block th:unless="${postDTO.isAuthor}"> <!-- 본인게시글 아닐때만 가능한 기능-->
                 <!-- 좋아요 버튼 -->
                 <button class="actionButton likeButton" th:data-postid="${postDTO.postId}">
                     <span class="icon" th:classappend="${isLiked ? 'active' : ''}">♥</span>
