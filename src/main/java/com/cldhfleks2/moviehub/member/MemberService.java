@@ -107,6 +107,7 @@ public class MemberService {
 
         //개인정보 수정 란
         Member member = memberObj.get();
+        Long memberId = member.getId();
         MemberDTO memberDTO = MemberDTO.create()
                 .username(member.getUsername())
                 .nickname(member.getNickname())
@@ -117,7 +118,7 @@ public class MemberService {
         int pageSize = 5;
         Page<Post> postPage;
         if(category.equals("ALL"))
-            postPage = postRepository.findAllByKeywordAndStatus(keyword, PageRequest.of(pageIdx - 1, pageSize));
+            postPage = postRepository.findAllByKeywordAndMemberIdAndStatus(keyword, memberId, PageRequest.of(pageIdx - 1, pageSize));
         else{
             PostType postType = PostType.valueOf(category.toUpperCase());
             postPage = postRepository.findAllByKeywordAndCategoryAndStatus(keyword, postType, PageRequest.of(pageIdx - 1, pageSize));

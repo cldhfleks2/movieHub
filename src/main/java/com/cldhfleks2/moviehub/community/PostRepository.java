@@ -20,6 +20,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE p.status = 1 AND p.postType = :category AND (p.title LIKE %:keyword% OR p.content LIKE %:keyword%)")
     Page<Post> findAllByKeywordAndCategoryAndStatus(String keyword, PostType category, Pageable pageable);
 
+    //keyword, memberId, status=1 page검색
+    @Query("SELECT p FROM Post p WHERE p.status = 1 " +
+            "AND p.member.id = :memberId " +
+            "AND (p.title LIKE %:keyword% OR p.content LIKE %:keyword%)")
+    Page<Post> findAllByKeywordAndMemberIdAndStatus(String keyword, Long memberId, Pageable pageable);
+
     //memberId로 page검색
     @Query("SELECT p FROM Post p WHERE p.member.id = :memberId AND p.status = 1")
     Page<Post> findAllByMemberIdAndStatus(Long memberId, Pageable pageable);
