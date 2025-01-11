@@ -26,6 +26,7 @@ public class SecurityConfig {
                 authorize.requestMatchers("/css/**", "/js/**", "/image/**", "/static/**").permitAll()
                         .requestMatchers("/", "/main").permitAll()
                         .requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers("/api/checkUsername").permitAll() //회원가입시 아이디 중복확인 요청 API
                         .requestMatchers("/api/manager/**").hasRole("ADMIN") //관리자 기능
                         .requestMatchers("/manager/**").hasRole("ADMIN") //관리자 기능
 //                        .requestMatchers("/detail/**").permitAll()

@@ -52,8 +52,8 @@ public class MemberService {
 
     //회원가입시 아이디 중복검사
     ResponseEntity<String> checkUsername(String username) {
-        //회원인것들에서만 중복 검사
-        //오류를 막기위해 회원탈퇴한 유저의 아이디를 사용 불가능
+        //회원인것들에서만 username 중복 검사
+        //오류를 막기위해 회원탈퇴한 유저의 아이디도 사용 불가능
         Optional<Member> memberObj = memberRepository.findByUsername(username);
 
         if(memberObj.isPresent()) {
