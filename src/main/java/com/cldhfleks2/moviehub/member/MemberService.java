@@ -121,7 +121,7 @@ public class MemberService {
             postPage = postRepository.findAllByKeywordAndMemberIdAndStatus(keyword, memberId, PageRequest.of(pageIdx - 1, pageSize));
         else{
             PostType postType = PostType.valueOf(category.toUpperCase());
-            postPage = postRepository.findAllByKeywordAndCategoryAndStatus(keyword, postType, PageRequest.of(pageIdx - 1, pageSize));
+            postPage = postRepository.findAllByKeywordAndMemberIdAndCategoryAndStatus(keyword, memberId, postType, PageRequest.of(pageIdx - 1, pageSize));
         }
 
         List<PostDTO> postDTOList = new ArrayList<>();
