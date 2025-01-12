@@ -120,10 +120,6 @@ function searchingReviewDetail(reviewId) {
             var dataHtml = $("<div>").append(data);
             $("#reviewDetailSection").replaceWith(dataHtml.find("#reviewDetailSection"));
 
-            // 스크롤 이동
-            $('html, body').animate({
-                scrollTop: $('#reviewDetailSection').offset().top
-            }, 500);
             console.log("get-review-detail ajax success")
         },
         error: function (xhr){
@@ -131,6 +127,11 @@ function searchingReviewDetail(reviewId) {
             console.log("get-review-detail ajax failed")
         }
     });
+
+    // 스크롤 이동
+    $('html, body').animate({
+        scrollTop: $('#reviewDetailSection').offset().top
+    }, 500);
 }
 
 //리뷰 삭제
